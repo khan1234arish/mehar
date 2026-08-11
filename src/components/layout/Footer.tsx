@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { BROAD_CATEGORIES } from '@/data/categories';
 import { COMPANY_INFO } from '@/data/companyInfo';
-import { Mail, MessageSquare } from 'lucide-react';
+import { Mail, MessageSquare, Search, SlidersHorizontal, FileSpreadsheet } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -53,40 +53,38 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Applications & Tech */}
+          {/* Procurement & Tools */}
           <div>
             <h4 className="text-xs font-bold font-mono uppercase tracking-wider text-[#059669] mb-4">
-              Applications & Tech
+              Procurement Engines
             </h4>
             <ul className="space-y-2.5 text-xs text-[#475569]">
               <li>
-                <Link href="/applications" className="hover:text-[#059669] transition-colors font-medium">
-                  Electric 2-Wheelers & E-Bikes
+                <Link href="/finder" className="hover:text-[#059669] transition-colors font-medium flex items-center gap-1.5">
+                  <Search className="w-3.5 h-3.5 text-[#059669]" />
+                  Battery Finder Wizard
+                </Link>
+              </li>
+              <li>
+                <Link href="/compare" className="hover:text-[#059669] transition-colors font-medium flex items-center gap-1.5">
+                  <SlidersHorizontal className="w-3.5 h-3.5 text-[#059669]" />
+                  Category Comparison
+                </Link>
+              </li>
+              <li>
+                <Link href="/rfq" className="hover:text-[#059669] transition-colors font-medium flex items-center gap-1.5">
+                  <FileSpreadsheet className="w-3.5 h-3.5 text-[#059669]" />
+                  B2B RFQ Builder
                 </Link>
               </li>
               <li>
                 <Link href="/applications" className="hover:text-[#059669] transition-colors font-medium">
-                  Commercial 3-Wheelers & E-Rickshaw
-                </Link>
-              </li>
-              <li>
-                <Link href="/applications" className="hover:text-[#059669] transition-colors font-medium">
-                  Solar & Renewable Storage
-                </Link>
-              </li>
-              <li>
-                <Link href="/applications" className="hover:text-[#059669] transition-colors font-medium">
-                  Inverter & Backup UPS
+                  Applications & Industries
                 </Link>
               </li>
               <li>
                 <Link href="/technology" className="hover:text-[#059669] transition-colors font-medium">
-                  Cell Chemistries (LFP & NMC)
-                </Link>
-              </li>
-              <li>
-                <Link href="/technology" className="hover:text-[#059669] transition-colors font-medium">
-                  Smart BMS Architecture
+                  Technology & Quality
                 </Link>
               </li>
             </ul>
@@ -150,8 +148,8 @@ export default function Footer() {
             <span>•</span>
             <span className="text-[#0F172A] font-medium">Wholesale & OEM Direct</span>
             <span>•</span>
-            <Link href="/contact" className="text-[#059669] hover:underline font-bold">
-              Request Quotation
+            <Link href="/rfq" className="text-[#059669] hover:underline font-bold">
+              Submit RFQ
             </Link>
           </div>
         </div>

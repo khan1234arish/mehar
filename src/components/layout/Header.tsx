@@ -10,6 +10,8 @@ import {
   X,
   ChevronDown,
   ArrowUpRight,
+  Search,
+  SlidersHorizontal,
 } from 'lucide-react';
 import Button from '@/components/ui/Button';
 
@@ -35,16 +37,18 @@ export default function Header() {
   const navLinks = [
     { label: 'Home', href: '/' },
     { label: 'Products', href: '/products', hasDropdown: true },
+    { label: 'Battery Finder', href: '/finder' },
+    { label: 'Compare', href: '/compare' },
     { label: 'Applications', href: '/applications' },
-    { label: 'Technology & Quality', href: '/technology' },
-    { label: 'About & Infrastructure', href: '/about' },
+    { label: 'Technology', href: '/technology' },
+    { label: 'About Us', href: '/about' },
     { label: 'Resources', href: '/resources' },
     { label: 'Contact', href: '/contact' },
   ];
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-200 ${
+      className={`sticky top-0 z-40 transition-all duration-200 ${
         scrolled
           ? 'bg-white/95 backdrop-blur-md border-b border-[#E2E8F0] shadow-sm'
           : 'bg-white border-b border-[#E2E8F0]'
@@ -54,7 +58,7 @@ export default function Header() {
         <div className="flex items-center justify-between h-20">
           {/* MEHAR Logo */}
           <Link href="/" className="flex items-center gap-3 shrink-0 group">
-            <div className="w-48 sm:w-56 h-12 sm:h-14 relative">
+            <div className="w-44 sm:w-52 h-12 sm:h-14 relative">
               <Image
                 src="/assets/logo/mehar-logo.svg"
                 alt="MEHAR - Lawad Infrastructure Private Limited"
@@ -66,9 +70,11 @@ export default function Header() {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
+          <nav className="hidden xl:flex items-center gap-1">
             {navLinks.map((link) => {
-              const isActive = pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href));
+              const isActive =
+                pathname === link.href ||
+                (link.href !== '/' && pathname.startsWith(link.href));
 
               if (link.hasDropdown) {
                 return (
@@ -80,7 +86,7 @@ export default function Header() {
                   >
                     <Link
                       href={link.href}
-                      className={`inline-flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${
+                      className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
                         isActive
                           ? 'text-[#059669] bg-[#ECFDF5]'
                           : 'text-[#334155] hover:text-[#059669] hover:bg-[#F8FAFC]'
@@ -88,7 +94,7 @@ export default function Header() {
                     >
                       <span>{link.label}</span>
                       <ChevronDown
-                        className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                        className={`w-3 h-3 transition-transform duration-200 ${
                           productsDropdownOpen ? 'rotate-180 text-[#059669]' : 'text-[#64748B]'
                         }`}
                       />
@@ -142,7 +148,7 @@ export default function Header() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${
+                  className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
                     isActive
                       ? 'text-[#059669] bg-[#ECFDF5]'
                       : 'text-[#334155] hover:text-[#059669] hover:bg-[#F8FAFC]'
@@ -155,21 +161,30 @@ export default function Header() {
           </nav>
 
           {/* Primary Action Button */}
-          <div className="hidden lg:flex items-center gap-3">
+          <div className="hidden lg:flex items-center gap-2.5">
             <Button
-              href="/contact?type=rfq"
+              href="/finder"
+              variant="outline"
+              size="sm"
+              icon={<Search className="w-3.5 h-3.5" />}
+            >
+              Finder
+            </Button>
+
+            <Button
+              href="/rfq"
               variant="primary"
               size="sm"
-              icon={<ArrowUpRight className="w-4 h-4" />}
+              icon={<ArrowUpRight className="w-3.5 h-3.5" />}
             >
-              Request a Quote
+              RFQ Builder
             </Button>
           </div>
 
           {/* Mobile Hamburger Toggle */}
-          <div className="flex lg:hidden items-center gap-2">
+          <div className="flex xl:hidden items-center gap-2">
             <Button
-              href="/contact?type=rfq"
+              href="/rfq"
               variant="primary"
               size="sm"
               className="text-xs px-3 py-1.5"
@@ -190,7 +205,7 @@ export default function Header() {
 
       {/* Mobile Drawer Navigation */}
       {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-x-0 top-[113px] bg-white border-b border-[#E2E8F0] shadow-xl max-h-[calc(100vh-120px)] overflow-y-auto">
+        <div className="xl:hidden fixed inset-x-0 top-[113px] bg-white border-b border-[#E2E8F0] shadow-xl max-h-[calc(100vh-120px)] overflow-y-auto z-40">
           <div className="p-5 space-y-4">
             <div className="space-y-1">
               {navLinks.map((link) => {
@@ -200,7 +215,7 @@ export default function Header() {
                   <div key={link.href} className="border-b border-[#E2E8F0]/60 pb-1">
                     <Link
                       href={link.href}
-                      className={`block px-3 py-2.5 rounded-lg text-sm font-bold ${
+                      className={`block px-3 py-2 rounded-lg text-xs font-bold ${
                         isActive
                           ? 'text-[#059669] bg-[#ECFDF5]'
                           : 'text-[#0F172A] hover:bg-[#F8FAFC]'
@@ -218,7 +233,7 @@ export default function Header() {
                           <Link
                             key={cat.id}
                             href={`/products/${cat.slug}`}
-                            className="block py-1.5 text-xs text-[#334155] hover:text-[#059669] font-medium"
+                            className="block py-1 text-xs text-[#334155] hover:text-[#059669] font-medium"
                           >
                             • {cat.name}
                           </Link>
@@ -230,14 +245,23 @@ export default function Header() {
               })}
             </div>
 
-            <div className="pt-4 border-t border-[#E2E8F0] space-y-2">
+            <div className="pt-3 border-t border-[#E2E8F0] space-y-2">
               <Button
-                href="/contact?type=rfq"
+                href="/finder"
+                variant="outline"
+                size="md"
+                className="w-full justify-center"
+              >
+                Launch Battery Requirements Finder
+              </Button>
+
+              <Button
+                href="/rfq"
                 variant="primary"
                 size="md"
                 className="w-full justify-center"
               >
-                Submit B2B Quotation Request
+                Open Official RFQ Builder
               </Button>
             </div>
           </div>

@@ -3,9 +3,10 @@ import './globals.css';
 import TopBar from '@/components/layout/TopBar';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import MeharAssistant from '@/components/chat/MeharAssistant';
 
 export const metadata: Metadata = {
-  title: 'MEHAR Batteries | Lawad Infrastructure Private Limited | Official B2B Manufacturer',
+  title: 'MEHAR Batteries | Lawad Infrastructure Private Limited | Official B2B Platform',
   description: 'Official B2B platform for MEHAR battery systems and energy storage solutions by Lawad Infrastructure Private Limited.',
   keywords: ['MEHAR', 'Lawad Infrastructure Private Limited', 'Battery Manufacturer India', 'B2B Battery Supplier', 'EV Battery Pack', 'Inverter Battery', 'Solar Energy Storage'],
 };
@@ -33,6 +34,8 @@ export default function RootLayout({
           <main>{children}</main>
         </div>
         <Footer />
+        {/* Persistent Floating B2B Assistant */}
+        <MeharAssistant />
       </body>
     </html>
   );
