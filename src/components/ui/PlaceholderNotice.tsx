@@ -14,11 +14,11 @@ export default function PlaceholderNotice({
 }: PlaceholderNoticeProps) {
   if (variant === 'banner') {
     return (
-      <div className={`p-4 rounded-xl bg-[#0F172A] border border-yellow-500/20 flex items-start gap-3 text-xs text-[#94A3B8] ${className}`}>
-        <AlertCircle className="w-4 h-4 text-yellow-400 shrink-0 mt-0.5" />
+      <div className={`p-4 rounded-xl bg-[#FEFCE8] border border-[#FEF08A] flex items-start gap-3 text-xs text-[#854D0E] shadow-sm ${className}`}>
+        <AlertCircle className="w-4 h-4 text-[#CA8A04] shrink-0 mt-0.5" />
         <div>
-          <span className="font-semibold text-yellow-400 block mb-0.5">Placeholder Notice:</span>
-          <p>{message}</p>
+          <span className="font-bold text-[#854D0E] block mb-0.5">Placeholder Notice:</span>
+          <p className="text-[#713F12] leading-relaxed">{message}</p>
         </div>
       </div>
     );
@@ -26,19 +26,19 @@ export default function PlaceholderNotice({
 
   if (variant === 'card') {
     return (
-      <div className={`p-6 rounded-xl bg-[#0F172A]/80 border border-[#1E293B] text-center ${className}`}>
-        <div className="w-10 h-10 rounded-full bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-yellow-400 mx-auto mb-3">
+      <div className={`p-6 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] text-center ${className}`}>
+        <div className="w-10 h-10 rounded-full bg-[#FEFCE8] border border-[#FEF08A] flex items-center justify-center text-[#CA8A04] mx-auto mb-3">
           <AlertCircle className="w-5 h-5" />
         </div>
-        <h4 className="text-sm font-bold text-white mb-1">Specifications Coming Soon</h4>
-        <p className="text-xs text-[#94A3B8] max-w-md mx-auto">{message}</p>
+        <h4 className="text-sm font-bold text-[#0F172A] mb-1">Specifications Coming Soon</h4>
+        <p className="text-xs text-[#64748B] max-w-md mx-auto">{message}</p>
       </div>
     );
   }
 
   return (
-    <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-mono bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 ${className}`}>
-      <span className="w-1.5 h-1.5 rounded-full bg-yellow-400"></span>
+    <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-mono bg-[#FEFCE8] text-[#854D0E] border border-[#FEF08A] ${className}`}>
+      <span className="w-1.5 h-1.5 rounded-full bg-[#CA8A04]"></span>
       {message}
     </span>
   );

@@ -1,19 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 90" width="100%" height="100%">
   <defs>
-    <linearGradient id="meharIconGreen" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#00F59B"/>
-      <stop offset="100%" stop-color="#00B4D8"/>
-    </linearGradient>
-    <linearGradient id="meharIconBlue" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#00D2FF"/>
-      <stop offset="100%" stop-color="#00F59B"/>
+    <linearGradient id="meharIconCorporateGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#059669"/>
     </linearGradient>
   </defs>
 
   <g transform="translate(0, 0)">
-    <path d="M 45 5 L 75 22 L 75 68 L 45 85 L 15 68 L 15 22 Z" fill="#0C1527" stroke="#1E293B" stroke-width="2"/>
-    <path d="M 45 10 L 70 24 L 70 65 L 45 80 L 20 65 L 20 24 Z" fill="#080D1A" stroke="url(#meharIconBlue)" stroke-width="1.5"/>
-    <path d="M 48 18 L 30 46 L 44 46 L 38 72 L 62 40 L 48 40 Z" fill="url(#meharIconGreen)"/>
-    <rect x="38" y="2" width="14" height="4" rx="2" fill="#00D2FF"/>
+    <path d="M 45 5 L 75 22 L 75 68 L 45 85 L 15 68 L 15 22 Z" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2"/>
+    <path d="M 45 10 L 70 24 L 70 65 L 45 80 L 20 65 L 20 24 Z" fill="#FFFFFF" stroke="#059669" stroke-width="1.5"/>
+    <path d="M 48 18 L 30 46 L 44 46 L 38 72 L 62 40 L 48 40 Z" fill="url(#meharIconCorporateGreen)"/>
+    <rect x="38" y="2" width="14" height="4" rx="2" fill="#0284C7"/>
   </g>
 </svg>

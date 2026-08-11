@@ -45,15 +45,15 @@ function ContactFormInner() {
   return (
     <div>
       {isSubmitted ? (
-        <div className="p-8 rounded-2xl bg-[#131F37] border border-[#00F59B]/30 text-center space-y-4">
-          <div className="w-14 h-14 rounded-full bg-[#00F59B]/10 border border-[#00F59B]/30 flex items-center justify-center text-[#00F59B] mx-auto">
+        <div className="p-8 rounded-2xl bg-[#ECFDF5] border border-[#A7F3D0] text-center space-y-4">
+          <div className="w-14 h-14 rounded-full bg-white border border-[#A7F3D0] flex items-center justify-center text-[#059669] mx-auto shadow-sm">
             <CheckCircle2 className="w-8 h-8" />
           </div>
-          <h3 className="text-lg font-bold text-white">
+          <h3 className="text-lg font-bold text-[#065F46]">
             Enquiry Received Successfully
           </h3>
-          <p className="text-xs text-[#94A3B8] max-w-md mx-auto leading-relaxed">
-            Thank you for contacting <strong className="text-white">{COMPANY_INFO.brandName}</strong>. Your requirement has been registered. Our technical sales team will review your parameters and follow up promptly.
+          <p className="text-xs text-[#047857] max-w-md mx-auto leading-relaxed">
+            Thank you for contacting <strong className="text-[#064E3B]">{COMPANY_INFO.brandName}</strong>. Your requirement has been registered. Our technical sales team will review your parameters and follow up promptly.
           </p>
           <div className="pt-4">
             <Button
@@ -69,8 +69,8 @@ function ContactFormInner() {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="space-y-2">
-              <label className="text-xs font-mono text-[#CBD5E1] block">
-                Contact Person Name <span className="text-[#00F59B]">*</span>
+              <label className="text-xs font-mono font-bold text-[#334155] block">
+                Contact Person Name <span className="text-[#059669]">*</span>
               </label>
               <input
                 type="text"
@@ -78,13 +78,13 @@ function ContactFormInner() {
                 placeholder="e.g. Ramesh Kumar"
                 value={formData.fullName}
                 onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl bg-[#131F37] border border-[#1E293B] text-white text-xs placeholder-[#64748B] focus:outline-none focus:border-[#00F59B] transition-colors"
+                className="w-full px-4 py-3 rounded-xl bg-white border border-[#CBD5E1] text-[#0F172A] text-xs placeholder-[#94A3B8] focus:outline-none focus:border-[#059669] focus:ring-1 focus:ring-[#059669] transition-colors"
               />
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs font-mono text-[#CBD5E1] block">
-                Company / Organization Name <span className="text-[#00F59B]">*</span>
+              <label className="text-xs font-mono font-bold text-[#334155] block">
+                Company / Organization Name <span className="text-[#059669]">*</span>
               </label>
               <input
                 type="text"
@@ -92,15 +92,15 @@ function ContactFormInner() {
                 placeholder="e.g. EV Motors Pvt. Ltd."
                 value={formData.companyName}
                 onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl bg-[#131F37] border border-[#1E293B] text-white text-xs placeholder-[#64748B] focus:outline-none focus:border-[#00F59B] transition-colors"
+                className="w-full px-4 py-3 rounded-xl bg-white border border-[#CBD5E1] text-[#0F172A] text-xs placeholder-[#94A3B8] focus:outline-none focus:border-[#059669] focus:ring-1 focus:ring-[#059669] transition-colors"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="space-y-2">
-              <label className="text-xs font-mono text-[#CBD5E1] block">
-                Official Email Address <span className="text-[#00F59B]">*</span>
+              <label className="text-xs font-mono font-bold text-[#334155] block">
+                Official Email Address <span className="text-[#059669]">*</span>
               </label>
               <input
                 type="email"
@@ -108,13 +108,13 @@ function ContactFormInner() {
                 placeholder="e.g. ramesh@company.com"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl bg-[#131F37] border border-[#1E293B] text-white text-xs placeholder-[#64748B] focus:outline-none focus:border-[#00F59B] transition-colors"
+                className="w-full px-4 py-3 rounded-xl bg-white border border-[#CBD5E1] text-[#0F172A] text-xs placeholder-[#94A3B8] focus:outline-none focus:border-[#059669] focus:ring-1 focus:ring-[#059669] transition-colors"
               />
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs font-mono text-[#CBD5E1] block">
-                Phone / Mobile Number <span className="text-[#00F59B]">*</span>
+              <label className="text-xs font-mono font-bold text-[#334155] block">
+                Phone / Mobile Number <span className="text-[#059669]">*</span>
               </label>
               <input
                 type="tel"
@@ -122,15 +122,15 @@ function ContactFormInner() {
                 placeholder="e.g. +91 98765 43210"
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl bg-[#131F37] border border-[#1E293B] text-white text-xs placeholder-[#64748B] focus:outline-none focus:border-[#00F59B] transition-colors"
+                className="w-full px-4 py-3 rounded-xl bg-white border border-[#CBD5E1] text-[#0F172A] text-xs placeholder-[#94A3B8] focus:outline-none focus:border-[#059669] focus:ring-1 focus:ring-[#059669] transition-colors"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="space-y-2">
-              <label className="text-xs font-mono text-[#CBD5E1] block">
-                City & State <span className="text-[#00F59B]">*</span>
+              <label className="text-xs font-mono font-bold text-[#334155] block">
+                City & State <span className="text-[#059669]">*</span>
               </label>
               <input
                 type="text"
@@ -138,12 +138,12 @@ function ContactFormInner() {
                 placeholder="e.g. New Delhi, Delhi"
                 value={formData.cityState}
                 onChange={(e) => setFormData({ ...formData, cityState: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl bg-[#131F37] border border-[#1E293B] text-white text-xs placeholder-[#64748B] focus:outline-none focus:border-[#00F59B] transition-colors"
+                className="w-full px-4 py-3 rounded-xl bg-white border border-[#CBD5E1] text-[#0F172A] text-xs placeholder-[#94A3B8] focus:outline-none focus:border-[#059669] focus:ring-1 focus:ring-[#059669] transition-colors"
               />
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs font-mono text-[#CBD5E1] block">
+              <label className="text-xs font-mono font-bold text-[#334155] block">
                 GSTIN (Optional)
               </label>
               <input
@@ -151,20 +151,20 @@ function ContactFormInner() {
                 placeholder="e.g. 07AAAAA0000A1Z5"
                 value={formData.gstin}
                 onChange={(e) => setFormData({ ...formData, gstin: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl bg-[#131F37] border border-[#1E293B] text-white text-xs placeholder-[#64748B] focus:outline-none focus:border-[#00F59B] transition-colors"
+                className="w-full px-4 py-3 rounded-xl bg-white border border-[#CBD5E1] text-[#0F172A] text-xs placeholder-[#94A3B8] focus:outline-none focus:border-[#059669] focus:ring-1 focus:ring-[#059669] transition-colors"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="space-y-2">
-              <label className="text-xs font-mono text-[#CBD5E1] block">
-                Enquiry Classification <span className="text-[#00F59B]">*</span>
+              <label className="text-xs font-mono font-bold text-[#334155] block">
+                Enquiry Classification <span className="text-[#059669]">*</span>
               </label>
               <select
                 value={formData.enquiryType}
                 onChange={(e) => setFormData({ ...formData, enquiryType: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl bg-[#131F37] border border-[#1E293B] text-white text-xs focus:outline-none focus:border-[#00F59B] transition-colors"
+                className="w-full px-4 py-3 rounded-xl bg-white border border-[#CBD5E1] text-[#0F172A] text-xs focus:outline-none focus:border-[#059669] focus:ring-1 focus:ring-[#059669] transition-colors font-medium"
               >
                 <option value="BULK_RFQ">B2B Bulk Quotation (RFQ)</option>
                 <option value="CUSTOM_OEM">Custom OEM Battery Pack Engineering</option>
@@ -174,13 +174,13 @@ function ContactFormInner() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs font-mono text-[#CBD5E1] block">
+              <label className="text-xs font-mono font-bold text-[#334155] block">
                 Primary Category of Interest
               </label>
               <select
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl bg-[#131F37] border border-[#1E293B] text-white text-xs focus:outline-none focus:border-[#00F59B] transition-colors"
+                className="w-full px-4 py-3 rounded-xl bg-white border border-[#CBD5E1] text-[#0F172A] text-xs focus:outline-none focus:border-[#059669] focus:ring-1 focus:ring-[#059669] transition-colors font-medium"
               >
                 <option value="">-- Select Battery Category --</option>
                 {BROAD_CATEGORIES.map((cat) => (
@@ -193,13 +193,13 @@ function ContactFormInner() {
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-mono text-[#CBD5E1] block">
+            <label className="text-xs font-mono font-bold text-[#334155] block">
               Estimated Procurement / Production Volume
             </label>
             <select
               value={formData.volumeTier}
               onChange={(e) => setFormData({ ...formData, volumeTier: e.target.value })}
-              className="w-full px-4 py-3 rounded-xl bg-[#131F37] border border-[#1E293B] text-white text-xs focus:outline-none focus:border-[#00F59B] transition-colors"
+              className="w-full px-4 py-3 rounded-xl bg-white border border-[#CBD5E1] text-[#0F172A] text-xs focus:outline-none focus:border-[#059669] focus:ring-1 focus:ring-[#059669] transition-colors font-medium"
             >
               <option value="PILOT">Evaluation & Testing Batch (1 – 10 Units)</option>
               <option value="COMMERCIAL_BATCH">Commercial Production Batch (50 – 200 Units)</option>
@@ -208,7 +208,7 @@ function ContactFormInner() {
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-mono text-[#CBD5E1] block">
+            <label className="text-xs font-mono font-bold text-[#334155] block">
               Project Scope & Technical Requirements
             </label>
             <textarea
@@ -216,7 +216,7 @@ function ContactFormInner() {
               placeholder="Specify target vehicle/application, voltage requirements, desired runtime, or custom enclosure dimensions..."
               value={formData.projectNotes}
               onChange={(e) => setFormData({ ...formData, projectNotes: e.target.value })}
-              className="w-full px-4 py-3 rounded-xl bg-[#131F37] border border-[#1E293B] text-white text-xs placeholder-[#64748B] focus:outline-none focus:border-[#00F59B] transition-colors"
+              className="w-full px-4 py-3 rounded-xl bg-white border border-[#CBD5E1] text-[#0F172A] text-xs placeholder-[#94A3B8] focus:outline-none focus:border-[#059669] focus:ring-1 focus:ring-[#059669] transition-colors"
             />
           </div>
 
@@ -230,7 +230,7 @@ function ContactFormInner() {
             Submit Official B2B Inquiry
           </Button>
 
-          <p className="text-[11px] text-[#64748B] text-center font-mono">
+          <p className="text-[11px] text-[#64748B] text-center font-mono font-medium">
             Strictly B2B & Wholesale. No consumer retail inquiries.
           </p>
         </form>
@@ -241,17 +241,17 @@ function ContactFormInner() {
 
 export default function ContactPage() {
   return (
-    <div className="py-12 space-y-16">
+    <div className="py-12 space-y-16 bg-white text-[#0F172A]">
       {/* Header Banner */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="p-8 sm:p-12 rounded-3xl bg-[#0F172A] border border-[#1E293B] relative overflow-hidden">
+        <div className="p-8 sm:p-12 rounded-3xl bg-[#F8FAFC] border border-[#E2E8F0]">
           <div className="max-w-3xl space-y-4">
             <Badge variant="green">B2B Commercial & OEM Desk</Badge>
-            <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+            <h1 className="text-3xl sm:text-5xl font-extrabold text-[#0F172A] tracking-tight">
               Contact & Business Enquiry
             </h1>
-            <p className="text-sm sm:text-base text-[#94A3B8] leading-relaxed">
-              Connect directly with the commercial and engineering team at <strong className="text-white">{COMPANY_INFO.parentCompanyName}</strong> for brand <strong className="text-white">{COMPANY_INFO.brandName}</strong> battery procurement, custom OEM pack design, or regional distribution partnerships.
+            <p className="text-sm sm:text-base text-[#475569] leading-relaxed">
+              Connect directly with the commercial and engineering team at <strong className="text-[#0F172A]">{COMPANY_INFO.parentCompanyName}</strong> for brand <strong className="text-[#0F172A]">{COMPANY_INFO.brandName}</strong> battery procurement, custom OEM pack design, or regional distribution partnerships.
             </p>
           </div>
         </div>
@@ -261,18 +261,18 @@ export default function ContactPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           {/* Left Column: Form */}
-          <div className="lg:col-span-7 bg-[#0F172A] border border-[#1E293B] rounded-3xl p-8 sm:p-10 shadow-2xl">
+          <div className="lg:col-span-7 bg-[#F8FAFC] border border-[#E2E8F0] rounded-3xl p-8 sm:p-10 shadow-sm">
             <div className="mb-8">
-              <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                <FileSpreadsheet className="w-5 h-5 text-[#00F59B]" />
+              <h2 className="text-xl font-bold text-[#0F172A] flex items-center gap-2">
+                <FileSpreadsheet className="w-5 h-5 text-[#059669]" />
                 B2B Quotation & Enquiry Form
               </h2>
-              <p className="text-xs text-[#94A3B8] mt-1">
+              <p className="text-xs text-[#64748B] mt-1">
                 Please complete your company and requirement details. Our commercial sales desk will respond within 24 business hours.
               </p>
             </div>
 
-            <Suspense fallback={<div className="p-8 text-center text-xs text-[#94A3B8]">Loading enquiry form...</div>}>
+            <Suspense fallback={<div className="p-8 text-center text-xs text-[#64748B]">Loading enquiry form...</div>}>
               <ContactFormInner />
             </Suspense>
           </div>
@@ -280,46 +280,46 @@ export default function ContactPage() {
           {/* Right Column: Corporate & Contact Cards */}
           <div className="lg:col-span-5 space-y-6">
             {/* Direct Sales Card */}
-            <div className="p-8 rounded-3xl bg-[#0F172A] border border-[#1E293B] space-y-6">
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <Building2 className="w-5 h-5 text-[#00D2FF]" />
+            <div className="p-8 rounded-3xl bg-[#F8FAFC] border border-[#E2E8F0] space-y-6 shadow-sm">
+              <h3 className="text-base font-bold text-[#0F172A] flex items-center gap-2">
+                <Building2 className="w-5 h-5 text-[#059669]" />
                 Direct B2B Sales Desk
               </h3>
 
               <div className="space-y-4 text-xs">
-                <div className="p-4 rounded-xl bg-[#131F37] border border-[#1E293B] space-y-1">
-                  <span className="text-[#64748B] font-mono text-[10px] uppercase block">
+                <div className="p-4 rounded-xl bg-white border border-[#E2E8F0] space-y-1">
+                  <span className="text-[#64748B] font-mono text-[10px] uppercase font-bold block">
                     Official Sales Email
                   </span>
                   <a
                     href={`mailto:${COMPANY_INFO.salesEmail}`}
-                    className="text-white font-mono font-semibold hover:text-[#00F59B] transition-colors block"
+                    className="text-[#0F172A] font-mono font-bold hover:text-[#059669] transition-colors block"
                   >
                     {COMPANY_INFO.salesEmail}
                   </a>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#131F37] border border-[#1E293B] space-y-1">
-                  <span className="text-[#64748B] font-mono text-[10px] uppercase block">
+                <div className="p-4 rounded-xl bg-white border border-[#E2E8F0] space-y-1">
+                  <span className="text-[#64748B] font-mono text-[10px] uppercase font-bold block">
                     General Corporate Email
                   </span>
                   <a
                     href={`mailto:${COMPANY_INFO.supportEmail}`}
-                    className="text-white font-mono font-semibold hover:text-[#00F59B] transition-colors block"
+                    className="text-[#0F172A] font-mono font-bold hover:text-[#059669] transition-colors block"
                   >
                     {COMPANY_INFO.supportEmail}
                   </a>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#131F37] border border-[#1E293B] space-y-2">
-                  <span className="text-[#64748B] font-mono text-[10px] uppercase block">
+                <div className="p-4 rounded-xl bg-white border border-[#E2E8F0] space-y-2">
+                  <span className="text-[#64748B] font-mono text-[10px] uppercase font-bold block">
                     Instant WhatsApp Sales Connect
                   </span>
                   <a
                     href={`https://wa.me/${COMPANY_INFO.whatsappDesk.replace(/[^0-9]/g, '')}?text=Hello%2C%20I%20am%20contacting%20MEHAR%20regarding%20B2B%20battery%20procurement.`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-xs font-mono font-semibold text-[#00F59B] hover:underline"
+                    className="inline-flex items-center gap-2 text-xs font-mono font-bold text-[#059669] hover:underline"
                   >
                     <MessageSquare className="w-4 h-4" /> Connect with Sales Desk
                   </a>
@@ -328,20 +328,20 @@ export default function ContactPage() {
             </div>
 
             {/* Corporate Location Details */}
-            <div className="p-8 rounded-3xl bg-[#0F172A] border border-[#1E293B] space-y-5">
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <MapPin className="w-5 h-5 text-[#00F59B]" />
+            <div className="p-8 rounded-3xl bg-[#F8FAFC] border border-[#E2E8F0] space-y-5 shadow-sm">
+              <h3 className="text-base font-bold text-[#0F172A] flex items-center gap-2">
+                <MapPin className="w-5 h-5 text-[#059669]" />
                 Corporate & Facility Locations
               </h3>
 
-              <div className="space-y-4 text-xs font-mono text-[#94A3B8]">
+              <div className="space-y-4 text-xs font-mono text-[#334155]">
                 <div className="space-y-1">
-                  <span className="text-white font-semibold block">Registered Corporate Office:</span>
+                  <span className="text-[#0F172A] font-bold block">Registered Corporate Office:</span>
                   <p className="text-[#64748B]">{COMPANY_INFO.registeredOffice}</p>
                 </div>
 
                 <div className="space-y-1">
-                  <span className="text-white font-semibold block">Manufacturing & Assembly Unit:</span>
+                  <span className="text-[#0F172A] font-bold block">Manufacturing & Assembly Unit:</span>
                   <p className="text-[#64748B]">{COMPANY_INFO.plantLocation}</p>
                 </div>
               </div>

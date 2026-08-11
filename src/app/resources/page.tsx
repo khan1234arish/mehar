@@ -1,15 +1,9 @@
 import React from 'react';
-import Link from 'next/link';
 import { COMPANY_INFO } from '@/data/companyInfo';
-import SectionHeading from '@/components/ui/SectionHeading';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
 import PlaceholderNotice from '@/components/ui/PlaceholderNotice';
 import {
-  Download,
-  FileText,
-  FileSpreadsheet,
-  ShieldCheck,
   Clock,
   ArrowRight,
   Mail,
@@ -62,21 +56,21 @@ export default function ResourcesPage() {
   ];
 
   return (
-    <div className="py-12 space-y-16">
+    <div className="py-12 space-y-16 bg-white text-[#0F172A]">
       {/* Header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="p-8 sm:p-12 rounded-3xl bg-[#0F172A] border border-[#1E293B] relative overflow-hidden">
+        <div className="p-8 sm:p-12 rounded-3xl bg-[#F8FAFC] border border-[#E2E8F0]">
           <div className="max-w-3xl space-y-4">
             <Badge variant="blue">Documentation & Assets</Badge>
-            <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+            <h1 className="text-3xl sm:text-5xl font-extrabold text-[#0F172A] tracking-tight">
               Resource & Download Center
             </h1>
-            <p className="text-sm sm:text-base text-[#94A3B8] leading-relaxed">
-              Access technical documentation, engineering intake questionnaires, and safety guidelines for <strong className="text-white">{COMPANY_INFO.brandName}</strong> battery solutions by <strong className="text-white">{COMPANY_INFO.parentCompanyName}</strong>.
+            <p className="text-sm sm:text-base text-[#475569] leading-relaxed">
+              Access technical documentation, engineering intake questionnaires, and safety guidelines for <strong className="text-[#0F172A]">{COMPANY_INFO.brandName}</strong> battery solutions by <strong className="text-[#0F172A]">{COMPANY_INFO.parentCompanyName}</strong>.
             </p>
           </div>
 
-          <div className="mt-8 pt-6 border-t border-[#1E293B]">
+          <div className="mt-8 pt-6 border-t border-[#E2E8F0]">
             <PlaceholderNotice
               variant="inline"
               message="Final verified master PDF documents will be attached upon client release of the official catalogue."
@@ -91,32 +85,32 @@ export default function ResourcesPage() {
           {resources.map((res) => (
             <div
               key={res.id}
-              className="p-8 rounded-2xl bg-[#0F172A] border border-[#1E293B] flex flex-col justify-between space-y-6"
+              className="p-8 rounded-2xl bg-white border border-[#E2E8F0] hover:shadow-md transition-shadow flex flex-col justify-between space-y-6"
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono text-[#00D2FF] font-semibold uppercase">
+                  <span className="text-xs font-mono text-[#059669] font-bold uppercase">
                     {res.category}
                   </span>
                   {res.isReady ? (
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#00F59B]/10 text-[#00F59B] border border-[#00F59B]/30">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#ECFDF5] text-[#065F46] border border-[#A7F3D0] font-bold">
                       {res.status}
                     </span>
                   ) : (
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 flex items-center gap-1">
-                      <Clock className="w-3 h-3" /> {res.status}
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#FEFCE8] text-[#854D0E] border border-[#FEF08A] font-bold flex items-center gap-1">
+                      <Clock className="w-3 h-3 text-[#CA8A04]" /> {res.status}
                     </span>
                   )}
                 </div>
 
-                <h3 className="text-lg font-bold text-white">{res.title}</h3>
-                <p className="text-xs text-[#94A3B8] leading-relaxed">
+                <h3 className="text-lg font-bold text-[#0F172A]">{res.title}</h3>
+                <p className="text-xs text-[#64748B] leading-relaxed">
                   {res.description}
                 </p>
               </div>
 
-              <div className="pt-4 border-t border-[#1E293B] flex items-center justify-between">
-                <span className="text-[11px] font-mono text-[#64748B]">
+              <div className="pt-4 border-t border-[#E2E8F0] flex items-center justify-between">
+                <span className="text-[11px] font-mono text-[#64748B] font-semibold">
                   Format: {res.format}
                 </span>
 
@@ -142,12 +136,12 @@ export default function ResourcesPage() {
 
       {/* Direct Contact Banner */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="p-8 rounded-2xl bg-[#050914] border border-[#1E293B] flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+        <div className="p-8 rounded-2xl bg-[#F8FAFC] border border-[#E2E8F0] flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
           <div className="space-y-1">
-            <h3 className="text-base font-bold text-white">
+            <h3 className="text-base font-bold text-[#0F172A]">
               Need specific CAD models, dimensional outlines, or pinout schematics?
             </h3>
-            <p className="text-xs text-[#94A3B8]">
+            <p className="text-xs text-[#64748B]">
               Our engineering team can provide customized dimensional envelopes under mutual NDA.
             </p>
           </div>

@@ -1,5 +1,4 @@
 import React from 'react';
-import Link from 'next/link';
 import { COMPANY_INFO } from '@/data/companyInfo';
 import SectionHeading from '@/components/ui/SectionHeading';
 import Button from '@/components/ui/Button';
@@ -9,11 +8,9 @@ import {
   Cpu,
   Layers,
   ShieldCheck,
-  Zap,
-  Activity,
   CheckCircle2,
-  Sliders,
   Thermometer,
+  Activity,
   Lock,
   ArrowRight,
 } from 'lucide-react';
@@ -25,17 +22,17 @@ export const metadata = {
 
 export default function TechnologyPage() {
   return (
-    <div className="py-12 space-y-20">
+    <div className="py-12 space-y-20 bg-white text-[#0F172A]">
       {/* Header Banner */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="p-8 sm:p-12 rounded-3xl bg-[#0F172A] border border-[#1E293B] relative overflow-hidden">
+        <div className="p-8 sm:p-12 rounded-3xl bg-[#F8FAFC] border border-[#E2E8F0]">
           <div className="max-w-3xl space-y-4">
             <Badge variant="blue">Engineering & Technology</Badge>
-            <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+            <h1 className="text-3xl sm:text-5xl font-extrabold text-[#0F172A] tracking-tight">
               Technology & Quality Standards
             </h1>
-            <p className="text-sm sm:text-base text-[#94A3B8] leading-relaxed">
-              Under brand <strong className="text-white">{COMPANY_INFO.brandName}</strong>, <strong className="text-white">{COMPANY_INFO.parentCompanyName}</strong> integrates advanced cell chemistry, intelligent multi-point BMS telemetry, and precision assembly to deliver resilient battery packs.
+            <p className="text-sm sm:text-base text-[#475569] leading-relaxed">
+              Under brand <strong className="text-[#0F172A]">{COMPANY_INFO.brandName}</strong>, <strong className="text-[#0F172A]">{COMPANY_INFO.parentCompanyName}</strong> integrates advanced cell chemistry, intelligent multi-point BMS telemetry, and precision assembly to deliver resilient battery packs.
             </p>
           </div>
         </div>
@@ -51,23 +48,23 @@ export default function TechnologyPage() {
         />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="p-8 rounded-2xl bg-[#0F172A] border border-[#1E293B] space-y-4 flex flex-col justify-between">
+          <div className="p-8 rounded-2xl bg-white border border-[#E2E8F0] space-y-4 flex flex-col justify-between shadow-sm">
             <div className="space-y-3">
-              <span className="text-xs font-mono font-bold text-[#00F59B] uppercase block">
+              <span className="text-xs font-mono font-bold text-[#059669] uppercase block">
                 Lithium Iron Phosphate
               </span>
-              <h3 className="text-lg font-bold text-white">LiFePO4 (LFP) Technology</h3>
-              <p className="text-xs text-[#94A3B8] leading-relaxed">
+              <h3 className="text-lg font-bold text-[#0F172A]">LiFePO4 (LFP) Technology</h3>
+              <p className="text-xs text-[#64748B] leading-relaxed">
                 Known for superior thermal and chemical stability, extensive cycle life, and high resistance to thermal runaway. Ideal for heavy-duty commercial E-Rickshaws, Solar ESS, and stationary inverters.
               </p>
 
-              <div className="pt-3 border-t border-[#1E293B] space-y-2 text-xs text-[#CBD5E1]">
+              <div className="pt-3 border-t border-[#E2E8F0] space-y-2 text-xs text-[#334155]">
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#00F59B] shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-[#059669] shrink-0" />
                   <span>High thermal threshold stability</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#00F59B] shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-[#059669] shrink-0" />
                   <span>Exceptional deep-discharge cycle life</span>
                 </div>
               </div>
@@ -76,23 +73,23 @@ export default function TechnologyPage() {
             <PlaceholderNotice message="Verified cycle and C-rate charts will be populated upon official client catalogue release." />
           </div>
 
-          <div className="p-8 rounded-2xl bg-[#0F172A] border border-[#1E293B] space-y-4 flex flex-col justify-between">
+          <div className="p-8 rounded-2xl bg-white border border-[#E2E8F0] space-y-4 flex flex-col justify-between shadow-sm">
             <div className="space-y-3">
-              <span className="text-xs font-mono font-bold text-[#00D2FF] uppercase block">
+              <span className="text-xs font-mono font-bold text-[#0284C7] uppercase block">
                 Nickel Manganese Cobalt
               </span>
-              <h3 className="text-lg font-bold text-white">NMC Lithium-Ion Technology</h3>
-              <p className="text-xs text-[#94A3B8] leading-relaxed">
+              <h3 className="text-lg font-bold text-[#0F172A]">NMC Lithium-Ion Technology</h3>
+              <p className="text-xs text-[#64748B] leading-relaxed">
                 Offers high gravimetric and volumetric energy density, providing extended range within tight dimensional enclosures. Ideal for personal electric 2-wheelers and high-performance e-motorcycles.
               </p>
 
-              <div className="pt-3 border-t border-[#1E293B] space-y-2 text-xs text-[#CBD5E1]">
+              <div className="pt-3 border-t border-[#E2E8F0] space-y-2 text-xs text-[#334155]">
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#00D2FF] shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-[#0284C7] shrink-0" />
                   <span>High energy density per kg</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#00D2FF] shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-[#0284C7] shrink-0" />
                   <span>Compact form factor for 2W chassis</span>
                 </div>
               </div>
@@ -101,23 +98,23 @@ export default function TechnologyPage() {
             <PlaceholderNotice message="Verified energy density data will be populated upon official client catalogue release." />
           </div>
 
-          <div className="p-8 rounded-2xl bg-[#0F172A] border border-[#1E293B] space-y-4 flex flex-col justify-between">
+          <div className="p-8 rounded-2xl bg-white border border-[#E2E8F0] space-y-4 flex flex-col justify-between shadow-sm">
             <div className="space-y-3">
-              <span className="text-xs font-mono font-bold text-yellow-400 uppercase block">
+              <span className="text-xs font-mono font-bold text-[#854D0E] uppercase block">
                 Deep Cycle Lead-Acid
               </span>
-              <h3 className="text-lg font-bold text-white">Advanced Tall Tubular</h3>
-              <p className="text-xs text-[#94A3B8] leading-relaxed">
+              <h3 className="text-lg font-bold text-[#0F172A]">Advanced Tall Tubular</h3>
+              <p className="text-xs text-[#64748B] leading-relaxed">
                 Engineered with heavy-duty spine grids and active material formulation to handle prolonged power outages and continuous daily charging cycles for traditional inverter & solar storage.
               </p>
 
-              <div className="pt-3 border-t border-[#1E293B] space-y-2 text-xs text-[#CBD5E1]">
+              <div className="pt-3 border-t border-[#E2E8F0] space-y-2 text-xs text-[#334155]">
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-yellow-400 shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-[#CA8A04] shrink-0" />
                   <span>Resilient to deep discharge cycles</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-yellow-400 shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-[#CA8A04] shrink-0" />
                   <span>Cost-effective long backup storage</span>
                 </div>
               </div>
@@ -129,7 +126,7 @@ export default function TechnologyPage() {
       </div>
 
       {/* 2. SMART BMS ARCHITECTURE */}
-      <div className="bg-[#050914] border-y border-[#1E293B] py-20">
+      <div className="bg-[#F8FAFC] border-y border-[#E2E8F0] py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <SectionHeading
             badge="Intelligent Protection"
@@ -139,42 +136,42 @@ export default function TechnologyPage() {
           />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="p-6 rounded-2xl bg-[#0F172A] border border-[#1E293B] space-y-3">
-              <div className="w-10 h-10 rounded-lg bg-[#00F59B]/10 flex items-center justify-center text-[#00F59B]">
+            <div className="p-6 rounded-2xl bg-white border border-[#E2E8F0] space-y-3 shadow-sm">
+              <div className="w-10 h-10 rounded-lg bg-[#ECFDF5] flex items-center justify-center text-[#059669]">
                 <Thermometer className="w-5 h-5" />
               </div>
-              <h4 className="text-sm font-bold text-white">Multi-Point Thermal Guard</h4>
-              <p className="text-xs text-[#94A3B8] leading-relaxed">
+              <h4 className="text-sm font-bold text-[#0F172A]">Multi-Point Thermal Guard</h4>
+              <p className="text-xs text-[#64748B] leading-relaxed">
                 Dedicated NTC thermal sensors placed throughout cell clusters to trigger automatic charge/discharge throttling during temperature extremes.
               </p>
             </div>
 
-            <div className="p-6 rounded-2xl bg-[#0F172A] border border-[#1E293B] space-y-3">
-              <div className="w-10 h-10 rounded-lg bg-[#00D2FF]/10 flex items-center justify-center text-[#00D2FF]">
+            <div className="p-6 rounded-2xl bg-white border border-[#E2E8F0] space-y-3 shadow-sm">
+              <div className="w-10 h-10 rounded-lg bg-[#F0F9FF] flex items-center justify-center text-[#0284C7]">
                 <Activity className="w-5 h-5" />
               </div>
-              <h4 className="text-sm font-bold text-white">Active Cell Balancing</h4>
-              <p className="text-xs text-[#94A3B8] leading-relaxed">
+              <h4 className="text-sm font-bold text-[#0F172A]">Active Cell Balancing</h4>
+              <p className="text-xs text-[#64748B] leading-relaxed">
                 Precision balancing circuitry ensures uniform cell voltages across the entire series string, maximizing usable capacity and cycle life.
               </p>
             </div>
 
-            <div className="p-6 rounded-2xl bg-[#0F172A] border border-[#1E293B] space-y-3">
-              <div className="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center text-yellow-400">
+            <div className="p-6 rounded-2xl bg-white border border-[#E2E8F0] space-y-3 shadow-sm">
+              <div className="w-10 h-10 rounded-lg bg-[#FEFCE8] flex items-center justify-center text-[#854D0E]">
                 <Lock className="w-5 h-5" />
               </div>
-              <h4 className="text-sm font-bold text-white">Over-Current & Short Cutoff</h4>
-              <p className="text-xs text-[#94A3B8] leading-relaxed">
+              <h4 className="text-sm font-bold text-[#0F172A]">Over-Current & Short Cutoff</h4>
+              <p className="text-xs text-[#64748B] leading-relaxed">
                 Ultra-fast solid-state MOSFET / Contactor cutoff protecting against external short circuits, over-charging, and deep over-discharge.
               </p>
             </div>
 
-            <div className="p-6 rounded-2xl bg-[#0F172A] border border-[#1E293B] space-y-3">
-              <div className="w-10 h-10 rounded-lg bg-[#00F59B]/10 flex items-center justify-center text-[#00F59B]">
+            <div className="p-6 rounded-2xl bg-white border border-[#E2E8F0] space-y-3 shadow-sm">
+              <div className="w-10 h-10 rounded-lg bg-[#ECFDF5] flex items-center justify-center text-[#059669]">
                 <Cpu className="w-5 h-5" />
               </div>
-              <h4 className="text-sm font-bold text-white">Telemetry Communication</h4>
-              <p className="text-xs text-[#94A3B8] leading-relaxed">
+              <h4 className="text-sm font-bold text-[#0F172A]">Telemetry Communication</h4>
+              <p className="text-xs text-[#64748B] leading-relaxed">
                 Supports CAN 2.0B, RS485, and Bluetooth IoT protocols for seamless communication with motor controllers, vehicle displays, and cloud portals.
               </p>
             </div>
@@ -184,14 +181,14 @@ export default function TechnologyPage() {
 
       {/* 3. QUALITY & COMPLIANCE COMMITMENT */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="p-8 sm:p-12 rounded-3xl bg-[#0F172A] border border-[#1E293B] flex flex-col lg:flex-row items-center justify-between gap-8">
+        <div className="p-8 sm:p-12 rounded-3xl bg-[#F8FAFC] border border-[#E2E8F0] flex flex-col lg:flex-row items-center justify-between gap-8">
           <div className="space-y-3 max-w-2xl">
             <Badge variant="yellow">Compliance Framework</Badge>
-            <h3 className="text-2xl font-bold text-white">
+            <h3 className="text-2xl font-bold text-[#0F172A]">
               Commitment to National & International Safety Standards
             </h3>
-            <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed">
-              <strong className="text-white">{COMPANY_INFO.parentCompanyName}</strong> designs its battery systems in alignment with Indian automotive and industrial standards. Specific certification numbers and test lab reports will be published in the Resource Center upon formal catalogue release.
+            <p className="text-xs sm:text-sm text-[#475569] leading-relaxed">
+              <strong className="text-[#0F172A]">{COMPANY_INFO.parentCompanyName}</strong> designs its battery systems in alignment with Indian automotive and industrial standards. Specific certification numbers and test lab reports will be published in the Resource Center upon formal catalogue release.
             </p>
           </div>
 

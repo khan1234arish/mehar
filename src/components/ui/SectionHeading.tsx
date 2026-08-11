@@ -18,9 +18,9 @@ export default function SectionHeading({
   className = '',
 }: SectionHeadingProps) {
   const badgeColors = {
-    green: 'bg-[#00F59B]/10 text-[#00F59B] border-[#00F59B]/30',
-    blue: 'bg-[#00D2FF]/10 text-[#00D2FF] border-[#00D2FF]/30',
-    yellow: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/30',
+    green: 'bg-[#ECFDF5] text-[#065F46] border-[#A7F3D0]',
+    blue: 'bg-[#F0F9FF] text-[#0369A1] border-[#BAE6FD]',
+    yellow: 'bg-[#FEFCE8] text-[#854D0E] border-[#FEF08A]',
   };
 
   const alignStyles = align === 'center' ? 'text-center items-center mx-auto' : 'text-left items-start';
@@ -35,11 +35,11 @@ export default function SectionHeading({
           {badge}
         </span>
       )}
-      <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-tight">
+      <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0F172A] tracking-tight leading-tight">
         {title}
       </h2>
       {subtitle && (
-        <p className="text-sm sm:text-base text-[#94A3B8] mt-3 leading-relaxed">
+        <p className="text-sm sm:text-base text-[#475569] mt-3 leading-relaxed">
           {subtitle}
         </p>
       )}

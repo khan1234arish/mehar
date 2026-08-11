@@ -13,10 +13,6 @@ import {
   Cpu,
   Layers,
   Zap,
-  BatteryCharging,
-  Settings2,
-  FileSpreadsheet,
-  CheckCircle2,
   Factory,
   ArrowUpRight,
   Truck,
@@ -25,36 +21,33 @@ import {
   Home,
   Radio,
   SlidersHorizontal,
+  CheckCircle2,
 } from 'lucide-react';
 
 export default function HomePage() {
   return (
-    <div className="space-y-24 pb-20">
+    <div className="space-y-20 pb-20 bg-white text-[#0F172A]">
       {/* 1. HERO SECTION */}
-      <section className="relative pt-12 pb-20 overflow-hidden border-b border-[#1E293B]">
-        {/* Subtle Industrial Background Glows */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-[#00F59B]/5 blur-[120px] rounded-full pointer-events-none"></div>
-        <div className="absolute top-1/3 right-10 w-[400px] h-[300px] bg-[#00D2FF]/5 blur-[100px] rounded-full pointer-events-none"></div>
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+      <section className="relative pt-12 pb-16 bg-[#F8FAFC] border-b border-[#E2E8F0]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left Hero Content */}
             <div className="lg:col-span-7 space-y-6 text-left">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#0F172A] border border-[#1E293B] text-xs font-mono text-[#00D2FF]">
-                <span className="w-2 h-2 rounded-full bg-[#00F59B] animate-pulse"></span>
-                <span>OFFICIAL B2B MANUFACTURING PLATFORM</span>
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#E2E8F0] text-xs font-mono text-[#065F46] shadow-sm">
+                <span className="w-2 h-2 rounded-full bg-[#10B981]"></span>
+                <span className="font-semibold">OFFICIAL B2B MANUFACTURING PLATFORM</span>
               </div>
 
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.1]">
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-[#0F172A] tracking-tight leading-[1.15]">
                 High-Performance <br className="hidden sm:inline" />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00F59B] via-[#00D2FF] to-white">
+                <span className="text-[#059669]">
                   Battery Systems
                 </span>{' '}
                 for Next-Gen Mobility & ESS
               </h1>
 
-              <p className="text-base sm:text-lg text-[#94A3B8] max-w-2xl leading-relaxed">
-                Engineered and manufactured by <strong className="text-white">{COMPANY_INFO.parentCompanyName}</strong> under brand <strong className="text-white">{COMPANY_INFO.brandName}</strong>. Supplying robust, industrial-grade battery solutions for EV OEMs, solar integrators, and B2B distributors.
+              <p className="text-base sm:text-lg text-[#475569] max-w-2xl leading-relaxed">
+                Engineered and manufactured by <strong className="text-[#0F172A]">{COMPANY_INFO.parentCompanyName}</strong> under brand <strong className="text-[#0F172A]">{COMPANY_INFO.brandName}</strong>. Supplying robust, industrial-grade battery solutions for EV OEMs, solar integrators, and B2B distributors.
               </p>
 
               {/* CTAs */}
@@ -79,17 +72,17 @@ export default function HomePage() {
               </div>
 
               {/* Trust Badges */}
-              <div className="pt-6 border-t border-[#1E293B]/80 grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs text-[#CBD5E1]">
+              <div className="pt-6 border-t border-[#CBD5E1]/60 grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs text-[#334155] font-medium">
                 <div className="flex items-center gap-2 font-mono">
-                  <ShieldCheck className="w-4 h-4 text-[#00F59B] shrink-0" />
+                  <ShieldCheck className="w-4 h-4 text-[#059669] shrink-0" />
                   <span>B2B & OEM Supply</span>
                 </div>
                 <div className="flex items-center gap-2 font-mono">
-                  <Cpu className="w-4 h-4 text-[#00D2FF] shrink-0" />
+                  <Cpu className="w-4 h-4 text-[#0284C7] shrink-0" />
                   <span>Smart BMS Telemetry</span>
                 </div>
                 <div className="flex items-center gap-2 font-mono col-span-2 sm:col-span-1">
-                  <Factory className="w-4 h-4 text-[#00F59B] shrink-0" />
+                  <Factory className="w-4 h-4 text-[#059669] shrink-0" />
                   <span>Custom Pack Design</span>
                 </div>
               </div>
@@ -97,64 +90,64 @@ export default function HomePage() {
 
             {/* Right Hero Graphic Card */}
             <div className="lg:col-span-5">
-              <div className="relative p-6 sm:p-8 rounded-2xl bg-[#0F172A] border border-[#1E293B] shadow-2xl shadow-black/80 overflow-hidden">
+              <div className="p-6 sm:p-8 rounded-2xl bg-white border border-[#CBD5E1] shadow-md space-y-5">
                 {/* Tech Badge */}
-                <div className="flex items-center justify-between pb-4 mb-6 border-b border-[#1E293B]">
+                <div className="flex items-center justify-between pb-4 border-b border-[#E2E8F0]">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-3 h-3 rounded-full bg-[#00F59B]"></div>
-                    <span className="text-xs font-mono text-white font-bold uppercase tracking-wider">
+                    <div className="w-3 h-3 rounded-full bg-[#10B981]"></div>
+                    <span className="text-xs font-mono text-[#0F172A] font-bold uppercase tracking-wider">
                       MEHAR Power Architecture
                     </span>
                   </div>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#131F37] text-[#94A3B8] border border-[#1E293B]">
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#F1F5F9] text-[#475569] border border-[#E2E8F0] font-semibold">
                     Industrial Grade
                   </span>
                 </div>
 
                 {/* Conceptual Battery Pack Graphic Visualization */}
-                <div className="space-y-4 font-mono text-xs">
-                  <div className="p-4 rounded-xl bg-[#131F37]/80 border border-[#1E293B] flex items-center justify-between">
+                <div className="space-y-3 font-mono text-xs">
+                  <div className="p-4 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[#00F59B]/10 flex items-center justify-center text-[#00F59B]">
+                      <div className="w-8 h-8 rounded-lg bg-[#ECFDF5] border border-[#A7F3D0] flex items-center justify-center text-[#059669]">
                         <Zap className="w-4 h-4" />
                       </div>
                       <div>
-                        <span className="text-white font-bold block">Cell Level Engineering</span>
-                        <span className="text-[11px] text-[#94A3B8]">Automated Laser Sorting & Sizing</span>
+                        <span className="text-[#0F172A] font-bold block">Cell Level Engineering</span>
+                        <span className="text-[11px] text-[#64748B]">Automated Laser Sorting & Sizing</span>
                       </div>
                     </div>
-                    <span className="text-[10px] text-[#00F59B] font-semibold">Active</span>
+                    <span className="text-[10px] text-[#059669] font-bold">Active</span>
                   </div>
 
-                  <div className="p-4 rounded-xl bg-[#131F37]/80 border border-[#1E293B] flex items-center justify-between">
+                  <div className="p-4 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[#00D2FF]/10 flex items-center justify-center text-[#00D2FF]">
+                      <div className="w-8 h-8 rounded-lg bg-[#F0F9FF] border border-[#BAE6FD] flex items-center justify-center text-[#0284C7]">
                         <Cpu className="w-4 h-4" />
                       </div>
                       <div>
-                        <span className="text-white font-bold block">Integrated Smart BMS</span>
-                        <span className="text-[11px] text-[#94A3B8]">CAN 2.0B / RS485 / Thermal Guard</span>
+                        <span className="text-[#0F172A] font-bold block">Integrated Smart BMS</span>
+                        <span className="text-[11px] text-[#64748B]">CAN 2.0B / RS485 / Thermal Guard</span>
                       </div>
                     </div>
-                    <span className="text-[10px] text-[#00D2FF] font-semibold">Protected</span>
+                    <span className="text-[10px] text-[#0284C7] font-bold">Protected</span>
                   </div>
 
-                  <div className="p-4 rounded-xl bg-[#131F37]/80 border border-[#1E293B] flex items-center justify-between">
+                  <div className="p-4 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-yellow-500/10 flex items-center justify-center text-yellow-400">
+                      <div className="w-8 h-8 rounded-lg bg-[#FEFCE8] border border-[#FEF08A] flex items-center justify-center text-[#854D0E]">
                         <Layers className="w-4 h-4" />
                       </div>
                       <div>
-                        <span className="text-white font-bold block">Enclosure & Ingress</span>
-                        <span className="text-[11px] text-[#94A3B8]">Heavy-Duty Shock & Vibration Proof</span>
+                        <span className="text-[#0F172A] font-bold block">Enclosure & Ingress</span>
+                        <span className="text-[11px] text-[#64748B]">Heavy-Duty Shock & Vibration Proof</span>
                       </div>
                     </div>
-                    <span className="text-[10px] text-yellow-400 font-semibold">IP Certified</span>
+                    <span className="text-[10px] text-[#854D0E] font-bold">IP Certified</span>
                   </div>
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-[#1E293B] flex items-center justify-between text-xs text-[#94A3B8]">
-                  <span>Verification Status:</span>
+                <div className="pt-3 border-t border-[#E2E8F0] flex items-center justify-between text-xs text-[#64748B]">
+                  <span className="font-medium">Verification Status:</span>
                   <PlaceholderNotice message="Catalogue in Preparation" />
                 </div>
               </div>
@@ -176,12 +169,12 @@ export default function HomePage() {
           {BROAD_CATEGORIES.map((cat) => (
             <div
               key={cat.id}
-              className="bg-[#0F172A] border border-[#1E293B] hover:border-[#00F59B]/40 transition-all duration-300 rounded-2xl p-6 flex flex-col justify-between group"
+              className="bg-white border border-[#E2E8F0] hover:border-[#059669] hover:shadow-md transition-all duration-200 rounded-2xl p-6 flex flex-col justify-between group"
             >
               <div>
                 {/* Category Header */}
                 <div className="flex items-start justify-between gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-[#131F37] border border-[#1E293B] flex items-center justify-center text-[#00F59B] group-hover:scale-105 transition-transform">
+                  <div className="w-12 h-12 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] flex items-center justify-center text-[#059669] group-hover:bg-[#ECFDF5] transition-colors">
                     {cat.iconName === 'Bike' && <Bike className="w-6 h-6" />}
                     {cat.iconName === 'Truck' && <Truck className="w-6 h-6" />}
                     {cat.iconName === 'Home' && <Home className="w-6 h-6" />}
@@ -190,31 +183,31 @@ export default function HomePage() {
                     {cat.iconName === 'Cpu' && <Cpu className="w-6 h-6" />}
                   </div>
 
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-yellow-500/10 text-yellow-400 border border-yellow-500/20">
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#FEFCE8] text-[#854D0E] border border-[#FEF08A] font-semibold">
                     Specs Coming Soon
                   </span>
                 </div>
 
-                <h3 className="text-lg font-bold text-white group-hover:text-[#00F59B] transition-colors mb-2">
+                <h3 className="text-lg font-bold text-[#0F172A] group-hover:text-[#059669] transition-colors mb-2">
                   {cat.name}
                 </h3>
 
-                <p className="text-xs text-[#94A3B8] leading-relaxed mb-6">
+                <p className="text-xs text-[#475569] leading-relaxed mb-6">
                   {cat.description}
                 </p>
               </div>
 
               <div>
                 {/* Key Applications */}
-                <div className="pt-4 border-t border-[#1E293B] mb-5">
-                  <span className="text-[11px] font-mono text-[#64748B] block mb-2">
+                <div className="pt-4 border-t border-[#E2E8F0] mb-5">
+                  <span className="text-[11px] font-mono text-[#64748B] block mb-2 font-bold uppercase tracking-wider">
                     Key Applications:
                   </span>
                   <div className="flex flex-wrap gap-1.5">
                     {cat.keyApplications.map((app) => (
                       <span
                         key={app}
-                        className="px-2.5 py-1 rounded-md bg-[#131F37] border border-[#1E293B] text-[11px] text-[#CBD5E1]"
+                        className="px-2.5 py-1 rounded-md bg-[#F8FAFC] border border-[#E2E8F0] text-[11px] text-[#334155] font-medium"
                       >
                         {app}
                       </span>
@@ -225,7 +218,7 @@ export default function HomePage() {
                 {/* Action Link */}
                 <Link
                   href={`/products/${cat.slug}`}
-                  className="inline-flex items-center justify-between w-full px-4 py-2.5 rounded-lg bg-[#131F37] border border-[#1E293B] text-xs font-semibold text-white hover:text-[#00F59B] hover:border-[#00F59B]/30 transition-colors"
+                  className="inline-flex items-center justify-between w-full px-4 py-2.5 rounded-lg bg-[#F8FAFC] border border-[#E2E8F0] text-xs font-bold text-[#0F172A] hover:bg-[#059669] hover:text-white hover:border-[#059669] transition-all"
                 >
                   <span>View Category Details</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -237,7 +230,7 @@ export default function HomePage() {
       </section>
 
       {/* 3. OEM / ODM CUSTOM ENGINEERING PROCESS */}
-      <section className="bg-[#050914] border-y border-[#1E293B] py-20">
+      <section className="bg-[#F8FAFC] border-y border-[#E2E8F0] py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <SectionHeading
             badge="Custom OEM Capabilities"
@@ -255,7 +248,7 @@ export default function HomePage() {
               },
               {
                 step: '02',
-                title: 'Cell & Chemistry Sourcing',
+                title: 'Cell Sourcing & Sizing',
                 desc: 'Optimal cell chemistry selection (LiFePO4, NMC) and automated capacity sorting.',
               },
               {
@@ -271,18 +264,18 @@ export default function HomePage() {
               {
                 step: '05',
                 title: 'Mass B2B Production',
-                desc: 'Automated laser welding assembly and batch delivery to your manufacturing facility.',
+                desc: 'Automated precision welding assembly and batch delivery to your manufacturing plant.',
               },
             ].map((item) => (
               <div
                 key={item.step}
-                className="bg-[#0F172A] border border-[#1E293B] rounded-2xl p-6 relative overflow-hidden"
+                className="bg-white border border-[#E2E8F0] rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow"
               >
-                <span className="text-2xl font-extrabold font-mono text-[#00D2FF]/30 block mb-3">
+                <span className="text-2xl font-extrabold font-mono text-[#059669] block mb-3">
                   {item.step}
                 </span>
-                <h4 className="text-sm font-bold text-white mb-2">{item.title}</h4>
-                <p className="text-xs text-[#94A3B8] leading-relaxed">{item.desc}</p>
+                <h4 className="text-sm font-bold text-[#0F172A] mb-2">{item.title}</h4>
+                <p className="text-xs text-[#64748B] leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -310,32 +303,32 @@ export default function HomePage() {
         />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="p-8 rounded-2xl bg-[#0F172A] border border-[#1E293B] space-y-4">
-            <div className="w-12 h-12 rounded-xl bg-[#00F59B]/10 border border-[#00F59B]/20 flex items-center justify-center text-[#00F59B]">
+          <div className="p-8 rounded-2xl bg-white border border-[#E2E8F0] space-y-4 shadow-sm">
+            <div className="w-12 h-12 rounded-xl bg-[#ECFDF5] border border-[#A7F3D0] flex items-center justify-center text-[#059669]">
               <Layers className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold text-white">Cell Chemistry Excellence</h3>
-            <p className="text-xs text-[#94A3B8] leading-relaxed">
+            <h3 className="text-lg font-bold text-[#0F172A]">Cell Chemistry Excellence</h3>
+            <p className="text-xs text-[#475569] leading-relaxed">
               Utilizing stable Lithium Iron Phosphate (LiFePO4) and high-energy NMC cells sorted rigorously for consistent internal resistance and capacity matching.
             </p>
           </div>
 
-          <div className="p-8 rounded-2xl bg-[#0F172A] border border-[#1E293B] space-y-4">
-            <div className="w-12 h-12 rounded-xl bg-[#00D2FF]/10 border border-[#00D2FF]/20 flex items-center justify-center text-[#00D2FF]">
+          <div className="p-8 rounded-2xl bg-white border border-[#E2E8F0] space-y-4 shadow-sm">
+            <div className="w-12 h-12 rounded-xl bg-[#F0F9FF] border border-[#BAE6FD] flex items-center justify-center text-[#0284C7]">
               <Cpu className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold text-white">Smart Telemetry BMS</h3>
-            <p className="text-xs text-[#94A3B8] leading-relaxed">
+            <h3 className="text-lg font-bold text-[#0F172A]">Smart Telemetry BMS</h3>
+            <p className="text-xs text-[#475569] leading-relaxed">
               Equipped with real-time multi-point temperature sensors, over-voltage/under-voltage protection, short-circuit cutoff, and CANbus/RS485 communication protocols.
             </p>
           </div>
 
-          <div className="p-8 rounded-2xl bg-[#0F172A] border border-[#1E293B] space-y-4">
-            <div className="w-12 h-12 rounded-xl bg-[#10B981]/10 border border-[#10B981]/20 flex items-center justify-center text-[#10B981]">
+          <div className="p-8 rounded-2xl bg-white border border-[#E2E8F0] space-y-4 shadow-sm">
+            <div className="w-12 h-12 rounded-xl bg-[#ECFDF5] border border-[#A7F3D0] flex items-center justify-center text-[#059669]">
               <ShieldCheck className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold text-white">Automated Assembly</h3>
-            <p className="text-xs text-[#94A3B8] leading-relaxed">
+            <h3 className="text-lg font-bold text-[#0F172A]">Automated Assembly</h3>
+            <p className="text-xs text-[#475569] leading-relaxed">
               Precision spot and laser welding, standardized insulation barriers, and heavy-duty structural enclosures designed for high vibration durability.
             </p>
           </div>
@@ -343,7 +336,7 @@ export default function HomePage() {
       </section>
 
       {/* 5. INDUSTRIES SERVED */}
-      <section className="bg-[#050914] border-t border-[#1E293B] py-20">
+      <section className="bg-[#F8FAFC] border-t border-[#E2E8F0] py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <SectionHeading
             badge="B2B Applications"
@@ -363,12 +356,12 @@ export default function HomePage() {
             ].map((ind) => (
               <div
                 key={ind.label}
-                className="p-5 rounded-xl bg-[#0F172A] border border-[#1E293B] hover:border-[#00D2FF]/40 transition-colors flex flex-col items-center justify-center gap-3"
+                className="p-5 rounded-xl bg-white border border-[#E2E8F0] hover:border-[#059669] transition-colors flex flex-col items-center justify-center gap-3 shadow-sm"
               >
-                <div className="w-10 h-10 rounded-lg bg-[#131F37] flex items-center justify-center text-[#00D2FF]">
+                <div className="w-10 h-10 rounded-lg bg-[#ECFDF5] flex items-center justify-center text-[#059669]">
                   <ind.icon className="w-5 h-5" />
                 </div>
-                <span className="text-xs font-semibold text-white">{ind.label}</span>
+                <span className="text-xs font-bold text-[#0F172A]">{ind.label}</span>
               </div>
             ))}
           </div>
@@ -377,13 +370,15 @@ export default function HomePage() {
 
       {/* 6. B2B CONVERSION / RFQ CALLOUT */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-[#0F172A] via-[#0C1528] to-[#050914] border border-[#1E293B] relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-8">
+        <div className="p-8 sm:p-12 rounded-3xl bg-[#0F172A] text-white border border-[#1E293B] flex flex-col lg:flex-row items-center justify-between gap-8 shadow-xl">
           <div className="space-y-3 text-center lg:text-left">
-            <Badge variant="green">B2B Procurement & Supply</Badge>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-mono font-medium border bg-[#1E293B] text-[#10B981] border-[#334155]">
+              B2B Procurement & Supply
+            </span>
             <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
               Ready to Discuss Your Battery Supply Requirements?
             </h3>
-            <p className="text-xs sm:text-sm text-[#94A3B8] max-w-xl">
+            <p className="text-xs sm:text-sm text-[#94A3B8] max-w-xl leading-relaxed">
               Connect with our technical sales engineers for bulk inquiries, custom OEM battery pack development, or dealership opportunities.
             </p>
           </div>
@@ -402,6 +397,7 @@ export default function HomePage() {
               href="/contact"
               variant="outline"
               size="lg"
+              className="border-[#475569] text-white hover:bg-white/10"
             >
               Contact Sales Desk
             </Button>

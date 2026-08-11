@@ -20,7 +20,7 @@ export default function Button({
   ...props
 }: ButtonProps) {
   const baseStyles =
-    'inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#080D1A] disabled:opacity-50 disabled:cursor-not-allowed';
+    'inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm';
 
   const sizeStyles = {
     sm: 'px-3.5 py-1.5 text-xs gap-1.5',
@@ -30,13 +30,13 @@ export default function Button({
 
   const variantStyles = {
     primary:
-      'bg-[#00F59B] text-[#04070F] hover:bg-[#00D887] hover:shadow-glow-green focus:ring-[#00F59B]',
+      'bg-[#059669] text-white hover:bg-[#047857] focus:ring-[#059669]',
     secondary:
-      'bg-[#00D2FF] text-[#04070F] hover:bg-[#00B4D8] hover:shadow-glow-blue focus:ring-[#00D2FF]',
+      'bg-[#0F172A] text-white hover:bg-[#1E293B] focus:ring-[#0F172A]',
     outline:
-      'bg-transparent border border-[#1E293B] text-white hover:border-[#00F59B] hover:text-[#00F59B] hover:bg-[#00F59B]/5 focus:ring-[#00F59B]',
+      'bg-white border border-[#CBD5E1] text-[#0F172A] hover:border-[#059669] hover:text-[#059669] hover:bg-[#ECFDF5] focus:ring-[#059669]',
     ghost:
-      'bg-[#131F37] border border-[#1E293B] text-[#CBD5E1] hover:text-white hover:border-[#334155] focus:ring-[#1E293B]',
+      'bg-[#F1F5F9] border border-[#E2E8F0] text-[#334155] hover:bg-[#E2E8F0] hover:text-[#0F172A] focus:ring-[#CBD5E1]',
   };
 
   const combinedClasses = `${baseStyles} ${sizeStyles[size]} ${variantStyles[variant]} ${className}`;

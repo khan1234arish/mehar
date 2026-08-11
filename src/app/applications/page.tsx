@@ -4,7 +4,6 @@ import { COMPANY_INFO } from '@/data/companyInfo';
 import SectionHeading from '@/components/ui/SectionHeading';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
-import PlaceholderNotice from '@/components/ui/PlaceholderNotice';
 import {
   Bike,
   Truck,
@@ -14,8 +13,6 @@ import {
   Radio,
   ArrowRight,
   ArrowUpRight,
-  ShieldCheck,
-  Zap,
 } from 'lucide-react';
 
 export const metadata = {
@@ -112,17 +109,17 @@ export default function ApplicationsPage() {
   ];
 
   return (
-    <div className="py-12 space-y-16">
+    <div className="py-12 space-y-16 bg-white text-[#0F172A]">
       {/* Header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="p-8 sm:p-12 rounded-3xl bg-[#0F172A] border border-[#1E293B] relative overflow-hidden">
+        <div className="p-8 sm:p-12 rounded-3xl bg-[#F8FAFC] border border-[#E2E8F0]">
           <div className="max-w-3xl space-y-4">
             <Badge variant="green">Target Sectors</Badge>
-            <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+            <h1 className="text-3xl sm:text-5xl font-extrabold text-[#0F172A] tracking-tight">
               Applications & Industries
             </h1>
-            <p className="text-sm sm:text-base text-[#94A3B8] leading-relaxed">
-              Discover how <strong className="text-white">{COMPANY_INFO.brandName}</strong> battery solutions, manufactured by <strong className="text-white">{COMPANY_INFO.parentCompanyName}</strong>, power key commercial sectors across India.
+            <p className="text-sm sm:text-base text-[#475569] leading-relaxed">
+              Discover how <strong className="text-[#0F172A]">{COMPANY_INFO.brandName}</strong> battery solutions, manufactured by <strong className="text-[#0F172A]">{COMPANY_INFO.parentCompanyName}</strong>, power key commercial sectors across India.
             </p>
           </div>
         </div>
@@ -134,38 +131,38 @@ export default function ApplicationsPage() {
           {applications.map((app) => (
             <div
               key={app.id}
-              className="bg-[#0F172A] border border-[#1E293B] hover:border-[#00D2FF]/40 transition-all rounded-2xl p-8 flex flex-col justify-between"
+              className="bg-white border border-[#E2E8F0] hover:border-[#059669] hover:shadow-md transition-all rounded-2xl p-8 flex flex-col justify-between"
             >
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <div className="w-12 h-12 rounded-xl bg-[#131F37] border border-[#1E293B] flex items-center justify-center text-[#00D2FF]">
+                  <div className="w-12 h-12 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] flex items-center justify-center text-[#059669]">
                     <app.icon className="w-6 h-6" />
                   </div>
                   <Badge variant="blue">{app.badge}</Badge>
                 </div>
 
-                <h3 className="text-xl font-bold text-white">{app.title}</h3>
-                <p className="text-xs text-[#94A3B8] leading-relaxed">
+                <h3 className="text-xl font-bold text-[#0F172A]">{app.title}</h3>
+                <p className="text-xs text-[#64748B] leading-relaxed">
                   {app.description}
                 </p>
 
-                <div className="pt-3 border-t border-[#1E293B] space-y-2">
-                  <span className="text-[11px] font-mono text-[#64748B] block font-semibold">
+                <div className="pt-3 border-t border-[#E2E8F0] space-y-2">
+                  <span className="text-[11px] font-mono text-[#64748B] block font-bold uppercase tracking-wider">
                     Key Technical Demands:
                   </span>
                   {app.points.map((point, idx) => (
-                    <div key={idx} className="flex items-start gap-2 text-xs text-[#CBD5E1]">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#00F59B] mt-1.5 shrink-0"></span>
+                    <div key={idx} className="flex items-start gap-2 text-xs text-[#334155]">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#059669] mt-1.5 shrink-0"></span>
                       <span>{point}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="pt-6 mt-6 border-t border-[#1E293B] flex items-center justify-between">
+              <div className="pt-6 mt-6 border-t border-[#E2E8F0] flex items-center justify-between">
                 <Link
                   href={`/products/${app.categorySlug}`}
-                  className="text-xs font-semibold text-[#00F59B] hover:underline flex items-center gap-1"
+                  className="text-xs font-bold text-[#059669] hover:underline flex items-center gap-1"
                 >
                   View Related Category <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
