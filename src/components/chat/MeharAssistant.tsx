@@ -1,302 +1,1742 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import { usePathname, useRouter } from 'next/navigation';
 import { COMPANY_INFO } from '@/data/companyInfo';
+import { APPLICATION_DOMAINS } from '@/data/applicationDomains';
 import {
   MessageSquare,
   X,
-  Send,
-  ArrowRight,
-  ShieldCheck,
-  Cpu,
-  FileSpreadsheet,
-  PhoneCall,
+  Minus,
+  ArrowLeft,
   RotateCcw,
-  Sparkles,
+  ChevronRight,
+  AlertTriangle,
+  CheckCircle,
+  Search,
+  Layers,
+  FileText,
+  Handshake,
+  Phone,
+  Building2,
+  MessageCircle,
 } from 'lucide-react';
 
-interface ChatMessage {
-  id: string;
-  sender: 'bot' | 'user';
-  text: string;
-  options?: { label: string; action: () => void }[];
-  actionLink?: { href: string; label: string };
+// ─────────────────────────────────────────────────────────────────
+// TYPES
+// ─────────────────────────────────────────────────────────────────
+
+type Flow =
+  | 'welcome'
+  | 'finder'
+  | 'oem'
+  | 'bulk_rfq'
+  | 'dealer'
+  | 'sales'
+  | 'summary';
+
+interface RequirementsData {
+  application?: string;
+  applicationLabel?: string;
+  voltageKnown?: 'yes' | 'no';
+  voltage?: string;
+  voltageUnit?: string;
+  capacityKnown?: 'yes' | 'no';
+  capacity?: string;
+  capacityUnit?: string;
+  runtime?: string;
+  runtimeUnit?: string;
+  continuousCurrent?: string;
+  peakCurrent?: string;
+  dimensions?: string;
+  ipRating?: string;
+  quantity?: string;
+  projectStage?: string;
 }
 
-export default function MeharAssistant() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [inputValue, setInputValue] = useState('');
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+interface OemData {
+  application?: string;
+  applicationLabel?: string;
+  voltage?: string;
+  capacity?: string;
+  dimensions?: string;
+  weightLimit?: string;
+  currentReq?: string;
+  connector?: string;
+  bmsReq?: string;
+  environmentalReq?: string;
+  protoQty?: string;
+  annualQty?: string;
+}
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+interface BulkRfqData {
+  application?: string;
+  applicationLabel?: string;
+  quantity?: string;
+  hasSpec?: 'yes' | 'no';
+  keyRequirements?: string;
+  companyName?: string;
+  contactName?: string;
+  email?: string;
+  phone?: string;
+}
+
+interface DealerData {
+  companyName?: string;
+  location?: string;
+  businessType?: string;
+  existingMarket?: string;
+  expectedVolume?: string;
+  website?: string;
+  contactInfo?: string;
+}
+
+// ─────────────────────────────────────────────────────────────────
+// FINDER STEPS
+// ─────────────────────────────────────────────────────────────────
+
+type FinderStep =
+  | 'application'
+  | 'voltage_known'
+  | 'voltage_value'
+  | 'capacity_known'
+  | 'capacity_value'
+  | 'runtime'
+  | 'current'
+  | 'dimensions'
+  | 'quantity'
+  | 'project_stage'
+  | 'summary';
+
+const FINDER_STEPS: FinderStep[] = [
+  'application',
+  'voltage_known',
+  'voltage_value',
+  'capacity_known',
+  'capacity_value',
+  'runtime',
+  'current',
+  'dimensions',
+  'quantity',
+  'project_stage',
+  'summary',
+];
+
+const SKIPPABLE_STEPS: FinderStep[] = [
+  'voltage_value',
+  'capacity_value',
+  'runtime',
+  'current',
+  'dimensions',
+];
+
+// ─────────────────────────────────────────────────────────────────
+// OEM STEPS
+// ─────────────────────────────────────────────────────────────────
+
+type OemStep =
+  | 'application'
+  | 'voltage'
+  | 'capacity'
+  | 'dimensions'
+  | 'weight_limit'
+  | 'current_req'
+  | 'connector'
+  | 'bms_req'
+  | 'environmental_req'
+  | 'proto_qty'
+  | 'annual_qty'
+  | 'summary';
+
+const OEM_STEPS: OemStep[] = [
+  'application',
+  'voltage',
+  'capacity',
+  'dimensions',
+  'weight_limit',
+  'current_req',
+  'connector',
+  'bms_req',
+  'environmental_req',
+  'proto_qty',
+  'annual_qty',
+  'summary',
+];
+
+// ─────────────────────────────────────────────────────────────────
+// BULK RFQ STEPS
+// ─────────────────────────────────────────────────────────────────
+
+type BulkStep =
+  | 'application'
+  | 'quantity'
+  | 'has_spec'
+  | 'key_requirements'
+  | 'company_name'
+  | 'contact_name'
+  | 'email'
+  | 'phone'
+  | 'summary';
+
+// ─────────────────────────────────────────────────────────────────
+// DEALER STEPS
+// ─────────────────────────────────────────────────────────────────
+
+type DealerStep =
+  | 'company_name'
+  | 'location'
+  | 'business_type'
+  | 'existing_market'
+  | 'expected_volume'
+  | 'website'
+  | 'contact_info'
+  | 'summary';
+
+// ─────────────────────────────────────────────────────────────────
+// UTILITY
+// ─────────────────────────────────────────────────────────────────
+
+function buildRfqUrl(req: RequirementsData): string {
+  const params = new URLSearchParams();
+  if (req.application) params.set('category', req.application);
+  if (req.voltage && req.voltageKnown === 'yes')
+    params.set('voltage', `${req.voltage}${req.voltageUnit || 'V'}`);
+  if (req.capacity && req.capacityKnown === 'yes')
+    params.set('capacity', req.capacity);
+  if (req.quantity) params.set('volume', 'COMMERCIAL_BATCH');
+  const notes = [
+    req.runtime ? `Runtime/Range: ${req.runtime} ${req.runtimeUnit || ''}` : '',
+    req.continuousCurrent ? `Continuous current: ${req.continuousCurrent}A` : '',
+    req.peakCurrent ? `Peak current: ${req.peakCurrent}A` : '',
+    req.dimensions ? `Dimensions: ${req.dimensions}` : '',
+    req.ipRating ? `IP Rating: ${req.ipRating}` : '',
+    req.projectStage ? `Project stage: ${req.projectStage}` : '',
+  ]
+    .filter(Boolean)
+    .join(' | ');
+  if (notes) params.set('notes', notes);
+  return `/rfq?${params.toString()}`;
+}
+
+function buildOemRfqUrl(oem: OemData): string {
+  const params = new URLSearchParams();
+  if (oem.application) params.set('category', oem.application);
+  if (oem.voltage) params.set('voltage', oem.voltage);
+  if (oem.capacity) params.set('capacity', oem.capacity);
+  const notes = [
+    oem.dimensions ? `Dimensions: ${oem.dimensions}` : '',
+    oem.weightLimit ? `Weight limit: ${oem.weightLimit}` : '',
+    oem.currentReq ? `Current req: ${oem.currentReq}` : '',
+    oem.connector ? `Connector: ${oem.connector}` : '',
+    oem.bmsReq ? `BMS/Comms: ${oem.bmsReq}` : '',
+    oem.environmentalReq ? `Environmental: ${oem.environmentalReq}` : '',
+    oem.protoQty ? `Prototype qty: ${oem.protoQty}` : '',
+    oem.annualQty ? `Annual qty: ${oem.annualQty}` : '',
+  ]
+    .filter(Boolean)
+    .join(' | ');
+  if (notes) params.set('notes', notes);
+  return `/rfq?${params.toString()}`;
+}
+
+function buildBulkRfqUrl(bulk: BulkRfqData): string {
+  const params = new URLSearchParams();
+  if (bulk.application) params.set('category', bulk.application);
+  if (bulk.quantity) params.set('volume', 'ANNUAL_VOLUME');
+  const notes = [
+    bulk.hasSpec === 'yes' ? 'Customer has existing spec/datasheet' : 'No existing spec — requires engineering scoping',
+    bulk.keyRequirements ? `Key requirements: ${bulk.keyRequirements}` : '',
+    bulk.companyName ? `Company: ${bulk.companyName}` : '',
+    bulk.contactName ? `Contact: ${bulk.contactName}` : '',
+    bulk.email ? `Email: ${bulk.email}` : '',
+    bulk.phone ? `Phone: ${bulk.phone}` : '',
+  ]
+    .filter(Boolean)
+    .join(' | ');
+  if (notes) params.set('notes', notes);
+  return `/rfq?${params.toString()}`;
+}
+
+// ─────────────────────────────────────────────────────────────────
+// SUB-COMPONENTS
+// ─────────────────────────────────────────────────────────────────
+
+function QuickReplies({
+  options,
+  onSelect,
+}: {
+  options: { label: string; value?: string }[];
+  onSelect: (label: string, value?: string) => void;
+}) {
+  return (
+    <div className="flex flex-wrap gap-1.5 mt-2">
+      {options.map((opt) => (
+        <button
+          key={opt.value ?? opt.label}
+          onClick={() => onSelect(opt.label, opt.value)}
+          className="px-3 py-1.5 rounded-lg bg-white border border-[#CBD5E1] text-[11px] font-semibold text-[#0F172A] hover:border-[#059669] hover:bg-[#ECFDF5] hover:text-[#065F46] transition-all duration-150 text-left leading-snug"
+        >
+          {opt.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function TextInput({
+  placeholder,
+  onSubmit,
+  onSkip,
+  buttonLabel = 'Continue',
+  type = 'text',
+  unit,
+  unitOptions,
+  onUnitChange,
+  skippable = false,
+}: {
+  placeholder: string;
+  onSubmit: (value: string) => void;
+  onSkip?: () => void;
+  buttonLabel?: string;
+  type?: string;
+  unit?: string;
+  unitOptions?: string[];
+  onUnitChange?: (u: string) => void;
+  skippable?: boolean;
+}) {
+  const [val, setVal] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (isOpen && messages.length === 0) {
-      initWelcome();
-    }
-  }, [isOpen]);
+    inputRef.current?.focus();
+  }, []);
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  const initWelcome = () => {
-    setMessages([
-      {
-        id: 'welcome-1',
-        sender: 'bot',
-        text: `Welcome to the MEHAR B2B Commercial & Technical Desk (Lawad Infrastructure Pvt. Ltd.). How can we assist your battery procurement today?`,
-        options: [
-          { label: '🔍 Scope Battery Requirements', action: () => handleAction('finder') },
-          { label: '⚙️ Custom OEM / ODM Pack', action: () => handleAction('oem') },
-          { label: '📦 Bulk Quotation (RFQ)', action: () => handleAction('rfq') },
-          { label: '🤝 Dealership Inquiry', action: () => handleAction('dealer') },
-          { label: '📞 Contact Sales Engineer', action: () => handleAction('contact') },
-        ],
-      },
-    ]);
-  };
-
-  const handleAction = (type: string) => {
-    if (type === 'finder') {
-      setMessages((prev) => [
-        ...prev,
-        { id: String(Date.now()), sender: 'user', text: 'I want to scope my battery requirements.' },
-        {
-          id: String(Date.now() + 1),
-          sender: 'bot',
-          text: `You can use our interactive Battery Requirements Finder to capture your voltage, capacity, dimension, and duty cycle parameters. Our engineering team will evaluate the optimal solution.`,
-          actionLink: { href: '/finder', label: 'Launch Battery Finder Wizard' },
-        },
-      ]);
-    } else if (type === 'oem') {
-      setMessages((prev) => [
-        ...prev,
-        { id: String(Date.now()), sender: 'user', text: 'I need a custom OEM / ODM battery pack.' },
-        {
-          id: String(Date.now() + 1),
-          sender: 'bot',
-          text: `We collaborate with OEMs on tailored form-factors, custom BMS telemetry (CAN/RS485), and specific enclosure footprints. All custom designs require engineering confirmation.`,
-          actionLink: { href: '/rfq', label: 'Submit Custom OEM Specifications' },
-        },
-      ]);
-    } else if (type === 'rfq') {
-      setMessages((prev) => [
-        ...prev,
-        { id: String(Date.now()), sender: 'user', text: 'I would like to submit a B2B RFQ.' },
-        {
-          id: String(Date.now() + 1),
-          sender: 'bot',
-          text: `Please use our structured B2B RFQ Builder to specify batch quantities, target electrical parameters, and delivery timelines.`,
-          actionLink: { href: '/rfq', label: 'Open B2B RFQ Builder' },
-        },
-      ]);
-    } else if (type === 'dealer') {
-      setMessages((prev) => [
-        ...prev,
-        { id: String(Date.now()), sender: 'user', text: 'Tell me about dealership and distribution partnerships.' },
-        {
-          id: String(Date.now() + 1),
-          sender: 'bot',
-          text: `MEHAR partners with authorized commercial battery distributors across India. Please provide your business details through our commercial desk.`,
-          actionLink: { href: '/contact?type=dealership', label: 'Apply for Dealership / Distribution' },
-        },
-      ]);
-    } else if (type === 'contact') {
-      setMessages((prev) => [
-        ...prev,
-        { id: String(Date.now()), sender: 'user', text: 'I want to connect with a sales engineer.' },
-        {
-          id: String(Date.now() + 1),
-          sender: 'bot',
-          text: `You can reach our sales desk directly via email at ${COMPANY_INFO.salesEmail} or connect instantly on WhatsApp.`,
-          actionLink: {
-            href: `https://wa.me/${COMPANY_INFO.whatsappDesk.replace(/[^0-9]/g, '')}?text=Hello%2C%20I%20am%20inquiring%20about%20MEHAR%20B2B%20battery%20procurement.`,
-            label: 'Open WhatsApp Business Chat',
-          },
-        },
-      ]);
-    }
-  };
-
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inputValue.trim()) return;
-
-    const userText = inputValue;
-    setInputValue('');
-
-    const newMsgId = String(Date.now());
-    const lower = userText.toLowerCase();
-
-    let botResponse = `Thank you for sharing your requirement. All battery configurations, chemistry selections, and custom pack specifications undergo technical evaluation by Lawad Infrastructure engineers.`;
-    let actionLink: { href: string; label: string } | undefined = { href: '/rfq', label: 'Submit Formal RFQ' };
-
-    if (lower.includes('quote') || lower.includes('price') || lower.includes('rfq') || lower.includes('cost')) {
-      botResponse = `For official B2B wholesale quotation, please submit your target parameters and batch volumes via our RFQ Builder. Our commercial desk will prepare an official proposal.`;
-      actionLink = { href: '/rfq', label: 'Go to RFQ Builder' };
-    } else if (lower.includes('custom') || lower.includes('oem') || lower.includes('bms') || lower.includes('design')) {
-      botResponse = `For custom pack development, please specify your required voltage envelope, dimensional space constraints, and continuous discharge currents.`;
-      actionLink = { href: '/rfq', label: 'Open Custom Pack Intake' };
-    } else if (lower.includes('spec') || lower.includes('voltage') || lower.includes('capacity') || lower.includes('ah')) {
-      botResponse = `Verified client catalogue data is currently in preparation. You can capture and submit your target electrical requirements through our Finder Wizard.`;
-      actionLink = { href: '/finder', label: 'Open Battery Requirements Finder' };
-    } else if (lower.includes('phone') || lower.includes('contact') || lower.includes('whatsapp') || lower.includes('call')) {
-      botResponse = `You can connect directly with our technical sales engineers via WhatsApp or submit a callback request.`;
-      actionLink = { href: '/contact', label: 'View Contact Details' };
-    }
-
-    setMessages((prev) => [
-      ...prev,
-      { id: newMsgId, sender: 'user', text: userText },
-      {
-        id: String(Date.now() + 1),
-        sender: 'bot',
-        text: botResponse,
-        actionLink,
-      },
-    ]);
+    if (val.trim()) onSubmit(val.trim());
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
-      {/* Floating Trigger Button */}
+    <form onSubmit={handleSubmit} className="mt-2 space-y-1.5">
+      <div className="flex gap-1.5">
+        <input
+          ref={inputRef}
+          type={type}
+          value={val}
+          onChange={(e) => setVal(e.target.value)}
+          placeholder={placeholder}
+          className="flex-1 min-w-0 px-3 py-2 text-xs rounded-lg bg-white border border-[#CBD5E1] text-[#0F172A] placeholder-[#94A3B8] focus:outline-none focus:border-[#059669] focus:ring-1 focus:ring-[#059669]/30"
+        />
+        {unitOptions && unit && onUnitChange && (
+          <select
+            value={unit}
+            onChange={(e) => onUnitChange(e.target.value)}
+            className="px-2 py-2 text-xs rounded-lg bg-white border border-[#CBD5E1] text-[#0F172A] focus:outline-none focus:border-[#059669]"
+          >
+            {unitOptions.map((u) => (
+              <option key={u} value={u}>{u}</option>
+            ))}
+          </select>
+        )}
+        <button
+          type="submit"
+          disabled={!val.trim()}
+          className="px-3 py-2 rounded-lg bg-[#059669] text-white text-xs font-semibold hover:bg-[#047857] transition-colors disabled:opacity-40 whitespace-nowrap"
+        >
+          {buttonLabel}
+        </button>
+      </div>
+      {skippable && onSkip && (
+        <button
+          type="button"
+          onClick={onSkip}
+          className="text-[10px] text-[#64748B] hover:text-[#059669] transition-colors"
+        >
+          Skip this →
+        </button>
+      )}
+    </form>
+  );
+}
+
+function SummaryRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex justify-between items-start gap-3 py-1.5 border-b border-[#F1F5F9] last:border-0">
+      <span className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider whitespace-nowrap">
+        {label}
+      </span>
+      <span className="text-[11px] text-[#0F172A] text-right font-medium">{value}</span>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────
+// MAIN COMPONENT
+// ─────────────────────────────────────────────────────────────────
+
+export default function MeharAssistant() {
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(false);
+  const [flow, setFlow] = useState<Flow>('welcome');
+  const [historyStack, setHistoryStack] = useState<Flow[]>([]);
+
+  // Finder state
+  const [finderStep, setFinderStep] = useState<FinderStep>('application');
+  const [finderStepHistory, setFinderStepHistory] = useState<FinderStep[]>([]);
+  const [requirements, setRequirements] = useState<RequirementsData>({});
+
+  // OEM state
+  const [oemStep, setOemStep] = useState<OemStep>('application');
+  const [oemStepHistory, setOemStepHistory] = useState<OemStep[]>([]);
+  const [oemData, setOemData] = useState<OemData>({});
+  const [oemUnit, setOemUnit] = useState('V');
+
+  // Bulk RFQ state
+  const [bulkStep, setBulkStep] = useState<BulkStep>('application');
+  const [bulkStepHistory, setBulkStepHistory] = useState<BulkStep[]>([]);
+  const [bulkData, setBulkData] = useState<BulkRfqData>({});
+
+  // Dealer state
+  const [dealerStep, setDealerStep] = useState<DealerStep>('company_name');
+  const [dealerStepHistory, setDealerStepHistory] = useState<DealerStep[]>([]);
+  const [dealerData, setDealerData] = useState<DealerData>({});
+
+  // Finder unit state
+  const [voltageUnit, setVoltageUnit] = useState('V');
+  const [capacityUnit, setCapacityUnit] = useState('Ah');
+  const [runtimeUnit, setRuntimeUnit] = useState('hours');
+
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [flow, finderStep, oemStep, bulkStep, dealerStep]);
+
+  // ─── Context-aware suggestions ───────────────────────────────
+  const contextPrompt = (() => {
+    if (pathname === '/finder')
+      return {
+        text: 'Need help choosing what to enter?',
+        cta: 'Start guided assessment',
+        action: () => { setFlow('finder'); setFinderStep('application'); },
+      };
+    if (pathname === '/rfq')
+      return {
+        text: 'Need help preparing your RFQ?',
+        cta: 'Guide me through it',
+        action: () => { setFlow('bulk_rfq'); setBulkStep('application'); },
+      };
+    if (pathname?.startsWith('/products'))
+      return {
+        text: 'Looking for a battery solution?',
+        cta: 'Find a solution',
+        action: () => { setFlow('finder'); setFinderStep('application'); },
+      };
+    if (pathname === '/compare')
+      return {
+        text: 'Not sure which category fits?',
+        cta: 'Start requirement assessment',
+        action: () => { setFlow('finder'); setFinderStep('application'); },
+      };
+    return null;
+  })();
+
+  // ─── Navigation helpers ───────────────────────────────────────
+  const goToFlow = useCallback((f: Flow) => {
+    setHistoryStack((h) => [...h, flow]);
+    setFlow(f);
+  }, [flow]);
+
+  const goBack = useCallback(() => {
+    if (flow === 'finder' && finderStepHistory.length > 0) {
+      const prev = [...finderStepHistory];
+      const last = prev.pop()!;
+      setFinderStepHistory(prev);
+      setFinderStep(last);
+      return;
+    }
+    if (flow === 'oem' && oemStepHistory.length > 0) {
+      const prev = [...oemStepHistory];
+      const last = prev.pop()!;
+      setOemStepHistory(prev);
+      setOemStep(last);
+      return;
+    }
+    if (flow === 'bulk_rfq' && bulkStepHistory.length > 0) {
+      const prev = [...bulkStepHistory];
+      const last = prev.pop()!;
+      setBulkStepHistory(prev);
+      setBulkStep(last);
+      return;
+    }
+    if (flow === 'dealer' && dealerStepHistory.length > 0) {
+      const prev = [...dealerStepHistory];
+      const last = prev.pop()!;
+      setDealerStepHistory(prev);
+      setDealerStep(last);
+      return;
+    }
+    if (historyStack.length > 0) {
+      const prev = [...historyStack];
+      const last = prev.pop()!;
+      setHistoryStack(prev);
+      setFlow(last);
+    }
+  }, [flow, finderStepHistory, oemStepHistory, bulkStepHistory, dealerStepHistory, historyStack]);
+
+  const startOver = useCallback(() => {
+    setFlow('welcome');
+    setHistoryStack([]);
+    setFinderStep('application');
+    setFinderStepHistory([]);
+    setRequirements({});
+    setOemStep('application');
+    setOemStepHistory([]);
+    setOemData({});
+    setOemUnit('V');
+    setBulkStep('application');
+    setBulkStepHistory([]);
+    setBulkData({});
+    setDealerStep('company_name');
+    setDealerStepHistory([]);
+    setDealerData({});
+    setVoltageUnit('V');
+    setCapacityUnit('Ah');
+    setRuntimeUnit('hours');
+  }, []);
+
+  const canGoBack =
+    flow !== 'welcome' ||
+    finderStepHistory.length > 0 ||
+    oemStepHistory.length > 0 ||
+    bulkStepHistory.length > 0 ||
+    dealerStepHistory.length > 0;
+
+  // ─── Finder flow helpers ──────────────────────────────────────
+  const advanceFinder = (next: FinderStep) => {
+    setFinderStepHistory((h) => [...h, finderStep]);
+    setFinderStep(next);
+  };
+
+  const advanceOem = (next: OemStep) => {
+    setOemStepHistory((h) => [...h, oemStep]);
+    setOemStep(next);
+  };
+
+  const advanceBulk = (next: BulkStep) => {
+    setBulkStepHistory((h) => [...h, bulkStep]);
+    setBulkStep(next);
+  };
+
+  const advanceDealer = (next: DealerStep) => {
+    setDealerStepHistory((h) => [...h, dealerStep]);
+    setDealerStep(next);
+  };
+
+  // ─── Progress calculation ─────────────────────────────────────
+  const finderProgress = (() => {
+    const idx = FINDER_STEPS.indexOf(finderStep);
+    return Math.round((idx / (FINDER_STEPS.length - 1)) * 100);
+  })();
+
+  const oemProgress = (() => {
+    const idx = OEM_STEPS.indexOf(oemStep);
+    return Math.round((idx / (OEM_STEPS.length - 1)) * 100);
+  })();
+
+  // ─── WhatsApp URL ─────────────────────────────────────────────
+  const whatsappUrl = `https://wa.me/${COMPANY_INFO.whatsappDesk.replace(/[^0-9]/g, '')}?text=${encodeURIComponent('Hello, I am enquiring about MEHAR battery solutions (Lawad Infrastructure Pvt. Ltd.).')}`;
+
+  // ─────────────────────────────────────────────────────────────
+  // RENDER
+  // ─────────────────────────────────────────────────────────────
+
+  const applicationOptions = APPLICATION_DOMAINS.map((d) => ({
+    label: d.name,
+    value: d.id,
+  })).concat([{ label: 'Other / Not listed', value: 'other' }]);
+
+  return (
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50">
+
+      {/* ── Floating Trigger Button ── */}
       {!isOpen && (
         <button
+          id="mehar-assistant-trigger"
           onClick={() => setIsOpen(true)}
-          className="flex items-center gap-2.5 px-4 py-3 rounded-full bg-[#059669] text-white shadow-xl hover:bg-[#047857] hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-[#059669]/30 group"
+          className="flex items-center gap-2.5 px-4 py-3 rounded-full bg-[#059669] text-white shadow-xl hover:bg-[#047857] hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-[#059669]/30"
           aria-label="Open MEHAR Battery Assistant"
         >
           <div className="relative">
             <MessageSquare className="w-5 h-5" />
-            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-white animate-pulse"></span>
+            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-white border border-[#059669] animate-pulse" />
           </div>
-          <span className="text-xs font-bold font-mono tracking-wide">
-            MEHAR Assistant
-          </span>
+          <span className="text-xs font-bold tracking-wide">MEHAR Assistant</span>
         </button>
       )}
 
-      {/* Chat Window Modal */}
+      {/* ── Chat Window ── */}
       {isOpen && (
-        <div className="w-[360px] sm:w-[400px] h-[520px] max-h-[85vh] bg-white border border-[#CBD5E1] rounded-2xl shadow-2xl flex flex-col justify-between overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-200">
-          {/* Header */}
-          <div className="p-4 bg-[#F8FAFC] border-b border-[#E2E8F0] flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-[#ECFDF5] border border-[#A7F3D0] flex items-center justify-center text-[#059669]">
-                <Cpu className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-xs font-bold text-[#0F172A] flex items-center gap-1.5">
-                  MEHAR Battery Assistant
-                  <span className="w-2 h-2 rounded-full bg-[#10B981]"></span>
-                </h3>
-                <p className="text-[10px] text-[#64748B] font-mono">
-                  Lawad Infrastructure B2B Desk
-                </p>
-              </div>
-            </div>
+        <div
+          ref={containerRef}
+          className={`
+            w-[calc(100vw-2rem)] sm:w-[420px]
+            ${isMinimized ? 'h-auto' : 'h-[580px] max-h-[85vh]'}
+            bg-white border border-[#CBD5E1] rounded-2xl shadow-2xl flex flex-col overflow-hidden
+            transition-all duration-200
+          `}
+          role="dialog"
+          aria-label="MEHAR Battery Assistant"
+        >
 
-            <div className="flex items-center gap-1">
-              <button
-                onClick={() => initWelcome()}
-                title="Reset Chat"
-                className="p-1.5 rounded-lg text-[#64748B] hover:text-[#0F172A] hover:bg-[#E2E8F0] transition-colors"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-              </button>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="p-1.5 rounded-lg text-[#64748B] hover:text-[#0F172A] hover:bg-[#E2E8F0] transition-colors"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-
-          {/* Messages Area */}
-          <div className="flex-1 p-4 overflow-y-auto space-y-3.5 text-xs">
-            {messages.map((msg) => (
-              <div
-                key={msg.id}
-                className={`flex flex-col ${
-                  msg.sender === 'user' ? 'items-end' : 'items-start'
-                }`}
-              >
-                <div
-                  className={`p-3.5 rounded-2xl max-w-[85%] ${
-                    msg.sender === 'user'
-                      ? 'bg-[#059669] text-white rounded-br-none'
-                      : 'bg-[#F8FAFC] border border-[#E2E8F0] text-[#334155] rounded-bl-none'
-                  }`}
-                >
-                  <p className="leading-relaxed whitespace-pre-wrap">{msg.text}</p>
-
-                  {/* Action Link Button */}
-                  {msg.actionLink && (
-                    <div className="mt-3 pt-2 border-t border-[#CBD5E1]/40">
-                      <Link
-                        href={msg.actionLink.href}
-                        onClick={() => setIsOpen(false)}
-                        className="inline-flex items-center gap-1.5 text-xs font-bold text-[#059669] bg-white px-3 py-1.5 rounded-lg border border-[#CBD5E1] hover:bg-[#ECFDF5] transition-colors"
-                      >
-                        <span>{msg.actionLink.label}</span>
-                        <ArrowRight className="w-3 h-3" />
-                      </Link>
-                    </div>
-                  )}
+          {/* ── Header ── */}
+          <div className="flex-shrink-0 px-4 py-3 bg-white border-b border-[#E2E8F0]">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-[#ECFDF5] border border-[#A7F3D0] flex items-center justify-center">
+                  <MessageCircle className="w-4 h-4 text-[#059669]" />
                 </div>
+                <div className="min-w-0">
+                  <p className="text-[12px] font-bold text-[#0F172A] leading-tight">MEHAR Battery Assistant</p>
+                  <p className="text-[10px] text-[#64748B] leading-tight">B2B Solutions &amp; Engineering Enquiry</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-1 flex-shrink-0">
+                {flow !== 'welcome' && (
+                  <button
+                    onClick={startOver}
+                    title="Start Over"
+                    className="p-1.5 rounded-lg text-[#64748B] hover:text-[#0F172A] hover:bg-[#F1F5F9] transition-colors"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                  </button>
+                )}
+                <button
+                  onClick={() => setIsMinimized((v) => !v)}
+                  title={isMinimized ? 'Expand' : 'Minimise'}
+                  className="p-1.5 rounded-lg text-[#64748B] hover:text-[#0F172A] hover:bg-[#F1F5F9] transition-colors"
+                >
+                  <Minus className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="p-1.5 rounded-lg text-[#64748B] hover:text-[#DC2626] hover:bg-[#FEF2F2] transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
 
-                {/* Quick Action Options */}
-                {msg.options && (
-                  <div className="mt-2.5 flex flex-wrap gap-1.5 max-w-[90%]">
-                    {msg.options.map((opt, idx) => (
-                      <button
-                        key={idx}
-                        onClick={opt.action}
-                        className="px-2.5 py-1 rounded-lg bg-white border border-[#CBD5E1] text-[11px] font-semibold text-[#0F172A] hover:border-[#059669] hover:bg-[#ECFDF5] hover:text-[#065F46] transition-colors text-left"
-                      >
-                        {opt.label}
-                      </button>
-                    ))}
+            {/* Back button row + progress */}
+            {!isMinimized && (flow !== 'welcome') && (
+              <div className="mt-2 flex items-center gap-2">
+                <button
+                  onClick={goBack}
+                  className="flex items-center gap-1 text-[10px] text-[#64748B] hover:text-[#059669] transition-colors"
+                >
+                  <ArrowLeft className="w-3 h-3" /> Back
+                </button>
+                {(flow === 'finder') && (
+                  <div className="flex-1 flex items-center gap-2">
+                    <div className="flex-1 h-1 rounded-full bg-[#F1F5F9] overflow-hidden">
+                      <div
+                        className="h-full rounded-full bg-[#059669] transition-all duration-300"
+                        style={{ width: `${finderProgress}%` }}
+                      />
+                    </div>
+                    <span className="text-[9px] text-[#94A3B8] whitespace-nowrap">{finderProgress}%</span>
+                  </div>
+                )}
+                {(flow === 'oem') && (
+                  <div className="flex-1 flex items-center gap-2">
+                    <div className="flex-1 h-1 rounded-full bg-[#F1F5F9] overflow-hidden">
+                      <div
+                        className="h-full rounded-full bg-[#059669] transition-all duration-300"
+                        style={{ width: `${oemProgress}%` }}
+                      />
+                    </div>
+                    <span className="text-[9px] text-[#94A3B8] whitespace-nowrap">{oemProgress}%</span>
                   </div>
                 )}
               </div>
-            ))}
-            <div ref={messagesEndRef} />
+            )}
           </div>
 
-          {/* Input Footer */}
-          <div className="p-3 bg-[#F8FAFC] border-t border-[#E2E8F0]">
-            <form onSubmit={handleSendMessage} className="flex items-center gap-2">
-              <input
-                type="text"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                placeholder="Type your battery requirement..."
-                className="flex-1 px-3.5 py-2 text-xs rounded-xl bg-white border border-[#CBD5E1] text-[#0F172A] placeholder-[#94A3B8] focus:outline-none focus:border-[#059669] focus:ring-1 focus:ring-[#059669]"
-              />
-              <button
-                type="submit"
-                className="p-2 rounded-xl bg-[#059669] text-white hover:bg-[#047857] transition-colors disabled:opacity-50"
-                disabled={!inputValue.trim()}
-              >
-                <Send className="w-4 h-4" />
-              </button>
-            </form>
-            <div className="mt-1.5 text-center">
-              <span className="text-[10px] text-[#64748B] font-mono">
-                Official B2B Desk • Engineering Confirmation Required
-              </span>
+          {/* ── Body ── */}
+          {!isMinimized && (
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 text-xs">
+
+              {/* ════════════════════════════════════════════════
+                  WELCOME SCREEN
+              ════════════════════════════════════════════════ */}
+              {flow === 'welcome' && (
+                <div className="space-y-4">
+
+                  {/* Context-aware banner */}
+                  {contextPrompt && (
+                    <div className="bg-[#F0FDF4] border border-[#A7F3D0] rounded-xl p-3">
+                      <p className="text-[11px] text-[#065F46] font-medium mb-1.5">{contextPrompt.text}</p>
+                      <button
+                        onClick={contextPrompt.action}
+                        className="flex items-center gap-1 text-[11px] font-bold text-[#059669] hover:text-[#047857]"
+                      >
+                        {contextPrompt.cta} <ChevronRight className="w-3 h-3" />
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Welcome message */}
+                  <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3.5">
+                    <p className="text-[11px] font-bold text-[#0F172A] mb-1">Welcome to MEHAR.</p>
+                    <p className="text-[11px] text-[#475569] leading-relaxed">
+                      I can help you scope a battery requirement, prepare an RFQ, or connect you with the appropriate business or engineering team.
+                    </p>
+                  </div>
+
+                  {/* Main action cards */}
+                  <div className="space-y-2">
+                    <ActionCard
+                      icon={<Search className="w-4 h-4 text-[#059669]" />}
+                      title="Find a Battery Solution"
+                      subtitle="Tell us about your application and requirements."
+                      onClick={() => { setFlow('finder'); setFinderStep('application'); }}
+                    />
+                    <ActionCard
+                      icon={<Layers className="w-4 h-4 text-[#059669]" />}
+                      title="Design a Custom OEM Battery"
+                      subtitle="For custom form factor, electrical, BMS and mechanical requirements."
+                      onClick={() => { setFlow('oem'); setOemStep('application'); }}
+                    />
+                    <ActionCard
+                      icon={<FileText className="w-4 h-4 text-[#059669]" />}
+                      title="Prepare a Bulk RFQ"
+                      subtitle="Submit your requirements and company details."
+                      onClick={() => { setFlow('bulk_rfq'); setBulkStep('application'); }}
+                    />
+                    <ActionCard
+                      icon={<Handshake className="w-4 h-4 text-[#059669]" />}
+                      title="Dealer / Distribution Enquiry"
+                      subtitle="For channel and distribution enquiries."
+                      onClick={() => { setFlow('dealer'); setDealerStep('company_name'); }}
+                    />
+                    <ActionCard
+                      icon={<Phone className="w-4 h-4 text-[#059669]" />}
+                      title="Talk to Sales"
+                      subtitle="Contact the MEHAR business team."
+                      onClick={() => setFlow('sales')}
+                    />
+                  </div>
+
+                  {/* Secondary option */}
+                  <button
+                    onClick={() => { setFlow('finder'); setFinderStep('application'); }}
+                    className="w-full flex items-center justify-center gap-1.5 py-2.5 border border-dashed border-[#CBD5E1] rounded-xl text-[11px] font-semibold text-[#059669] hover:border-[#059669] hover:bg-[#F0FDF4] transition-colors"
+                  >
+                    Start with my requirements <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
+
+              {/* ════════════════════════════════════════════════
+                  FINDER FLOW
+              ════════════════════════════════════════════════ */}
+              {flow === 'finder' && (
+                <div className="space-y-3" key={finderStep}>
+                  {finderStep === 'application' && (
+                    <>
+                      <BotMessage text="What will the battery be used for?" />
+                      <QuickReplies
+                        options={applicationOptions}
+                        onSelect={(label, value) => {
+                          const dom = APPLICATION_DOMAINS.find((d) => d.id === value);
+                          setRequirements((r) => ({
+                            ...r,
+                            application: value,
+                            applicationLabel: label,
+                          }));
+                          advanceFinder('voltage_known');
+                        }}
+                      />
+                    </>
+                  )}
+
+                  {finderStep === 'voltage_known' && (
+                    <>
+                      <BotMessage text="Do you already know the required voltage?" />
+                      <QuickReplies
+                        options={[
+                          { label: 'Yes, I know the voltage', value: 'yes' },
+                          { label: 'No / Not sure', value: 'no' },
+                        ]}
+                        onSelect={(_, value) => {
+                          setRequirements((r) => ({ ...r, voltageKnown: value as 'yes' | 'no' }));
+                          if (value === 'yes') advanceFinder('voltage_value');
+                          else advanceFinder('capacity_known');
+                        }}
+                      />
+                    </>
+                  )}
+
+                  {finderStep === 'voltage_value' && (
+                    <>
+                      <BotMessage text="What is the required voltage?" />
+                      <TextInput
+                        placeholder="e.g. 48"
+                        type="number"
+                        unit={voltageUnit}
+                        unitOptions={['V', 'kV']}
+                        onUnitChange={setVoltageUnit}
+                        onSubmit={(v) => {
+                          setRequirements((r) => ({ ...r, voltage: v, voltageUnit }));
+                          advanceFinder('capacity_known');
+                        }}
+                        onSkip={() => advanceFinder('capacity_known')}
+                        skippable
+                      />
+                    </>
+                  )}
+
+                  {finderStep === 'capacity_known' && (
+                    <>
+                      <BotMessage text="Do you know the required capacity (Ah)?" />
+                      <QuickReplies
+                        options={[
+                          { label: 'Yes, I know the capacity', value: 'yes' },
+                          { label: 'No / Not sure', value: 'no' },
+                        ]}
+                        onSelect={(_, value) => {
+                          setRequirements((r) => ({ ...r, capacityKnown: value as 'yes' | 'no' }));
+                          if (value === 'yes') advanceFinder('capacity_value');
+                          else advanceFinder('runtime');
+                        }}
+                      />
+                    </>
+                  )}
+
+                  {finderStep === 'capacity_value' && (
+                    <>
+                      <BotMessage text="What is the required capacity?" />
+                      <TextInput
+                        placeholder="e.g. 100"
+                        type="number"
+                        unit={capacityUnit}
+                        unitOptions={['Ah', 'kWh', 'Wh']}
+                        onUnitChange={setCapacityUnit}
+                        onSubmit={(v) => {
+                          setRequirements((r) => ({ ...r, capacity: v, capacityUnit }));
+                          advanceFinder('runtime');
+                        }}
+                        onSkip={() => advanceFinder('runtime')}
+                        skippable
+                      />
+                    </>
+                  )}
+
+                  {finderStep === 'runtime' && (
+                    <>
+                      <BotMessage text="What is the required runtime or range?" />
+                      <TextInput
+                        placeholder="e.g. 8"
+                        type="number"
+                        unit={runtimeUnit}
+                        unitOptions={['hours', 'km', 'cycles/day']}
+                        onUnitChange={setRuntimeUnit}
+                        onSubmit={(v) => {
+                          setRequirements((r) => ({ ...r, runtime: v, runtimeUnit }));
+                          advanceFinder('current');
+                        }}
+                        onSkip={() => advanceFinder('current')}
+                        skippable
+                      />
+                    </>
+                  )}
+
+                  {finderStep === 'current' && (
+                    <>
+                      <BotMessage text="What is the continuous discharge current? (Optional)" />
+                      <TextInput
+                        placeholder="Continuous current in Amps"
+                        type="number"
+                        onSubmit={(v) => {
+                          setRequirements((r) => ({ ...r, continuousCurrent: v }));
+                          advanceFinder('dimensions');
+                        }}
+                        onSkip={() => advanceFinder('dimensions')}
+                        skippable
+                      />
+                    </>
+                  )}
+
+                  {finderStep === 'dimensions' && (
+                    <>
+                      <BotMessage text="Are there space or dimensional constraints? (Optional)" />
+                      <TextInput
+                        placeholder="e.g. 300×200×150 mm"
+                        onSubmit={(v) => {
+                          setRequirements((r) => ({ ...r, dimensions: v }));
+                          advanceFinder('quantity');
+                        }}
+                        onSkip={() => advanceFinder('quantity')}
+                        skippable
+                      />
+                    </>
+                  )}
+
+                  {finderStep === 'quantity' && (
+                    <>
+                      <BotMessage text="What quantity do you require?" />
+                      <QuickReplies
+                        options={[
+                          { label: 'Evaluation / Sample (1–10 units)', value: '1–10 units' },
+                          { label: 'Small batch (10–50 units)', value: '10–50 units' },
+                          { label: 'Commercial batch (50–200 units)', value: '50–200 units' },
+                          { label: 'Annual volume (500+ units)', value: '500+ units' },
+                          { label: 'Not yet decided', value: 'Not yet decided' },
+                        ]}
+                        onSelect={(_, value) => {
+                          setRequirements((r) => ({ ...r, quantity: value }));
+                          advanceFinder('project_stage');
+                        }}
+                      />
+                    </>
+                  )}
+
+                  {finderStep === 'project_stage' && (
+                    <>
+                      <BotMessage text="What stage is your project at?" />
+                      <QuickReplies
+                        options={[
+                          { label: 'Concept / Research', value: 'Concept / Research' },
+                          { label: 'Prototype', value: 'Prototype' },
+                          { label: 'Pre-production', value: 'Pre-production' },
+                          { label: 'Volume production', value: 'Volume production' },
+                          { label: 'Retrofit / Upgrade', value: 'Retrofit / Upgrade' },
+                        ]}
+                        onSelect={(_, value) => {
+                          setRequirements((r) => ({ ...r, projectStage: value }));
+                          advanceFinder('summary');
+                        }}
+                      />
+                    </>
+                  )}
+
+                  {finderStep === 'summary' && (
+                    <FinderSummary
+                      requirements={requirements}
+                      onStartRfq={() => {
+                        const url = buildRfqUrl(requirements);
+                        setIsOpen(false);
+                        router.push(url);
+                      }}
+                      onReview={() => {
+                        setFinderStep('application');
+                        setFinderStepHistory([]);
+                      }}
+                      onTalkEngineering={() => {
+                        setIsOpen(false);
+                        router.push('/contact?type=engineering');
+                      }}
+                    />
+                  )}
+                </div>
+              )}
+
+              {/* ════════════════════════════════════════════════
+                  OEM FLOW
+              ════════════════════════════════════════════════ */}
+              {flow === 'oem' && (
+                <div className="space-y-3" key={oemStep}>
+                  {oemStep === 'application' && (
+                    <>
+                      <div className="bg-[#F0FDF4] border border-[#A7F3D0] rounded-xl p-3 mb-2">
+                        <p className="text-[11px] text-[#065F46] leading-relaxed">
+                          Custom battery projects can involve electrical, mechanical, BMS, environmental and application requirements. Final configuration requires engineering validation.
+                        </p>
+                      </div>
+                      <BotMessage text="What is the application for this custom battery?" />
+                      <QuickReplies
+                        options={applicationOptions}
+                        onSelect={(label, value) => {
+                          setOemData((d) => ({ ...d, application: value, applicationLabel: label }));
+                          advanceOem('voltage');
+                        }}
+                      />
+                    </>
+                  )}
+
+                  {oemStep === 'voltage' && (
+                    <>
+                      <BotMessage text="What voltage is required? (Enter if known)" />
+                      <TextInput
+                        placeholder="e.g. 48"
+                        type="number"
+                        unit={oemUnit}
+                        unitOptions={['V', 'kV']}
+                        onUnitChange={setOemUnit}
+                        onSubmit={(v) => {
+                          setOemData((d) => ({ ...d, voltage: `${v}${oemUnit}` }));
+                          advanceOem('capacity');
+                        }}
+                        onSkip={() => advanceOem('capacity')}
+                        skippable
+                      />
+                    </>
+                  )}
+
+                  {oemStep === 'capacity' && (
+                    <>
+                      <BotMessage text="What capacity is required? (Ah or Wh if known)" />
+                      <TextInput
+                        placeholder="e.g. 50Ah or 2.4kWh"
+                        onSubmit={(v) => {
+                          setOemData((d) => ({ ...d, capacity: v }));
+                          advanceOem('dimensions');
+                        }}
+                        onSkip={() => advanceOem('dimensions')}
+                        skippable
+                      />
+                    </>
+                  )}
+
+                  {oemStep === 'dimensions' && (
+                    <>
+                      <BotMessage text="What are the maximum external dimensions? (L × W × H)" />
+                      <TextInput
+                        placeholder="e.g. 400×200×120 mm"
+                        onSubmit={(v) => {
+                          setOemData((d) => ({ ...d, dimensions: v }));
+                          advanceOem('weight_limit');
+                        }}
+                        onSkip={() => advanceOem('weight_limit')}
+                        skippable
+                      />
+                    </>
+                  )}
+
+                  {oemStep === 'weight_limit' && (
+                    <>
+                      <BotMessage text="Is there a weight limit for the battery pack?" />
+                      <TextInput
+                        placeholder="e.g. 12 kg"
+                        onSubmit={(v) => {
+                          setOemData((d) => ({ ...d, weightLimit: v }));
+                          advanceOem('current_req');
+                        }}
+                        onSkip={() => advanceOem('current_req')}
+                        skippable
+                      />
+                    </>
+                  )}
+
+                  {oemStep === 'current_req' && (
+                    <>
+                      <BotMessage text="What is the continuous / peak discharge current?" />
+                      <TextInput
+                        placeholder="e.g. 50A continuous / 100A peak"
+                        onSubmit={(v) => {
+                          setOemData((d) => ({ ...d, currentReq: v }));
+                          advanceOem('connector');
+                        }}
+                        onSkip={() => advanceOem('connector')}
+                        skippable
+                      />
+                    </>
+                  )}
+
+                  {oemStep === 'connector' && (
+                    <>
+                      <BotMessage text="Any specific connector or interface requirement?" />
+                      <QuickReplies
+                        options={[
+                          { label: 'Standard Anderson SB', value: 'Anderson SB' },
+                          { label: 'XT60 / XT90', value: 'XT60/XT90' },
+                          { label: 'Custom / proprietary', value: 'Custom / proprietary' },
+                          { label: 'Not yet decided', value: 'Not yet decided' },
+                        ]}
+                        onSelect={(_, value) => {
+                          setOemData((d) => ({ ...d, connector: value }));
+                          advanceOem('bms_req');
+                        }}
+                      />
+                    </>
+                  )}
+
+                  {oemStep === 'bms_req' && (
+                    <>
+                      <BotMessage text="Any BMS or communication protocol requirements?" />
+                      <TextInput
+                        placeholder="e.g. CAN, RS485, UART, None"
+                        onSubmit={(v) => {
+                          setOemData((d) => ({ ...d, bmsReq: v }));
+                          advanceOem('environmental_req');
+                        }}
+                        onSkip={() => advanceOem('environmental_req')}
+                        skippable
+                      />
+                    </>
+                  )}
+
+                  {oemStep === 'environmental_req' && (
+                    <>
+                      <BotMessage text="What are the environmental requirements?" />
+                      <TextInput
+                        placeholder="e.g. IP65, -20°C to 60°C, vibration spec"
+                        onSubmit={(v) => {
+                          setOemData((d) => ({ ...d, environmentalReq: v }));
+                          advanceOem('proto_qty');
+                        }}
+                        onSkip={() => advanceOem('proto_qty')}
+                        skippable
+                      />
+                    </>
+                  )}
+
+                  {oemStep === 'proto_qty' && (
+                    <>
+                      <BotMessage text="How many prototype / sample units do you need initially?" />
+                      <QuickReplies
+                        options={[
+                          { label: '1–3 units', value: '1–3' },
+                          { label: '4–10 units', value: '4–10' },
+                          { label: '10+ units', value: '10+' },
+                          { label: 'Not yet decided', value: 'Not yet decided' },
+                        ]}
+                        onSelect={(_, value) => {
+                          setOemData((d) => ({ ...d, protoQty: value }));
+                          advanceOem('annual_qty');
+                        }}
+                      />
+                    </>
+                  )}
+
+                  {oemStep === 'annual_qty' && (
+                    <>
+                      <BotMessage text="What is the estimated annual production volume?" />
+                      <QuickReplies
+                        options={[
+                          { label: 'Under 500 units / year', value: '<500' },
+                          { label: '500–2,000 units / year', value: '500–2000' },
+                          { label: '2,000–10,000 units / year', value: '2000–10000' },
+                          { label: '10,000+ units / year', value: '10000+' },
+                          { label: 'Not yet estimated', value: 'Not yet estimated' },
+                        ]}
+                        onSelect={(_, value) => {
+                          setOemData((d) => ({ ...d, annualQty: value }));
+                          advanceOem('summary');
+                        }}
+                      />
+                    </>
+                  )}
+
+                  {oemStep === 'summary' && (
+                    <OemSummary
+                      data={oemData}
+                      onContinue={() => {
+                        const url = buildOemRfqUrl(oemData);
+                        setIsOpen(false);
+                        router.push(url);
+                      }}
+                    />
+                  )}
+                </div>
+              )}
+
+              {/* ════════════════════════════════════════════════
+                  BULK RFQ FLOW
+              ════════════════════════════════════════════════ */}
+              {flow === 'bulk_rfq' && (
+                <div className="space-y-3" key={bulkStep}>
+                  {bulkStep === 'application' && (
+                    <>
+                      <BotMessage text="What application category does this RFQ cover?" />
+                      <QuickReplies
+                        options={applicationOptions}
+                        onSelect={(label, value) => {
+                          setBulkData((d) => ({ ...d, application: value, applicationLabel: label }));
+                          advanceBulk('quantity');
+                        }}
+                      />
+                    </>
+                  )}
+
+                  {bulkStep === 'quantity' && (
+                    <>
+                      <BotMessage text="What quantity are you looking to procure?" />
+                      <TextInput
+                        placeholder="e.g. 500 units"
+                        onSubmit={(v) => {
+                          setBulkData((d) => ({ ...d, quantity: v }));
+                          advanceBulk('has_spec');
+                        }}
+                      />
+                    </>
+                  )}
+
+                  {bulkStep === 'has_spec' && (
+                    <>
+                      <BotMessage text="Do you have an existing battery specification or datasheet?" />
+                      <QuickReplies
+                        options={[
+                          { label: 'Yes — I have a specification', value: 'yes' },
+                          { label: 'No — I need engineering input', value: 'no' },
+                        ]}
+                        onSelect={(_, value) => {
+                          setBulkData((d) => ({ ...d, hasSpec: value as 'yes' | 'no' }));
+                          advanceBulk('key_requirements');
+                        }}
+                      />
+                    </>
+                  )}
+
+                  {bulkStep === 'key_requirements' && (
+                    <>
+                      <BotMessage text="Summarise the key requirements or constraints." />
+                      <TextInput
+                        placeholder="e.g. 48V 100Ah, IP65, delivery in 45 days"
+                        onSubmit={(v) => {
+                          setBulkData((d) => ({ ...d, keyRequirements: v }));
+                          advanceBulk('company_name');
+                        }}
+                        onSkip={() => advanceBulk('company_name')}
+                        skippable
+                      />
+                    </>
+                  )}
+
+                  {bulkStep === 'company_name' && (
+                    <>
+                      <BotMessage text="What is your company name?" />
+                      <TextInput
+                        placeholder="Company / Organisation name"
+                        onSubmit={(v) => {
+                          setBulkData((d) => ({ ...d, companyName: v }));
+                          advanceBulk('contact_name');
+                        }}
+                      />
+                    </>
+                  )}
+
+                  {bulkStep === 'contact_name' && (
+                    <>
+                      <BotMessage text="Your name / contact person?" />
+                      <TextInput
+                        placeholder="Full name"
+                        onSubmit={(v) => {
+                          setBulkData((d) => ({ ...d, contactName: v }));
+                          advanceBulk('email');
+                        }}
+                      />
+                    </>
+                  )}
+
+                  {bulkStep === 'email' && (
+                    <>
+                      <BotMessage text="Business email address?" />
+                      <TextInput
+                        placeholder="name@company.com"
+                        type="email"
+                        onSubmit={(v) => {
+                          setBulkData((d) => ({ ...d, email: v }));
+                          advanceBulk('phone');
+                        }}
+                      />
+                    </>
+                  )}
+
+                  {bulkStep === 'phone' && (
+                    <>
+                      <BotMessage text="Contact phone number?" />
+                      <TextInput
+                        placeholder="+91 XXXXX XXXXX"
+                        type="tel"
+                        onSubmit={(v) => {
+                          setBulkData((d) => ({ ...d, phone: v }));
+                          advanceBulk('summary');
+                        }}
+                        onSkip={() => advanceBulk('summary')}
+                        skippable
+                      />
+                    </>
+                  )}
+
+                  {bulkStep === 'summary' && (
+                    <BulkRfqSummary
+                      data={bulkData}
+                      onBuildRfq={() => {
+                        const url = buildBulkRfqUrl(bulkData);
+                        setIsOpen(false);
+                        router.push(url);
+                      }}
+                    />
+                  )}
+                </div>
+              )}
+
+              {/* ════════════════════════════════════════════════
+                  DEALER FLOW
+              ════════════════════════════════════════════════ */}
+              {flow === 'dealer' && (
+                <div className="space-y-3" key={dealerStep}>
+                  {dealerStep === 'company_name' && (
+                    <>
+                      <BotMessage text="To process your dealership / distribution enquiry, let's start with your company name." />
+                      <TextInput
+                        placeholder="Company / Organisation name"
+                        onSubmit={(v) => {
+                          setDealerData((d) => ({ ...d, companyName: v }));
+                          advanceDealer('location');
+                        }}
+                      />
+                    </>
+                  )}
+
+                  {dealerStep === 'location' && (
+                    <>
+                      <BotMessage text="What is your business location? (City, State)" />
+                      <TextInput
+                        placeholder="e.g. Pune, Maharashtra"
+                        onSubmit={(v) => {
+                          setDealerData((d) => ({ ...d, location: v }));
+                          advanceDealer('business_type');
+                        }}
+                      />
+                    </>
+                  )}
+
+                  {dealerStep === 'business_type' && (
+                    <>
+                      <BotMessage text="What type of business do you operate?" />
+                      <QuickReplies
+                        options={[
+                          { label: 'Distributor', value: 'Distributor' },
+                          { label: 'Dealer / Reseller', value: 'Dealer / Reseller' },
+                          { label: 'System Integrator', value: 'System Integrator' },
+                          { label: 'EV Service Centre', value: 'EV Service Centre' },
+                          { label: 'Industrial Supplier', value: 'Industrial Supplier' },
+                          { label: 'Other', value: 'Other' },
+                        ]}
+                        onSelect={(_, value) => {
+                          setDealerData((d) => ({ ...d, businessType: value }));
+                          advanceDealer('existing_market');
+                        }}
+                      />
+                    </>
+                  )}
+
+                  {dealerStep === 'existing_market' && (
+                    <>
+                      <BotMessage text="Which market segments do you currently serve?" />
+                      <TextInput
+                        placeholder="e.g. Electric mobility, Solar, Industrial"
+                        onSubmit={(v) => {
+                          setDealerData((d) => ({ ...d, existingMarket: v }));
+                          advanceDealer('expected_volume');
+                        }}
+                        onSkip={() => advanceDealer('expected_volume')}
+                        skippable
+                      />
+                    </>
+                  )}
+
+                  {dealerStep === 'expected_volume' && (
+                    <>
+                      <BotMessage text="What monthly / annual battery volume do you expect to handle?" />
+                      <QuickReplies
+                        options={[
+                          { label: 'Under 50 units / month', value: '<50/month' },
+                          { label: '50–200 units / month', value: '50–200/month' },
+                          { label: '200–500 units / month', value: '200–500/month' },
+                          { label: '500+ units / month', value: '500+/month' },
+                          { label: 'Not yet estimated', value: 'Not yet estimated' },
+                        ]}
+                        onSelect={(_, value) => {
+                          setDealerData((d) => ({ ...d, expectedVolume: value }));
+                          advanceDealer('website');
+                        }}
+                      />
+                    </>
+                  )}
+
+                  {dealerStep === 'website' && (
+                    <>
+                      <BotMessage text="Company website? (Optional)" />
+                      <TextInput
+                        placeholder="https://www.yourcompany.com"
+                        type="url"
+                        onSubmit={(v) => {
+                          setDealerData((d) => ({ ...d, website: v }));
+                          advanceDealer('contact_info');
+                        }}
+                        onSkip={() => advanceDealer('contact_info')}
+                        skippable
+                      />
+                    </>
+                  )}
+
+                  {dealerStep === 'contact_info' && (
+                    <>
+                      <BotMessage text="Your contact email and phone number?" />
+                      <TextInput
+                        placeholder="email@company.com / +91 XXXXX XXXXX"
+                        onSubmit={(v) => {
+                          setDealerData((d) => ({ ...d, contactInfo: v }));
+                          advanceDealer('summary');
+                        }}
+                      />
+                    </>
+                  )}
+
+                  {dealerStep === 'summary' && (
+                    <DealerSummary
+                      data={dealerData}
+                      onSubmit={() => {
+                        const notes = [
+                          dealerData.companyName ? `Company: ${dealerData.companyName}` : '',
+                          dealerData.location ? `Location: ${dealerData.location}` : '',
+                          dealerData.businessType ? `Type: ${dealerData.businessType}` : '',
+                          dealerData.existingMarket ? `Market: ${dealerData.existingMarket}` : '',
+                          dealerData.expectedVolume ? `Volume: ${dealerData.expectedVolume}` : '',
+                          dealerData.website ? `Website: ${dealerData.website}` : '',
+                          dealerData.contactInfo ? `Contact: ${dealerData.contactInfo}` : '',
+                        ]
+                          .filter(Boolean)
+                          .join(' | ');
+                        const url = `/contact?type=dealership&notes=${encodeURIComponent(notes)}`;
+                        setIsOpen(false);
+                        router.push(url);
+                      }}
+                    />
+                  )}
+                </div>
+              )}
+
+              {/* ════════════════════════════════════════════════
+                  SALES FLOW
+              ════════════════════════════════════════════════ */}
+              {flow === 'sales' && (
+                <div className="space-y-3">
+                  <BotMessage text="How would you like to contact MEHAR?" />
+
+                  <div className="space-y-2 mt-1">
+                    <SalesCard
+                      icon={<Building2 className="w-4 h-4 text-[#059669]" />}
+                      label="Business Enquiry"
+                      href="/contact?type=business"
+                      onClick={() => setIsOpen(false)}
+                    />
+                    <SalesCard
+                      icon={<Layers className="w-4 h-4 text-[#059669]" />}
+                      label="Technical / Engineering Enquiry"
+                      href="/contact?type=engineering"
+                      onClick={() => setIsOpen(false)}
+                    />
+                    <SalesCard
+                      icon={<MessageSquare className="w-4 h-4 text-[#059669]" />}
+                      label="WhatsApp"
+                      href={whatsappUrl}
+                      external
+                      onClick={() => setIsOpen(false)}
+                    />
+                    <SalesCard
+                      icon={<Phone className="w-4 h-4 text-[#059669]" />}
+                      label="Request Callback"
+                      href="/contact?type=callback"
+                      onClick={() => setIsOpen(false)}
+                    />
+                  </div>
+
+                  <div className="mt-2 p-3 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl">
+                    <p className="text-[10px] text-[#64748B]">Sales enquiries: <span className="font-semibold text-[#0F172A]">{COMPANY_INFO.salesEmail}</span></p>
+                  </div>
+                </div>
+              )}
+
+              <div ref={messagesEndRef} />
             </div>
-          </div>
+          )}
+
+          {/* ── Footer ── */}
+          {!isMinimized && (
+            <div className="flex-shrink-0 px-4 py-2 bg-[#F8FAFC] border-t border-[#E2E8F0]">
+              <p className="text-center text-[9px] text-[#94A3B8]">
+                Requirements captured for engineering evaluation only.&nbsp;No product recommendation implied.
+              </p>
+            </div>
+          )}
         </div>
       )}
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────
+// HELPER SUB-COMPONENTS
+// ─────────────────────────────────────────────────────────────────
+
+function BotMessage({ text }: { text: string }) {
+  return (
+    <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl rounded-tl-sm p-3">
+      <p className="text-[11px] text-[#334155] leading-relaxed">{text}</p>
+    </div>
+  );
+}
+
+function ActionCard({
+  icon,
+  title,
+  subtitle,
+  onClick,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  subtitle: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className="w-full flex items-start gap-3 p-3 rounded-xl border border-[#E2E8F0] bg-white hover:border-[#059669] hover:bg-[#F0FDF4] transition-all duration-150 text-left group"
+    >
+      <div className="flex-shrink-0 w-7 h-7 rounded-lg bg-[#F0FDF4] border border-[#D1FAE5] flex items-center justify-center group-hover:bg-[#ECFDF5]">
+        {icon}
+      </div>
+      <div className="min-w-0">
+        <p className="text-[11px] font-bold text-[#0F172A] group-hover:text-[#059669] transition-colors">{title}</p>
+        <p className="text-[10px] text-[#64748B] leading-snug mt-0.5">{subtitle}</p>
+      </div>
+      <ChevronRight className="flex-shrink-0 w-3.5 h-3.5 text-[#CBD5E1] group-hover:text-[#059669] mt-0.5 ml-auto" />
+    </button>
+  );
+}
+
+function SalesCard({
+  icon,
+  label,
+  href,
+  external,
+  onClick,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  href: string;
+  external?: boolean;
+  onClick?: () => void;
+}) {
+  const cls =
+    'w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl border border-[#E2E8F0] bg-white hover:border-[#059669] hover:bg-[#F0FDF4] transition-all duration-150 text-left group';
+  const content = (
+    <>
+      <div className="flex-shrink-0 w-7 h-7 rounded-lg bg-[#F0FDF4] border border-[#D1FAE5] flex items-center justify-center">
+        {icon}
+      </div>
+      <span className="flex-1 text-[11px] font-semibold text-[#0F172A] group-hover:text-[#059669]">{label}</span>
+      <ChevronRight className="w-3.5 h-3.5 text-[#CBD5E1] group-hover:text-[#059669]" />
+    </>
+  );
+
+  if (external) {
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer" className={cls} onClick={onClick}>
+        {content}
+      </a>
+    );
+  }
+  return (
+    <Link href={href} className={cls} onClick={onClick}>
+      {content}
+    </Link>
+  );
+}
+
+// ─── Finder Summary ───────────────────────────────────────────────
+
+function FinderSummary({
+  requirements,
+  onStartRfq,
+  onReview,
+  onTalkEngineering,
+}: {
+  requirements: RequirementsData;
+  onStartRfq: () => void;
+  onReview: () => void;
+  onTalkEngineering: () => void;
+}) {
+  return (
+    <div className="space-y-3">
+      <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3.5 space-y-1">
+        <SummaryRow label="Application" value={requirements.applicationLabel || 'Not specified'} />
+        <SummaryRow
+          label="Voltage"
+          value={
+            requirements.voltageKnown === 'yes' && requirements.voltage
+              ? `${requirements.voltage} ${requirements.voltageUnit || 'V'} — Customer requirement`
+              : 'Not specified'
+          }
+        />
+        <SummaryRow
+          label="Capacity"
+          value={
+            requirements.capacityKnown === 'yes' && requirements.capacity
+              ? `${requirements.capacity} ${requirements.capacityUnit || 'Ah'} — Customer requirement`
+              : 'Not specified'
+          }
+        />
+        <SummaryRow
+          label="Runtime"
+          value={
+            requirements.runtime
+              ? `${requirements.runtime} ${requirements.runtimeUnit || ''}`
+              : 'Not specified'
+          }
+        />
+        <SummaryRow label="Quantity" value={requirements.quantity || 'Not specified'} />
+        <SummaryRow label="Project Stage" value={requirements.projectStage || 'Not specified'} />
+      </div>
+
+      <div className="flex items-start gap-2 p-3 bg-[#FFFBEB] border border-[#FDE68A] rounded-xl">
+        <AlertTriangle className="w-3.5 h-3.5 text-[#D97706] flex-shrink-0 mt-0.5" />
+        <div>
+          <p className="text-[10px] font-bold text-[#92400E] uppercase tracking-wider">Engineering Assessment Required</p>
+          <p className="text-[10px] text-[#78350F] mt-0.5 leading-relaxed">
+            Based on the information provided, our engineering team can evaluate a suitable battery solution.
+          </p>
+        </div>
+      </div>
+
+      <div className="space-y-1.5">
+        <button
+          onClick={onStartRfq}
+          className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[#059669] text-white text-[11px] font-bold hover:bg-[#047857] transition-colors"
+        >
+          <CheckCircle className="w-3.5 h-3.5" /> Start RFQ
+        </button>
+        <button
+          onClick={onTalkEngineering}
+          className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl border border-[#059669] text-[#059669] text-[11px] font-bold hover:bg-[#F0FDF4] transition-colors"
+        >
+          Talk to Engineering
+        </button>
+        <button
+          onClick={onReview}
+          className="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl border border-[#CBD5E1] text-[#64748B] text-[11px] font-semibold hover:bg-[#F8FAFC] transition-colors"
+        >
+          Review Requirements
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ─── OEM Summary ──────────────────────────────────────────────────
+
+function OemSummary({
+  data,
+  onContinue,
+}: {
+  data: OemData;
+  onContinue: () => void;
+}) {
+  return (
+    <div className="space-y-3">
+      <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3.5 space-y-1">
+        <SummaryRow label="Application" value={data.applicationLabel || 'Not specified'} />
+        <SummaryRow label="Voltage" value={data.voltage || 'Not specified'} />
+        <SummaryRow label="Capacity" value={data.capacity || 'Not specified'} />
+        <SummaryRow label="Dimensions" value={data.dimensions || 'Not specified'} />
+        <SummaryRow label="Weight Limit" value={data.weightLimit || 'Not specified'} />
+        <SummaryRow label="Current Req." value={data.currentReq || 'Not specified'} />
+        <SummaryRow label="Connector" value={data.connector || 'Not specified'} />
+        <SummaryRow label="BMS / Comms" value={data.bmsReq || 'Not specified'} />
+        <SummaryRow label="Environmental" value={data.environmentalReq || 'Not specified'} />
+        <SummaryRow label="Prototype Qty" value={data.protoQty || 'Not specified'} />
+        <SummaryRow label="Annual Volume" value={data.annualQty || 'Not specified'} />
+      </div>
+
+      <div className="flex items-start gap-2 p-3 bg-[#FFFBEB] border border-[#FDE68A] rounded-xl">
+        <AlertTriangle className="w-3.5 h-3.5 text-[#D97706] flex-shrink-0 mt-0.5" />
+        <p className="text-[10px] text-[#78350F] leading-relaxed">
+          All custom OEM battery configurations require direct engineering validation by Lawad Infrastructure engineers.
+        </p>
+      </div>
+
+      <button
+        onClick={onContinue}
+        className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[#059669] text-white text-[11px] font-bold hover:bg-[#047857] transition-colors"
+      >
+        Continue to OEM Enquiry
+      </button>
+    </div>
+  );
+}
+
+// ─── Bulk RFQ Summary ─────────────────────────────────────────────
+
+function BulkRfqSummary({
+  data,
+  onBuildRfq,
+}: {
+  data: BulkRfqData;
+  onBuildRfq: () => void;
+}) {
+  return (
+    <div className="space-y-3">
+      <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3.5 space-y-1">
+        <SummaryRow label="Application" value={data.applicationLabel || 'Not specified'} />
+        <SummaryRow label="Quantity" value={data.quantity || 'Not specified'} />
+        <SummaryRow label="Existing Spec" value={data.hasSpec === 'yes' ? 'Available' : 'Needs engineering scope'} />
+        <SummaryRow label="Key Requirements" value={data.keyRequirements || 'Not specified'} />
+        <SummaryRow label="Company" value={data.companyName || 'Not specified'} />
+        <SummaryRow label="Contact" value={data.contactName || 'Not specified'} />
+        <SummaryRow label="Email" value={data.email || 'Not specified'} />
+        <SummaryRow label="Phone" value={data.phone || 'Not specified'} />
+      </div>
+
+      <button
+        onClick={onBuildRfq}
+        className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[#059669] text-white text-[11px] font-bold hover:bg-[#047857] transition-colors"
+      >
+        <FileText className="w-3.5 h-3.5" /> Build RFQ
+      </button>
+    </div>
+  );
+}
+
+// ─── Dealer Summary ───────────────────────────────────────────────
+
+function DealerSummary({
+  data,
+  onSubmit,
+}: {
+  data: DealerData;
+  onSubmit: () => void;
+}) {
+  return (
+    <div className="space-y-3">
+      <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3.5 space-y-1">
+        <SummaryRow label="Company" value={data.companyName || 'Not specified'} />
+        <SummaryRow label="Location" value={data.location || 'Not specified'} />
+        <SummaryRow label="Business Type" value={data.businessType || 'Not specified'} />
+        <SummaryRow label="Market" value={data.existingMarket || 'Not specified'} />
+        <SummaryRow label="Est. Volume" value={data.expectedVolume || 'Not specified'} />
+        <SummaryRow label="Website" value={data.website || 'Not specified'} />
+        <SummaryRow label="Contact" value={data.contactInfo || 'Not specified'} />
+      </div>
+
+      <p className="text-[10px] text-[#64748B] leading-relaxed">
+        Your dealership enquiry will be forwarded to the MEHAR commercial desk. A team member will be in touch to discuss channel partnership terms.
+      </p>
+
+      <button
+        onClick={onSubmit}
+        className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[#059669] text-white text-[11px] font-bold hover:bg-[#047857] transition-colors"
+      >
+        <Handshake className="w-3.5 h-3.5" /> Submit Dealership Enquiry
+      </button>
     </div>
   );
 }
