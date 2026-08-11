@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { BROAD_CATEGORIES } from '@/data/categories';
-import { COMPANY_INFO } from '@/data/companyInfo';
+import { getCompanySettings, getSalesSettings } from '@/lib/settings';
 import {
   Mail,
   MessageSquare,
@@ -16,7 +16,14 @@ import {
   FileText,
 } from 'lucide-react';
 
-export default function Footer() {
+export default async function Footer() {
+  const [company, sales] = await Promise.all([
+    getCompanySettings(),
+    getSalesSettings(),
+  ]);
+
+  const cleanWhatsapp = sales.whatsappDesk.replace(/[^0-9]/g, '');
+
   return (
     <footer className="bg-[#F8FAFC] border-t border-[#E2E8F0] text-[#0F172A] pt-14 pb-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -26,14 +33,14 @@ export default function Footer() {
             <div className="w-48 sm:w-52 h-12 sm:h-14 relative">
               <Image
                 src="/assets/logo/mehar-logo.svg"
-                alt="MEHAR - Lawad Infrastructure Private Limited"
+                alt={`${company.brandName} - ${company.parentCompanyName}`}
                 fill
                 className="object-contain object-left"
               />
             </div>
 
             <p className="text-xs text-[#475569] leading-relaxed max-w-sm">
-              <strong className="text-[#0F172A] font-bold">{COMPANY_INFO.brandName}</strong> is the specialized industrial battery manufacturing and energy storage brand of <strong className="text-[#0F172A] font-bold">{COMPANY_INFO.parentCompanyName}</strong>.
+              <strong className="text-[#0F172A] font-bold">{company.brandName}</strong> is the specialized industrial battery manufacturing and energy storage brand of <strong className="text-[#0F172A] font-bold">{company.parentCompanyName}</strong>.
               We engineer robust battery systems for original equipment manufacturers (OEMs), solar integrators, and commercial distributors.
             </p>
 
@@ -152,16 +159,16 @@ export default function Footer() {
               </li>
               <li className="pt-2 border-t border-[#E2E8F0]">
                 <a
-                  href={`mailto:${COMPANY_INFO.salesEmail}`}
+                  href={`mailto:${sales.salesEmail}`}
                   className="flex items-center gap-2 text-[#0F172A] hover:text-[#059669] transition-colors font-mono font-bold text-xs"
                 >
                   <Mail className="w-3.5 h-3.5 text-[#059669]" />
-                  <span>{COMPANY_INFO.salesEmail}</span>
+                  <span>{sales.salesEmail}</span>
                 </a>
               </li>
               <li>
                 <a
-                  href={`https://wa.me/${COMPANY_INFO.whatsappDesk.replace(/[^0-9]/g, '')}`}
+                  href={`https://wa.me/${cleanWhatsapp}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 text-[#059669] hover:text-[#047857] transition-colors font-mono font-bold text-xs"
@@ -178,7 +185,7 @@ export default function Footer() {
         <div className="pt-6 border-t border-[#E2E8F0] flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-[#64748B]">
           <div>
             <p>
-              © {new Date().getFullYear()} <span className="text-[#0F172A] font-semibold">{COMPANY_INFO.brandName}</span> • A unit of <span className="text-[#0F172A] font-semibold">{COMPANY_INFO.parentCompanyName}</span>. All rights reserved.
+              © {new Date().getFullYear()} <span className="text-[#0F172A] font-semibold">{company.brandName}</span> • A unit of <span className="text-[#0F172A] font-semibold">{company.parentCompanyName}</span>. All rights reserved.
             </p>
           </div>
 

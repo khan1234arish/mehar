@@ -22,6 +22,9 @@ import {
 function RfqBuilderInner() {
   const searchParams = useSearchParams();
   const initialCategory = searchParams.get('category') || '';
+  const initialProduct = searchParams.get('product') || '';
+  const initialMoqParam = searchParams.get('moq');
+  const initialMoq = initialMoqParam ? parseInt(initialMoqParam, 10) : null;
   const initialVoltage = searchParams.get('voltage') || '';
   const initialCapacity = searchParams.get('capacity') || '';
   const initialVolume = searchParams.get('volume') || 'COMMERCIAL_BATCH';
@@ -30,6 +33,8 @@ function RfqBuilderInner() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>(
     initialCategory ? [initialCategory] : [BROAD_CATEGORIES[0].slug]
   );
+
+  const [requestedQuantity, setRequestedQuantity] = useState<string>('');
 
   const [formData, setFormData] = useState({
     companyName: '',
@@ -325,6 +330,25 @@ function RfqBuilderInner() {
           </h3>
         </div>
 
+        {initialProduct && (
+          <div className="p-4 rounded-2xl bg-[#F8FAFC] border border-[#CBD5E1] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <span className="text-[11px] font-mono font-bold text-[#059669] uppercase tracking-wider block">
+                Target Product Inquired
+              </span>
+              <span className="text-sm font-bold text-[#0F172A]">{initialProduct}</span>
+            </div>
+            <div className="text-left sm:text-right">
+              <span className="text-[11px] font-mono text-[#64748B] block font-bold uppercase">
+                Minimum Order Quantity (MOQ)
+              </span>
+              <span className="text-xs font-mono font-bold text-[#0F172A]">
+                {initialMoq ? `${initialMoq} units` : 'Contact MEHAR'}
+              </span>
+            </div>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div className="space-y-1.5">
             <label className="text-xs font-mono font-bold text-[#334155] block">
@@ -340,6 +364,36 @@ function RfqBuilderInner() {
               <option value="OEM_ANNUAL">OEM Annual Supply Agreement (500+ Units/Month)</option>
             </select>
           </div>
+
+          <div className="space-y-1.5">
+            <label className="text-xs font-mono font-bold text-[#334155] block">
+              Specific Unit Quantity
+            </label>
+            <input
+              type="number"
+              min="1"
+              placeholder={initialMoq ? `e.g. ${initialMoq} units` : 'e.g. 50 units'}
+              value={requestedQuantity}
+              onChange={(e) => setRequestedQuantity(e.target.value)}
+              className="w-full px-4 py-2.5 rounded-xl bg-white border border-[#CBD5E1] text-[#0F172A] text-xs focus:outline-none focus:border-[#059669]"
+            />
+          </div>
+
+          {/* Advisory Warning if quantity is below configured MOQ */}
+          {initialMoq &&
+            requestedQuantity &&
+            parseInt(requestedQuantity, 10) > 0 &&
+            parseInt(requestedQuantity, 10) < initialMoq && (
+              <div className="p-4 rounded-xl bg-[#FEFCE8] border border-[#FEF08A] text-[#854D0E] text-xs flex items-start gap-3 sm:col-span-2 shadow-sm">
+                <div className="w-5 h-5 rounded-full bg-[#FDE047] flex items-center justify-center font-bold flex-shrink-0 text-xs text-[#713F12]">
+                  !
+                </div>
+                <div>
+                  <strong className="font-bold block mb-0.5">MOQ Advisory Notice</strong>
+                  Requested quantity is below the minimum order quantity for this product ({initialMoq} units). Please increase the quantity or contact MEHAR for assistance.
+                </div>
+              </div>
+            )}
 
           <div className="space-y-1.5">
             <label className="text-xs font-mono font-bold text-[#334155] block">

@@ -30,6 +30,15 @@ export interface ProductData {
   verificationStatus: 'UNVERIFIED_PLACEHOLDER' | 'PENDING_CLIENT_REVIEW' | 'CLIENT_VERIFIED';
   placeholderNote: string;
   tdsFileUrl: string | null;
+  imageUrl?: string | null;
+  minimumOrderQuantity?: number | null;
+  images?: Array<{
+    id: string;
+    imageUrl: string;
+    altText?: string | null;
+    isPrimary: boolean;
+    isPublished: boolean;
+  }>;
   specifications: ProductSpecItem[];
 }
 
