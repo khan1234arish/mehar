@@ -370,15 +370,15 @@ export default function HomePage() {
 
       {/* 6. B2B CONVERSION / RFQ CALLOUT */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="p-8 sm:p-12 rounded-3xl bg-[#0F172A] text-white border border-[#1E293B] flex flex-col lg:flex-row items-center justify-between gap-8 shadow-xl">
+        <div className="p-8 sm:p-12 rounded-3xl bg-[#F8FAFC] text-[#0F172A] border border-[#E2E8F0] flex flex-col lg:flex-row items-center justify-between gap-8 shadow-sm">
           <div className="space-y-3 text-center lg:text-left">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-mono font-medium border bg-[#1E293B] text-[#10B981] border-[#334155]">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-mono font-bold border bg-[#ECFDF5] text-[#065F46] border-[#A7F3D0]">
               B2B Procurement & Supply
             </span>
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A]">
               Ready to Discuss Your Battery Supply Requirements?
             </h3>
-            <p className="text-xs sm:text-sm text-[#94A3B8] max-w-xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#475569] max-w-xl leading-relaxed">
               Connect with our technical sales engineers for bulk inquiries, custom OEM battery pack development, or dealership opportunities.
             </p>
           </div>
@@ -397,7 +397,6 @@ export default function HomePage() {
               href="/contact"
               variant="outline"
               size="lg"
-              className="border-[#475569] text-white hover:bg-white/10"
             >
               Contact Sales Desk
             </Button>
