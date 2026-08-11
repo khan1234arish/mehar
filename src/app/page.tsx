@@ -1,495 +1,138 @@
-import React from 'react';
 import Link from 'next/link';
-import { BROAD_CATEGORIES } from '@/data/categories';
-import { COMPANY_INFO } from '@/data/companyInfo';
-import SectionHeading from '@/components/ui/SectionHeading';
-import Button from '@/components/ui/Button';
-import Badge from '@/components/ui/Badge';
-import PlaceholderNotice from '@/components/ui/PlaceholderNotice';
-import {
-  ArrowRight,
-  ShieldCheck,
-  Cpu,
-  Layers,
-  Zap,
-  Factory,
-  ArrowUpRight,
-  Truck,
-  Bike,
-  Sun,
-  Home,
-  Radio,
-  SlidersHorizontal,
-  Wrench,
-  FileText,
-  Search,
-} from 'lucide-react';
 
-export const metadata = {
-  title: 'MEHAR Batteries | Lawad Infrastructure Private Limited | Official B2B Platform',
-  description: 'Official B2B platform for MEHAR battery systems and energy storage solutions by Lawad Infrastructure Private Limited. Supplying commercial EV OEMs, solar integrators, and industrial distributors.',
-};
+const products = [
+  {
+    name: 'EV Battery Systems',
+    text: 'Reliable battery systems designed for modern electric mobility.',
+    tone: 'bg-emerald-100',
+  },
+  {
+    name: 'Solar Energy Storage',
+    text: 'Store clean energy and keep essential systems running longer.',
+    tone: 'bg-sky-100',
+  },
+  {
+    name: 'Industrial Power',
+    text: 'Practical power solutions for demanding industrial environments.',
+    tone: 'bg-amber-100',
+  },
+];
+
+const benefits = [
+  ['01', 'Built for real work', 'Industrial-grade thinking from concept to delivery.'],
+  ['02', 'Clear technical support', 'Talk directly with a team that understands your requirements.'],
+  ['03', 'Flexible solutions', 'Choose a catalogue system or create a tailored battery pack.'],
+];
 
 export default function HomePage() {
   return (
-    <div className="space-y-20 pb-20 bg-white text-[#0F172A]">
-      {/* 1. HERO SECTION */}
-      <section className="relative pt-12 pb-16 bg-[#F8FAFC] border-b border-[#E2E8F0]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            {/* Left Hero Content */}
-            <div className="lg:col-span-7 space-y-6 text-left">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#E2E8F0] text-xs font-mono text-[#065F46] shadow-sm">
-                <span className="w-2 h-2 rounded-full bg-[#10B981]"></span>
-                <span className="font-semibold">OFFICIAL B2B MANUFACTURING PLATFORM</span>
-              </div>
+    <div className="min-h-screen bg-[#f8faf9] text-slate-950">
+      <header className="border-b border-slate-200 bg-white">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
+          <Link href="/" className="text-xl font-black tracking-[0.2em] text-slate-950">
+            MEHAR
+          </Link>
+          <nav className="hidden items-center gap-8 text-sm font-medium text-slate-600 md:flex">
+            <Link href="#solutions" className="transition hover:text-emerald-700">Solutions</Link>
+            <Link href="#process" className="transition hover:text-emerald-700">How we work</Link>
+            <Link href="/about" className="transition hover:text-emerald-700">About</Link>
+          </nav>
+          <Link href="/rfq" className="rounded-full bg-slate-950 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-700">
+            Request a quote
+          </Link>
+        </div>
+      </header>
 
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-[#0F172A] tracking-tight leading-[1.15]">
-                High-Performance <br className="hidden sm:inline" />
-                <span className="text-[#059669]">
-                  Battery Systems
-                </span>{' '}
-                for Next-Gen Mobility &amp; ESS
-              </h1>
-
-              <p className="text-base sm:text-lg text-[#475569] max-w-2xl leading-relaxed">
-                Engineered and manufactured by <strong className="text-[#0F172A]">{COMPANY_INFO.parentCompanyName}</strong> under brand <strong className="text-[#0F172A]">{COMPANY_INFO.brandName}</strong>. Supplying robust, industrial-grade battery solutions for EV OEMs, solar integrators, and B2B distributors.
-              </p>
-
-              {/* CTAs */}
-              <div className="flex flex-wrap items-center gap-3 pt-2">
-                <Button
-                  href="/products"
-                  variant="primary"
-                  size="lg"
-                  icon={<ArrowRight className="w-4 h-4" />}
-                >
-                  Explore Solutions
-                </Button>
-
-                <Button
-                  href="/rfq"
-                  variant="outline"
-                  size="lg"
-                  icon={<ArrowUpRight className="w-4 h-4" />}
-                >
-                  Request B2B RFQ
-                </Button>
-
-                <Button
-                  href="/oem-custom-solutions"
-                  variant="ghost"
-                  size="lg"
-                  icon={<Factory className="w-4 h-4 text-[#059669]" />}
-                >
-                  Talk to Engineering
-                </Button>
-              </div>
-
-              {/* Trust Badges */}
-              <div className="pt-6 border-t border-[#CBD5E1]/60 grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs text-[#334155] font-medium">
-                <div className="flex items-center gap-2 font-mono">
-                  <ShieldCheck className="w-4 h-4 text-[#059669] shrink-0" />
-                  <span>B2B &amp; OEM Supply</span>
-                </div>
-                <div className="flex items-center gap-2 font-mono">
-                  <Cpu className="w-4 h-4 text-[#0284C7] shrink-0" />
-                  <span>Smart BMS Architecture</span>
-                </div>
-                <div className="flex items-center gap-2 font-mono col-span-2 sm:col-span-1">
-                  <Factory className="w-4 h-4 text-[#059669] shrink-0" />
-                  <span>Custom Pack Engineering</span>
-                </div>
-              </div>
+      <main>
+        <section className="mx-auto grid max-w-7xl gap-12 px-6 pb-20 pt-16 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:px-8 lg:pb-28 lg:pt-24">
+          <div>
+            <p className="mb-6 text-sm font-bold uppercase tracking-[0.2em] text-emerald-700">Battery systems for a moving world</p>
+            <h1 className="max-w-3xl text-5xl font-black leading-[1.02] tracking-tight sm:text-6xl lg:text-7xl">
+              Power that keeps your next move going.
+            </h1>
+            <p className="mt-7 max-w-xl text-lg leading-8 text-slate-600">
+              MEHAR supplies dependable battery systems and energy storage solutions for EV, solar, and industrial applications.
+            </p>
+            <div className="mt-9 flex flex-wrap gap-4">
+              <Link href="/products" className="rounded-full bg-emerald-600 px-6 py-3.5 text-sm font-bold text-white transition hover:bg-emerald-700">Explore solutions</Link>
+              <Link href="/contact" className="rounded-full border border-slate-300 bg-white px-6 py-3.5 text-sm font-bold text-slate-900 transition hover:border-slate-950">Talk to our team</Link>
             </div>
+            <div className="mt-12 flex flex-wrap gap-x-8 gap-y-3 border-t border-slate-200 pt-6 text-sm text-slate-600">
+              <span><strong className="text-slate-950">B2B</strong> supply</span>
+              <span><strong className="text-slate-950">OEM</strong> support</span>
+              <span><strong className="text-slate-950">Custom</strong> engineering</span>
+            </div>
+          </div>
 
-            {/* Right Hero Graphic Card */}
-            <div className="lg:col-span-5">
-              <div className="p-6 sm:p-8 rounded-2xl bg-white border border-[#CBD5E1] shadow-md space-y-5">
-                {/* Tech Badge */}
-                <div className="flex items-center justify-between pb-4 border-b border-[#E2E8F0]">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-3 h-3 rounded-full bg-[#10B981]"></div>
-                    <span className="text-xs font-mono text-[#0F172A] font-bold uppercase tracking-wider">
-                      MEHAR Power Architecture
-                    </span>
-                  </div>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#F1F5F9] text-[#475569] border border-[#E2E8F0] font-semibold">
-                    Industrial Grade
-                  </span>
-                </div>
-
-                {/* Conceptual Battery Pack Graphic Visualization */}
-                <div className="space-y-3 font-mono text-xs">
-                  <div className="p-4 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[#ECFDF5] border border-[#A7F3D0] flex items-center justify-center text-[#059669]">
-                        <Zap className="w-4 h-4" />
-                      </div>
-                      <div>
-                        <span className="text-[#0F172A] font-bold block">Cell Level Engineering</span>
-                        <span className="text-[11px] text-[#64748B]">Automated IR Sorting &amp; Capacity Matching</span>
-                      </div>
-                    </div>
-                    <span className="text-[10px] text-[#059669] font-bold">Matched</span>
-                  </div>
-
-                  <div className="p-4 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[#F0F9FF] border border-[#BAE6FD] flex items-center justify-center text-[#0284C7]">
-                        <Cpu className="w-4 h-4" />
-                      </div>
-                      <div>
-                        <span className="text-[#0F172A] font-bold block">Smart Telemetry BMS</span>
-                        <span className="text-[11px] text-[#64748B]">CAN 2.0B / RS485 / Thermal Guard</span>
-                      </div>
-                    </div>
-                    <span className="text-[10px] text-[#0284C7] font-bold">Telemetry</span>
-                  </div>
-
-                  <div className="p-4 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[#FEFCE8] border border-[#FEF08A] flex items-center justify-center text-[#854D0E]">
-                        <Layers className="w-4 h-4" />
-                      </div>
-                      <div>
-                        <span className="text-[#0F172A] font-bold block">Enclosure &amp; Ingress</span>
-                        <span className="text-[11px] text-[#64748B]">Heavy-Duty Shock &amp; Vibration Enclosure</span>
-                      </div>
-                    </div>
-                    <span className="text-[10px] text-[#854D0E] font-bold">Enclosed</span>
-                  </div>
-                </div>
-
-                <div className="pt-3 border-t border-[#E2E8F0] flex items-center justify-between text-xs text-[#64748B]">
-                  <span className="font-medium">Verification Status:</span>
-                  <PlaceholderNotice message="Catalogue in Preparation" />
-                </div>
+          <div className="rounded-[2rem] bg-slate-200 p-3 shadow-sm">
+            <div className="flex min-h-[420px] flex-col justify-between rounded-[1.5rem] bg-gradient-to-br from-slate-300 via-slate-100 to-emerald-100 p-6 sm:p-8">
+              <div className="flex items-center justify-between text-xs font-bold uppercase tracking-[0.18em] text-slate-500">
+                <span>Image placeholder</span><span>01 / 03</span>
+              </div>
+              <div>
+                <div className="mb-6 h-24 w-24 rounded-3xl border-2 border-dashed border-slate-400 bg-white/40" />
+                <p className="max-w-xs text-3xl font-bold leading-tight text-slate-900">A simple visual space for your product photography.</p>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* 2. BROAD CATEGORIES PORTFOLIO */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6">
-        <SectionHeading
-          badge="Product Architecture"
-          badgeVariant="green"
-          title="Comprehensive B2B Battery Solutions"
-          subtitle="Explore our broad category portfolio engineered for electric mobility, solar energy storage, and industrial equipment."
-        />
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {BROAD_CATEGORIES.map((cat) => (
-            <div
-              key={cat.id}
-              className="bg-white border border-[#E2E8F0] hover:border-[#059669] hover:shadow-md transition-all duration-200 rounded-2xl p-6 flex flex-col justify-between group"
-            >
-              <div>
-                {/* Category Header */}
-                <div className="flex items-start justify-between gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] flex items-center justify-center text-[#059669] group-hover:bg-[#ECFDF5] transition-colors">
-                    {cat.iconName === 'Bike' && <Bike className="w-6 h-6" />}
-                    {cat.iconName === 'Truck' && <Truck className="w-6 h-6" />}
-                    {cat.iconName === 'Home' && <Home className="w-6 h-6" />}
-                    {cat.iconName === 'Sun' && <Sun className="w-6 h-6" />}
-                    {cat.iconName === 'Zap' && <Zap className="w-6 h-6" />}
-                    {cat.iconName === 'Cpu' && <Cpu className="w-6 h-6" />}
+        <section id="solutions" className="border-y border-slate-200 bg-white">
+          <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
+            <div className="max-w-2xl">
+              <p className="text-sm font-bold uppercase tracking-[0.2em] text-emerald-700">What we do</p>
+              <h2 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl">Solutions without the clutter.</h2>
+              <p className="mt-5 text-lg leading-8 text-slate-600">Start with a proven system or work with us on a pack designed around your requirements.</p>
+            </div>
+            <div className="mt-12 grid gap-5 md:grid-cols-3">
+              {products.map((product, index) => (
+                <Link href="/products" key={product.name} className="group rounded-3xl border border-slate-200 bg-white p-4 transition hover:-translate-y-1 hover:border-emerald-300 hover:shadow-lg">
+                  <div className={`flex h-56 items-end rounded-2xl ${product.tone} p-5`}>
+                    <span className="rounded-full bg-white/80 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-600">Image placeholder {index + 1}</span>
                   </div>
-
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#FEFCE8] text-[#854D0E] border border-[#FEF08A] font-semibold">
-                    Specs Coming Soon
-                  </span>
-                </div>
-
-                <h3 className="text-lg font-bold text-[#0F172A] group-hover:text-[#059669] transition-colors mb-2">
-                  {cat.name}
-                </h3>
-
-                <p className="text-xs text-[#475569] leading-relaxed mb-6">
-                  {cat.description}
-                </p>
-              </div>
-
-              <div>
-                {/* Key Applications */}
-                <div className="pt-4 border-t border-[#E2E8F0] mb-5">
-                  <span className="text-[11px] font-mono text-[#64748B] block mb-2 font-bold uppercase tracking-wider">
-                    Key Applications:
-                  </span>
-                  <div className="flex flex-wrap gap-1.5">
-                    {cat.keyApplications.map((app) => (
-                      <span
-                        key={app}
-                        className="px-2.5 py-1 rounded-md bg-[#F8FAFC] border border-[#E2E8F0] text-[11px] text-[#334155] font-medium"
-                      >
-                        {app}
-                      </span>
-                    ))}
+                  <div className="p-3 pt-6">
+                    <h3 className="text-xl font-bold">{product.name}</h3>
+                    <p className="mt-3 text-sm leading-6 text-slate-600">{product.text}</p>
+                    <span className="mt-6 inline-block text-sm font-bold text-emerald-700">View solution →</span>
                   </div>
-                </div>
-
-                {/* Action Link */}
-                <Link
-                  href={`/products/${cat.slug}`}
-                  className="inline-flex items-center justify-between w-full px-4 py-2.5 rounded-lg bg-[#F8FAFC] border border-[#E2E8F0] text-xs font-bold text-[#0F172A] hover:bg-[#059669] hover:text-white hover:border-[#059669] transition-all"
-                >
-                  <span>View Category Details</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
-              </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </section>
-
-      {/* 3. OEM / ODM CUSTOM ENGINEERING PROCESS */}
-      <section className="bg-[#F8FAFC] border-y border-[#E2E8F0] py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <SectionHeading
-            badge="Custom OEM Capabilities"
-            badgeVariant="blue"
-            title="Custom Pack Engineering &amp; Contract Manufacturing"
-            subtitle="From initial application specifications to thermal simulation, smart BMS architecture, and mass production."
-          />
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-            {[
-              {
-                step: '01',
-                title: 'Requirement Analysis',
-                desc: 'Voltage, target C-rate, dimension envelope, and operational duty cycle scoping.',
-              },
-              {
-                step: '02',
-                title: 'Cell Chemistry Selection',
-                desc: 'Optimal cell chemistry selection (LiFePO4, NMC) and automated capacity matching.',
-              },
-              {
-                step: '03',
-                title: 'BMS & Telemetry Design',
-                desc: 'Tailored BMS telemetry with CAN, RS485, cell balancing, and thermal cutoff safeguards.',
-              },
-              {
-                step: '04',
-                title: 'Prototyping & Validation',
-                desc: 'Sample pack build, vibration analysis, charge-discharge cycling, and temperature testing.',
-              },
-              {
-                step: '05',
-                title: 'Mass B2B Production',
-                desc: 'Automated precision assembly and batch delivery to OEM manufacturing plants.',
-              },
-            ].map((item) => (
-              <div
-                key={item.step}
-                className="bg-white border border-[#E2E8F0] rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow"
-              >
-                <span className="text-2xl font-extrabold font-mono text-[#059669] block mb-3">
-                  {item.step}
-                </span>
-                <h4 className="text-sm font-bold text-[#0F172A] mb-2">{item.title}</h4>
-                <p className="text-xs text-[#64748B] leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
           </div>
+        </section>
 
-          <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
-            <Button
-              href="/oem-custom-solutions"
-              variant="primary"
-              size="md"
-              icon={<Factory className="w-4 h-4" />}
-            >
-              Start OEM Custom Battery Intake
-            </Button>
-            <Button
-              href="/finder"
-              variant="outline"
-              size="md"
-              icon={<Search className="w-4 h-4" />}
-            >
-              Launch Requirements Finder
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. TECHNOLOGY & QUALITY PILLARS */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6">
-        <SectionHeading
-          badge="Engineering & Safety"
-          badgeVariant="green"
-          title="Technology &amp; BMS Architecture"
-          subtitle="Engineered with multi-layered safety mechanisms and robust thermal management."
-        />
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="p-8 rounded-2xl bg-white border border-[#E2E8F0] space-y-4 shadow-sm">
-            <div className="w-12 h-12 rounded-xl bg-[#ECFDF5] border border-[#A7F3D0] flex items-center justify-center text-[#059669]">
-              <Layers className="w-6 h-6" />
+        <section id="process" className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28">
+          <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
+            <div>
+              <p className="text-sm font-bold uppercase tracking-[0.2em] text-emerald-700">How we work</p>
+              <h2 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl">Straightforward from first conversation to delivery.</h2>
             </div>
-            <h3 className="text-lg font-bold text-[#0F172A]">Cell Chemistry Excellence</h3>
-            <p className="text-xs text-[#475569] leading-relaxed">
-              Utilizing stable Lithium Iron Phosphate (LiFePO4) and high-energy NMC cells sorted rigorously for consistent internal resistance and capacity matching.
-            </p>
-          </div>
-
-          <div className="p-8 rounded-2xl bg-white border border-[#E2E8F0] space-y-4 shadow-sm">
-            <div className="w-12 h-12 rounded-xl bg-[#F0F9FF] border border-[#BAE6FD] flex items-center justify-center text-[#0284C7]">
-              <Cpu className="w-6 h-6" />
-            </div>
-            <h3 className="text-lg font-bold text-[#0F172A]">Smart Telemetry BMS</h3>
-            <p className="text-xs text-[#475569] leading-relaxed">
-              Equipped with real-time multi-point temperature sensors, over-voltage/under-voltage protection, short-circuit cutoff, and CANbus/RS485 communication protocols.
-            </p>
-          </div>
-
-          <div className="p-8 rounded-2xl bg-white border border-[#E2E8F0] space-y-4 shadow-sm">
-            <div className="w-12 h-12 rounded-xl bg-[#ECFDF5] border border-[#A7F3D0] flex items-center justify-center text-[#059669]">
-              <ShieldCheck className="w-6 h-6" />
-            </div>
-            <h3 className="text-lg font-bold text-[#0F172A]">Automated Assembly</h3>
-            <p className="text-xs text-[#475569] leading-relaxed">
-              Precision welding, standardized insulation barriers, and heavy-duty structural enclosures designed for high vibration durability.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* 5. INDUSTRIES SERVED */}
-      <section className="bg-[#F8FAFC] border-t border-[#E2E8F0] py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <SectionHeading
-            badge="B2B Applications"
-            badgeVariant="blue"
-            title="Industries &amp; Use Cases"
-            subtitle="Supplying tailored power systems across key mobility and infrastructure sectors."
-          />
-
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 text-center">
-            {[
-              { label: 'Electric 2-Wheelers', icon: Bike, href: '/applications#e-2w' },
-              { label: 'E-Rickshaw Fleets', icon: Truck, href: '/applications#e-3w' },
-              { label: 'Solar & ESS', icon: Sun, href: '/applications#solar-ess' },
-              { label: 'Inverter Backup', icon: Home, href: '/applications#inverter-backup' },
-              { label: 'Telecom Towers', icon: Radio, href: '/applications#telecom' },
-              { label: 'Custom Industrial', icon: Factory, href: '/applications#industrial-traction' },
-            ].map((ind) => (
-              <Link
-                key={ind.label}
-                href={ind.href}
-                className="p-5 rounded-xl bg-white border border-[#E2E8F0] hover:border-[#059669] hover:shadow-sm transition-all flex flex-col items-center justify-center gap-3"
-              >
-                <div className="w-10 h-10 rounded-lg bg-[#ECFDF5] flex items-center justify-center text-[#059669]">
-                  <ind.icon className="w-5 h-5" />
+            <div className="divide-y divide-slate-200 border-y border-slate-200">
+              {benefits.map(([number, title, text]) => (
+                <div key={number} className="grid gap-4 py-7 sm:grid-cols-[70px_1fr]">
+                  <span className="text-sm font-black text-emerald-700">{number}</span>
+                  <div><h3 className="text-xl font-bold">{title}</h3><p className="mt-2 max-w-lg leading-7 text-slate-600">{text}</p></div>
                 </div>
-                <span className="text-xs font-bold text-[#0F172A]">{ind.label}</span>
-              </Link>
-            ))}
+              ))}
+            </div>
           </div>
+        </section>
 
-          <div className="mt-8 text-center">
-            <Link
-              href="/applications"
-              className="text-xs font-mono font-bold text-[#059669] hover:underline inline-flex items-center gap-1"
-            >
-              Explore All 15+ Industry Application Domains →
-            </Link>
+        <section className="mx-6 mb-16 rounded-[2rem] bg-slate-950 px-6 py-14 text-white sm:px-12 lg:mx-auto lg:max-w-7xl lg:px-16">
+          <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
+            <div className="max-w-2xl"><p className="text-sm font-bold uppercase tracking-[0.2em] text-emerald-400">Let&apos;s build the right system</p><h2 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl">Have a battery requirement?</h2><p className="mt-5 leading-7 text-slate-300">Share your application, target specifications, and volume. Our team will help you find the clearest next step.</p></div>
+            <Link href="/rfq" className="shrink-0 rounded-full bg-emerald-500 px-6 py-3.5 text-center text-sm font-bold text-slate-950 transition hover:bg-emerald-400">Start an enquiry →</Link>
           </div>
+        </section>
+      </main>
+
+      <footer className="border-t border-slate-200 bg-white">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-8 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between lg:px-8">
+          <span className="font-bold tracking-[0.2em] text-slate-950">MEHAR</span>
+          <span>Battery systems and energy storage solutions.</span>
+          <Link href="/contact" className="font-semibold text-emerald-700 hover:text-emerald-800">Contact us →</Link>
         </div>
-      </section>
-
-      {/* 6. TECHNICAL TOOLS CALLOUT */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="p-8 rounded-3xl bg-white border border-[#E2E8F0] space-y-4 shadow-sm flex flex-col justify-between">
-            <div className="space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-[#F0FDF4] border border-[#A7F3D0] flex items-center justify-center text-[#059669]">
-                <Wrench className="w-5 h-5" />
-              </div>
-              <h3 className="text-lg font-bold text-[#0F172A]">Battery Engineering Calculators</h3>
-              <p className="text-xs text-[#64748B] leading-relaxed">
-                Use our general engineering tools to estimate battery energy (Wh), calculate estimated runtime under load, evaluate series/parallel strings, and convert units.
-              </p>
-            </div>
-            <div className="pt-4 border-t border-[#E2E8F0]">
-              <Link
-                href="/tools"
-                className="text-xs font-bold text-[#059669] hover:underline flex items-center gap-1"
-              >
-                Open Engineering Calculators →
-              </Link>
-            </div>
-          </div>
-
-          <div className="p-8 rounded-3xl bg-white border border-[#E2E8F0] space-y-4 shadow-sm flex flex-col justify-between">
-            <div className="space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-[#F0F9FF] border border-[#BAE6FD] flex items-center justify-center text-[#0284C7]">
-                <FileText className="w-5 h-5" />
-              </div>
-              <h3 className="text-lg font-bold text-[#0F172A]">Resource &amp; Download Center</h3>
-              <p className="text-xs text-[#64748B] leading-relaxed">
-                Access product brochures, technical data sheets, safety guidelines, and OEM intake forms for MEHAR battery systems.
-              </p>
-            </div>
-            <div className="pt-4 border-t border-[#E2E8F0]">
-              <Link
-                href="/resources"
-                className="text-xs font-bold text-[#0284C7] hover:underline flex items-center gap-1"
-              >
-                Browse Documentation &amp; Assets →
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 7. B2B CONVERSION / RFQ CALLOUT */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="p-8 sm:p-12 rounded-3xl bg-[#F8FAFC] text-[#0F172A] border border-[#E2E8F0] flex flex-col lg:flex-row items-center justify-between gap-8 shadow-sm">
-          <div className="space-y-3 text-center lg:text-left">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-mono font-bold border bg-[#ECFDF5] text-[#065F46] border-[#A7F3D0]">
-              B2B Procurement &amp; Supply
-            </span>
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A]">
-              Ready to Discuss Your Battery Supply Requirements?
-            </h3>
-            <p className="text-xs sm:text-sm text-[#475569] max-w-xl leading-relaxed">
-              Connect with our technical sales engineers for bulk enquiries, custom OEM battery pack development, or dealership opportunities.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap items-center justify-center gap-3 shrink-0">
-            <Button
-              href="/rfq"
-              variant="primary"
-              size="lg"
-              icon={<ArrowRight className="w-4 h-4" />}
-            >
-              Submit B2B RFQ
-            </Button>
-
-            <Button
-              href="/oem-custom-solutions"
-              variant="outline"
-              size="lg"
-              icon={<Factory className="w-4 h-4" />}
-            >
-              Custom OEM Intake
-            </Button>
-
-            <Button
-              href="/contact"
-              variant="ghost"
-              size="lg"
-            >
-              Contact Sales Desk
-            </Button>
-          </div>
-        </div>
-      </section>
+      </footer>
     </div>
   );
 }
