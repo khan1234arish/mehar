@@ -1137,9 +1137,8 @@ export default function MeharAssistant() {
                     <OemSummary
                       data={oemData}
                       onContinue={() => {
-                        const url = buildOemRfqUrl(oemData);
                         setIsOpen(false);
-                        router.push(url);
+                        router.push('/oem-custom-solutions');
                       }}
                     />
                   )}

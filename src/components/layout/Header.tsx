@@ -39,6 +39,8 @@ export default function Header() {
     { label: 'Products', href: '/products', hasDropdown: true },
     { label: 'Battery Finder', href: '/finder' },
     { label: 'Compare', href: '/compare' },
+    { label: 'OEM / ODM', href: '/oem-custom-solutions' },
+    { label: 'Tools', href: '/tools' },
     { label: 'Applications', href: '/applications' },
     { label: 'Technology', href: '/technology' },
     { label: 'About Us', href: '/about' },

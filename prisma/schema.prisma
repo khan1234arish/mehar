@@ -37,6 +37,14 @@ enum RfqStatus {
   CLOSED_LOST
 }
 
+enum OemEnquiryStatus {
+  NEW
+  UNDER_REVIEW
+  ENGINEERING_REVIEW
+  QUOTATION
+  CLOSED
+}
+
 enum EnquiryType {
   GENERAL
   TECHNICAL
@@ -188,27 +196,48 @@ model RfqItem {
 }
 
 model OemEnquiry {
-  id                     String      @id @default(uuid())
-  enquiryNumber          String      @unique
-  companyName            String
-  contactPerson          String
-  email                  String
-  phone                  String
-  applicationType        String
-  preferredChemistry     String?
-  targetVoltage          String
-  targetCapacityAh       String
-  peakDischargeCurrent   String?
-  enclosureConstraints   String?
-  communicationProtocol  String?
-  targetCompliance       String?
-  estimatedMonthlyVolume String
-  projectTimeline        String
-  attachments            String?
-  status                 RfqStatus   @default(NEW)
-  internalNotes          String?
-  createdAt              DateTime    @default(now())
-  updatedAt              DateTime    @updatedAt
+  id                       String            @id @default(uuid())
+  enquiryNumber            String            @unique
+
+  // Company & Contact
+  companyName              String
+  contactPerson            String
+  email                    String
+  phone                    String
+  city                     String
+  state                    String
+  country                  String            @default("India")
+  gstin                    String?
+  website                  String?
+
+  // Application
+  applicationType          String            // Customer requirement label
+  applicationDetail        String?
+
+  // Electrical Requirements (JSON)
+  electricalRequirements   String?           // JSON: voltage, capacity, energy, continuousCurrent, peakCurrent, runtime, chemistry
+
+  // Mechanical Requirements (JSON)
+  mechanicalRequirements   String?           // JSON: length, width, height, maxWeight, mountingReqs, connector, harness
+
+  // BMS & Communication (JSON)
+  bmsRequirements          String?           // JSON: bmsRequired, protocols[], otherProtocol
+
+  // Environmental Requirements (JSON)
+  environmentalRequirements String?          // JSON: operatingTemp, storageTemp, ipRating, vibrationShock, other
+
+  // Commercial Requirements (JSON)
+  commercialRequirements   String?           // JSON: protoQty, productionQty, annualQty, targetDate, projectStage
+
+  // Attachments (JSON array of metadata: name, size, type)
+  attachmentMetadata       String?
+
+  // Enquiry status
+  status                   OemEnquiryStatus  @default(NEW)
+  internalNotes            String?
+
+  createdAt                DateTime          @default(now())
+  updatedAt                DateTime          @updatedAt
 
   @@index([enquiryNumber, status])
 }

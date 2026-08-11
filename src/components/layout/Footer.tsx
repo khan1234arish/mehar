@@ -56,7 +56,7 @@ export default function Footer() {
           {/* Procurement & Tools */}
           <div>
             <h4 className="text-xs font-bold font-mono uppercase tracking-wider text-[#059669] mb-4">
-              Procurement Engines
+              Procurement &amp; Tools
             </h4>
             <ul className="space-y-2.5 text-xs text-[#475569]">
               <li>
@@ -78,13 +78,23 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/oem-custom-solutions" className="hover:text-[#059669] transition-colors font-medium">
+                  OEM / ODM Custom Battery
+                </Link>
+              </li>
+              <li>
+                <Link href="/tools" className="hover:text-[#059669] transition-colors font-medium">
+                  Engineering Calculators
+                </Link>
+              </li>
+              <li>
                 <Link href="/applications" className="hover:text-[#059669] transition-colors font-medium">
-                  Applications & Industries
+                  Applications &amp; Industries
                 </Link>
               </li>
               <li>
                 <Link href="/technology" className="hover:text-[#059669] transition-colors font-medium">
-                  Technology & Quality
+                  Technology &amp; Quality
                 </Link>
               </li>
             </ul>
