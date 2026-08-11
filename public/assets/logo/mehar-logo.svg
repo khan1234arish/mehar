@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 110" width="100%" height="100%">
+  <defs>
+    <linearGradient id="meharGreenGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00F59B"/>
+      <stop offset="100%" stop-color="#00B4D8"/>
+    </linearGradient>
+    <linearGradient id="meharBlueGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00D2FF"/>
+      <stop offset="100%" stop-color="#00F59B"/>
+    </linearGradient>
+    <filter id="subtleShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#00F59B" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Industrial Geometric Energy Emblem -->
+  <g transform="translate(10, 10)" filter="url(#subtleShadow)">
+    <!-- Battery Cell Outer Shield -->
+    <path d="M 45 5 L 75 22 L 75 68 L 45 85 L 15 68 L 15 22 Z" fill="#0C1527" stroke="#1E293B" stroke-width="2"/>
+    <path d="M 45 10 L 70 24 L 70 65 L 45 80 L 20 65 L 20 24 Z" fill="#080D1A" stroke="url(#meharBlueGlow)" stroke-width="1.5"/>
+    
+    <!-- Dynamic Power Lightning / Energy Core -->
+    <path d="M 48 18 L 30 46 L 44 46 L 38 72 L 62 40 L 48 40 Z" fill="url(#meharGreenGlow)"/>
+    
+    <!-- Anode & Cathode Power Nodes -->
+    <rect x="38" y="2" width="14" height="4" rx="2" fill="#00D2FF"/>
+    <circle cx="30" cy="55" r="2" fill="#00F59B"/>
+    <circle cx="60" cy="55" r="2" fill="#00D2FF"/>
+  </g>
+
+  <!-- Brand Typography -->
+  <!-- MEHAR Bold Industrial Logotype -->
+  <text x="110" y="60" font-family="'Outfit', 'Inter', -apple-system, sans-serif" font-weight="900" font-size="46" letter-spacing="3" fill="#FFFFFF">
+    MEHAR
+  </text>
+
+  <!-- Accent Energy Dot -->
+  <circle cx="282" cy="38" r="5" fill="url(#meharGreenGlow)"/>
+
+  <!-- Parent Company Sub-brand Descriptor -->
+  <text x="112" y="82" font-family="'Inter', -apple-system, sans-serif" font-weight="700" font-size="11" letter-spacing="3.5" fill="#00D2FF">
+    LAWAD INFRASTRUCTURE
+  </text>
+  
+  <text x="312" y="82" font-family="'Inter', -apple-system, sans-serif" font-weight="500" font-size="10" letter-spacing="1.5" fill="#94A3B8">
+    PVT. LTD.
+  </text>
+
+  <!-- Technical Divider Line -->
+  <line x1="112" y1="92" x2="430" y2="92" stroke="#1E293B" stroke-width="1.5"/>
+  <line x1="112" y1="92" x2="220" y2="92" stroke="url(#meharGreenGlow)" stroke-width="1.5"/>
+</svg>

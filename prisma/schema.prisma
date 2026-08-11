@@ -1,0 +1,251 @@
+// Prisma Schema for MEHAR B2B Platform (PostgreSQL)
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  SUPER_ADMIN
+  SALES_ADMIN
+  DEALER
+  USER
+}
+
+enum UserStatus {
+  ACTIVE
+  PENDING_VERIFICATION
+  SUSPENDED
+}
+
+enum VerificationStatus {
+  UNVERIFIED_PLACEHOLDER
+  PENDING_CLIENT_REVIEW
+  CLIENT_VERIFIED
+}
+
+enum RfqStatus {
+  NEW
+  UNDER_REVIEW
+  QUOTATION_SENT
+  IN_NEGOTIATION
+  CLOSED_WON
+  CLOSED_LOST
+}
+
+enum EnquiryType {
+  GENERAL
+  TECHNICAL
+  BULK_ORDER
+  EXPORT
+  CUSTOM_OEM
+}
+
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  passwordHash  String
+  name          String
+  phone         String?
+  role          Role           @default(USER)
+  status        UserStatus     @default(ACTIVE)
+  dealerProfile DealerProfile?
+  auditLogs     AuditLog[]
+  assignedRfqs  RfqRequest[]   @relation("AssignedRep")
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([email])
+}
+
+model DealerProfile {
+  id                      String    @id @default(uuid())
+  userId                  String    @unique
+  user                    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  companyName             String
+  gstin                   String?
+  panNumber               String?
+  businessType            String
+  address                 String
+  city                    String
+  state                   String
+  pincode                 String
+  territoryInterest       String
+  existingBatteryBrands   String?
+  annualVolumeCommitment  String?
+  warehouseSquareFeet     String?
+  isVerified              Boolean   @default(false)
+  verifiedAt              DateTime?
+  verificationNotes       String?
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+}
+
+model Category {
+  id                 String             @id @default(uuid())
+  name               String
+  slug               String             @unique
+  tagline            String?
+  description        String
+  iconName           String?
+  bannerImage        String?
+  displayOrder       Int                @default(0)
+  isPlaceholder      Boolean            @default(true)
+  verificationStatus VerificationStatus @default(UNVERIFIED_PLACEHOLDER)
+  products           Product[]
+  isActive           Boolean            @default(true)
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  @@index([slug])
+}
+
+model Product {
+  id                 String             @id @default(uuid())
+  categoryId         String
+  category           Category           @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  name               String
+  slug               String             @unique
+  shortDescription   String
+  applicationTag     String
+  chemistry          String?
+  voltageRange       String?
+  capacityRange      String?
+  energyRange        String?
+  cycleLife          String?
+  maxDischargeRate   String?
+  operatingTemp      String?
+  bmsProtocols       String?
+  ipRating           String?
+  dimensions         String?
+  weight             String?
+  warrantySummary    String?
+  isPlaceholder      Boolean            @default(true)
+  verificationStatus VerificationStatus @default(UNVERIFIED_PLACEHOLDER)
+  placeholderNote    String             @default("Specifications coming soon. Contact sales for custom engineering requirements.")
+  tdsFileUrl         String?
+  specifications     ProductSpec[]
+  rfqItems           RfqItem[]
+  isActive           Boolean            @default(true)
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  @@index([slug, categoryId])
+}
+
+model ProductSpec {
+  id           String   @id @default(uuid())
+  productId    String
+  product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  groupName    String   // e.g. "Electrical", "Mechanical", "BMS & Safety"
+  specKey      String
+  specValue    String
+  specUnit     String?
+  isHighlight  Boolean  @default(false)
+  displayOrder Int      @default(0)
+}
+
+model RfqRequest {
+  id              String      @id @default(uuid())
+  rfqNumber       String      @unique
+  companyName     String
+  contactPerson   String
+  email           String
+  phone           String
+  gstin           String?
+  businessType    String
+  city            String
+  state           String
+  projectTimeline String
+  volumeTier      String
+  customNotes     String?
+  status          RfqStatus   @default(NEW)
+  assignedToId    String?
+  assignedTo      User?       @relation("AssignedRep", fields: [assignedToId], references: [id])
+  internalNotes   String?
+  items           RfqItem[]
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@index([rfqNumber, status])
+}
+
+model RfqItem {
+  id                 String     @id @default(uuid())
+  rfqRequestId       String
+  rfqRequest         RfqRequest @relation(fields: [rfqRequestId], references: [id], onDelete: Cascade)
+  productId          String?
+  product            Product?   @relation(fields: [productId], references: [id])
+  categoryName       String
+  customVoltage      String?
+  customCapacity     String?
+  quantityTier       String
+  technicalNotes     String?
+}
+
+model OemEnquiry {
+  id                     String      @id @default(uuid())
+  enquiryNumber          String      @unique
+  companyName            String
+  contactPerson          String
+  email                  String
+  phone                  String
+  applicationType        String
+  preferredChemistry     String?
+  targetVoltage          String
+  targetCapacityAh       String
+  peakDischargeCurrent   String?
+  enclosureConstraints   String?
+  communicationProtocol  String?
+  targetCompliance       String?
+  estimatedMonthlyVolume String
+  projectTimeline        String
+  attachments            String?
+  status                 RfqStatus   @default(NEW)
+  internalNotes          String?
+  createdAt              DateTime    @default(now())
+  updatedAt              DateTime    @updatedAt
+
+  @@index([enquiryNumber, status])
+}
+
+model GeneralEnquiry {
+  id          String      @id @default(uuid())
+  name        String
+  companyName String?
+  email       String
+  phone       String
+  enquiryType EnquiryType @default(GENERAL)
+  subject     String
+  message     String
+  status      RfqStatus   @default(NEW)
+  createdAt   DateTime    @default(now())
+}
+
+model ResourceDownload {
+  id            String             @id @default(uuid())
+  title         String
+  category      String
+  fileUrl       String
+  fileType      String             @default("PDF")
+  fileSize      String?
+  isGated       Boolean            @default(false)
+  isPlaceholder Boolean            @default(true)
+  downloadCount Int                @default(0)
+  createdAt     DateTime           @default(now())
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id])
+  action     String
+  entityType String
+  entityId   String
+  metadata   String?
+  createdAt  DateTime @default(now())
+}

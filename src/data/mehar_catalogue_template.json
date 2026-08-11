@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MeharCatalogueImportFormat",
+  "description": "Standardized import template for client-verified MEHAR battery catalogue",
+  "categories": [
+    {
+      "name": "Electric 2-Wheeler Batteries",
+      "slug": "electric-2-wheeler-batteries",
+      "description": "High-density battery systems for electric scooters, motorcycles, and e-bikes",
+      "products": [
+        {
+          "name": "MEHAR 48V 24Ah LiFePO4 Battery Pack",
+          "slug": "mehar-48v-24ah-lifepo4-battery",
+          "shortDescription": "Compact LiFePO4 battery pack for electric two-wheelers with smart BMS protection.",
+          "applicationTag": "Electric 2-Wheelers",
+          "chemistry": "LiFePO4 (Lithium Iron Phosphate)",
+          "voltageRange": "48V Nominal (54.6V Max)",
+          "capacityRange": "24Ah (1.15 kWh)",
+          "cycleLife": "2500+ Cycles @ 80% DoD",
+          "bmsProtocols": "CAN 2.0B / Bluetooth",
+          "ipRating": "IP67",
+          "dimensions": "320 x 180 x 165 mm",
+          "weight": "9.5 kg",
+          "warrantySummary": "3 Years Standard Replacement Warranty",
+          "specifications": [
+            { "groupName": "Electrical", "specKey": "Nominal Voltage", "specValue": "48V", "isHighlight": true },
+            { "groupName": "Electrical", "specKey": "Rated Capacity", "specValue": "24Ah", "isHighlight": true },
+            { "groupName": "Electrical", "specKey": "Continuous Discharge", "specValue": "30A" },
+            { "groupName": "Electrical", "specKey": "Peak Pulse Discharge", "specValue": "60A (10s)" },
+            { "groupName": "Mechanical", "specKey": "Enclosure Material", "specValue": "Powder-Coated Steel / Aluminium" }
+          ]
+        }
+      ]
+    }
+  ]
+}
