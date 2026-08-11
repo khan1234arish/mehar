@@ -33,6 +33,14 @@ export async function POST(request: Request) {
       );
     }
 
+    // Basic email format validation
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return NextResponse.json(
+        { error: 'Please provide a valid business email address.' },
+        { status: 400 }
+      );
+    }
+
     // Generate unique RFQ reference number
     const randomSuffix = Math.random().toString(36).substring(2, 7).toUpperCase();
     const rfqNumber = `MEHAR-RFQ-2026-${randomSuffix}`;
@@ -53,29 +61,41 @@ export async function POST(request: Request) {
       userNotes: notes || '',
     });
 
-    // Store in PostgreSQL via Prisma if available
+    // Check Prisma database availability and persist
+    if (!prisma) {
+      return NextResponse.json(
+        { error: 'Database service is temporarily unavailable. Please contact our commercial sales desk directly.' },
+        { status: 503 }
+      );
+    }
+
     try {
-      if (prisma) {
-        await prisma.rfqRequest.create({
-          data: {
-            rfqNumber,
-            companyName,
-            contactPerson,
-            email,
-            phone,
-            gstin: gstin || null,
-            businessType: 'B2B_PROCUREMENT',
-            city,
-            state,
-            projectTimeline: timeline || 'WITHIN_30_DAYS',
-            volumeTier: volumeTier || 'COMMERCIAL_BATCH',
-            customNotes: customNotesSummary,
-            status: 'NEW',
-          },
-        });
-      }
+      await prisma.rfqRequest.create({
+        data: {
+          rfqNumber,
+          companyName,
+          contactPerson,
+          email,
+          phone,
+          gstin: gstin || null,
+          businessType: 'B2B_PROCUREMENT',
+          city,
+          state,
+          projectTimeline: timeline || 'WITHIN_30_DAYS',
+          volumeTier: volumeTier || 'COMMERCIAL_BATCH',
+          customNotes: customNotesSummary,
+          status: 'NEW',
+        },
+      });
     } catch (dbError) {
-      console.warn('PostgreSQL write skipped or pending migration:', dbError);
+      console.error('Database write error during RFQ persistence:', dbError);
+      // Strictly return error response so customer is NOT falsely told it succeeded
+      return NextResponse.json(
+        {
+          error: 'We were unable to save your quotation request to the database. Please try again or contact our sales desk directly.',
+        },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json({
@@ -84,9 +104,9 @@ export async function POST(request: Request) {
       message: 'Official B2B RFQ registered successfully. Our commercial sales engineers will evaluate your requirements within 24 business hours.',
     });
   } catch (error) {
-    console.error('Error processing RFQ:', error);
+    console.error('Error processing RFQ request:', error);
     return NextResponse.json(
-      { error: 'An error occurred while submitting your quotation request.' },
+      { error: 'An unexpected error occurred while processing your quotation request. Please try again.' },
       { status: 500 }
     );
   }

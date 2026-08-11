@@ -54,6 +54,7 @@ function RfqBuilderInner() {
   const [submissionResult, setSubmissionResult] = useState<{
     rfqNumber: string;
   } | null>(null);
+  const [errorMessage, setErrorMessage] = useState('');
   const [copied, setCopied] = useState(false);
 
   const toggleCategory = (slug: string) => {
@@ -69,6 +70,7 @@ function RfqBuilderInner() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
+    setErrorMessage('');
 
     try {
       const res = await fetch('/api/rfq', {
@@ -81,16 +83,18 @@ function RfqBuilderInner() {
       });
 
       const data = await res.json();
-      if (data.success && data.rfqNumber) {
+      if (res.ok && data.success && data.rfqNumber) {
         setSubmissionResult({ rfqNumber: data.rfqNumber });
       } else {
-        // Fallback RFQ number if offline
-        const fallbackId = `MEHAR-RFQ-2026-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
-        setSubmissionResult({ rfqNumber: fallbackId });
+        setErrorMessage(
+          data.error ||
+            'Unable to register quotation request at this time. Please try again or contact our sales desk directly.'
+        );
       }
     } catch (err) {
-      const fallbackId = `MEHAR-RFQ-2026-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
-      setSubmissionResult({ rfqNumber: fallbackId });
+      setErrorMessage(
+        'A network error occurred while submitting your quotation request. Please check your connection or contact our sales desk directly.'
+      );
     } finally {
       setSubmitting(false);
     }
@@ -464,6 +468,33 @@ function RfqBuilderInner() {
         </div>
       </div>
 
+      {/* Error State Banner */}
+      {errorMessage && (
+        <div className="p-4 rounded-xl bg-[#FEF2F2] border border-[#FECACA] text-left space-y-2">
+          <div className="flex items-center gap-2 text-[#991B1B] text-xs font-bold">
+            <span>Submission Error</span>
+          </div>
+          <p className="text-xs text-[#B91C1C] leading-relaxed">{errorMessage}</p>
+          <div className="pt-2 flex flex-wrap items-center gap-3 text-xs">
+            <a
+              href={`mailto:${COMPANY_INFO.salesEmail}?subject=B2B%20RFQ%20Submission%20Enquiry`}
+              className="text-[#059669] font-bold hover:underline font-mono"
+            >
+              Email Sales: {COMPANY_INFO.salesEmail}
+            </a>
+            <span className="text-[#CBD5E1]">•</span>
+            <a
+              href={`https://wa.me/${COMPANY_INFO.whatsappDesk.replace(/[^0-9]/g, '')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#059669] font-bold hover:underline font-mono"
+            >
+              WhatsApp Sales Desk
+            </a>
+          </div>
+        </div>
+      )}
+
       {/* Submit Button */}
       <div className="pt-6 border-t border-[#E2E8F0] space-y-3">
         <Button
@@ -478,7 +509,7 @@ function RfqBuilderInner() {
         </Button>
 
         <p className="text-[11px] text-[#64748B] text-center font-mono">
-          Strictly B2B Wholesale & OEM Supply • Engineering confirmation required for final pack specifications.
+          Strictly B2B Wholesale &amp; OEM Supply • Engineering confirmation required for final pack specifications.
         </p>
       </div>
     </form>

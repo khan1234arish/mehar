@@ -64,7 +64,7 @@ export async function POST(request: Request) {
           );
         }
 
-        // Validate filename (no path traversal)
+        // Validate filename (sanitize path characters)
         const safeName = file.name.replace(/[^a-zA-Z0-9._\- ]/g, '_');
 
         // Validate type
@@ -79,8 +79,7 @@ export async function POST(request: Request) {
           );
         }
 
-        // Store only metadata — no file contents persisted to disk in this implementation.
-        // For production: integrate with cloud storage (S3, GCS, Cloudinary, etc.)
+        // Store validated metadata for technical scoping
         attachmentMetadata.push({
           name: safeName,
           size: file.size,
@@ -88,7 +87,7 @@ export async function POST(request: Request) {
         });
       }
     } else {
-      // JSON fallback (for clients that don't send files)
+      // JSON fallback (for clients without file attachments)
       fields = await request.json();
     }
 
@@ -104,45 +103,59 @@ export async function POST(request: Request) {
 
     // Basic email format check
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return NextResponse.json({ error: 'Please provide a valid email address.' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Please provide a valid business email address.' },
+        { status: 400 }
+      );
     }
 
     // ── Generate unique enquiry reference ────────────────────────
     const enquiryNumber = generateEnquiryNumber();
 
-    // ── Persist to PostgreSQL ────────────────────────────────────
+    // ── Check Prisma availability & persist to PostgreSQL ─────────
+    if (!prisma) {
+      return NextResponse.json(
+        { error: 'Database service is temporarily unavailable. Please contact our engineering desk directly.' },
+        { status: 503 }
+      );
+    }
+
     try {
-      if (prisma) {
-        await prisma.oemEnquiry.create({
-          data: {
-            enquiryNumber,
-            companyName,
-            contactPerson,
-            email,
-            phone,
-            city: city || 'Unspecified',
-            state: state || 'India',
-            country: fields.country || 'India',
-            gstin: fields.gstin || null,
-            website: fields.website || null,
-            applicationType,
-            applicationDetail: fields.applicationDetail || null,
-            electricalRequirements: fields.electricalRequirements || null,
-            mechanicalRequirements: fields.mechanicalRequirements || null,
-            bmsRequirements: fields.bmsRequirements || null,
-            environmentalRequirements: fields.environmentalRequirements || null,
-            commercialRequirements: fields.commercialRequirements || null,
-            attachmentMetadata:
-              attachmentMetadata.length > 0
-                ? JSON.stringify(attachmentMetadata)
-                : null,
-            status: 'NEW',
-          },
-        });
-      }
+      await prisma.oemEnquiry.create({
+        data: {
+          enquiryNumber,
+          companyName,
+          contactPerson,
+          email,
+          phone,
+          city: city || 'Unspecified',
+          state: state || 'India',
+          country: fields.country || 'India',
+          gstin: fields.gstin || null,
+          website: fields.website || null,
+          applicationType,
+          applicationDetail: fields.applicationDetail || null,
+          electricalRequirements: fields.electricalRequirements || null,
+          mechanicalRequirements: fields.mechanicalRequirements || null,
+          bmsRequirements: fields.bmsRequirements || null,
+          environmentalRequirements: fields.environmentalRequirements || null,
+          commercialRequirements: fields.commercialRequirements || null,
+          attachmentMetadata:
+            attachmentMetadata.length > 0
+              ? JSON.stringify(attachmentMetadata)
+              : null,
+          status: 'NEW',
+        },
+      });
     } catch (dbError) {
-      // Graceful fallback: log and continue — reference is still returned to user
-      console.warn('PostgreSQL OEM enquiry write skipped (pending migration or connection):', dbError);
+      console.error('Database write error during OEM enquiry persistence:', dbError);
+      // Strictly return error response so customer is NOT falsely told it succeeded
+      return NextResponse.json(
+        {
+          error: 'We were unable to save your OEM engineering enquiry to the database. Please try again or contact our engineering desk directly.',
+        },
+        { status: 500 }
+      );
     }
 
     // ── Build pre-filled WhatsApp message ────────────────────────
