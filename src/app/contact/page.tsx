@@ -29,7 +29,14 @@ function ContactFormInner() {
     phone: '',
     cityState: '',
     gstin: '',
-    enquiryType: initialType === 'oem' ? 'CUSTOM_OEM' : 'BULK_RFQ',
+    enquiryType:
+      initialType === 'oem'
+        ? 'CUSTOM_OEM'
+        : initialType === 'dealer' || initialType === 'dealership'
+        ? 'DEALERSHIP'
+        : initialType === 'technical' || initialType === 'engineering'
+        ? 'TECHNICAL'
+        : 'BULK_RFQ',
     category: initialCategory,
     volumeTier: 'COMMERCIAL_BATCH',
     projectNotes: '',

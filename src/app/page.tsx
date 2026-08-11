@@ -1,6 +1,5 @@
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { BROAD_CATEGORIES } from '@/data/categories';
 import { COMPANY_INFO } from '@/data/companyInfo';
 import SectionHeading from '@/components/ui/SectionHeading';
@@ -21,8 +20,15 @@ import {
   Home,
   Radio,
   SlidersHorizontal,
-  CheckCircle2,
+  Wrench,
+  FileText,
+  Search,
 } from 'lucide-react';
+
+export const metadata = {
+  title: 'MEHAR Batteries | Lawad Infrastructure Private Limited | Official B2B Platform',
+  description: 'Official B2B platform for MEHAR battery systems and energy storage solutions by Lawad Infrastructure Private Limited. Supplying commercial EV OEMs, solar integrators, and industrial distributors.',
+};
 
 export default function HomePage() {
   return (
@@ -43,7 +49,7 @@ export default function HomePage() {
                 <span className="text-[#059669]">
                   Battery Systems
                 </span>{' '}
-                for Next-Gen Mobility & ESS
+                for Next-Gen Mobility &amp; ESS
               </h1>
 
               <p className="text-base sm:text-lg text-[#475569] max-w-2xl leading-relaxed">
@@ -51,23 +57,32 @@ export default function HomePage() {
               </p>
 
               {/* CTAs */}
-              <div className="flex flex-wrap items-center gap-4 pt-2">
+              <div className="flex flex-wrap items-center gap-3 pt-2">
                 <Button
                   href="/products"
                   variant="primary"
                   size="lg"
                   icon={<ArrowRight className="w-4 h-4" />}
                 >
-                  Explore Product Portfolio
+                  Explore Solutions
                 </Button>
 
                 <Button
-                  href="/contact?type=rfq"
+                  href="/rfq"
                   variant="outline"
                   size="lg"
                   icon={<ArrowUpRight className="w-4 h-4" />}
                 >
-                  Request a B2B Quote
+                  Request B2B RFQ
+                </Button>
+
+                <Button
+                  href="/oem-custom-solutions"
+                  variant="ghost"
+                  size="lg"
+                  icon={<Factory className="w-4 h-4 text-[#059669]" />}
+                >
+                  Talk to Engineering
                 </Button>
               </div>
 
@@ -75,15 +90,15 @@ export default function HomePage() {
               <div className="pt-6 border-t border-[#CBD5E1]/60 grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs text-[#334155] font-medium">
                 <div className="flex items-center gap-2 font-mono">
                   <ShieldCheck className="w-4 h-4 text-[#059669] shrink-0" />
-                  <span>B2B & OEM Supply</span>
+                  <span>B2B &amp; OEM Supply</span>
                 </div>
                 <div className="flex items-center gap-2 font-mono">
                   <Cpu className="w-4 h-4 text-[#0284C7] shrink-0" />
-                  <span>Smart BMS Telemetry</span>
+                  <span>Smart BMS Architecture</span>
                 </div>
                 <div className="flex items-center gap-2 font-mono col-span-2 sm:col-span-1">
                   <Factory className="w-4 h-4 text-[#059669] shrink-0" />
-                  <span>Custom Pack Design</span>
+                  <span>Custom Pack Engineering</span>
                 </div>
               </div>
             </div>
@@ -113,10 +128,10 @@ export default function HomePage() {
                       </div>
                       <div>
                         <span className="text-[#0F172A] font-bold block">Cell Level Engineering</span>
-                        <span className="text-[11px] text-[#64748B]">Automated Laser Sorting & Sizing</span>
+                        <span className="text-[11px] text-[#64748B]">Automated IR Sorting &amp; Capacity Matching</span>
                       </div>
                     </div>
-                    <span className="text-[10px] text-[#059669] font-bold">Active</span>
+                    <span className="text-[10px] text-[#059669] font-bold">Matched</span>
                   </div>
 
                   <div className="p-4 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] flex items-center justify-between">
@@ -125,11 +140,11 @@ export default function HomePage() {
                         <Cpu className="w-4 h-4" />
                       </div>
                       <div>
-                        <span className="text-[#0F172A] font-bold block">Integrated Smart BMS</span>
+                        <span className="text-[#0F172A] font-bold block">Smart Telemetry BMS</span>
                         <span className="text-[11px] text-[#64748B]">CAN 2.0B / RS485 / Thermal Guard</span>
                       </div>
                     </div>
-                    <span className="text-[10px] text-[#0284C7] font-bold">Protected</span>
+                    <span className="text-[10px] text-[#0284C7] font-bold">Telemetry</span>
                   </div>
 
                   <div className="p-4 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] flex items-center justify-between">
@@ -138,11 +153,11 @@ export default function HomePage() {
                         <Layers className="w-4 h-4" />
                       </div>
                       <div>
-                        <span className="text-[#0F172A] font-bold block">Enclosure & Ingress</span>
-                        <span className="text-[11px] text-[#64748B]">Heavy-Duty Shock & Vibration Proof</span>
+                        <span className="text-[#0F172A] font-bold block">Enclosure &amp; Ingress</span>
+                        <span className="text-[11px] text-[#64748B]">Heavy-Duty Shock &amp; Vibration Enclosure</span>
                       </div>
                     </div>
-                    <span className="text-[10px] text-[#854D0E] font-bold">IP Certified</span>
+                    <span className="text-[10px] text-[#854D0E] font-bold">Enclosed</span>
                   </div>
                 </div>
 
@@ -235,7 +250,7 @@ export default function HomePage() {
           <SectionHeading
             badge="Custom OEM Capabilities"
             badgeVariant="blue"
-            title="Custom Pack Engineering & Contract Manufacturing"
+            title="Custom Pack Engineering &amp; Contract Manufacturing"
             subtitle="From initial application specifications to thermal simulation, smart BMS architecture, and mass production."
           />
 
@@ -248,23 +263,23 @@ export default function HomePage() {
               },
               {
                 step: '02',
-                title: 'Cell Sourcing & Sizing',
-                desc: 'Optimal cell chemistry selection (LiFePO4, NMC) and automated capacity sorting.',
+                title: 'Cell Chemistry Selection',
+                desc: 'Optimal cell chemistry selection (LiFePO4, NMC) and automated capacity matching.',
               },
               {
                 step: '03',
                 title: 'BMS & Telemetry Design',
-                desc: 'Tailored BMS programming with CAN, RS485, active balancing, and thermal cutoff.',
+                desc: 'Tailored BMS telemetry with CAN, RS485, cell balancing, and thermal cutoff safeguards.',
               },
               {
                 step: '04',
                 title: 'Prototyping & Validation',
-                desc: 'Sample pack build, vibration, charge-discharge endurance, and temperature validation.',
+                desc: 'Sample pack build, vibration analysis, charge-discharge cycling, and temperature testing.',
               },
               {
                 step: '05',
                 title: 'Mass B2B Production',
-                desc: 'Automated precision welding assembly and batch delivery to your manufacturing plant.',
+                desc: 'Automated precision assembly and batch delivery to OEM manufacturing plants.',
               },
             ].map((item) => (
               <div
@@ -280,14 +295,22 @@ export default function HomePage() {
             ))}
           </div>
 
-          <div className="mt-12 text-center">
+          <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
             <Button
-              href="/contact?type=oem"
-              variant="secondary"
+              href="/oem-custom-solutions"
+              variant="primary"
               size="md"
-              icon={<SlidersHorizontal className="w-4 h-4" />}
+              icon={<Factory className="w-4 h-4" />}
             >
-              Start an OEM Custom Battery Consultation
+              Start OEM Custom Battery Intake
+            </Button>
+            <Button
+              href="/finder"
+              variant="outline"
+              size="md"
+              icon={<Search className="w-4 h-4" />}
+            >
+              Launch Requirements Finder
             </Button>
           </div>
         </div>
@@ -298,7 +321,7 @@ export default function HomePage() {
         <SectionHeading
           badge="Engineering & Safety"
           badgeVariant="green"
-          title="Technology & BMS Architecture"
+          title="Technology &amp; BMS Architecture"
           subtitle="Engineered with multi-layered safety mechanisms and robust thermal management."
         />
 
@@ -329,7 +352,7 @@ export default function HomePage() {
             </div>
             <h3 className="text-lg font-bold text-[#0F172A]">Automated Assembly</h3>
             <p className="text-xs text-[#475569] leading-relaxed">
-              Precision spot and laser welding, standardized insulation barriers, and heavy-duty structural enclosures designed for high vibration durability.
+              Precision welding, standardized insulation barriers, and heavy-duty structural enclosures designed for high vibration durability.
             </p>
           </div>
         </div>
@@ -341,61 +364,125 @@ export default function HomePage() {
           <SectionHeading
             badge="B2B Applications"
             badgeVariant="blue"
-            title="Industries & Use Cases"
+            title="Industries &amp; Use Cases"
             subtitle="Supplying tailored power systems across key mobility and infrastructure sectors."
           />
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 text-center">
             {[
-              { label: 'Electric 2-Wheelers', icon: Bike },
-              { label: 'E-Rickshaw Fleets', icon: Truck },
-              { label: 'Solar & ESS', icon: Sun },
-              { label: 'Inverter Backup', icon: Home },
-              { label: 'Telecom Towers', icon: Radio },
-              { label: 'Custom Industrial', icon: Factory },
+              { label: 'Electric 2-Wheelers', icon: Bike, href: '/applications#e-2w' },
+              { label: 'E-Rickshaw Fleets', icon: Truck, href: '/applications#e-3w' },
+              { label: 'Solar & ESS', icon: Sun, href: '/applications#solar-ess' },
+              { label: 'Inverter Backup', icon: Home, href: '/applications#inverter-backup' },
+              { label: 'Telecom Towers', icon: Radio, href: '/applications#telecom' },
+              { label: 'Custom Industrial', icon: Factory, href: '/applications#industrial-traction' },
             ].map((ind) => (
-              <div
+              <Link
                 key={ind.label}
-                className="p-5 rounded-xl bg-white border border-[#E2E8F0] hover:border-[#059669] transition-colors flex flex-col items-center justify-center gap-3 shadow-sm"
+                href={ind.href}
+                className="p-5 rounded-xl bg-white border border-[#E2E8F0] hover:border-[#059669] hover:shadow-sm transition-all flex flex-col items-center justify-center gap-3"
               >
                 <div className="w-10 h-10 rounded-lg bg-[#ECFDF5] flex items-center justify-center text-[#059669]">
                   <ind.icon className="w-5 h-5" />
                 </div>
                 <span className="text-xs font-bold text-[#0F172A]">{ind.label}</span>
-              </div>
+              </Link>
             ))}
+          </div>
+
+          <div className="mt-8 text-center">
+            <Link
+              href="/applications"
+              className="text-xs font-mono font-bold text-[#059669] hover:underline inline-flex items-center gap-1"
+            >
+              Explore All 15+ Industry Application Domains →
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* 6. B2B CONVERSION / RFQ CALLOUT */}
+      {/* 6. TECHNICAL TOOLS CALLOUT */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="p-8 rounded-3xl bg-white border border-[#E2E8F0] space-y-4 shadow-sm flex flex-col justify-between">
+            <div className="space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-[#F0FDF4] border border-[#A7F3D0] flex items-center justify-center text-[#059669]">
+                <Wrench className="w-5 h-5" />
+              </div>
+              <h3 className="text-lg font-bold text-[#0F172A]">Battery Engineering Calculators</h3>
+              <p className="text-xs text-[#64748B] leading-relaxed">
+                Use our general engineering tools to estimate battery energy (Wh), calculate estimated runtime under load, evaluate series/parallel strings, and convert units.
+              </p>
+            </div>
+            <div className="pt-4 border-t border-[#E2E8F0]">
+              <Link
+                href="/tools"
+                className="text-xs font-bold text-[#059669] hover:underline flex items-center gap-1"
+              >
+                Open Engineering Calculators →
+              </Link>
+            </div>
+          </div>
+
+          <div className="p-8 rounded-3xl bg-white border border-[#E2E8F0] space-y-4 shadow-sm flex flex-col justify-between">
+            <div className="space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-[#F0F9FF] border border-[#BAE6FD] flex items-center justify-center text-[#0284C7]">
+                <FileText className="w-5 h-5" />
+              </div>
+              <h3 className="text-lg font-bold text-[#0F172A]">Resource &amp; Download Center</h3>
+              <p className="text-xs text-[#64748B] leading-relaxed">
+                Access product brochures, technical data sheets, safety guidelines, and OEM intake forms for MEHAR battery systems.
+              </p>
+            </div>
+            <div className="pt-4 border-t border-[#E2E8F0]">
+              <Link
+                href="/resources"
+                className="text-xs font-bold text-[#0284C7] hover:underline flex items-center gap-1"
+              >
+                Browse Documentation &amp; Assets →
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 7. B2B CONVERSION / RFQ CALLOUT */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="p-8 sm:p-12 rounded-3xl bg-[#F8FAFC] text-[#0F172A] border border-[#E2E8F0] flex flex-col lg:flex-row items-center justify-between gap-8 shadow-sm">
           <div className="space-y-3 text-center lg:text-left">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-mono font-bold border bg-[#ECFDF5] text-[#065F46] border-[#A7F3D0]">
-              B2B Procurement & Supply
+              B2B Procurement &amp; Supply
             </span>
             <h3 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A]">
               Ready to Discuss Your Battery Supply Requirements?
             </h3>
             <p className="text-xs sm:text-sm text-[#475569] max-w-xl leading-relaxed">
-              Connect with our technical sales engineers for bulk inquiries, custom OEM battery pack development, or dealership opportunities.
+              Connect with our technical sales engineers for bulk enquiries, custom OEM battery pack development, or dealership opportunities.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 shrink-0">
+          <div className="flex flex-wrap items-center justify-center gap-3 shrink-0">
             <Button
-              href="/contact?type=rfq"
+              href="/rfq"
               variant="primary"
               size="lg"
               icon={<ArrowRight className="w-4 h-4" />}
             >
-              Submit RFQ / Inquiry
+              Submit B2B RFQ
+            </Button>
+
+            <Button
+              href="/oem-custom-solutions"
+              variant="outline"
+              size="lg"
+              icon={<Factory className="w-4 h-4" />}
+            >
+              Custom OEM Intake
             </Button>
 
             <Button
               href="/contact"
-              variant="outline"
+              variant="ghost"
               size="lg"
             >
               Contact Sales Desk
