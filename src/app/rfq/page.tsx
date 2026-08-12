@@ -4,7 +4,9 @@ import React, { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { BROAD_CATEGORIES } from '@/data/categories';
 import { COMPANY_INFO } from '@/data/companyInfo';
+import { analytics } from '@/lib/analytics';
 import Button from '@/components/ui/Button';
+
 import Badge from '@/components/ui/Badge';
 import PlaceholderNotice from '@/components/ui/PlaceholderNotice';
 import {
@@ -90,7 +92,14 @@ function RfqBuilderInner() {
       const data = await res.json();
       if (res.ok && data.success && data.rfqNumber) {
         setSubmissionResult({ rfqNumber: data.rfqNumber });
+        analytics.rfqSubmit(
+          selectedCategories.length,
+          Boolean(formData.gstin),
+          formData.timeline,
+          formData.volumeTier
+        );
       } else {
+
         setErrorMessage(
           data.error ||
             'Unable to register quotation request at this time. Please try again or contact our sales desk directly.'

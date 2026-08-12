@@ -4,6 +4,8 @@ import TopBar from '@/components/layout/TopBar';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import MeharAssistant from '@/components/chat/MeharAssistant';
+import { Analytics } from '@vercel/analytics/react';
+
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.meharbatteries.com';
 
@@ -94,7 +96,10 @@ export default function RootLayout({
         <Footer />
         {/* Persistent Floating B2B Assistant */}
         <MeharAssistant />
+        {/* Official Vercel Web Analytics Provider */}
+        <Analytics />
       </body>
     </html>
   );
 }
+

@@ -5,7 +5,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { COMPANY_INFO } from '@/data/companyInfo';
 import { APPLICATION_DOMAINS } from '@/data/applicationDomains';
+import { analytics } from '@/lib/analytics';
 import OemProgressBar, { OEM_STEPS } from '@/components/oem/OemProgressBar';
+
 import {
   ChevronRight,
   ChevronLeft,
@@ -559,8 +561,10 @@ export default function OemCustomSolutionsPage() {
 
       if (!res.ok) throw new Error(data.error || 'Submission failed.');
 
+      analytics.oemSubmit(applicationLabel, bms.bmsRequired === 'YES');
       setSubmissionResult(data);
     } catch (err) {
+
       setSubmitError(
         err instanceof Error ? err.message : 'An unexpected error occurred.'
       );

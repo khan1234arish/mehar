@@ -14,6 +14,7 @@ import {
   Edit3,
   ShieldCheck,
   KeyRound,
+  BarChart3,
   LogOut,
   X,
 } from 'lucide-react';
@@ -29,6 +30,7 @@ interface SidebarProps {
 
 const NAV_ITEMS = [
   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+  { label: 'Website Analytics', href: '/admin/analytics', icon: BarChart3 },
   { label: 'Products & Specs', href: '/admin/products', icon: Layers },
   { label: 'Enquiries & RFQs', href: '/admin/enquiries', icon: FileSpreadsheet },
   { label: 'Resource Center', href: '/admin/resources', icon: FileText },
@@ -38,6 +40,7 @@ const NAV_ITEMS = [
   { label: 'Audit Logs', href: '/admin/audit-logs', icon: ShieldCheck },
   { label: 'Change Password', href: '/admin/change-password', icon: KeyRound },
 ];
+
 
 export default function AdminSidebar({ user, onCloseMobile }: SidebarProps) {
   const pathname = usePathname();

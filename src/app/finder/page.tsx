@@ -6,7 +6,9 @@ import { useRouter } from 'next/navigation';
 import { APPLICATION_DOMAINS } from '@/data/applicationDomains';
 import { BROAD_CATEGORIES } from '@/data/categories';
 import { COMPANY_INFO } from '@/data/companyInfo';
+import { analytics } from '@/lib/analytics';
 import Button from '@/components/ui/Button';
+
 import Badge from '@/components/ui/Badge';
 import PlaceholderNotice from '@/components/ui/PlaceholderNotice';
 import {
@@ -69,6 +71,10 @@ export default function BatteryFinderPage() {
   };
 
   const proceedToRfq = () => {
+    analytics.useFinder(
+      selectedDomain.name,
+      formData.targetVoltage === 'CUSTOM' ? formData.customVoltage : formData.targetVoltage
+    );
     const query = new URLSearchParams({
       category: matchedCategory.slug,
       application: selectedDomain.name,
@@ -79,6 +85,7 @@ export default function BatteryFinderPage() {
     });
     router.push(`/rfq?${query.toString()}`);
   };
+
 
   return (
     <div className="py-12 space-y-12 bg-white text-[#0F172A]">
