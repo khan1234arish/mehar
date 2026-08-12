@@ -41,3 +41,8 @@ yarn-error.log*
 # Uploads
 /public/uploads/*
 !/public/uploads/.gitkeep
+
+# Sensitive and temporary local scratch files
+*password*.txt
+scratch_*.js
+

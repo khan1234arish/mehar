@@ -5,6 +5,7 @@ import { BROAD_CATEGORIES } from '@/data/categories';
 import { getCompanySettings, getSalesSettings } from '@/lib/settings';
 import {
   Mail,
+  Phone,
   MessageSquare,
   Search,
   SlidersHorizontal,
@@ -14,6 +15,8 @@ import {
   ShieldCheck,
   Building2,
   FileText,
+  Layers,
+  MapPin,
 } from 'lucide-react';
 
 export default async function Footer() {
@@ -22,41 +25,69 @@ export default async function Footer() {
     getSalesSettings(),
   ]);
 
-  const cleanWhatsapp = sales.whatsappDesk.replace(/[^0-9]/g, '');
+  const cleanWhatsapp = (sales.whatsappDesk || '').replace(/[^0-9]/g, '');
 
   return (
-    <footer className="bg-[#F8FAFC] border-t border-[#E2E8F0] text-[#0F172A] pt-14 pb-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 mb-12">
-          {/* Brand & Corporate Overview */}
+    <footer className="bg-white text-[#334155] border-t border-[#E2E8F0] pt-14 pb-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Main Footer Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-10 lg:gap-8 mb-14">
+          
+          {/* Column 1 & 2: Brand & Corporate Overview */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="w-48 sm:w-52 h-12 sm:h-14 relative">
-              <Image
-                src="/assets/logo/mehar-logo.svg"
-                alt={`${company.brandName} - ${company.parentCompanyName}`}
-                fill
-                className="object-contain object-left"
-              />
-            </div>
+            <Link href="/" className="inline-block" aria-label="MEHAR – The Name You Trust">
+              <div className="w-48 h-12 relative">
+                <Image
+                  src="/assets/logo/mehar-logo.svg"
+                  alt={`${company.brandName} – The Name You Trust`}
+                  fill
+                  className="object-contain object-left"
+                />
+              </div>
+            </Link>
 
             <p className="text-xs text-[#475569] leading-relaxed max-w-sm">
-              <strong className="text-[#0F172A] font-bold">{company.brandName}</strong> is the specialized industrial battery manufacturing and energy storage brand of <strong className="text-[#0F172A] font-bold">{company.parentCompanyName}</strong>.
-              We engineer robust battery systems for original equipment manufacturers (OEMs), solar integrators, and commercial distributors.
+              <strong className="text-[#0F172A] font-bold">{company.brandName}</strong> is the specialized industrial battery manufacturing and clean energy brand of <strong className="text-[#0F172A] font-bold">{company.parentCompanyName}</strong>.
+              We engineer dependable battery systems and energy solutions for commercial electric mobility, solar ESS, and industrial OEMs.
             </p>
 
-            <div className="pt-1 flex flex-wrap items-center gap-3 text-xs text-[#64748B]">
-              <span className="px-2.5 py-1 rounded bg-[#ECFDF5] border border-[#A7F3D0] font-mono text-[11px] text-[#065F46] font-bold flex items-center gap-1">
+            {/* Corporate Badges */}
+            <div className="pt-1 flex flex-wrap items-center gap-2.5 text-xs">
+              <span className="px-3 py-1 rounded-lg bg-[#ECFDF5] border border-[#A7F3D0] font-mono text-[11px] text-[#065F46] font-bold flex items-center gap-1.5">
                 <ShieldCheck className="w-3.5 h-3.5 text-[#059669]" />
-                B2B Manufacturing Only
+                B2B Manufacturing &amp; Supply
               </span>
-              <span className="font-mono text-[11px] text-[#64748B]">Zero Consumer Retail</span>
+              <span className="font-mono text-[11px] text-[#64748B]">
+                Official OEM &amp; Commercial Desk
+              </span>
+            </div>
+
+            {/* Plant & Office Locations from Dynamic Settings */}
+            <div className="pt-2 space-y-1.5 text-xs text-[#475569]">
+              <div className="flex items-start gap-2">
+                <MapPin className="w-4 h-4 text-[#059669] shrink-0 mt-0.5" />
+                <span>
+                  <strong className="text-[#0F172A]">Registered Office:</strong> {company.registeredOffice}
+                </span>
+              </div>
+              <div className="flex items-start gap-2">
+                <Building2 className="w-4 h-4 text-[#059669] shrink-0 mt-0.5" />
+                <span>
+                  <strong className="text-[#0F172A]">Plant Location:</strong> {company.plantLocation}
+                </span>
+              </div>
+              {company.gstin && (
+                <div className="font-mono text-[11px] text-[#64748B] pl-6">
+                  GSTIN: {company.gstin}
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Product Categories */}
+          {/* Column 3: Products & Categories */}
           <div>
-            <h4 className="text-xs font-bold font-mono uppercase tracking-wider text-[#059669] mb-4">
-              Battery Categories
+            <h4 className="text-xs font-bold font-mono uppercase tracking-wider text-[#059669] mb-4 flex items-center gap-1.5">
+              <Layers className="w-3.5 h-3.5" /> Products &amp; Solutions
             </h4>
             <ul className="space-y-2.5 text-xs text-[#475569]">
               {BROAD_CATEGORIES.map((cat) => (
@@ -69,137 +100,202 @@ export default async function Footer() {
                   </Link>
                 </li>
               ))}
-              <li className="pt-1">
+              <li className="pt-1.5">
                 <Link
                   href="/products"
-                  className="text-[#059669] hover:underline font-semibold text-[11px] flex items-center gap-1"
+                  className="text-[#059669] hover:underline font-bold text-xs flex items-center gap-1"
                 >
-                  All Categories Portfolio →
+                  All Battery Categories →
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/applications"
+                  className="text-[#475569] hover:text-[#059669] transition-colors font-medium"
+                >
+                  Application Sectors
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* B2B Procurement & Engineering Tools */}
+          {/* Column 4: B2B Procurement */}
           <div>
-            <h4 className="text-xs font-bold font-mono uppercase tracking-wider text-[#059669] mb-4">
-              B2B Tools &amp; Solutions
+            <h4 className="text-xs font-bold font-mono uppercase tracking-wider text-[#059669] mb-4 flex items-center gap-1.5">
+              <FileSpreadsheet className="w-3.5 h-3.5" /> B2B Procurement
             </h4>
             <ul className="space-y-2.5 text-xs text-[#475569]">
               <li>
-                <Link href="/oem-custom-solutions" className="hover:text-[#059669] transition-colors font-medium flex items-center gap-1.5">
-                  <Factory className="w-3.5 h-3.5 text-[#059669]" />
-                  OEM / ODM Configurator
-                </Link>
-              </li>
-              <li>
-                <Link href="/rfq" className="hover:text-[#059669] transition-colors font-medium flex items-center gap-1.5">
-                  <FileSpreadsheet className="w-3.5 h-3.5 text-[#059669]" />
-                  B2B RFQ Builder
-                </Link>
-              </li>
-              <li>
-                <Link href="/finder" className="hover:text-[#059669] transition-colors font-medium flex items-center gap-1.5">
+                <Link
+                  href="/finder"
+                  className="hover:text-[#059669] transition-colors font-medium flex items-center gap-1.5"
+                >
                   <Search className="w-3.5 h-3.5 text-[#059669]" />
-                  Battery Finder Wizard
+                  Find a Battery Solution
                 </Link>
               </li>
               <li>
-                <Link href="/compare" className="hover:text-[#059669] transition-colors font-medium flex items-center gap-1.5">
+                <Link
+                  href="/compare"
+                  className="hover:text-[#059669] transition-colors font-medium flex items-center gap-1.5"
+                >
                   <SlidersHorizontal className="w-3.5 h-3.5 text-[#059669]" />
-                  Category Comparison
+                  Compare Categories
                 </Link>
               </li>
               <li>
-                <Link href="/tools" className="hover:text-[#059669] transition-colors font-medium flex items-center gap-1.5">
+                <Link
+                  href="/rfq"
+                  className="hover:text-[#059669] transition-colors font-medium flex items-center gap-1.5"
+                >
+                  <FileSpreadsheet className="w-3.5 h-3.5 text-[#059669]" />
+                  Prepare an RFQ
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/tools"
+                  className="hover:text-[#059669] transition-colors font-medium flex items-center gap-1.5"
+                >
                   <Wrench className="w-3.5 h-3.5 text-[#059669]" />
                   Engineering Calculators
                 </Link>
               </li>
+            </ul>
+
+            <h4 className="text-xs font-bold font-mono uppercase tracking-wider text-[#059669] mt-6 mb-3 flex items-center gap-1.5">
+              <Factory className="w-3.5 h-3.5" /> OEM / ODM Engineering
+            </h4>
+            <ul className="space-y-2 text-xs text-[#475569]">
               <li>
-                <Link href="/applications" className="hover:text-[#059669] transition-colors font-medium">
-                  Applications &amp; Solutions
+                <Link
+                  href="/oem-custom-solutions"
+                  className="hover:text-[#059669] transition-colors font-medium block"
+                >
+                  Configure an OEM Solution
                 </Link>
               </li>
               <li>
-                <Link href="/technology" className="hover:text-[#059669] transition-colors font-medium">
+                <Link
+                  href="/technology"
+                  className="text-[#64748B] hover:text-[#059669] transition-colors font-medium block"
+                >
                   Technology &amp; Quality
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Corporate & Sales Desk */}
+          {/* Column 5: Company & Resources */}
           <div>
-            <h4 className="text-xs font-bold font-mono uppercase tracking-wider text-[#059669] mb-4">
-              Corporate &amp; Sales Desk
+            <h4 className="text-xs font-bold font-mono uppercase tracking-wider text-[#059669] mb-4 flex items-center gap-1.5">
+              <Building2 className="w-3.5 h-3.5" /> Company &amp; Docs
             </h4>
             <ul className="space-y-2.5 text-xs text-[#475569]">
               <li>
-                <Link href="/about" className="hover:text-[#059669] transition-colors font-medium flex items-center gap-1.5">
-                  <Building2 className="w-3.5 h-3.5 text-[#059669]" />
-                  About Lawad Infrastructure
+                <Link href="/about" className="hover:text-[#059669] transition-colors font-medium">
+                  About MEHAR
                 </Link>
               </li>
               <li>
-                <Link href="/resources" className="hover:text-[#059669] transition-colors font-medium flex items-center gap-1.5">
+                <Link href="/technology" className="hover:text-[#059669] transition-colors font-medium">
+                  Quality &amp; Standards
+                </Link>
+              </li>
+              <li>
+                <Link href="/resources" className="hover:text-[#059669] transition-colors font-medium flex items-center gap-1">
                   <FileText className="w-3.5 h-3.5 text-[#059669]" />
-                  Resource &amp; Download Center
+                  Technical Resources
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="hover:text-[#059669] transition-colors font-medium">
-                  Contact &amp; Enquiries
+                <Link href="/terms" className="text-[#64748B] hover:text-[#059669] transition-colors">
+                  Commercial Terms
                 </Link>
               </li>
               <li>
-                <Link href="/contact?type=dealer" className="hover:text-[#059669] transition-colors font-medium">
-                  Dealership &amp; Distribution
+                <Link href="/privacy" className="text-[#64748B] hover:text-[#059669] transition-colors">
+                  Privacy Policy
                 </Link>
-              </li>
-              <li className="pt-2 border-t border-[#E2E8F0]">
-                <a
-                  href={`mailto:${sales.salesEmail}`}
-                  className="flex items-center gap-2 text-[#0F172A] hover:text-[#059669] transition-colors font-mono font-bold text-xs"
-                >
-                  <Mail className="w-3.5 h-3.5 text-[#059669]" />
-                  <span>{sales.salesEmail}</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href={`https://wa.me/${cleanWhatsapp}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-[#059669] hover:text-[#047857] transition-colors font-mono font-bold text-xs"
-                >
-                  <MessageSquare className="w-3.5 h-3.5" />
-                  <span>WhatsApp Business Desk</span>
-                </a>
               </li>
             </ul>
           </div>
+
+          {/* Column 6: Contact & Direct Inquiries */}
+          <div>
+            <h4 className="text-xs font-bold font-mono uppercase tracking-wider text-[#059669] mb-4 flex items-center gap-1.5">
+              <Mail className="w-3.5 h-3.5" /> Direct B2B Contact
+            </h4>
+            <div className="space-y-3 text-xs text-[#475569]">
+              <div>
+                <span className="text-[11px] font-mono text-[#64748B] block font-bold">Sales Desk:</span>
+                <a
+                  href={`mailto:${sales.salesEmail}`}
+                  className="text-[#0F172A] hover:text-[#059669] transition-colors font-mono font-semibold break-all"
+                >
+                  {sales.salesEmail}
+                </a>
+              </div>
+
+              <div>
+                <span className="text-[11px] font-mono text-[#64748B] block font-bold">Sales Phone:</span>
+                <a
+                  href={`tel:${sales.salesPhone}`}
+                  className="text-[#0F172A] hover:text-[#059669] transition-colors font-mono font-semibold"
+                >
+                  {sales.salesPhone}
+                </a>
+              </div>
+
+              <div>
+                <span className="text-[11px] font-mono text-[#64748B] block font-bold">Technical Desk:</span>
+                <a
+                  href={`mailto:${sales.supportEmail}`}
+                  className="text-[#0F172A] hover:text-[#059669] transition-colors font-mono font-semibold break-all"
+                >
+                  {sales.supportEmail}
+                </a>
+              </div>
+
+              {cleanWhatsapp && (
+                <div className="pt-2">
+                  <a
+                    href={`https://wa.me/${cleanWhatsapp}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#059669] hover:bg-[#047857] text-white font-bold text-xs transition-colors shadow-sm"
+                  >
+                    <MessageSquare className="w-3.5 h-3.5" />
+                    WhatsApp B2B Desk
+                  </a>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
-        {/* Corporate Legal & Compliance Strip */}
-        <div className="pt-6 border-t border-[#E2E8F0] flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-[#64748B]">
-          <div>
+        {/* Bottom Legal Bar */}
+        <div className="pt-8 border-t border-[#E2E8F0] flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-[#64748B]">
+          <div className="text-center md:text-left">
             <p>
-              © {new Date().getFullYear()} <span className="text-[#0F172A] font-semibold">{company.brandName}</span> • A unit of <span className="text-[#0F172A] font-semibold">{company.parentCompanyName}</span>. All rights reserved.
+              &copy; {new Date().getFullYear()} <strong className="text-[#0F172A]">{company.brandName}</strong> (A brand of <strong className="text-[#0F172A]">{company.parentCompanyName}</strong>). All rights reserved.
+            </p>
+            <p className="text-[11px] text-[#64748B] mt-0.5">
+              THE NAME YOU TRUST &bull; Industrial battery manufacturing, energy storage integration, and OEM supply.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-4 sm:gap-6 font-mono text-[11px]">
+          <div className="flex items-center gap-4 text-xs font-mono">
+            <Link href="/terms" className="hover:text-[#059669] transition-colors">
+              Terms &amp; Conditions
+            </Link>
+            <span>&bull;</span>
             <Link href="/privacy" className="hover:text-[#059669] transition-colors">
               Privacy Policy
             </Link>
-            <span>•</span>
-            <Link href="/terms" className="hover:text-[#059669] transition-colors">
-              Terms of Use
-            </Link>
-            <span>•</span>
-            <Link href="/rfq" className="text-[#059669] hover:underline font-bold">
-              Submit RFQ
+            <span>&bull;</span>
+            <Link href="/admin/login" className="text-[#64748B] hover:text-[#059669] transition-colors">
+              Admin Portal
             </Link>
           </div>
         </div>

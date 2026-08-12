@@ -4,6 +4,7 @@ export interface ApplicationDomain {
   categorySlug: string;
   description: string;
   sampleEquipment: string[];
+  defaultImage?: string;
 }
 
 export const APPLICATION_DOMAINS: ApplicationDomain[] = [
@@ -13,6 +14,7 @@ export const APPLICATION_DOMAINS: ApplicationDomain[] = [
     categorySlug: 'electric-2-wheeler-batteries',
     description: 'Electric scooters, motorcycles, e-rickshaws, and light electric passenger vehicles.',
     sampleEquipment: ['Electric Scooter (E2W)', 'Electric Motorcycle', 'E-Rickshaw (Passenger)', 'Cargo 3W (L5)', 'Light EV / Golf Cart'],
+    defaultImage: '/assets/products/mehar-2w-battery.jpg',
   },
   {
     id: 'solar-ess',
@@ -20,6 +22,7 @@ export const APPLICATION_DOMAINS: ApplicationDomain[] = [
     categorySlug: 'solar-renewable-energy-batteries',
     description: 'Off-grid and hybrid solar installations, commercial microgrids, and energy backup.',
     sampleEquipment: ['Off-Grid Solar Rooftop', 'Hybrid Solar Inverter Bank', 'Commercial Solar ESS', 'Solar Street Lighting Bank'],
+    defaultImage: '/assets/products/mehar-solar-battery.jpg',
   },
   {
     id: 'ups-inverter',
@@ -27,6 +30,7 @@ export const APPLICATION_DOMAINS: ApplicationDomain[] = [
     categorySlug: 'energy-storage-inverter-batteries',
     description: 'Residential home inverters, commercial office backup UPS, and sensitive electronics.',
     sampleEquipment: ['Home Inverter Backup', 'Commercial Office UPS', 'Industrial Online UPS', 'Emergency Backup Bank'],
+    defaultImage: '/assets/products/mehar-ess-battery.jpg',
   },
   {
     id: 'industrial-equipment',
@@ -34,6 +38,7 @@ export const APPLICATION_DOMAINS: ApplicationDomain[] = [
     categorySlug: 'custom-oem-industrial-batteries',
     description: 'Heavy machinery, factory equipment, and portable industrial power units.',
     sampleEquipment: ['Hydraulic Lift Units', 'Industrial Testing Equipment', 'Portable Generator Replacement', 'Factory Floor Machinery'],
+    defaultImage: '/assets/products/mehar-oem-battery.jpg',
   },
   {
     id: 'material-handling',
@@ -41,6 +46,7 @@ export const APPLICATION_DOMAINS: ApplicationDomain[] = [
     categorySlug: 'custom-oem-industrial-batteries',
     description: 'Electric forklifts, pallet trucks, order pickers, and warehouse traction units.',
     sampleEquipment: ['Electric Forklift', 'Electric Pallet Truck (BOPT)', 'Reach Truck', 'Electric Tow Tractor'],
+    defaultImage: '/assets/products/mehar-forklift-battery.jpg',
   },
   {
     id: 'robotics-automation',
@@ -48,6 +54,7 @@ export const APPLICATION_DOMAINS: ApplicationDomain[] = [
     categorySlug: 'custom-oem-industrial-batteries',
     description: 'Automated warehouse AGVs, autonomous mobile robots (AMRs), and robotic arms.',
     sampleEquipment: ['Warehouse AGV', 'Autonomous Mobile Robot (AMR)', 'Industrial Robotic Arm Base', 'Inspection Rover'],
+    defaultImage: '/assets/products/mehar-agv-battery.jpg',
   },
   {
     id: 'drones-uav',
@@ -55,6 +62,7 @@ export const APPLICATION_DOMAINS: ApplicationDomain[] = [
     categorySlug: 'custom-oem-industrial-batteries',
     description: 'Agricultural spraying drones, mapping UAVs, and commercial logistics aerial systems.',
     sampleEquipment: ['Agricultural Spraying Drone', 'Survey & Mapping UAV', 'Surveillance Drone', 'Heavy-Lift Cargo Drone'],
+    defaultImage: '/assets/products/mehar-drone-battery.jpg',
   },
   {
     id: 'medical-specialized',
@@ -62,6 +70,7 @@ export const APPLICATION_DOMAINS: ApplicationDomain[] = [
     categorySlug: 'custom-oem-industrial-batteries',
     description: 'Portable diagnostic equipment, motorized hospital beds, and mobile surgical carts.',
     sampleEquipment: ['Mobile Medical Cart', 'Portable Ultrasound Device', 'Electric Hospital Bed / Chair', 'Defibrillator Backup Unit'],
+    defaultImage: '/assets/products/mehar-oem-battery.jpg',
   },
   {
     id: 'telecom-infrastructure',
@@ -69,6 +78,7 @@ export const APPLICATION_DOMAINS: ApplicationDomain[] = [
     categorySlug: 'energy-storage-inverter-batteries',
     description: 'Base transceiver stations (BTS), cell tower backup, and datacenter edge racks.',
     sampleEquipment: ['Telecom Tower BTS Backup', 'Fiber Node Power Unit', 'Edge Datacenter Rack Bank', 'Rural Repeater Station'],
+    defaultImage: '/assets/products/mehar-telecom-battery.jpg',
   },
   {
     id: 'power-tools',
@@ -76,6 +86,7 @@ export const APPLICATION_DOMAINS: ApplicationDomain[] = [
     categorySlug: 'custom-oem-industrial-batteries',
     description: 'High-discharge portable battery packs for commercial construction and landscaping tools.',
     sampleEquipment: ['Commercial Cordless Saw/Drill Pack', 'Lawn Mower / Trimmer Battery', 'Concrete Finishing Tool', 'Hydraulic Crimper Tool'],
+    defaultImage: '/assets/products/mehar-2w-battery.jpg',
   },
   {
     id: 'cleaning-equipment',
@@ -83,6 +94,7 @@ export const APPLICATION_DOMAINS: ApplicationDomain[] = [
     categorySlug: 'custom-oem-industrial-batteries',
     description: 'Floor scrubbers, commercial sweepers, and industrial vacuum machines.',
     sampleEquipment: ['Ride-On Floor Scrubber', 'Walk-Behind Floor Sweeper', 'Industrial Vacuum Unit', 'Commercial Pressure Cleaner'],
+    defaultImage: '/assets/products/mehar-3w-battery.jpg',
   },
   {
     id: 'marine-rv',
@@ -90,6 +102,7 @@ export const APPLICATION_DOMAINS: ApplicationDomain[] = [
     categorySlug: 'solar-renewable-energy-batteries',
     description: 'Electric trolling motors, auxiliary marine house batteries, and campervan storage.',
     sampleEquipment: ['Electric Trolling Motor', 'Campervan / RV House Battery', 'Yacht Auxiliary Power Bank', 'Electric Small Boat Drive'],
+    defaultImage: '/assets/products/mehar-solar-battery.jpg',
   },
   {
     id: 'consumer-electronics',
@@ -97,6 +110,7 @@ export const APPLICATION_DOMAINS: ApplicationDomain[] = [
     categorySlug: 'custom-oem-industrial-batteries',
     description: 'High-capacity power banks, portable outdoor power stations, and POS terminals.',
     sampleEquipment: ['Portable Power Station (PPS)', 'Handheld POS Terminal', 'High-Capacity Field Power Bank', 'Mobile Tracking Device'],
+    defaultImage: '/assets/products/mehar-ess-battery.jpg',
   },
   {
     id: 'educational-robotics',
@@ -104,6 +118,7 @@ export const APPLICATION_DOMAINS: ApplicationDomain[] = [
     categorySlug: 'custom-oem-industrial-batteries',
     description: 'STEM robotics kits, RC models, and specialized educational vehicle platforms.',
     sampleEquipment: ['STEM Competition Robot', 'RC Industrial Model', 'Educational Mobility Kit', 'Prototyping Test Bed'],
+    defaultImage: '/assets/products/mehar-agv-battery.jpg',
   },
   {
     id: 'custom-oem',
@@ -111,5 +126,6 @@ export const APPLICATION_DOMAINS: ApplicationDomain[] = [
     categorySlug: 'custom-oem-industrial-batteries',
     description: 'Application-specific engineering with unique form factor, voltage, or communication demands.',
     sampleEquipment: ['Custom Form Factor Project', 'Specialized Prototype Build', 'Retrofit Energy Storage Bank', 'Proprietary OEM Chassis Unit'],
+    defaultImage: '/assets/products/mehar-oem-battery.jpg',
   },
 ];

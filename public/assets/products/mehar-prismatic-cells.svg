@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <defs>
+    <radialGradient id="bgGlowPris" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="60%" stop-color="#F8FAFC"/>
+      <stop offset="100%" stop-color="#EDF2F7"/>
+    </radialGradient>
+    
+    <radialGradient id="floorShadowPris" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(15,23,42,0.20)"/>
+      <stop offset="50%" stop-color="rgba(15,23,42,0.08)"/>
+      <stop offset="100%" stop-color="rgba(15,23,42,0)"/>
+    </radialGradient>
+
+    <!-- Blue Polymer Wrap (Clean, solid industrial surface) -->
+    <linearGradient id="blueWrapClean" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0284C7"/>
+      <stop offset="50%" stop-color="#0EA5E9"/>
+      <stop offset="100%" stop-color="#0369A1"/>
+    </linearGradient>
+
+    <!-- Top Laser Welded Aluminum Cover -->
+    <linearGradient id="topAlumClean" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="50%" stop-color="#E2E8F0"/>
+      <stop offset="100%" stop-color="#CBD5E1"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="600" fill="url(#bgGlowPris)" />
+  <ellipse cx="400" cy="510" rx="300" ry="28" fill="url(#floorShadowPris)" />
+
+  <g transform="translate(130, 130)">
+    <!-- 4 Stacked Large-Format Prismatic Cells (Clean blue wrap, polar terminals, pressure vent) -->
+    
+    <!-- Cell 1 -->
+    <g transform="translate(0, 40)">
+      <rect x="0" y="40" width="110" height="300" rx="6" fill="url(#blueWrapClean)" stroke="#0369A1" stroke-width="1.5" />
+      <rect x="0" y="20" width="110" height="24" rx="3" fill="url(#topAlumClean)" stroke="#64748B" stroke-width="1.5" />
+      <!-- Positive Terminal (Red Ring) -->
+      <circle cx="25" cy="32" r="9" fill="#EF4444" stroke="#991B1B" stroke-width="1"/>
+      <circle cx="25" cy="32" r="5" fill="#CBD5E1" stroke="#475569" stroke-width="1"/>
+      <!-- Safety Pressure Relief Vent -->
+      <circle cx="55" cy="32" r="6" fill="#94A3B8" stroke="#475569" stroke-width="1"/>
+      <!-- Negative Terminal (Black Ring) -->
+      <circle cx="85" cy="32" r="9" fill="#1E293B" stroke="#0F172A" stroke-width="1"/>
+      <circle cx="85" cy="32" r="5" fill="#CBD5E1" stroke="#475569" stroke-width="1"/>
+    </g>
+
+    <!-- Cell 2 -->
+    <g transform="translate(125, 40)">
+      <rect x="0" y="40" width="110" height="300" rx="6" fill="url(#blueWrapClean)" stroke="#0369A1" stroke-width="1.5" />
+      <rect x="0" y="20" width="110" height="24" rx="3" fill="url(#topAlumClean)" stroke="#64748B" stroke-width="1.5" />
+      <circle cx="25" cy="32" r="9" fill="#1E293B" stroke="#0F172A" stroke-width="1"/>
+      <circle cx="25" cy="32" r="5" fill="#CBD5E1" stroke="#475569" stroke-width="1"/>
+      <circle cx="55" cy="32" r="6" fill="#94A3B8" stroke="#475569" stroke-width="1"/>
+      <circle cx="85" cy="32" r="9" fill="#EF4444" stroke="#991B1B" stroke-width="1"/>
+      <circle cx="85" cy="32" r="5" fill="#CBD5E1" stroke="#475569" stroke-width="1"/>
+    </g>
+
+    <!-- Cell 3 -->
+    <g transform="translate(250, 40)">
+      <rect x="0" y="40" width="110" height="300" rx="6" fill="url(#blueWrapClean)" stroke="#0369A1" stroke-width="1.5" />
+      <rect x="0" y="20" width="110" height="24" rx="3" fill="url(#topAlumClean)" stroke="#64748B" stroke-width="1.5" />
+      <circle cx="25" cy="32" r="9" fill="#EF4444" stroke="#991B1B" stroke-width="1"/>
+      <circle cx="25" cy="32" r="5" fill="#CBD5E1" stroke="#475569" stroke-width="1"/>
+      <circle cx="55" cy="32" r="6" fill="#94A3B8" stroke="#475569" stroke-width="1"/>
+      <circle cx="85" cy="32" r="9" fill="#1E293B" stroke="#0F172A" stroke-width="1"/>
+      <circle cx="85" cy="32" r="5" fill="#CBD5E1" stroke="#475569" stroke-width="1"/>
+    </g>
+
+    <!-- Cell 4 -->
+    <g transform="translate(375, 40)">
+      <rect x="0" y="40" width="110" height="300" rx="6" fill="url(#blueWrapClean)" stroke="#0369A1" stroke-width="1.5" />
+      <rect x="0" y="20" width="110" height="24" rx="3" fill="url(#topAlumClean)" stroke="#64748B" stroke-width="1.5" />
+      <circle cx="25" cy="32" r="9" fill="#1E293B" stroke="#0F172A" stroke-width="1"/>
+      <circle cx="25" cy="32" r="5" fill="#CBD5E1" stroke="#475569" stroke-width="1"/>
+      <circle cx="55" cy="32" r="6" fill="#94A3B8" stroke="#475569" stroke-width="1"/>
+      <circle cx="85" cy="32" r="9" fill="#EF4444" stroke="#991B1B" stroke-width="1"/>
+      <circle cx="85" cy="32" r="5" fill="#CBD5E1" stroke="#475569" stroke-width="1"/>
+    </g>
+
+    <!-- Heavy Copper Inter-Cell Busbars -->
+    <rect x="80" y="47" width="75" height="10" rx="3" fill="#CA8A04" stroke="#854D0E" stroke-width="1" />
+    <circle cx="85" cy="52" r="3" fill="#1E293B" />
+    <circle cx="150" cy="52" r="3" fill="#1E293B" />
+
+    <rect x="205" y="47" width="75" height="10" rx="3" fill="#CA8A04" stroke="#854D0E" stroke-width="1" />
+    <circle cx="210" cy="52" r="3" fill="#1E293B" />
+    <circle cx="275" cy="52" r="3" fill="#1E293B" />
+
+    <rect x="330" y="47" width="75" height="10" rx="3" fill="#CA8A04" stroke="#854D0E" stroke-width="1" />
+    <circle cx="335" cy="52" r="3" fill="#1E293B" />
+    <circle cx="400" cy="52" r="3" fill="#1E293B" />
+  </g>
+</svg>

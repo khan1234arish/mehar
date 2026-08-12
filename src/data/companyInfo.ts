@@ -16,14 +16,15 @@ export interface CompanyMetadata {
 export const COMPANY_INFO: CompanyMetadata = {
   brandName: 'MEHAR',
   parentCompanyName: 'Lawad Infrastructure Private Limited',
-  industry: 'Battery Manufacturing & Energy Storage Solutions',
-  registeredOffice: 'Details to be updated with verified corporate address',
-  plantLocation: 'Details to be updated with verified plant address',
+  industry: 'Lithium Battery Pack Manufacturing & Energy Storage Systems',
+  registeredOffice: 'Details subject to final corporate verification',
+  plantLocation: 'Details subject to final corporate verification',
   salesEmail: 'sales@meharbatteries.com',
   supportEmail: 'info@lawadinfrastructure.com',
   salesPhone: '+91 XXXXX XXXXX',
   whatsappDesk: '+91 XXXXX XXXXX',
-  cin: 'UXXXXXXXXXXPTCXXXXXX (Subject to Client Verification)',
-  gstin: 'XXAAAAA0000A1Z5 (Subject to Client Verification)',
+  cin: 'UXXXXXXXXXXPTCXXXXXX (Subject to Client Corporate Verification)',
+  gstin: 'XXAAAAA0000A1Z5 (Subject to Client Corporate Verification)',
   isPlaceholderData: true,
 };
+

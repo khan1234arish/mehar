@@ -32,11 +32,11 @@ export default function Button({
     primary:
       'bg-[#059669] text-white hover:bg-[#047857] focus:ring-[#059669]',
     secondary:
-      'bg-[#0F172A] text-white hover:bg-[#1E293B] focus:ring-[#0F172A]',
+      'bg-white border-2 border-[#059669] text-[#059669] hover:bg-[#F0FDF4] focus:ring-[#059669]',
     outline:
-      'bg-white border border-[#CBD5E1] text-[#0F172A] hover:border-[#059669] hover:text-[#059669] hover:bg-[#ECFDF5] focus:ring-[#059669]',
+      'bg-white border border-[#CBD5E1] text-[#0F172A] hover:border-[#059669] hover:text-[#059669] hover:bg-[#F0FDF4] focus:ring-[#059669]',
     ghost:
-      'bg-[#F1F5F9] border border-[#E2E8F0] text-[#334155] hover:bg-[#E2E8F0] hover:text-[#0F172A] focus:ring-[#CBD5E1]',
+      'bg-[#F8FAFC] border border-[#E2E8F0] text-[#334155] hover:bg-[#F0FDF4] hover:text-[#059669] hover:border-[#A7F3D0] focus:ring-[#059669]',
   };
 
   const combinedClasses = `${baseStyles} ${sizeStyles[size]} ${variantStyles[variant]} ${className}`;

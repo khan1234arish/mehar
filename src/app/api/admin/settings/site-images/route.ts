@@ -58,50 +58,43 @@ export async function PUT(request: Request) {
 
     const data = parsed.data;
 
-    try {
-      if (prisma && process.env.DATABASE_URL) {
-        const record = await prisma.siteManagedImage.upsert({
-          where: { key: data.key },
-          create: {
-            key: data.key,
-            imageUrl: data.imageUrl,
-            altText: data.altText,
-            description: data.description || null,
-            isActive: data.isActive,
-            updatedBy: session.user.email,
-          },
-          update: {
-            imageUrl: data.imageUrl,
-            altText: data.altText,
-            description: data.description || null,
-            isActive: data.isActive,
-            updatedBy: session.user.email,
-          },
-        });
-
-        await logAdminAudit({
-          userId: session.user.id,
-          adminEmail: session.user.email,
-          action: 'SITE_IMAGE_UPDATE',
-          entityType: 'SiteManagedImage',
-          entityId: record.id,
-          metadata: { key: record.key, imageUrl: record.imageUrl, isActive: record.isActive },
-          request,
-        });
-
-        return NextResponse.json({ success: true, record });
-      }
-    } catch {
-      // Offline fallback
+    if (!prisma || !process.env.DATABASE_URL) {
+      return NextResponse.json(
+        { error: 'Database is not configured. Cannot persist site image settings.' },
+        { status: 503 }
+      );
     }
 
-    return NextResponse.json({
-      success: true,
-      record: {
-        id: `site-img-${data.key}`,
-        ...data,
+    const record = await prisma.siteManagedImage.upsert({
+      where: { key: data.key },
+      create: {
+        key: data.key,
+        imageUrl: data.imageUrl,
+        altText: data.altText,
+        description: data.description || null,
+        isActive: data.isActive,
+        updatedBy: session.user.email,
+      },
+      update: {
+        imageUrl: data.imageUrl,
+        altText: data.altText,
+        description: data.description || null,
+        isActive: data.isActive,
+        updatedBy: session.user.email,
       },
     });
+
+    await logAdminAudit({
+      userId: session.user.id,
+      adminEmail: session.user.email,
+      action: 'SITE_IMAGE_UPDATE',
+      entityType: 'SiteManagedImage',
+      entityId: record.id,
+      metadata: { key: record.key, imageUrl: record.imageUrl, isActive: record.isActive },
+      request,
+    });
+
+    return NextResponse.json({ success: true, record });
   } catch (error) {
     console.error('Error saving site image setting:', error);
     return NextResponse.json(

@@ -16,21 +16,22 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'MEHAR Batteries | Lawad Infrastructure Private Limited | Official B2B Platform',
-    template: '%s | MEHAR Batteries',
+    default: 'MEHAR – The Name You Trust | Official B2B Battery Platform',
+    template: '%s | MEHAR – The Name You Trust',
   },
   description:
-    'Official B2B platform for MEHAR battery systems and energy storage solutions by Lawad Infrastructure Private Limited. Supplying commercial EV OEMs, solar integrators, and industrial distributors.',
+    'Official B2B platform for MEHAR battery systems and clean energy storage solutions by Lawad Infrastructure Private Limited. Supplying commercial EV OEMs, solar integrators, and industrial distributors across India.',
   keywords: [
     'MEHAR',
-    'Lawad Infrastructure Private Limited',
-    'Battery Manufacturer India',
-    'B2B Battery Supplier',
-    'EV Battery Pack',
-    'Inverter Battery',
+    'THE NAME YOU TRUST',
+    'Battery Manufacturer',
+    'Lithium Battery Solutions',
     'Solar Energy Storage',
-    'Lithium Iron Phosphate',
+    'Industrial Battery Systems',
+    'OEM Battery Solutions',
+    'B2B Battery Supplier',
     'Custom OEM Battery Engineering',
+    'Lawad Infrastructure Private Limited',
   ],
   authors: [{ name: 'Lawad Infrastructure Private Limited' }],
   creator: 'Lawad Infrastructure Private Limited',
@@ -44,16 +45,16 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_IN',
     url: siteUrl,
-    title: 'MEHAR Batteries | Lawad Infrastructure Private Limited | Official B2B Platform',
+    title: 'MEHAR – The Name You Trust | Official B2B Battery Platform',
     description:
-      'Official B2B platform for MEHAR battery systems and energy storage solutions by Lawad Infrastructure Private Limited.',
-    siteName: 'MEHAR Batteries',
+      'Official B2B platform for MEHAR battery systems and clean energy storage solutions by Lawad Infrastructure Private Limited.',
+    siteName: 'MEHAR – The Name You Trust',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'MEHAR Batteries | Official B2B Platform',
+    title: 'MEHAR – The Name You Trust | Official B2B Battery Platform',
     description:
-      'Official B2B platform for MEHAR battery systems and energy storage solutions by Lawad Infrastructure Private Limited.',
+      'Official B2B platform for MEHAR battery systems and clean energy storage solutions by Lawad Infrastructure Private Limited.',
   },
   robots: {
     index: true,

@@ -21,6 +21,7 @@ import { ContentSettingsData } from '@/lib/settings';
 interface SiteImageItem {
   key: string;
   label: string;
+  section?: 'homepage' | 'technology' | 'applications' | 'placeholders';
   defaultUrl: string;
   currentUrl: string;
   altText: string;
@@ -30,6 +31,7 @@ interface SiteImageItem {
 
 export default function AdminContentSettingsPage() {
   const [activeTab, setActiveTab] = useState<'content' | 'images'>('content');
+  const [imageSectionFilter, setImageSectionFilter] = useState<'all' | 'homepage' | 'technology' | 'applications' | 'placeholders'>('all');
 
   // Copy & Text Content
   const [formData, setFormData] = useState<ContentSettingsData>({
@@ -46,6 +48,7 @@ export default function AdminContentSettingsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [storageNotice, setStorageNotice] = useState('');
   const [success, setSuccess] = useState(false);
 
   const getCsrfToken = (): string => {
@@ -129,10 +132,21 @@ export default function AdminContentSettingsPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Upload failed.');
 
-      // Update image url in state
+      if (!data.url) throw new Error('Upload succeeded but no URL was returned.');
+
+      // Update image url in state with the confirmed upload URL
       setSiteImages((prev) =>
         prev.map((img) => (img.key === key ? { ...img, currentUrl: data.url } : img))
       );
+
+      // Warn if using non-persistent local dev storage
+      if (!data.isPersistentProductionStorage) {
+        setStorageNotice(
+          `Upload saved to local dev storage. Click "Save Image Settings" to persist the URL to the database. Configure S3/R2 for persistent production storage.`
+        );
+      } else {
+        setStorageNotice('');
+      }
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Image upload failed.');
     } finally {
@@ -161,6 +175,10 @@ export default function AdminContentSettingsPage() {
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to update placeholder image.');
+
+      // Re-fetch from DB to confirm the write actually persisted
+      await fetchSettings();
+      setStorageNotice('');
 
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
@@ -218,12 +236,20 @@ export default function AdminContentSettingsPage() {
         </div>
       )}
 
+      {storageNotice && !error && (
+        <div className="p-4 rounded-2xl bg-[#EFF6FF] border border-[#BFDBFE] flex items-center gap-2 text-xs text-[#1E40AF]">
+          <Eye className="w-4 h-4 text-[#3B82F6] flex-shrink-0" />
+          <span>{storageNotice}</span>
+        </div>
+      )}
+
       {success && (
         <div className="p-4 rounded-2xl bg-[#ECFDF5] border border-[#A7F3D0] flex items-center gap-2 text-xs text-[#065F46]">
           <CheckCircle2 className="w-4 h-4 text-[#059669] flex-shrink-0" />
-          <span>Configuration changes saved and published successfully.</span>
+          <span>Configuration changes saved and confirmed in database.</span>
         </div>
       )}
+
 
       {/* TAB 1: COPY & ANNOUNCEMENTS */}
       {activeTab === 'content' && (
@@ -307,111 +333,150 @@ export default function AdminContentSettingsPage() {
         </form>
       )}
 
-      {/* TAB 2: MANAGED SITE PLACEHOLDER IMAGES */}
+      {/* TAB 2: MANAGED SITE IMAGES & VISUALS */}
       {activeTab === 'images' && (
         <div className="space-y-6">
-          <div className="p-4 rounded-2xl bg-[#F8FAFC] border border-[#CBD5E1] text-xs text-[#475569]">
-            <strong className="text-[#0F172A] block mb-1">Managed Placeholder Architecture:</strong>
-            These images replace static fallback symbols across the public website when products or categories have no custom photography. If disabled, safe enterprise vector placeholders are preserved.
+          <div className="p-4 rounded-2xl bg-[#F8FAFC] border border-[#CBD5E1] text-xs text-[#475569] space-y-1">
+            <strong className="text-[#0F172A] block">Independent Image Management Architecture:</strong>
+            <p>
+              Each visual on the MEHAR website is independently configurable across Homepage sections, Battery Cell &amp; Engineering pages, and Industrial Application sectors. Uploading or changing an image for one location does not impact other sections.
+            </p>
+          </div>
+
+          {/* Section Filter Pills */}
+          <div className="flex flex-wrap items-center gap-2 pt-1 pb-2">
+            {[
+              { id: 'all', label: `All Visuals (${siteImages.length})` },
+              { id: 'homepage', label: `Homepage (${siteImages.filter((i) => i.section === 'homepage').length})` },
+              { id: 'technology', label: `Technology & Cells (${siteImages.filter((i) => i.section === 'technology').length})` },
+              { id: 'applications', label: `Applications (${siteImages.filter((i) => i.section === 'applications').length})` },
+              { id: 'placeholders', label: `Global Defaults (${siteImages.filter((i) => i.section === 'placeholders').length})` },
+            ].map((f) => (
+              <button
+                key={f.id}
+                type="button"
+                onClick={() => setImageSectionFilter(f.id as any)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all ${
+                  imageSectionFilter === f.id
+                    ? 'bg-[#059669] text-white shadow-sm'
+                    : 'bg-white border border-[#CBD5E1] text-[#64748B] hover:text-[#0F172A] hover:border-[#059669]'
+                }`}
+              >
+                {f.label}
+              </button>
+            ))}
           </div>
 
           <div className="grid grid-cols-1 gap-6">
-            {siteImages.map((img) => (
-              <div
-                key={img.key}
-                className="p-6 rounded-3xl bg-white border border-[#E2E8F0] shadow-sm space-y-4"
-              >
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E2E8F0] pb-3">
-                  <div>
-                    <span className="text-[11px] font-mono font-bold text-[#059669] uppercase tracking-wider block">
-                      {img.key}
-                    </span>
-                    <h3 className="text-base font-bold text-[#0F172A]">{img.label}</h3>
-                  </div>
+            {siteImages
+              .filter((img) => imageSectionFilter === 'all' || img.section === imageSectionFilter)
+              .map((img) => (
+                <div
+                  key={img.key}
+                  className="p-6 rounded-3xl bg-white border border-[#E2E8F0] shadow-sm space-y-4"
+                >
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E2E8F0] pb-3">
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-[10px] font-mono font-bold text-[#059669] uppercase tracking-wider bg-[#ECFDF5] px-2 py-0.5 rounded border border-[#A7F3D0]">
+                          {img.key}
+                        </span>
+                        {img.section && (
+                          <span className="text-[10px] font-mono text-[#64748B] uppercase tracking-wider">
+                            · {img.section}
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="text-base font-bold text-[#0F172A]">{img.label}</h3>
+                      {img.description && (
+                        <p className="text-xs text-[#64748B] mt-0.5">{img.description}</p>
+                      )}
+                    </div>
 
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const updated = { ...img, isActive: !img.isActive };
-                        setSiteImages((prev) =>
-                          prev.map((i) => (i.key === img.key ? updated : i))
-                        );
-                        handleSaveSiteImage(updated);
-                      }}
-                      className={`px-3 py-1 rounded-lg text-xs font-mono font-semibold flex items-center gap-1.5 ${
-                        img.isActive
-                          ? 'bg-[#ECFDF5] text-[#065F46] border border-[#A7F3D0]'
-                          : 'bg-[#F1F5F9] text-[#64748B] border border-[#CBD5E1]'
-                      }`}
-                    >
-                      {img.isActive ? <ToggleRight className="w-4 h-4 text-[#059669]" /> : <ToggleLeft className="w-4 h-4" />}
-                      {img.isActive ? 'Active' : 'Inactive'}
-                    </button>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
-                  {/* Image Preview */}
-                  <div className="md:col-span-4 aspect-video rounded-2xl bg-[#F8FAFC] border border-[#CBD5E1] flex items-center justify-center p-3 overflow-hidden">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={img.currentUrl}
-                      alt={img.altText || img.label}
-                      className="max-h-28 max-w-full object-contain"
-                    />
-                  </div>
-
-                  {/* Settings & Upload */}
-                  <div className="md:col-span-8 space-y-3">
-                    <div className="space-y-1">
-                      <label className="text-[11px] font-mono font-bold text-[#334155] block">
-                        Alt Text (Accessibility &amp; SEO) <span className="text-[#059669]">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        value={img.altText}
-                        onChange={(e) =>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          const updated = { ...img, isActive: !img.isActive };
                           setSiteImages((prev) =>
-                            prev.map((i) => (i.key === img.key ? { ...i, altText: e.target.value } : i))
-                          )
-                        }
-                        className="w-full px-3 py-2 rounded-xl bg-white border border-[#CBD5E1] text-[#0F172A] text-xs focus:outline-none focus:border-[#059669]"
+                            prev.map((i) => (i.key === img.key ? updated : i))
+                          );
+                          await handleSaveSiteImage(updated);
+                        }}
+                        disabled={saving}
+                        className={`px-3 py-1 rounded-lg text-xs font-mono font-semibold flex items-center gap-1.5 disabled:opacity-50 ${
+                          img.isActive
+                            ? 'bg-[#ECFDF5] text-[#065F46] border border-[#A7F3D0]'
+                            : 'bg-[#F1F5F9] text-[#64748B] border border-[#CBD5E1]'
+                        }`}
+                      >
+                        {img.isActive ? <ToggleRight className="w-4 h-4 text-[#059669]" /> : <ToggleLeft className="w-4 h-4" />}
+                        {img.isActive ? 'Active' : 'Inactive'}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
+                    {/* Image Preview */}
+                    <div className="md:col-span-4 aspect-video rounded-2xl bg-[#F8FAFC] border border-[#CBD5E1] flex items-center justify-center p-3 overflow-hidden">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={img.currentUrl}
+                        alt={img.altText || img.label}
+                        className="max-h-28 max-w-full object-contain"
                       />
                     </div>
 
-                    <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
-                      <div>
-                        <label className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] hover:border-[#059669] text-xs font-mono font-semibold text-[#0F172A] transition-colors">
-                          <Upload className="w-3.5 h-3.5 text-[#059669]" />
-                          {uploadingKey === img.key ? 'Uploading...' : 'Replace Image'}
-                          <input
-                            type="file"
-                            accept="image/jpeg,image/png,image/webp,image/svg+xml"
-                            className="hidden"
-                            onChange={(e) => {
-                              const file = e.target.files?.[0];
-                              if (file) handleImageFileUpload(img.key, file);
-                            }}
-                          />
+                    {/* Settings & Upload */}
+                    <div className="md:col-span-8 space-y-3">
+                      <div className="space-y-1">
+                        <label className="text-[11px] font-mono font-bold text-[#334155] block">
+                          Alt Text (Accessibility &amp; SEO) <span className="text-[#059669]">*</span>
                         </label>
+                        <input
+                          type="text"
+                          value={img.altText}
+                          onChange={(e) =>
+                            setSiteImages((prev) =>
+                              prev.map((i) => (i.key === img.key ? { ...i, altText: e.target.value } : i))
+                            )
+                          }
+                          className="w-full px-3 py-2 rounded-xl bg-white border border-[#CBD5E1] text-[#0F172A] text-xs focus:outline-none focus:border-[#059669]"
+                        />
                       </div>
 
-                      <Button
-                        type="button"
-                        variant="primary"
-                        size="sm"
-                        onClick={() => handleSaveSiteImage(img)}
-                        disabled={saving}
-                        icon={<Save className="w-3.5 h-3.5" />}
-                      >
-                        Save Image Settings
-                      </Button>
+                      <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+                        <div>
+                          <label className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] hover:border-[#059669] text-xs font-mono font-semibold text-[#0F172A] transition-colors">
+                            <Upload className="w-3.5 h-3.5 text-[#059669]" />
+                            {uploadingKey === img.key ? 'Uploading...' : 'Replace Image'}
+                            <input
+                              type="file"
+                              accept="image/jpeg,image/png,image/webp,image/svg+xml"
+                              className="hidden"
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) handleImageFileUpload(img.key, file);
+                              }}
+                            />
+                          </label>
+                        </div>
+
+                        <Button
+                          type="button"
+                          variant="primary"
+                          size="sm"
+                          onClick={() => handleSaveSiteImage(img)}
+                          disabled={saving}
+                          icon={<Save className="w-3.5 h-3.5" />}
+                        >
+                          Save Image Settings
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       )}

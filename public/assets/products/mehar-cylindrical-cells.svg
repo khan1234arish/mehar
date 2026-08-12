@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <defs>
+    <radialGradient id="bgGlowCyl" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="60%" stop-color="#F8FAFC"/>
+      <stop offset="100%" stop-color="#EDF2F7"/>
+    </radialGradient>
+    
+    <radialGradient id="floorShadowCyl" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(15,23,42,0.20)"/>
+      <stop offset="50%" stop-color="rgba(15,23,42,0.06)"/>
+      <stop offset="100%" stop-color="rgba(15,23,42,0)"/>
+    </radialGradient>
+
+    <!-- Clean Industrial Steel Can (No text, pure metallic reflection) -->
+    <linearGradient id="steelCanClean" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#64748B"/>
+      <stop offset="18%" stop-color="#CBD5E1"/>
+      <stop offset="42%" stop-color="#FFFFFF"/>
+      <stop offset="70%" stop-color="#E2E8F0"/>
+      <stop offset="88%" stop-color="#94A3B8"/>
+      <stop offset="100%" stop-color="#475569"/>
+    </linearGradient>
+
+    <linearGradient id="topButtonClean" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#94A3B8"/>
+      <stop offset="50%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#64748B"/>
+    </linearGradient>
+
+    <linearGradient id="nickelStripClean" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#94A3B8"/>
+      <stop offset="50%" stop-color="#F1F5F9"/>
+      <stop offset="100%" stop-color="#64748B"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="600" fill="url(#bgGlowCyl)" />
+  <ellipse cx="400" cy="520" rx="280" ry="26" fill="url(#floorShadowCyl)" />
+
+  <!-- GROUP 1: Individual Standing Cylindrical Cells (Left) -->
+  <g transform="translate(120, 140)">
+    <!-- Cell 1 -->
+    <g transform="translate(0, 40)">
+      <rect x="0" y="30" width="70" height="280" rx="6" fill="url(#steelCanClean)" stroke="#475569" stroke-width="1.5"/>
+      <ellipse cx="35" cy="30" rx="35" ry="10" fill="#CBD5E1" stroke="#475569" stroke-width="1.5"/>
+      <ellipse cx="35" cy="27" rx="28" ry="7" fill="#059669" stroke="#047857" stroke-width="1"/>
+      <rect x="23" y="10" width="24" height="16" rx="4" fill="url(#topButtonClean)" stroke="#475569" stroke-width="1.5"/>
+      <ellipse cx="35" cy="10" rx="12" ry="4" fill="#FFFFFF" stroke="#475569" stroke-width="1"/>
+      <ellipse cx="35" cy="310" rx="35" ry="8" fill="#475569" />
+    </g>
+
+    <!-- Cell 2 -->
+    <g transform="translate(85, 0)">
+      <rect x="0" y="30" width="70" height="320" rx="6" fill="url(#steelCanClean)" stroke="#475569" stroke-width="1.5"/>
+      <ellipse cx="35" cy="30" rx="35" ry="10" fill="#CBD5E1" stroke="#475569" stroke-width="1.5"/>
+      <ellipse cx="35" cy="27" rx="28" ry="7" fill="#059669" stroke="#047857" stroke-width="1"/>
+      <rect x="23" y="10" width="24" height="16" rx="4" fill="url(#topButtonClean)" stroke="#475569" stroke-width="1.5"/>
+      <ellipse cx="35" cy="10" rx="12" ry="4" fill="#FFFFFF" stroke="#475569" stroke-width="1"/>
+      <ellipse cx="35" cy="350" rx="35" ry="8" fill="#475569" />
+    </g>
+  </g>
+
+  <!-- GROUP 2: Spot-Welded Cell Matrix Array with Nickel Busbars (Right) -->
+  <g transform="translate(360, 130)">
+    
+    <!-- Cell Matrix Row 1 (Back) -->
+    <g transform="translate(40, 20)">
+      <rect x="0" y="30" width="65" height="290" rx="6" fill="url(#steelCanClean)" stroke="#475569" stroke-width="1.5"/>
+      <ellipse cx="32.5" cy="30" rx="32.5" ry="9" fill="#CBD5E1"/>
+      <ellipse cx="32.5" cy="27" rx="25" ry="6" fill="#059669"/>
+      
+      <rect x="75" y="30" width="65" height="290" rx="6" fill="url(#steelCanClean)" stroke="#475569" stroke-width="1.5"/>
+      <ellipse cx="107.5" cy="30" rx="32.5" ry="9" fill="#CBD5E1"/>
+      <ellipse cx="107.5" cy="27" rx="25" ry="6" fill="#059669"/>
+      
+      <rect x="150" y="30" width="65" height="290" rx="6" fill="url(#steelCanClean)" stroke="#475569" stroke-width="1.5"/>
+      <ellipse cx="182.5" cy="30" rx="32.5" ry="9" fill="#CBD5E1"/>
+      <ellipse cx="182.5" cy="27" rx="25" ry="6" fill="#059669"/>
+    </g>
+
+    <!-- Cell Matrix Row 2 (Front) -->
+    <g transform="translate(0, 60)">
+      <rect x="0" y="30" width="65" height="290" rx="6" fill="url(#steelCanClean)" stroke="#475569" stroke-width="1.5"/>
+      <ellipse cx="32.5" cy="30" rx="32.5" ry="9" fill="#CBD5E1"/>
+      <ellipse cx="32.5" cy="27" rx="25" ry="6" fill="#059669"/>
+      <rect x="21" y="10" width="23" height="16" rx="4" fill="url(#topButtonClean)" stroke="#475569" stroke-width="1.5"/>
+      
+      <rect x="75" y="30" width="65" height="290" rx="6" fill="url(#steelCanClean)" stroke="#475569" stroke-width="1.5"/>
+      <ellipse cx="107.5" cy="30" rx="32.5" ry="9" fill="#CBD5E1"/>
+      <ellipse cx="107.5" cy="27" rx="25" ry="6" fill="#059669"/>
+      <rect x="96" y="10" width="23" height="16" rx="4" fill="url(#topButtonClean)" stroke="#475569" stroke-width="1.5"/>
+
+      <rect x="150" y="30" width="65" height="290" rx="6" fill="url(#steelCanClean)" stroke="#475569" stroke-width="1.5"/>
+      <ellipse cx="182.5" cy="30" rx="32.5" ry="9" fill="#CBD5E1"/>
+      <ellipse cx="182.5" cy="27" rx="25" ry="6" fill="#059669"/>
+      <rect x="171" y="10" width="23" height="16" rx="4" fill="url(#topButtonClean)" stroke="#475569" stroke-width="1.5"/>
+
+      <!-- TOP STAMPED NICKEL STRIP BUSBAR -->
+      <path d="M 20,8 L 195,8 Q 205,8 205,18 L 205,20 Q 205,25 195,25 L 20,25 Q 10,25 10,20 L 10,18 Q 10,8 20,8 Z" fill="url(#nickelStripClean)" stroke="#475569" stroke-width="1.5"/>
+      
+      <!-- 4 Precision Spot-Welds per Cell -->
+      <circle cx="28" cy="14" r="1.5" fill="#1E293B"/>
+      <circle cx="36" cy="14" r="1.5" fill="#1E293B"/>
+      <circle cx="28" cy="20" r="1.5" fill="#1E293B"/>
+      <circle cx="36" cy="20" r="1.5" fill="#1E293B"/>
+      
+      <circle cx="103" cy="14" r="1.5" fill="#1E293B"/>
+      <circle cx="111" cy="14" r="1.5" fill="#1E293B"/>
+      <circle cx="103" cy="20" r="1.5" fill="#1E293B"/>
+      <circle cx="111" cy="20" r="1.5" fill="#1E293B"/>
+      
+      <circle cx="178" cy="14" r="1.5" fill="#1E293B"/>
+      <circle cx="186" cy="14" r="1.5" fill="#1E293B"/>
+      <circle cx="178" cy="20" r="1.5" fill="#1E293B"/>
+      <circle cx="186" cy="20" r="1.5" fill="#1E293B"/>
+    </g>
+  </g>
+</svg>

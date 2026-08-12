@@ -12,8 +12,8 @@ export default async function TopBar() {
   const cleanWhatsapp = sales.whatsappDesk.replace(/[^0-9]/g, '');
 
   return (
-    <div className="bg-[#F8FAFC] border-b border-[#E2E8F0] text-[11px] text-[#475569] px-4 sm:px-6 py-2 font-medium">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
+    <div className="bg-[#F8FAFC] border-b border-[#E2E8F0] text-[11px] text-[#475569] py-2 font-medium">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-2">
         {/* Parent Company & Trust Marker */}
         <div className="flex items-center gap-2.5">
           <span className="flex items-center gap-1.5 text-[#334155]">

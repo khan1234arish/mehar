@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 120" width="100%" height="100%">
+  <defs>
+    <!-- Lightning Green Gradient -->
+    <linearGradient id="boltGreenDark" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#84CC16" />
+      <stop offset="45%" stop-color="#22C55E" />
+      <stop offset="100%" stop-color="#10B981" />
+    </linearGradient>
+
+    <!-- Inner Orbit Green Gradient -->
+    <linearGradient id="orbitGreenDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#84CC16" />
+      <stop offset="60%" stop-color="#22C55E" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+
+    <!-- Outer Orbit Electric Blue Gradient -->
+    <linearGradient id="orbitBlueDark" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0284C7" />
+      <stop offset="50%" stop-color="#0EA5E9" />
+      <stop offset="100%" stop-color="#38BDF8" />
+    </linearGradient>
+
+    <!-- Star Glow Radial Gradient -->
+    <radialGradient id="sparkGlowDark" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#38BDF8" stop-opacity="1" />
+      <stop offset="40%" stop-color="#0EA5E9" stop-opacity="0.7" />
+      <stop offset="100%" stop-color="#0EA5E9" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- ── Emblem Section (Left) ─────────────────────────────────────────── -->
+  <g transform="translate(60, 60)">
+    <!-- Outer White Arc Accent -->
+    <path d="M -46 4 C -48 -6 -32 -20 -8 -26 C 14 -32 40 -26 48 -14" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" opacity="0.9" transform="rotate(-15)" />
+    
+    <!-- Outer Electric Blue Orbit Arc -->
+    <path d="M -30 22 C 2 30 38 24 50 10 C 60 -2 52 -18 30 -24" fill="none" stroke="url(#orbitBlueDark)" stroke-width="4" stroke-linecap="round" transform="rotate(-15)" />
+    
+    <!-- Inner Energy Green Orbit Arc -->
+    <path d="M -44 10 C -48 0 -36 -14 -12 -20 C 16 -26 40 -20 46 -8 C 50 2 38 16 10 22 C -18 28 -40 20 -44 10 Z" fill="none" stroke="url(#orbitGreenDark)" stroke-width="4.5" stroke-linecap="round" transform="rotate(-15)" />
+
+    <!-- Central Dynamic Lightning Bolt -->
+    <polygon points="-2,-38 12,-38 -6,0 10,0 -12,38 0,4 -10,4" fill="url(#boltGreenDark)" />
+
+    <!-- Spark Star on Upper Right Arc -->
+    <g transform="translate(42, -22)">
+      <circle cx="0" cy="0" r="12" fill="url(#sparkGlowDark)" />
+      <polygon points="0,-8 2.5,-2.5 8,0 2.5,2.5 0,8 -2.5,2.5 -8,0 -2.5,-2.5" fill="#FFFFFF" />
+      <circle cx="0" cy="0" r="1.8" fill="#38BDF8" />
+    </g>
+  </g>
+
+  <!-- ── Typography Section (Right) ────────────────────────────────────── -->
+  <!-- Wordmark MEHAR with Green 'H' -->
+  <g transform="translate(135, 70)">
+    <text font-family="'Outfit', 'Inter', system-ui, -apple-system, sans-serif" font-size="54" font-weight="900" letter-spacing="4">
+      <tspan fill="#FFFFFF">ME</tspan>
+      <tspan fill="#22C55E">H</tspan>
+      <tspan fill="#FFFFFF">AR</tspan>
+    </text>
+  </g>
+
+  <!-- Tagline: THE NAME YOU TRUST -->
+  <g transform="translate(138, 98)">
+    <text font-family="'Inter', system-ui, -apple-system, sans-serif" font-size="12.5" font-weight="800" fill="#94A3B8" letter-spacing="5.5">
+      THE NAME YOU TRUST
+    </text>
+  </g>
+</svg>

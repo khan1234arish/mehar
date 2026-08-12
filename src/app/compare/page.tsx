@@ -156,71 +156,111 @@ function CompareContent() {
                 {/* 2. Typical Operating Voltage */}
                 <tr className="hover:bg-[#F8FAFC] transition-colors">
                   <td className="py-4 px-6 font-bold text-[#0F172A] bg-[#F8FAFC]/50">
-                    Nominal Voltage & Capacity
+                    Nominal Voltage & Capacity Scope
                   </td>
-                  {selectedCategories.map((cat) => (
-                    <td key={cat.id} className="py-4 px-6 border-l border-[#E2E8F0]">
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[11px] font-mono bg-[#FEFCE8] text-[#854D0E] border border-[#FEF08A] font-semibold">
-                        <Clock className="w-3 h-3 text-[#CA8A04]" /> Not yet verified
-                      </span>
-                    </td>
-                  ))}
+                  {selectedCategories.map((cat) => {
+                    let voltageInfo = 'Application dependent';
+                    if (cat.slug === 'electric-2-wheeler-batteries') voltageInfo = '36V, 48V, 60V, 72V (7.5Ah - 34Ah)';
+                    else if (cat.slug === 'electric-3-wheeler-batteries') voltageInfo = '51.2V, 60.8V (86Ah - 200Ah)';
+                    else if (cat.slug === 'energy-storage-inverter-batteries') voltageInfo = '12.8V, 25.6V, 51.2V (100Ah - 200Ah)';
+                    else if (cat.slug === 'solar-renewable-energy-batteries') voltageInfo = '51.2V (100Ah - 200Ah ESS)';
+                    else if (cat.slug === 'ev-chargers-power-electronics') voltageInfo = '12V - 48V DC / 1200W - 6200W Output';
+                    else if (cat.slug === 'custom-oem-industrial-batteries') voltageInfo = '24V - 400V+ (Custom Configured)';
+
+                    return (
+                      <td key={cat.id} className="py-4 px-6 border-l border-[#E2E8F0]">
+                        <span className="text-xs font-mono font-semibold text-[#0F172A]">{voltageInfo}</span>
+                      </td>
+                    );
+                  })}
                 </tr>
 
                 {/* 3. Chemistry Suitability */}
                 <tr className="hover:bg-[#F8FAFC] transition-colors">
                   <td className="py-4 px-6 font-bold text-[#0F172A] bg-[#F8FAFC]/50">
-                    Electrochemistry Focus
+                    Electrochemistry Architecture
                   </td>
-                  {selectedCategories.map((cat) => (
-                    <td key={cat.id} className="py-4 px-6 border-l border-[#E2E8F0]">
-                      <p className="text-xs text-[#475569] leading-relaxed">
-                        Evaluated per customer duty cycle (LiFePO4, NMC, or Advanced Tubular).
-                      </p>
-                    </td>
-                  ))}
+                  {selectedCategories.map((cat) => {
+                    let chemInfo = 'LiFePO4 / NMC';
+                    if (cat.slug === 'electric-2-wheeler-batteries') chemInfo = 'NMC & Li-ion (High Energy Density)';
+                    else if (cat.slug === 'electric-3-wheeler-batteries') chemInfo = 'LiFePO4 (Thermal Stability & Long Life)';
+                    else if (cat.slug === 'energy-storage-inverter-batteries') chemInfo = 'LiFePO4 (Maintenance-Free Deep Cycle)';
+                    else if (cat.slug === 'solar-renewable-energy-batteries') chemInfo = 'LiFePO4 (High Charge Acceptance)';
+                    else if (cat.slug === 'ev-chargers-power-electronics') chemInfo = 'Power Electronics (CC/CV & Pure Sine Wave)';
+                    else if (cat.slug === 'custom-oem-industrial-batteries') chemInfo = 'LiFePO4 / NMC / High-C Polymer';
+
+                    return (
+                      <td key={cat.id} className="py-4 px-6 border-l border-[#E2E8F0]">
+                        <p className="text-xs text-[#475569] leading-relaxed font-medium">{chemInfo}</p>
+                      </td>
+                    );
+                  })}
                 </tr>
 
                 {/* 4. BMS & Telemetry Capabilities */}
                 <tr className="hover:bg-[#F8FAFC] transition-colors">
                   <td className="py-4 px-6 font-bold text-[#0F172A] bg-[#F8FAFC]/50">
-                    BMS & Telemetry Protocols
+                    BMS & Telemetry Integration
                   </td>
-                  {selectedCategories.map((cat) => (
-                    <td key={cat.id} className="py-4 px-6 border-l border-[#E2E8F0]">
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[11px] font-mono bg-[#FEFCE8] text-[#854D0E] border border-[#FEF08A] font-semibold">
-                        <Clock className="w-3 h-3 text-[#CA8A04]" /> Sized per OEM Spec
-                      </span>
-                    </td>
-                  ))}
+                  {selectedCategories.map((cat) => {
+                    let bmsInfo = 'Smart BMS Protection';
+                    if (cat.slug === 'electric-2-wheeler-batteries') bmsInfo = 'Multi-Tier Smart BMS (Optional CAN / RS485)';
+                    else if (cat.slug === 'electric-3-wheeler-batteries') bmsInfo = 'CAN 2.0B / RS485 / IoT Fleet Telematics';
+                    else if (cat.slug === 'energy-storage-inverter-batteries') bmsInfo = 'Digital Thermal Guard & Cell Balancing';
+                    else if (cat.slug === 'solar-renewable-energy-batteries') bmsInfo = 'RS485 / CAN Hybrid Inverter Protocol Mapping';
+                    else if (cat.slug === 'ev-chargers-power-electronics') bmsInfo = 'Auto-Cutoff & Microprocessor Voltage Sense';
+                    else if (cat.slug === 'custom-oem-industrial-batteries') bmsInfo = 'Industrial CANbus / Modbus / Custom Harness';
+
+                    return (
+                      <td key={cat.id} className="py-4 px-6 border-l border-[#E2E8F0]">
+                        <span className="text-xs text-[#334155]">{bmsInfo}</span>
+                      </td>
+                    );
+                  })}
                 </tr>
 
                 {/* 5. Ingress & Mechanical Enclosure */}
                 <tr className="hover:bg-[#F8FAFC] transition-colors">
                   <td className="py-4 px-6 font-bold text-[#0F172A] bg-[#F8FAFC]/50">
-                    Ingress & Enclosure Types
+                    Ingress Protection & Enclosure
                   </td>
-                  {selectedCategories.map((cat) => (
-                    <td key={cat.id} className="py-4 px-6 border-l border-[#E2E8F0]">
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[11px] font-mono bg-[#FEFCE8] text-[#854D0E] border border-[#FEF08A] font-semibold">
-                        <Clock className="w-3 h-3 text-[#CA8A04]" /> Not yet verified
-                      </span>
-                    </td>
-                  ))}
+                  {selectedCategories.map((cat) => {
+                    let ipInfo = 'IP65 Standard';
+                    if (cat.slug === 'electric-2-wheeler-batteries') ipInfo = 'IP65 / IP67 Aluminum / MS Powder Coated';
+                    else if (cat.slug === 'electric-3-wheeler-batteries') ipInfo = 'IP65 Vibration-Resistant Reinforced MS Casing';
+                    else if (cat.slug === 'energy-storage-inverter-batteries') ipInfo = 'IP54 / Indoor Enclosure / 19" Rack-Mount';
+                    else if (cat.slug === 'solar-renewable-energy-batteries') ipInfo = 'IP54 Wall-Mount / Modular Floor Cabinet';
+                    else if (cat.slug === 'ev-chargers-power-electronics') ipInfo = 'IP21 (Inverters) / IP54 (Chargers)';
+                    else if (cat.slug === 'custom-oem-industrial-batteries') ipInfo = 'Custom Heavy Steel / Molded Bay Enclosures';
+
+                    return (
+                      <td key={cat.id} className="py-4 px-6 border-l border-[#E2E8F0]">
+                        <span className="text-xs text-[#334155]">{ipInfo}</span>
+                      </td>
+                    );
+                  })}
                 </tr>
 
                 {/* 6. Cycle Life Rating */}
                 <tr className="hover:bg-[#F8FAFC] transition-colors">
                   <td className="py-4 px-6 font-bold text-[#0F172A] bg-[#F8FAFC]/50">
-                    Cycle Life & Durability
+                    Cycle Life Rating (@ 80%–85% DoD)
                   </td>
-                  {selectedCategories.map((cat) => (
-                    <td key={cat.id} className="py-4 px-6 border-l border-[#E2E8F0]">
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[11px] font-mono bg-[#FEFCE8] text-[#854D0E] border border-[#FEF08A] font-semibold">
-                        <Clock className="w-3 h-3 text-[#CA8A04]" /> Specifications coming soon
-                      </span>
-                    </td>
-                  ))}
+                  {selectedCategories.map((cat) => {
+                    let cycleInfo = '2,000+ cycles';
+                    if (cat.slug === 'electric-2-wheeler-batteries') cycleInfo = '800 - 1,200+ cycles (NMC / Li-ion)';
+                    else if (cat.slug === 'electric-3-wheeler-batteries') cycleInfo = '2,000+ cycles @ 85% DoD (LiFePO4)';
+                    else if (cat.slug === 'energy-storage-inverter-batteries') cycleInfo = '3,000+ cycles (LiFePO4)';
+                    else if (cat.slug === 'solar-renewable-energy-batteries') cycleInfo = '3,000+ cycles (LiFePO4)';
+                    else if (cat.slug === 'ev-chargers-power-electronics') cycleInfo = '10-Year Solid-State Design Life';
+                    else if (cat.slug === 'custom-oem-industrial-batteries') cycleInfo = '2,000+ to 3,000+ cycles (Chemistry dependent)';
+
+                    return (
+                      <td key={cat.id} className="py-4 px-6 border-l border-[#E2E8F0]">
+                        <span className="text-xs font-mono font-bold text-[#059669]">{cycleInfo}</span>
+                      </td>
+                    );
+                  })}
                 </tr>
 
                 {/* 7. Direct Action CTA */}
@@ -242,6 +282,7 @@ function CompareContent() {
                     </td>
                   ))}
                 </tr>
+
               </tbody>
             </table>
           </div>
