@@ -56,13 +56,14 @@ export const DEFAULT_SITE_IMAGES: Record<string, DefaultSiteImageMeta> = {
     altText: 'MEHAR Solar Renewable Deep-Cycle Storage Battery',
     description: 'Product category photograph for off-grid and hybrid solar installations.',
   },
-  homepage_ev_chargers: {
-    label: 'Homepage Category: EV Chargers & Power Electronics',
+  homepage_cylindrical_cells: {
+    label: 'Homepage Category: Cylindrical Li-ion Cells',
     section: 'homepage',
-    defaultUrl: '/assets/products/mehar-ev-charger.jpg',
-    altText: 'MEHAR Commercial EV Fast Charging Station & Power Unit',
-    description: 'Product category photograph for fleet depot and commercial fast chargers.',
+    defaultUrl: '/assets/products/mehar-cylindrical-cells.jpg',
+    altText: 'MEHAR Cylindrical Lithium-Ion Cells in 18650, 21700, and 32700 Formats',
+    description: 'Product category photograph for cylindrical Li-ion cells across 18650, 21700, and 32700 formats.',
   },
+
   homepage_custom_oem: {
     label: 'Homepage Category: Custom OEM & Industrial',
     section: 'homepage',
@@ -73,12 +74,13 @@ export const DEFAULT_SITE_IMAGES: Record<string, DefaultSiteImageMeta> = {
 
   // ── 2. TECHNOLOGY & BATTERY CELL VISUALS ───────────────────────────────────
   technology_cylindrical_cells: {
-    label: 'Technology: Cylindrical Li-Ion Cells',
+    label: 'Technology: Cylindrical Li-Ion Cells (18650, 21700, 32700 Formats)',
     section: 'technology',
     defaultUrl: '/assets/products/mehar-cylindrical-cells.jpg',
-    altText: 'MEHAR Clean Metallic Cylindrical Lithium-Ion Cells and Welded Module Array',
-    description: 'Studio photograph of cylindrical cells with pristine metallic finish and welded interconnects.',
+    altText: 'MEHAR Cylindrical Lithium-Ion Cells in 18650, 21700, and 32700 Formats',
+    description: 'Studio product photograph showing multiple cylindrical Li-ion cell formats with metallic casing and insulation.',
   },
+
   technology_prismatic_cells: {
     label: 'Technology: Prismatic LiFePO4 / NMC Cells',
     section: 'technology',

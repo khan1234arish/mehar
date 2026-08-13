@@ -164,7 +164,7 @@ function CompareContent() {
                     else if (cat.slug === 'electric-3-wheeler-batteries') voltageInfo = '51.2V, 60.8V (86Ah - 200Ah)';
                     else if (cat.slug === 'energy-storage-inverter-batteries') voltageInfo = '12.8V, 25.6V, 51.2V (100Ah - 200Ah)';
                     else if (cat.slug === 'solar-renewable-energy-batteries') voltageInfo = '51.2V (100Ah - 200Ah ESS)';
-                    else if (cat.slug === 'ev-chargers-power-electronics') voltageInfo = '12V - 48V DC / 1200W - 6200W Output';
+                    else if (cat.slug === 'cylindrical-li-ion-cells') voltageInfo = '3.6V - 3.7V Nominal / 18650, 21700, 32700';
                     else if (cat.slug === 'custom-oem-industrial-batteries') voltageInfo = '24V - 400V+ (Custom Configured)';
 
                     return (
@@ -186,7 +186,7 @@ function CompareContent() {
                     else if (cat.slug === 'electric-3-wheeler-batteries') chemInfo = 'LiFePO4 (Thermal Stability & Long Life)';
                     else if (cat.slug === 'energy-storage-inverter-batteries') chemInfo = 'LiFePO4 (Maintenance-Free Deep Cycle)';
                     else if (cat.slug === 'solar-renewable-energy-batteries') chemInfo = 'LiFePO4 (High Charge Acceptance)';
-                    else if (cat.slug === 'ev-chargers-power-electronics') chemInfo = 'Power Electronics (CC/CV & Pure Sine Wave)';
+                    else if (cat.slug === 'cylindrical-li-ion-cells') chemInfo = 'NMC / Li-Ion / LiFePO4 Cylindrical Formats';
                     else if (cat.slug === 'custom-oem-industrial-batteries') chemInfo = 'LiFePO4 / NMC / High-C Polymer';
 
                     return (
@@ -208,7 +208,7 @@ function CompareContent() {
                     else if (cat.slug === 'electric-3-wheeler-batteries') bmsInfo = 'CAN 2.0B / RS485 / IoT Fleet Telematics';
                     else if (cat.slug === 'energy-storage-inverter-batteries') bmsInfo = 'Digital Thermal Guard & Cell Balancing';
                     else if (cat.slug === 'solar-renewable-energy-batteries') bmsInfo = 'RS485 / CAN Hybrid Inverter Protocol Mapping';
-                    else if (cat.slug === 'ev-chargers-power-electronics') bmsInfo = 'Auto-Cutoff & Microprocessor Voltage Sense';
+                    else if (cat.slug === 'cylindrical-li-ion-cells') bmsInfo = 'Individual Cell Welded Arrays with Module BMS';
                     else if (cat.slug === 'custom-oem-industrial-batteries') bmsInfo = 'Industrial CANbus / Modbus / Custom Harness';
 
                     return (
@@ -230,7 +230,7 @@ function CompareContent() {
                     else if (cat.slug === 'electric-3-wheeler-batteries') ipInfo = 'IP65 Vibration-Resistant Reinforced MS Casing';
                     else if (cat.slug === 'energy-storage-inverter-batteries') ipInfo = 'IP54 / Indoor Enclosure / 19" Rack-Mount';
                     else if (cat.slug === 'solar-renewable-energy-batteries') ipInfo = 'IP54 Wall-Mount / Modular Floor Cabinet';
-                    else if (cat.slug === 'ev-chargers-power-electronics') ipInfo = 'IP21 (Inverters) / IP54 (Chargers)';
+                    else if (cat.slug === 'cylindrical-li-ion-cells') ipInfo = 'Standard Steel Canister with Heat-Shrink Sleeve';
                     else if (cat.slug === 'custom-oem-industrial-batteries') ipInfo = 'Custom Heavy Steel / Molded Bay Enclosures';
 
                     return (
@@ -252,8 +252,9 @@ function CompareContent() {
                     else if (cat.slug === 'electric-3-wheeler-batteries') cycleInfo = '2,000+ cycles @ 85% DoD (LiFePO4)';
                     else if (cat.slug === 'energy-storage-inverter-batteries') cycleInfo = '3,000+ cycles (LiFePO4)';
                     else if (cat.slug === 'solar-renewable-energy-batteries') cycleInfo = '3,000+ cycles (LiFePO4)';
-                    else if (cat.slug === 'ev-chargers-power-electronics') cycleInfo = '10-Year Solid-State Design Life';
+                    else if (cat.slug === 'cylindrical-li-ion-cells') cycleInfo = '800 - 2,000+ cycles (Format & Chemistry Dependent)';
                     else if (cat.slug === 'custom-oem-industrial-batteries') cycleInfo = '2,000+ to 3,000+ cycles (Chemistry dependent)';
+
 
                     return (
                       <td key={cat.id} className="py-4 px-6 border-l border-[#E2E8F0]">

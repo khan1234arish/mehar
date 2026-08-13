@@ -77,8 +77,9 @@ export default async function ProductsPage() {
               <Badge variant="green">B2B Product Portfolio</Badge>
               <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-mono font-bold bg-[#ECFDF5] text-[#065F46] border border-[#A7F3D0]">
                 <Layers className="w-3.5 h-3.5 text-[#059669]" />
-                {totalProducts} Verified Models Across 6 Categories
+                {totalProducts} Verified Models Across {BROAD_CATEGORIES.length} Categories
               </span>
+
             </div>
 
             <h1 className="text-3xl sm:text-5xl font-extrabold text-[#0F172A] tracking-tight">

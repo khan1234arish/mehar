@@ -130,30 +130,31 @@ export default async function TechnologyPage() {
 
               <div>
                 <span className="text-xs font-mono font-bold text-[#059669] uppercase block mb-1">
-                  High Energy Density &amp; High Discharge
+                  Configurable Pack Formats
                 </span>
                 <h3 className="text-2xl font-bold text-[#0F172A]">
-                  Cylindrical Lithium-Ion Cell Technology
+                  Cylindrical Li-Ion Cells &amp; Formats
                 </h3>
                 <p className="text-xs sm:text-sm text-[#475569] leading-relaxed mt-2">
-                  Engineered with steel can housing, integrated pressure relief seals, and uniform cylindrical geometry. Ideal for electric 2-wheelers, high-drain power tools, and compact mobile applications requiring agile form factors and rapid thermal dissipation.
+                  Common cylindrical Li-ion formats (including 18650, 21700, and 32700 cells) utilized in configurable battery-pack architectures. Engineered with steel can housing, integrated safety vents, and uniform radial geometry for electric 2-wheelers, portable systems, and high-drain applications.
                 </p>
               </div>
 
               <div className="space-y-2.5 pt-4 border-t border-[#E2E8F0] text-xs text-[#334155]">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-[#059669] shrink-0" />
+                  <span>Standard 18650, 21700, and 32700 cylindrical formats for modular integration</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#059669] shrink-0" />
                   <span>High continuous and peak discharge C-rate capability</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-[#059669] shrink-0" />
-                  <span>Individual cell insulation rings and precision nickel spot-welding</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#059669] shrink-0" />
-                  <span>Effective natural heat dissipation between radial cell gaps</span>
+                  <span>Individual cell insulation rings and precision nickel spot-welded arrays</span>
                 </div>
               </div>
+
             </div>
 
             <div className="mt-6 pt-4 border-t border-[#E2E8F0] flex items-center justify-between">

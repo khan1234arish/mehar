@@ -117,13 +117,23 @@ async function main() {
 
         console.log(`  ✓ Product: ${product.name} [${product.modelNumber || 'Standard'}]`);
 
-        // Create primary ProductImage record if imageUrl exists
+        // Create or update primary ProductImage record if imageUrl exists
         if (prod.imageUrl) {
-          const existingImages = await prisma.productImage.findMany({
-            where: { productId: product.id },
+          const existingPrimary = await prisma.productImage.findFirst({
+            where: { productId: product.id, isPrimary: true },
           });
 
-          if (existingImages.length === 0) {
+          if (existingPrimary) {
+            await prisma.productImage.update({
+              where: { id: existingPrimary.id },
+              data: {
+                imageUrl: prod.imageUrl,
+                altText: `${product.name} Industrial Lithium Battery`,
+                isPublished: true,
+                isArchived: false,
+              },
+            });
+          } else {
             await prisma.productImage.create({
               data: {
                 productId: product.id,
@@ -136,6 +146,7 @@ async function main() {
             });
           }
         }
+
 
         if (prod.specifications && Array.isArray(prod.specifications)) {
           // Delete old specs and re-insert verified specs

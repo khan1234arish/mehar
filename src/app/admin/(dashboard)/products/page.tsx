@@ -247,6 +247,39 @@ function ProductsManagementContent() {
       .replace(/-+/g, '-');
   };
 
+  const handleAddSpecRow = () => {
+    setFormData((prev) => ({
+      ...prev,
+      specifications: [
+        ...prev.specifications,
+        {
+          groupName: 'Electrical',
+          specKey: '',
+          specValue: '',
+          specUnit: '',
+          isHighlight: false,
+          displayOrder: prev.specifications.length,
+        },
+      ],
+    }));
+  };
+
+  const handleUpdateSpecRow = (index: number, field: keyof ProductSpec, value: any) => {
+    setFormData((prev) => {
+      const updated = [...prev.specifications];
+      updated[index] = { ...updated[index], [field]: value };
+      return { ...prev, specifications: updated };
+    });
+  };
+
+  const handleRemoveSpecRow = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      specifications: prev.specifications.filter((_, idx) => idx !== index),
+    }));
+  };
+
+
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -1004,8 +1037,121 @@ function ProductsManagementContent() {
                 </div>
               </div>
 
+              {/* DETAILED GROUPED SPECIFICATIONS EDITOR */}
+              <div className="pt-4 border-t border-[#E2E8F0] space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-bold text-xs text-[#059669] uppercase font-mono tracking-wider">
+                      Grouped Technical Specifications Table
+                    </h3>
+                    <p className="text-[11px] text-[#64748B]">
+                      Add, edit, or remove detailed specifications shown in the customer datasheet matrix.
+                    </p>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    size="sm"
+                    onClick={handleAddSpecRow}
+                    icon={<Plus className="w-3.5 h-3.5" />}
+                  >
+                    Add Specification Row
+                  </Button>
+                </div>
+
+                {formData.specifications.length === 0 ? (
+                  <div className="p-4 rounded-xl bg-[#F8FAFC] border border-dashed border-[#CBD5E1] text-center text-xs text-[#64748B]">
+                    No custom specification rows defined. Click &ldquo;Add Specification Row&rdquo; to add parameters.
+                  </div>
+                ) : (
+                  <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
+                    {formData.specifications.map((spec, sIdx) => (
+                      <div
+                        key={sIdx}
+                        className="p-2.5 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] grid grid-cols-12 gap-2 items-center text-xs"
+                      >
+                        {/* Group Name */}
+                        <div className="col-span-3">
+                          <select
+                            value={spec.groupName}
+                            onChange={(e) => handleUpdateSpecRow(sIdx, 'groupName', e.target.value)}
+                            className="w-full px-2 py-1.5 rounded-lg border border-[#CBD5E1] text-[11px] font-semibold bg-white"
+                          >
+                            <option value="Electrical">Electrical</option>
+                            <option value="Electrochemistry">Electrochemistry</option>
+                            <option value="BMS & Safety">BMS &amp; Safety</option>
+                            <option value="Mechanical">Mechanical</option>
+                            <option value="Operational">Operational</option>
+                            <option value="Quality & Testing">Quality &amp; Testing</option>
+                          </select>
+                        </div>
+
+                        {/* Spec Key */}
+                        <div className="col-span-3">
+                          <input
+                            type="text"
+                            placeholder="Parameter Name (e.g. Nominal Voltage)"
+                            value={spec.specKey}
+                            onChange={(e) => handleUpdateSpecRow(sIdx, 'specKey', e.target.value)}
+                            className="w-full px-2 py-1.5 rounded-lg border border-[#CBD5E1] text-[11px]"
+                          />
+                        </div>
+
+                        {/* Spec Value */}
+                        <div className="col-span-3">
+                          <input
+                            type="text"
+                            placeholder="Value (e.g. 51.2)"
+                            value={spec.specValue}
+                            onChange={(e) => handleUpdateSpecRow(sIdx, 'specValue', e.target.value)}
+                            className="w-full px-2 py-1.5 rounded-lg border border-[#CBD5E1] text-[11px] font-mono"
+                          />
+                        </div>
+
+                        {/* Spec Unit */}
+                        <div className="col-span-1">
+                          <input
+                            type="text"
+                            placeholder="Unit (V)"
+                            value={spec.specUnit || ''}
+                            onChange={(e) => handleUpdateSpecRow(sIdx, 'specUnit', e.target.value)}
+                            className="w-full px-1.5 py-1.5 rounded-lg border border-[#CBD5E1] text-[11px] font-mono text-center"
+                          />
+                        </div>
+
+                        {/* Highlight Toggle */}
+                        <div className="col-span-1 flex items-center justify-center">
+                          <label className="flex items-center gap-1 cursor-pointer" title="Highlight in Summary Badges">
+                            <input
+                              type="checkbox"
+                              checked={spec.isHighlight}
+                              onChange={(e) => handleUpdateSpecRow(sIdx, 'isHighlight', e.target.checked)}
+                              className="w-3.5 h-3.5 rounded text-[#059669]"
+                            />
+                            <span className="text-[10px] font-mono text-[#64748B]">Star</span>
+                          </label>
+                        </div>
+
+                        {/* Delete Row Button */}
+                        <div className="col-span-1 flex justify-end">
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveSpecRow(sIdx)}
+                            className="p-1 rounded-lg border border-[#FECACA] text-[#991B1B] hover:bg-[#FEF2F2]"
+                            title="Remove Row"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               {/* Publication Governance Controls */}
               <div className="p-4 rounded-2xl bg-[#F8FAFC] border border-[#E2E8F0] space-y-3">
+
                 <span className="font-bold text-xs text-[#0F172A] block font-mono uppercase">
                   Release &amp; Verification State
                 </span>

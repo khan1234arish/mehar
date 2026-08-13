@@ -147,7 +147,8 @@ export async function GET(request: Request) {
             { path: '/products/electric-3-wheeler-batteries', label: 'Electric 3-Wheeler & E-Rickshaw', category: 'Commercial EV' },
             { path: '/products/energy-storage-inverter-batteries', label: 'ESS & Lithium Inverters', category: 'Energy Storage' },
             { path: '/products/solar-renewable-energy-batteries', label: 'Solar & Renewable Storage', category: 'Solar' },
-            { path: '/products/ev-chargers-power-electronics', label: 'EV Fast Chargers & Inverters', category: 'Power Electronics' },
+            { path: '/products/cylindrical-li-ion-cells', label: 'Cylindrical Li-ion Cells', category: 'Battery Cells' },
+
             { path: '/products/custom-oem-industrial-batteries', label: 'Custom OEM & Industrial', category: 'Industrial & Robotics' },
             { path: '/technology', label: 'Smart BMS & Cell Engineering', category: 'Technology' },
             { path: '/applications', label: 'Industrial Applications', category: 'Solutions' },
@@ -202,7 +203,8 @@ export async function GET(request: Request) {
         { path: '/products/electric-3-wheeler-batteries', label: 'Electric 3-Wheeler & E-Rickshaw', category: 'Commercial EV' },
         { path: '/products/energy-storage-inverter-batteries', label: 'ESS & Lithium Inverters', category: 'Energy Storage' },
         { path: '/products/solar-renewable-energy-batteries', label: 'Solar & Renewable Storage', category: 'Solar' },
-        { path: '/products/ev-chargers-power-electronics', label: 'EV Fast Chargers & Inverters', category: 'Power Electronics' },
+        { path: '/products/cylindrical-li-ion-cells', label: 'Cylindrical Li-ion Cells', category: 'Battery Cells' },
+
         { path: '/products/custom-oem-industrial-batteries', label: 'Custom OEM & Industrial', category: 'Industrial & Robotics' },
       ],
     });

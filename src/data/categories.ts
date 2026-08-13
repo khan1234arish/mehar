@@ -61,17 +61,18 @@ export const BROAD_CATEGORIES: CategoryData[] = [
     defaultImage: '/assets/products/mehar-solar-battery.jpg',
   },
   {
-    id: 'cat-ev-chargers',
-    name: 'EV Chargers & Power Electronics',
-    slug: 'ev-chargers-power-electronics',
-    tagline: 'Intelligent multi-stage CC/CV lithium battery chargers and hybrid solar-grid power units',
-    description: 'Dedicated power electronics including intelligent CC/CV lithium chargers with automated cutoff, thermal monitoring, and reverse-polarity protection, alongside smart hybrid lithium inverters (12V to 48V, 1200W to 6200W) designed for wall-mount installations.',
+    id: 'cat-cylindrical-cells',
+    name: 'Cylindrical Li-ion Cells',
+    slug: 'cylindrical-li-ion-cells',
+    tagline: 'High-density cylindrical Li-ion cells for configurable battery-pack architectures',
+    description: 'Cylindrical lithium-ion cells for configurable battery-pack architectures across mobility, energy storage and specialized applications. Available in standard 18650, 21700, and 32700 industrial formats engineered for high discharge and uniform thermal dissipation.',
     iconName: 'Zap',
     isPlaceholder: false,
     verificationStatus: 'CLIENT_VERIFIED',
-    keyApplications: ['EV Fleet Depot Charging', 'Stationary Battery Charging', 'Hybrid Solar-Grid Inverters', 'Commercial Inverter Units'],
-    defaultImage: '/assets/products/mehar-ev-charger.jpg',
+    keyApplications: ['Electric 2-Wheelers', 'Portable Power Equipment', 'Modular Energy Storage', 'Custom Battery Packs'],
+    defaultImage: '/assets/products/mehar-cylindrical-cells.jpg',
   },
+
   {
     id: 'cat-custom-oem',
     name: 'Custom OEM & Industrial Battery Solutions',
@@ -85,4 +86,6 @@ export const BROAD_CATEGORIES: CategoryData[] = [
     defaultImage: '/assets/products/mehar-oem-battery.jpg',
   },
 ];
+
+
 

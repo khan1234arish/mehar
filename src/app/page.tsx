@@ -59,7 +59,7 @@ export default async function HomePage() {
     imgCat3W,
     imgCatESS,
     imgCatSolar,
-    imgCatChargers,
+    imgCatCells,
     imgCatOEM,
     // Application-specific managed images
     imgAppMobility,
@@ -84,7 +84,7 @@ export default async function HomePage() {
     getSitePlaceholderImage('homepage_electric_3w'),
     getSitePlaceholderImage('homepage_ess_inverter'),
     getSitePlaceholderImage('homepage_solar_renewable'),
-    getSitePlaceholderImage('homepage_ev_chargers'),
+    getSitePlaceholderImage('homepage_cylindrical_cells'),
     getSitePlaceholderImage('homepage_custom_oem'),
     getSitePlaceholderImage('app_electric_mobility'),
     getSitePlaceholderImage('app_solar_ess'),
@@ -103,9 +103,10 @@ export default async function HomePage() {
     'electric-3-wheeler-batteries': imgCat3W,
     'energy-storage-inverter-batteries': imgCatESS,
     'solar-renewable-energy-batteries': imgCatSolar,
-    'ev-chargers-power-units': imgCatChargers,
+    'cylindrical-li-ion-cells': imgCatCells,
     'custom-oem-industrial-batteries': imgCatOEM,
   };
+
 
   const managedAppImages: Record<string, { url: string; altText: string }> = {
     'electric-mobility': imgAppMobility,
