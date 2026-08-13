@@ -18,7 +18,14 @@ import {
   Save,
   X,
   FileText,
+  ChevronDown,
+  ChevronUp,
+  Code,
+  Zap,
+  Layers,
+  MapPin,
 } from 'lucide-react';
+
 
 interface RfqItem {
   id: string;
@@ -97,6 +104,7 @@ function EnquiriesContent() {
   const [modalStatus, setModalStatus] = useState('');
   const [modalNotes, setModalNotes] = useState('');
   const [savingStatus, setSavingStatus] = useState(false);
+  const [showRawJson, setShowRawJson] = useState(false);
 
   const getCsrfToken = (): string => {
     const match = document.cookie.match(/(?:^|;\s*)mehar_admin_csrf=([^;]+)/);
@@ -137,7 +145,9 @@ function EnquiriesContent() {
     setInspectRfq(rfq);
     setModalStatus(rfq.status);
     setModalNotes(rfq.internalNotes || '');
+    setShowRawJson(false);
   };
+
 
   const openOemInspect = (oem: OemItem) => {
     setInspectOem(oem);
@@ -505,185 +515,384 @@ function EnquiriesContent() {
       )}
 
       {/* RFQ Inspection Modal */}
-      {inspectRfq && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm overflow-y-auto">
-          <div className="bg-white rounded-3xl border border-[#E2E8F0] shadow-2xl max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden my-6">
-            <div className="p-6 border-b border-[#E2E8F0] flex items-center justify-between bg-[#F8FAFC]">
-              <div>
-                <span className="text-[10px] font-mono font-bold uppercase text-[#059669]">
-                  Official Quotation Request
-                </span>
-                <h2 className="text-lg font-bold text-[#0F172A]">{inspectRfq.rfqNumber}</h2>
-              </div>
-              <button
-                onClick={() => setInspectRfq(null)}
-                className="p-2 rounded-xl hover:bg-white text-[#64748B]"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
+      {inspectRfq && (() => {
+        const parsedNotes = parseJsonSafe(inspectRfq.customNotes);
+        const categoriesList = parsedNotes?.categories
+          ? Array.isArray(parsedNotes.categories)
+            ? parsedNotes.categories
+            : [parsedNotes.categories]
+          : [];
 
-            <div className="p-6 overflow-y-auto space-y-5 text-xs">
-              {/* Company Info Box */}
-              <div className="p-4 rounded-2xl bg-[#F8FAFC] border border-[#E2E8F0] grid grid-cols-2 gap-3 font-mono">
-                <div>
-                  <span className="text-[#64748B] block text-[10px] uppercase font-bold">Company</span>
-                  <span className="text-[#0F172A] font-bold text-xs">{inspectRfq.companyName}</span>
+        return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/50 backdrop-blur-xs overflow-y-auto overflow-x-hidden">
+            <div className="bg-white rounded-3xl border border-[#E2E8F0] shadow-2xl w-full max-w-[min(900px,calc(100vw-24px))] sm:max-w-[min(900px,calc(100vw-32px))] max-h-[90vh] sm:max-h-[85vh] flex flex-col overflow-hidden my-auto min-w-0 box-border">
+              {/* Modal Header */}
+              <div className="p-4 sm:p-6 border-b border-[#E2E8F0] flex items-center justify-between bg-[#F8FAFC] flex-shrink-0 min-w-0">
+                <div className="min-w-0 pr-3">
+                  <span className="text-[10px] font-mono font-bold uppercase text-[#059669] block tracking-wider">
+                    Official Quotation Request
+                  </span>
+                  <h2 className="text-lg sm:text-xl font-bold text-[#0F172A] truncate">
+                    {inspectRfq.rfqNumber}
+                  </h2>
                 </div>
-                <div>
-                  <span className="text-[#64748B] block text-[10px] uppercase font-bold">Contact Person</span>
-                  <span className="text-[#0F172A] font-bold text-xs">{inspectRfq.contactPerson}</span>
-                </div>
-                <div>
-                  <span className="text-[#64748B] block text-[10px] uppercase font-bold">Email</span>
-                  <span className="text-[#0F172A]">{inspectRfq.email}</span>
-                </div>
-                <div>
-                  <span className="text-[#64748B] block text-[10px] uppercase font-bold">Phone</span>
-                  <span className="text-[#0F172A]">{inspectRfq.phone}</span>
-                </div>
+                <button
+                  onClick={() => setInspectRfq(null)}
+                  className="p-2 rounded-xl hover:bg-white text-[#64748B] hover:text-[#0F172A] transition-colors flex-shrink-0 border border-transparent hover:border-[#CBD5E1]"
+                  aria-label="Close modal"
+                >
+                  <X className="w-5 h-5" />
+                </button>
               </div>
 
-              {/* Requirements Payload */}
-              {inspectRfq.customNotes && (
-                <div className="space-y-1.5">
-                  <span className="font-bold text-[#334155] block">Customer Stated Requirements</span>
-                  <div className="p-3 rounded-xl bg-white border border-[#CBD5E1] font-mono text-[11px] space-y-1">
-                    <pre className="whitespace-pre-wrap leading-relaxed">
-                      {inspectRfq.customNotes}
-                    </pre>
+              {/* Modal Scrollable Body */}
+              <div className="p-4 sm:p-6 overflow-y-auto overflow-x-hidden space-y-5 text-xs flex-1 min-w-0 max-w-full">
+                {/* Company & Contact Information Box */}
+                <div className="p-4 rounded-2xl bg-[#F8FAFC] border border-[#E2E8F0] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 font-mono min-w-0 max-w-full">
+                  <div className="min-w-0">
+                    <span className="text-[#64748B] block text-[10px] uppercase font-bold tracking-wider">Company</span>
+                    <span className="text-[#0F172A] font-bold text-xs break-words block">{inspectRfq.companyName}</span>
+                  </div>
+                  <div className="min-w-0">
+                    <span className="text-[#64748B] block text-[10px] uppercase font-bold tracking-wider">Contact Person</span>
+                    <span className="text-[#0F172A] font-bold text-xs break-words block">{inspectRfq.contactPerson}</span>
+                  </div>
+                  <div className="min-w-0">
+                    <span className="text-[#64748B] block text-[10px] uppercase font-bold tracking-wider">Email</span>
+                    <span className="text-[#0F172A] break-all block">{inspectRfq.email}</span>
+                  </div>
+                  <div className="min-w-0">
+                    <span className="text-[#64748B] block text-[10px] uppercase font-bold tracking-wider">Phone</span>
+                    <span className="text-[#0F172A] break-words block">{inspectRfq.phone}</span>
+                  </div>
+                  {inspectRfq.gstin && (
+                    <div className="min-w-0">
+                      <span className="text-[#64748B] block text-[10px] uppercase font-bold tracking-wider">GSTIN</span>
+                      <span className="text-[#0F172A] break-words block">{inspectRfq.gstin}</span>
+                    </div>
+                  )}
+                  <div className="min-w-0">
+                    <span className="text-[#64748B] block text-[10px] uppercase font-bold tracking-wider">Location</span>
+                    <span className="text-[#0F172A] break-words block">
+                      {inspectRfq.city}{inspectRfq.state ? `, ${inspectRfq.state}` : ''}
+                    </span>
+                  </div>
+                  <div className="min-w-0">
+                    <span className="text-[#64748B] block text-[10px] uppercase font-bold tracking-wider">Volume Tier</span>
+                    <span className="text-[#059669] font-bold break-words block">{inspectRfq.volumeTier}</span>
+                  </div>
+                  <div className="min-w-0">
+                    <span className="text-[#64748B] block text-[10px] uppercase font-bold tracking-wider">Project Timeline</span>
+                    <span className="text-[#0F172A] break-words block">{inspectRfq.projectTimeline}</span>
                   </div>
                 </div>
-              )}
 
-              {/* Status Update & Internal Notes */}
-              <div className="p-4 rounded-2xl bg-[#ECFDF5] border border-[#A7F3D0] space-y-3">
-                <span className="font-bold text-[#065F46] block">Commercial Status &amp; Internal Notes</span>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-[11px] font-bold text-[#064E3B] block mb-1">Update Status</label>
-                    <select
-                      value={modalStatus}
-                      onChange={(e) => setModalStatus(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl bg-white border border-[#A7F3D0] text-xs font-semibold text-[#0F172A]"
+                {/* Stated Requirements Payload */}
+                {inspectRfq.customNotes && (
+                  <div className="space-y-3 min-w-0 max-w-full">
+                    <div className="flex items-center justify-between flex-wrap gap-2">
+                      <span className="font-bold text-[#0F172A] block text-xs tracking-wide uppercase font-mono">
+                        Customer Technical Requirements
+                      </span>
+                      {parsedNotes && (
+                        <button
+                          type="button"
+                          onClick={() => setShowRawJson(!showRawJson)}
+                          className="inline-flex items-center gap-1 text-[11px] font-mono text-[#059669] hover:underline"
+                        >
+                          <Code className="w-3.5 h-3.5" />
+                          {showRawJson ? 'Hide Raw JSON' : 'View Raw JSON'}
+                          {showRawJson ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Structured Parameter Cards when JSON is available */}
+                    {parsedNotes ? (
+                      <div className="space-y-3 min-w-0 max-w-full">
+                        {/* Category Badges if any */}
+                        {categoriesList.length > 0 && (
+                          <div className="p-3 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] flex flex-wrap items-center gap-2 min-w-0">
+                            <span className="text-[10px] font-bold text-[#64748B] uppercase font-mono flex items-center gap-1">
+                              <Layers className="w-3 h-3 text-[#059669]" />
+                              Categories:
+                            </span>
+                            {categoriesList.map((catName: string, cIdx: number) => (
+                              <span
+                                key={cIdx}
+                                className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#ECFDF5] text-[#065F46] border border-[#A7F3D0] break-words"
+                              >
+                                {catName}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Technical Parameters Grid */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 min-w-0 max-w-full">
+                          {parsedNotes.targetVoltage && (
+                            <div className="p-3 rounded-xl bg-white border border-[#CBD5E1] min-w-0">
+                              <span className="text-[10px] font-mono font-bold text-[#64748B] uppercase block mb-0.5">
+                                Target Voltage
+                              </span>
+                              <span className="font-mono font-bold text-xs text-[#0F172A] break-words block">
+                                {parsedNotes.targetVoltage}
+                              </span>
+                            </div>
+                          )}
+
+                          {parsedNotes.targetCapacity && (
+                            <div className="p-3 rounded-xl bg-white border border-[#CBD5E1] min-w-0">
+                              <span className="text-[10px] font-mono font-bold text-[#64748B] uppercase block mb-0.5">
+                                Target Capacity
+                              </span>
+                              <span className="font-mono font-bold text-xs text-[#0F172A] break-words block">
+                                {parsedNotes.targetCapacity}
+                              </span>
+                            </div>
+                          )}
+
+                          {parsedNotes.continuousCurrent && (
+                            <div className="p-3 rounded-xl bg-white border border-[#CBD5E1] min-w-0">
+                              <span className="text-[10px] font-mono font-bold text-[#64748B] uppercase block mb-0.5">
+                                Continuous Current
+                              </span>
+                              <span className="font-mono text-xs text-[#0F172A] break-words block">
+                                {parsedNotes.continuousCurrent}
+                              </span>
+                            </div>
+                          )}
+
+                          {parsedNotes.peakCurrent && (
+                            <div className="p-3 rounded-xl bg-white border border-[#CBD5E1] min-w-0">
+                              <span className="text-[10px] font-mono font-bold text-[#64748B] uppercase block mb-0.5">
+                                Peak Current
+                              </span>
+                              <span className="font-mono text-xs text-[#0F172A] break-words block">
+                                {parsedNotes.peakCurrent}
+                              </span>
+                            </div>
+                          )}
+
+                          {parsedNotes.dimensionEnvelope && (
+                            <div className="p-3 rounded-xl bg-white border border-[#CBD5E1] min-w-0">
+                              <span className="text-[10px] font-mono font-bold text-[#64748B] uppercase block mb-0.5">
+                                Physical Envelope / Dimensions
+                              </span>
+                              <span className="font-mono text-xs text-[#0F172A] break-words block">
+                                {parsedNotes.dimensionEnvelope}
+                              </span>
+                            </div>
+                          )}
+
+                          {parsedNotes.chemistryPreference && (
+                            <div className="p-3 rounded-xl bg-white border border-[#CBD5E1] min-w-0">
+                              <span className="text-[10px] font-mono font-bold text-[#64748B] uppercase block mb-0.5">
+                                Chemistry Preference
+                              </span>
+                              <span className="font-mono font-bold text-xs text-[#059669] break-words block">
+                                {parsedNotes.chemistryPreference}
+                              </span>
+                            </div>
+                          )}
+
+                          {parsedNotes.bmsProtocol && (
+                            <div className="p-3 rounded-xl bg-white border border-[#CBD5E1] min-w-0 sm:col-span-2 lg:col-span-3">
+                              <span className="text-[10px] font-mono font-bold text-[#64748B] uppercase block mb-0.5">
+                                BMS &amp; Communication Protocol
+                              </span>
+                              <span className="font-mono text-xs text-[#0F172A] break-words block">
+                                {parsedNotes.bmsProtocol}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Customer Stated Notes / Scope */}
+                        {parsedNotes.userNotes && (
+                          <div className="p-3.5 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] space-y-1 min-w-0 max-w-full">
+                            <span className="text-[10px] font-mono font-bold uppercase text-[#64748B] block">
+                              Customer Project Notes &amp; Special Requirements:
+                            </span>
+                            <p className="text-xs text-[#334155] whitespace-pre-wrap break-words leading-relaxed">
+                              {parsedNotes.userNotes}
+                            </p>
+                          </div>
+                        )}
+
+                        {/* Optional Collapsible Raw JSON Code Block */}
+                        {showRawJson && (
+                          <div className="p-3 rounded-xl bg-[#0F172A] border border-[#334155] overflow-hidden min-w-0 max-w-full">
+                            <span className="text-[10px] font-mono text-[#94A3B8] block mb-1">
+                              Raw JSON Payload:
+                            </span>
+                            <pre className="font-mono text-[11px] text-[#A7F3D0] whitespace-pre-wrap break-words max-w-full overflow-x-auto">
+                              {JSON.stringify(parsedNotes, null, 2)}
+                            </pre>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      /* Plain Text Fallback */
+                      <div className="p-3.5 rounded-xl bg-white border border-[#CBD5E1] min-w-0 max-w-full overflow-hidden">
+                        <pre className="font-mono text-[11px] text-[#334155] whitespace-pre-wrap break-words leading-relaxed max-w-full overflow-x-auto">
+                          {inspectRfq.customNotes}
+                        </pre>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Status Update & Internal Notes (Green Update Section) */}
+                <div className="p-4 sm:p-5 rounded-2xl bg-[#ECFDF5] border border-[#A7F3D0] space-y-4 min-w-0 max-w-full box-border">
+                  <div className="flex items-center justify-between flex-wrap gap-2">
+                    <span className="font-bold text-[#065F46] block text-xs tracking-wide">
+                      Commercial Status &amp; Internal Notes
+                    </span>
+                    <span className="px-2.5 py-0.5 rounded-md font-mono text-[10px] font-bold bg-white text-[#065F46] border border-[#A7F3D0]">
+                      Current: {inspectRfq.status}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 min-w-0">
+                    <div className="min-w-0">
+                      <label className="text-[11px] font-bold text-[#064E3B] block mb-1">
+                        Update Pipeline Status
+                      </label>
+                      <select
+                        value={modalStatus}
+                        onChange={(e) => setModalStatus(e.target.value)}
+                        className="w-full max-w-full px-3 py-2 rounded-xl bg-white border border-[#A7F3D0] text-xs font-semibold text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#059669] box-border"
+                      >
+                        <option value="NEW">NEW (Fresh Intake)</option>
+                        <option value="UNDER_REVIEW">UNDER_REVIEW (Engineering Scoping)</option>
+                        <option value="QUOTATION_SENT">QUOTATION_SENT (Commercial Proposal Dispatched)</option>
+                        <option value="IN_NEGOTIATION">IN_NEGOTIATION (Terms Discussion)</option>
+                        <option value="CLOSED_WON">CLOSED_WON (Order Confirmed)</option>
+                        <option value="CLOSED_LOST">CLOSED_LOST (Cancelled / Incompatible)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="min-w-0">
+                    <label className="text-[11px] font-bold text-[#064E3B] block mb-1">
+                      Internal Sales &amp; Engineering Notes
+                    </label>
+                    <textarea
+                      rows={3}
+                      placeholder="Log pricing notes, pack configuration discussions, quotation revisions, or customer updates..."
+                      value={modalNotes}
+                      onChange={(e) => setModalNotes(e.target.value)}
+                      className="w-full max-w-full px-3 py-2 rounded-xl bg-white border border-[#A7F3D0] text-xs text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#059669] box-border resize-y"
+                    />
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-1 border-t border-[#A7F3D0]/60 min-w-0 max-w-full">
+                    <span className="text-[10px] text-[#065F46] font-mono">
+                      Changes are recorded in the audit log upon saving.
+                    </span>
+                    <Button
+                      onClick={handleUpdateRfqStatus}
+                      variant="primary"
+                      size="sm"
+                      disabled={savingStatus}
+                      icon={<Save className="w-3.5 h-3.5" />}
+                      className="w-full sm:w-auto justify-center flex-shrink-0"
                     >
-                      <option value="NEW">NEW</option>
-                      <option value="UNDER_REVIEW">UNDER_REVIEW</option>
-                      <option value="QUOTATION_SENT">QUOTATION_SENT</option>
-                      <option value="IN_NEGOTIATION">IN_NEGOTIATION</option>
-                      <option value="CLOSED_WON">CLOSED_WON</option>
-                      <option value="CLOSED_LOST">CLOSED_LOST</option>
-                    </select>
+                      {savingStatus ? 'Saving...' : 'Update RFQ Record'}
+                    </Button>
                   </div>
-                </div>
-
-                <div>
-                  <label className="text-[11px] font-bold text-[#064E3B] block mb-1">Internal Sales Notes</label>
-                  <textarea
-                    rows={3}
-                    placeholder="Log pricing notes, quotation revisions, or customer discussions..."
-                    value={modalNotes}
-                    onChange={(e) => setModalNotes(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-white border border-[#A7F3D0] text-xs text-[#0F172A] focus:outline-none"
-                  />
-                </div>
-
-                <div className="flex justify-end">
-                  <Button
-                    onClick={handleUpdateRfqStatus}
-                    variant="primary"
-                    size="sm"
-                    disabled={savingStatus}
-                    icon={<Save className="w-3.5 h-3.5" />}
-                  >
-                    {savingStatus ? 'Saving...' : 'Update RFQ Record'}
-                  </Button>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* OEM Inspection Modal */}
       {inspectOem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm overflow-y-auto">
-          <div className="bg-white rounded-3xl border border-[#E2E8F0] shadow-2xl max-w-3xl w-full max-h-[90vh] flex flex-col overflow-hidden my-6">
-            <div className="p-6 border-b border-[#E2E8F0] flex items-center justify-between bg-[#F8FAFC]">
-              <div>
-                <span className="text-[10px] font-mono font-bold uppercase text-[#0284C7]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/50 backdrop-blur-xs overflow-y-auto overflow-x-hidden">
+          <div className="bg-white rounded-3xl border border-[#E2E8F0] shadow-2xl w-full max-w-[min(900px,calc(100vw-24px))] sm:max-w-[min(900px,calc(100vw-32px))] max-h-[90vh] sm:max-h-[85vh] flex flex-col overflow-hidden my-auto min-w-0 box-border">
+            {/* Modal Header */}
+            <div className="p-4 sm:p-6 border-b border-[#E2E8F0] flex items-center justify-between bg-[#F8FAFC] flex-shrink-0 min-w-0">
+              <div className="min-w-0 pr-3">
+                <span className="text-[10px] font-mono font-bold uppercase text-[#0284C7] block tracking-wider">
                   OEM Configurator Engineering Intake
                 </span>
-                <h2 className="text-lg font-bold text-[#0F172A]">{inspectOem.enquiryNumber}</h2>
+                <h2 className="text-lg sm:text-xl font-bold text-[#0F172A] truncate">
+                  {inspectOem.enquiryNumber}
+                </h2>
               </div>
               <button
                 onClick={() => setInspectOem(null)}
-                className="p-2 rounded-xl hover:bg-white text-[#64748B]"
+                className="p-2 rounded-xl hover:bg-white text-[#64748B] hover:text-[#0F172A] transition-colors flex-shrink-0 border border-transparent hover:border-[#CBD5E1]"
+                aria-label="Close modal"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="p-6 overflow-y-auto space-y-5 text-xs">
+            {/* Modal Scrollable Body */}
+            <div className="p-4 sm:p-6 overflow-y-auto overflow-x-hidden space-y-5 text-xs flex-1 min-w-0 max-w-full">
               {/* Company Info */}
-              <div className="p-4 rounded-2xl bg-[#F8FAFC] border border-[#E2E8F0] grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono">
-                <div>
-                  <span className="text-[#64748B] block text-[10px] uppercase font-bold">Company</span>
-                  <span className="text-[#0F172A] font-bold text-xs">{inspectOem.companyName}</span>
+              <div className="p-4 rounded-2xl bg-[#F8FAFC] border border-[#E2E8F0] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 font-mono min-w-0 max-w-full">
+                <div className="min-w-0">
+                  <span className="text-[#64748B] block text-[10px] uppercase font-bold tracking-wider">Company</span>
+                  <span className="text-[#0F172A] font-bold text-xs break-words block">{inspectOem.companyName}</span>
                 </div>
-                <div>
-                  <span className="text-[#64748B] block text-[10px] uppercase font-bold">Contact</span>
-                  <span className="text-[#0F172A] font-bold text-xs">{inspectOem.contactPerson}</span>
+                <div className="min-w-0">
+                  <span className="text-[#64748B] block text-[10px] uppercase font-bold tracking-wider">Contact</span>
+                  <span className="text-[#0F172A] font-bold text-xs break-words block">{inspectOem.contactPerson}</span>
                 </div>
-                <div>
-                  <span className="text-[#64748B] block text-[10px] uppercase font-bold">Email</span>
-                  <span className="text-[#0F172A] truncate block">{inspectOem.email}</span>
+                <div className="min-w-0">
+                  <span className="text-[#64748B] block text-[10px] uppercase font-bold tracking-wider">Email</span>
+                  <span className="text-[#0F172A] break-all block">{inspectOem.email}</span>
                 </div>
-                <div>
-                  <span className="text-[#64748B] block text-[10px] uppercase font-bold">Phone</span>
-                  <span className="text-[#0F172A]">{inspectOem.phone}</span>
+                <div className="min-w-0">
+                  <span className="text-[#64748B] block text-[10px] uppercase font-bold tracking-wider">Phone</span>
+                  <span className="text-[#0F172A] break-words block">{inspectOem.phone}</span>
                 </div>
               </div>
 
               {/* Requirement Sections */}
-              <div className="space-y-3">
-                <div className="p-3.5 rounded-xl bg-white border border-[#CBD5E1]">
+              <div className="space-y-3 min-w-0 max-w-full">
+                <div className="p-3.5 rounded-xl bg-white border border-[#CBD5E1] min-w-0 max-w-full">
                   <span className="font-bold text-[#0284C7] font-mono block mb-1">
                     Application: {inspectOem.applicationType}
                   </span>
                   {inspectOem.applicationDetail && (
-                    <p className="text-[#64748B]">{inspectOem.applicationDetail}</p>
+                    <p className="text-[#64748B] break-words leading-relaxed">{inspectOem.applicationDetail}</p>
                   )}
                 </div>
 
                 {inspectOem.electricalRequirements && (
-                  <div className="p-3.5 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0]">
+                  <div className="p-3.5 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] min-w-0 max-w-full">
                     <span className="font-bold text-[#0F172A] font-mono block mb-1">
                       ⚡ Electrical Parameters:
                     </span>
-                    <pre className="font-mono text-[11px] text-[#334155] whitespace-pre-wrap">
+                    <pre className="font-mono text-[11px] text-[#334155] whitespace-pre-wrap break-words max-w-full overflow-x-auto">
                       {inspectOem.electricalRequirements}
                     </pre>
                   </div>
                 )}
 
                 {inspectOem.mechanicalRequirements && (
-                  <div className="p-3.5 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0]">
+                  <div className="p-3.5 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] min-w-0 max-w-full">
                     <span className="font-bold text-[#0F172A] font-mono block mb-1">
                       📐 Mechanical Envelope &amp; Mountings:
                     </span>
-                    <pre className="font-mono text-[11px] text-[#334155] whitespace-pre-wrap">
+                    <pre className="font-mono text-[11px] text-[#334155] whitespace-pre-wrap break-words max-w-full overflow-x-auto">
                       {inspectOem.mechanicalRequirements}
                     </pre>
                   </div>
                 )}
 
                 {inspectOem.attachmentMetadata && (
-                  <div className="p-3.5 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0]">
+                  <div className="p-3.5 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] min-w-0 max-w-full">
                     <span className="font-bold text-[#0F172A] font-mono block mb-1">
                       📎 Uploaded Attachments Metadata:
                     </span>
-                    <pre className="font-mono text-[11px] text-[#334155] whitespace-pre-wrap">
+                    <pre className="font-mono text-[11px] text-[#334155] whitespace-pre-wrap break-words max-w-full overflow-x-auto">
                       {inspectOem.attachmentMetadata}
                     </pre>
                   </div>
@@ -691,40 +900,59 @@ function EnquiriesContent() {
               </div>
 
               {/* Status Update & Notes */}
-              <div className="p-4 rounded-2xl bg-[#F0F9FF] border border-[#BAE6FD] space-y-3">
-                <span className="font-bold text-[#0369A1] block">Engineering Review Status</span>
-                <div>
-                  <select
-                    value={modalStatus}
-                    onChange={(e) => setModalStatus(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-white border border-[#BAE6FD] text-xs font-semibold text-[#0F172A]"
-                  >
-                    <option value="NEW">NEW</option>
-                    <option value="UNDER_REVIEW">UNDER_REVIEW</option>
-                    <option value="ENGINEERING_REVIEW">ENGINEERING_REVIEW</option>
-                    <option value="QUOTATION">QUOTATION</option>
-                    <option value="CLOSED">CLOSED</option>
-                  </select>
+              <div className="p-4 sm:p-5 rounded-2xl bg-[#F0F9FF] border border-[#BAE6FD] space-y-4 min-w-0 max-w-full box-border">
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <span className="font-bold text-[#0369A1] block text-xs tracking-wide">
+                    Engineering Review Status
+                  </span>
+                  <span className="px-2.5 py-0.5 rounded-md font-mono text-[10px] font-bold bg-white text-[#0369A1] border border-[#BAE6FD]">
+                    Current: {inspectOem.status}
+                  </span>
                 </div>
 
-                <div>
-                  <label className="text-[11px] font-bold text-[#0369A1] block mb-1">Internal Notes</label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 min-w-0">
+                  <div className="min-w-0">
+                    <label className="text-[11px] font-bold text-[#0369A1] block mb-1">
+                      Update Review Status
+                    </label>
+                    <select
+                      value={modalStatus}
+                      onChange={(e) => setModalStatus(e.target.value)}
+                      className="w-full max-w-full px-3 py-2 rounded-xl bg-white border border-[#BAE6FD] text-xs font-semibold text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#0284C7] box-border"
+                    >
+                      <option value="NEW">NEW</option>
+                      <option value="UNDER_REVIEW">UNDER_REVIEW</option>
+                      <option value="ENGINEERING_REVIEW">ENGINEERING_REVIEW</option>
+                      <option value="QUOTATION">QUOTATION</option>
+                      <option value="CLOSED">CLOSED</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="min-w-0">
+                  <label className="text-[11px] font-bold text-[#0369A1] block mb-1">
+                    Internal Notes &amp; Engineering Scoping
+                  </label>
                   <textarea
                     rows={3}
                     placeholder="Log technical scoping notes, pack sizing simulations, or client feedback..."
                     value={modalNotes}
                     onChange={(e) => setModalNotes(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-white border border-[#BAE6FD] text-xs text-[#0F172A] focus:outline-none"
+                    className="w-full max-w-full px-3 py-2 rounded-xl bg-white border border-[#BAE6FD] text-xs text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#0284C7] box-border resize-y"
                   />
                 </div>
 
-                <div className="flex justify-end">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-1 border-t border-[#BAE6FD]/60 min-w-0 max-w-full">
+                  <span className="text-[10px] text-[#0369A1] font-mono">
+                    Changes are saved to the engineering review queue.
+                  </span>
                   <Button
                     onClick={handleUpdateOemStatus}
                     variant="primary"
                     size="sm"
                     disabled={savingStatus}
                     icon={<Save className="w-3.5 h-3.5" />}
+                    className="w-full sm:w-auto justify-center flex-shrink-0"
                   >
                     {savingStatus ? 'Saving...' : 'Update OEM Record'}
                   </Button>
@@ -734,6 +962,7 @@ function EnquiriesContent() {
           </div>
         </div>
       )}
+
     </div>
   );
 }
