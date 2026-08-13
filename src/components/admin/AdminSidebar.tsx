@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard,
   Layers,
@@ -41,10 +41,8 @@ const NAV_ITEMS = [
   { label: 'Change Password', href: '/admin/change-password', icon: KeyRound },
 ];
 
-
 export default function AdminSidebar({ user, onCloseMobile }: SidebarProps) {
   const pathname = usePathname();
-  const router = useRouter();
 
   const handleLogout = async () => {
     try {
@@ -59,13 +57,13 @@ export default function AdminSidebar({ user, onCloseMobile }: SidebarProps) {
     href === '/admin' ? pathname === '/admin' : pathname.startsWith(href);
 
   return (
-    <aside className="w-64 bg-white border-r border-[#E2E8F0] flex flex-col h-full select-none">
+    <aside className="w-64 bg-[#070A0E] border-r border-[#1E2633] flex flex-col h-full select-none">
       {/* Header */}
-      <div className="p-5 border-b border-[#E2E8F0] flex items-center justify-between">
+      <div className="p-5 border-b border-[#1E2633] flex items-center justify-between">
         <Link href="/admin" className="flex items-center gap-2">
-          <div className="w-36 h-9 relative">
+          <div className="w-32 sm:w-36 h-13 sm:h-14 relative">
             <Image
-              src="/assets/logo/mehar-logo.svg"
+              src="/assets/logo/mehar-logo.png"
               alt="MEHAR Admin"
               fill
               className="object-contain object-left"
@@ -76,7 +74,7 @@ export default function AdminSidebar({ user, onCloseMobile }: SidebarProps) {
         {onCloseMobile && (
           <button
             onClick={onCloseMobile}
-            className="p-1 rounded-lg hover:bg-[#F8FAFC] text-[#64748B] md:hidden"
+            className="p-1 rounded-lg hover:bg-white/[0.04] text-[#A3AAB5] md:hidden"
             aria-label="Close Sidebar"
           >
             <X className="w-5 h-5" />
@@ -86,7 +84,7 @@ export default function AdminSidebar({ user, onCloseMobile }: SidebarProps) {
 
       {/* Navigation Links */}
       <div className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-        <p className="px-3 text-[10px] font-mono font-bold uppercase tracking-wider text-[#94A3B8] mb-2">
+        <p className="px-3 text-[10px] font-mono font-bold uppercase tracking-wider text-[#64748B] mb-2">
           Administrative Modules
         </p>
 
@@ -99,11 +97,11 @@ export default function AdminSidebar({ user, onCloseMobile }: SidebarProps) {
               onClick={onCloseMobile}
               className={`flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-colors ${
                 active
-                  ? 'bg-[#ECFDF5] text-[#059669] border border-[#A7F3D0]'
-                  : 'text-[#334155] hover:bg-[#F8FAFC] hover:text-[#059669]'
+                  ? 'bg-[#39D353]/10 text-[#39D353] border border-[#39D353]/30 shadow-[0_0_12px_rgba(57,211,83,0.15)]'
+                  : 'text-[#A3AAB5] hover:bg-white/[0.04] hover:text-[#E6EAF0]'
               }`}
             >
-              <item.icon className={`w-4 h-4 shrink-0 ${active ? 'text-[#059669]' : 'text-[#64748B]'}`} />
+              <item.icon className={`w-4 h-4 shrink-0 ${active ? 'text-[#39D353]' : 'text-[#64748B]'}`} />
               <span>{item.label}</span>
             </Link>
           );
@@ -111,25 +109,25 @@ export default function AdminSidebar({ user, onCloseMobile }: SidebarProps) {
       </div>
 
       {/* Admin User Info & Logout */}
-      <div className="p-4 border-t border-[#E2E8F0] space-y-3 bg-[#F8FAFC]">
+      <div className="p-4 border-t border-[#1E2633] space-y-3 bg-[#0B0F14]">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-full bg-[#ECFDF5] border border-[#A7F3D0] flex items-center justify-center font-bold text-xs text-[#059669] shrink-0">
+          <div className="w-8 h-8 rounded-full bg-[#161C24] border border-[#39D353]/30 flex items-center justify-center font-bold text-xs text-[#39D353] shrink-0">
             {user?.name ? user.name[0].toUpperCase() : 'A'}
           </div>
           <div className="overflow-hidden">
-            <p className="text-xs font-bold text-[#0F172A] truncate">{user?.name || 'Administrator'}</p>
+            <p className="text-xs font-bold text-[#E6EAF0] truncate">{user?.name || 'Administrator'}</p>
             <p className="text-[10px] font-mono text-[#64748B] truncate">{user?.email || 'admin'}</p>
           </div>
         </div>
 
-        <div className="pt-2 flex items-center justify-between border-t border-[#E2E8F0]">
-          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#FEFCE8] text-[#854D0E] border border-[#FEF08A]">
+        <div className="pt-2 flex items-center justify-between border-t border-[#1E2633]">
+          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30">
             {user?.role || 'SUPER_ADMIN'}
           </span>
 
           <button
             onClick={handleLogout}
-            className="flex items-center gap-1 text-xs font-semibold text-[#DC2626] hover:text-[#991B1B] transition-colors"
+            className="flex items-center gap-1 text-xs font-semibold text-red-400 hover:text-red-300 transition-colors"
           >
             <LogOut className="w-3.5 h-3.5" />
             <span>Logout</span>

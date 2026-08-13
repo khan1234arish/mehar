@@ -105,7 +105,7 @@ async function testAll() {
     headers: { ...authHeaders, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       key: 'product_default',
-      imageUrl: '/assets/logo/mehar-symbol.svg',
+      imageUrl: '/assets/logo/mehar-logo.png',
       altText: 'MEHAR Verified Placeholder',
       description: 'Default placeholder for batteries.',
       isActive: true

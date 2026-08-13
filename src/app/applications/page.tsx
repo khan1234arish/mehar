@@ -2,7 +2,6 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { COMPANY_INFO } from '@/data/companyInfo';
-import SectionHeading from '@/components/ui/SectionHeading';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
 import { getSitePlaceholderImage } from '@/lib/siteImages';
@@ -198,33 +197,34 @@ export default async function ApplicationsPage() {
   ];
 
   return (
-    <div className="py-12 space-y-16 bg-white text-[#0F172A]">
+    <div className="py-12 space-y-16 bg-[#0B0F14] text-[#E6EAF0]">
       {/* Header */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="p-8 sm:p-12 rounded-3xl bg-[#F8FAFC] border border-[#E2E8F0]">
-          <div className="max-w-3xl space-y-4">
-            <Badge variant="green">Target Sectors</Badge>
-            <h1 className="text-3xl sm:text-5xl font-extrabold text-[#0F172A] tracking-tight">
+      <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
+        <div className="p-8 sm:p-12 rounded-3xl bg-[#11161D] border border-[#1E2633] shadow-xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-80 h-80 bg-[#00A3FF]/10 rounded-full blur-[120px] pointer-events-none" />
+          <div className="max-w-3xl space-y-4 relative z-10">
+            <Badge variant="blue">Target Sectors</Badge>
+            <h1 className="text-3xl sm:text-5xl font-extrabold text-[#E6EAF0] tracking-tight">
               Applications &amp; Industries
             </h1>
-            <p className="text-sm sm:text-base text-[#475569] leading-relaxed">
-              Discover how <strong className="text-[#0F172A]">{COMPANY_INFO.brandName}</strong> battery solutions, manufactured by <strong className="text-[#0F172A]">{COMPANY_INFO.parentCompanyName}</strong>, power key commercial sectors across India. Every sector visual is independently configurable from the Admin CMS.
+            <p className="text-sm sm:text-base text-[#A3AAB5] leading-relaxed">
+              Discover how <strong className="text-[#E6EAF0]">{COMPANY_INFO.brandName}</strong> battery solutions, manufactured by <strong className="text-[#E6EAF0]">{COMPANY_INFO.parentCompanyName}</strong>, power key commercial sectors across India. Every sector visual is independently configurable from the Admin CMS.
             </p>
           </div>
         </div>
       </div>
 
       {/* Applications Grid */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {applications.map((app) => (
             <div
               key={app.id}
-              className="bg-white border border-[#E2E8F0] hover:border-[#059669] hover:shadow-md transition-all rounded-2xl p-7 flex flex-col justify-between group"
+              className="bg-[#11161D] border border-[#1E2633] hover:border-[#00A3FF]/50 hover:shadow-[0_0_25px_rgba(0,163,255,0.12)] transition-all duration-300 rounded-2xl p-7 flex flex-col justify-between group"
             >
               <div className="space-y-4">
                 {/* Visual Header Box */}
-                <div className="relative h-48 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] overflow-hidden flex items-center justify-center p-3 group-hover:border-[#A7F3D0] transition-colors">
+                <div className="relative h-48 rounded-xl bg-[#0B0F14] border border-[#1E2633] overflow-hidden flex items-center justify-center p-3 group-hover:border-[#00A3FF]/40 transition-colors">
                   <Image
                     src={app.image}
                     alt={app.altText || app.title}
@@ -237,32 +237,32 @@ export default async function ApplicationsPage() {
                 </div>
 
                 <div className="flex items-center gap-3 pt-2">
-                  <div className="w-10 h-10 rounded-xl bg-[#ECFDF5] border border-[#A7F3D0] flex items-center justify-center text-[#059669] shrink-0">
+                  <div className="w-10 h-10 rounded-xl bg-[#00A3FF]/10 border border-[#00A3FF]/25 flex items-center justify-center text-[#00A3FF] shrink-0">
                     <app.icon className="w-5 h-5" />
                   </div>
-                  <h3 className="text-lg font-bold text-[#0F172A] leading-snug">{app.title}</h3>
+                  <h3 className="text-lg font-bold text-[#E6EAF0] leading-snug">{app.title}</h3>
                 </div>
-                <p className="text-xs text-[#64748B] leading-relaxed">
+                <p className="text-xs text-[#A3AAB5] leading-relaxed">
                   {app.description}
                 </p>
 
-                <div className="pt-3 border-t border-[#E2E8F0] space-y-2">
-                  <span className="text-[11px] font-mono text-[#64748B] block font-bold uppercase tracking-wider">
+                <div className="pt-3 border-t border-[#1E2633] space-y-2">
+                  <span className="text-[11px] font-mono text-[#A3AAB5] block font-bold uppercase tracking-wider">
                     Key Technical Demands:
                   </span>
                   {app.points.map((point, idx) => (
-                    <div key={idx} className="flex items-start gap-2 text-xs text-[#334155]">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#059669] mt-1.5 shrink-0"></span>
+                    <div key={idx} className="flex items-start gap-2 text-xs text-[#E6EAF0]">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#39D353] mt-1.5 shrink-0"></span>
                       <span>{point}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="pt-6 mt-6 border-t border-[#E2E8F0] flex items-center justify-between">
+              <div className="pt-6 mt-6 border-t border-[#1E2633] flex items-center justify-between">
                 <Link
                   href={`/products/${app.categorySlug}`}
-                  className="text-xs font-bold text-[#059669] hover:underline flex items-center gap-1"
+                  className="text-xs font-bold text-[#00A3FF] hover:underline flex items-center gap-1"
                 >
                   View Category <ArrowRight className="w-3.5 h-3.5" />
                 </Link>

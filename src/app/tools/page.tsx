@@ -44,31 +44,31 @@ function CalcCard({
   const [open, setOpen] = useState(defaultOpen);
 
   return (
-    <section id={id} className="bg-white rounded-2xl border border-[#E2E8F0] overflow-hidden">
+    <section id={id} className="bg-[#11161D] rounded-2xl border border-[#1E2633] overflow-hidden shadow-xl">
       <button
         type="button"
-        className="w-full flex items-center justify-between px-5 py-4 hover:bg-[#F8FAFC] transition-colors"
+        className="w-full flex items-center justify-between px-5 py-4 hover:bg-white/[0.02] transition-colors"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
       >
         <div className="flex items-center gap-3 text-left">
-          <div className="w-9 h-9 rounded-xl bg-[#F0FDF4] border border-[#D1FAE5] flex items-center justify-center text-[#059669] flex-shrink-0">
+          <div className="w-9 h-9 rounded-xl bg-[#161C24] border border-[#39D353]/30 flex items-center justify-center text-[#39D353] flex-shrink-0 shadow-[0_0_10px_rgba(57,211,83,0.15)]">
             {icon}
           </div>
           <div>
-            <p className="text-sm font-bold text-[#0F172A]">{title}</p>
-            <p className="text-xs text-[#64748B]">{description}</p>
+            <p className="text-sm font-bold text-[#E6EAF0]">{title}</p>
+            <p className="text-xs text-[#A3AAB5]">{description}</p>
           </div>
         </div>
         {open ? (
-          <ChevronUp className="w-4 h-4 text-[#94A3B8] flex-shrink-0" />
+          <ChevronUp className="w-4 h-4 text-[#A3AAB5] flex-shrink-0" />
         ) : (
-          <ChevronDown className="w-4 h-4 text-[#94A3B8] flex-shrink-0" />
+          <ChevronDown className="w-4 h-4 text-[#A3AAB5] flex-shrink-0" />
         )}
       </button>
 
       {open && (
-        <div className="border-t border-[#E2E8F0] p-5">
+        <div className="border-t border-[#1E2633] p-5">
           {children}
         </div>
       )}
@@ -99,7 +99,7 @@ function CalcInput({
 }) {
   return (
     <div>
-      <label htmlFor={id} className="block text-xs font-bold text-[#0F172A] mb-1.5">
+      <label htmlFor={id} className="block text-xs font-bold text-[#E6EAF0] mb-1.5">
         {label}
       </label>
       <div className="flex gap-2">
@@ -110,10 +110,10 @@ function CalcInput({
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
           min={0}
-          className="flex-1 px-3.5 py-2.5 rounded-lg border border-[#CBD5E1] text-sm text-[#0F172A] bg-white focus:outline-none focus:border-[#059669] focus:ring-2 focus:ring-[#059669]/20"
+          className="flex-1 px-3.5 py-2.5 rounded-lg border border-[#1E2633] text-sm text-[#E6EAF0] placeholder-[#64748B] bg-[#161C24] focus:outline-none focus:border-[#39D353] focus:ring-2 focus:ring-[#39D353]/20"
         />
         {unit && !unitOptions && (
-          <span className="px-3.5 py-2.5 rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] text-xs font-semibold text-[#64748B]">
+          <span className="px-3.5 py-2.5 rounded-lg border border-[#1E2633] bg-[#161C24] text-xs font-semibold text-[#A3AAB5]">
             {unit}
           </span>
         )}
@@ -121,9 +121,9 @@ function CalcInput({
           <select
             value={unit}
             onChange={(e) => onUnitChange(e.target.value)}
-            className="px-2.5 py-2.5 rounded-lg border border-[#CBD5E1] text-xs text-[#0F172A] bg-white focus:outline-none focus:border-[#059669]"
+            className="px-2.5 py-2.5 rounded-lg border border-[#1E2633] text-xs text-[#E6EAF0] bg-[#161C24] focus:outline-none focus:border-[#39D353]"
           >
-            {unitOptions.map((u) => <option key={u} value={u}>{u}</option>)}
+            {unitOptions.map((u) => <option key={u} value={u} className="bg-[#161C24] text-[#E6EAF0]">{u}</option>)}
           </select>
         )}
       </div>
@@ -133,22 +133,22 @@ function CalcInput({
 
 function ResultBox({ label, value, unit, note }: { label: string; value: string; unit?: string; note?: string }) {
   return (
-    <div className="bg-[#F0FDF4] border border-[#A7F3D0] rounded-xl p-4">
-      <p className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider mb-1">{label}</p>
-      <p className="text-2xl font-bold text-[#059669]">
+    <div className="bg-[#161C24] border border-[#39D353]/30 rounded-xl p-4 shadow-[0_0_15px_rgba(57,211,83,0.1)]">
+      <p className="text-[10px] font-bold text-[#A3AAB5] uppercase tracking-wider mb-1">{label}</p>
+      <p className="text-2xl font-bold text-[#39D353]">
         {value}
-        {unit && <span className="text-base ml-1 font-semibold text-[#34D399]">{unit}</span>}
+        {unit && <span className="text-base ml-1 font-semibold text-[#39D353]/80">{unit}</span>}
       </p>
-      {note && <p className="text-[10px] text-[#047857] mt-1">{note}</p>}
+      {note && <p className="text-[10px] text-[#A3AAB5] mt-1">{note}</p>}
     </div>
   );
 }
 
 function EstimateDisclaimer() {
   return (
-    <div className="flex items-start gap-2 p-3 bg-[#FFFBEB] border border-[#FDE68A] rounded-xl mt-4">
-      <Info className="w-3.5 h-3.5 text-[#D97706] flex-shrink-0 mt-0.5" />
-      <p className="text-[10px] text-[#78350F] leading-relaxed">
+    <div className="flex items-start gap-2 p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl mt-4">
+      <Info className="w-3.5 h-3.5 text-amber-400 flex-shrink-0 mt-0.5" />
+      <p className="text-[10px] text-amber-200/90 leading-relaxed">
         <strong>General engineering estimate only.</strong> This calculator uses standard electrical formulas and does not account for temperature, battery ageing, load profile variation, or system losses. Results are not a MEHAR product specification or performance guarantee.
       </p>
     </div>
@@ -183,19 +183,19 @@ function EnergyCalculator() {
   return (
     <div className="space-y-5">
       {/* Mode tabs */}
-      <div className="flex gap-1 bg-[#F1F5F9] p-1 rounded-lg w-fit">
+      <div className="flex gap-1 bg-[#161C24] p-1 rounded-xl w-fit border border-[#1E2633]">
         <button
           onClick={() => setMode('vh_to_wh')}
-          className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
-            mode === 'vh_to_wh' ? 'bg-white shadow-sm text-[#059669]' : 'text-[#64748B]'
+          className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            mode === 'vh_to_wh' ? 'bg-[#39D353] text-[#0B0F14] font-bold shadow-sm' : 'text-[#A3AAB5] hover:text-[#E6EAF0]'
           }`}
         >
           V × Ah → Wh
         </button>
         <button
           onClick={() => setMode('wh_to_ah')}
-          className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
-            mode === 'wh_to_ah' ? 'bg-white shadow-sm text-[#059669]' : 'text-[#64748B]'
+          className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            mode === 'wh_to_ah' ? 'bg-[#39D353] text-[#0B0F14] font-bold shadow-sm' : 'text-[#A3AAB5] hover:text-[#E6EAF0]'
           }`}
         >
           Wh ÷ V → Ah
@@ -248,7 +248,6 @@ function RuntimeCalculator() {
     let loadW = load;
     if (loadUnit === 'kW') loadW = load * 1000;
     else if (loadUnit === 'A') {
-      // can't convert without voltage — show note
       return { hours: null, note: 'To convert Amps to Watts, enter load in W or kW instead.' };
     }
 
@@ -295,7 +294,7 @@ function RuntimeCalculator() {
       </div>
 
       {result?.note ? (
-        <div className="p-3 bg-[#FEF9C3] border border-[#FDE68A] rounded-xl text-xs text-[#78350F]">{result.note}</div>
+        <div className="p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl text-xs text-amber-300">{result.note}</div>
       ) : (
         <ResultBox
           label="Estimated Runtime"
@@ -329,7 +328,7 @@ function SeriesParallelCalculator() {
 
   return (
     <div className="space-y-5">
-      <p className="text-xs text-[#64748B]">
+      <p className="text-xs text-[#A3AAB5]">
         Enter individual cell parameters and the series/parallel configuration to calculate pack-level totals.
       </p>
 
@@ -405,57 +404,57 @@ function UnitConverter() {
     <div className="space-y-6">
       {/* Length */}
       <div>
-        <p className="text-xs font-bold text-[#059669] uppercase tracking-wider mb-3">Length</p>
+        <p className="text-xs font-bold text-[#39D353] uppercase tracking-wider mb-3 font-mono">Length</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <CalcInput id="calc-uc-mm" label="Millimetres" value={mm} onChange={setMm} unit="mm" />
-            <p className="text-xs text-[#64748B] mt-1.5">= <span className="font-bold text-[#0F172A]">{mmToIn}</span> inches</p>
+            <p className="text-xs text-[#A3AAB5] mt-1.5">= <span className="font-bold text-[#E6EAF0]">{mmToIn}</span> inches</p>
           </div>
           <div>
             <CalcInput id="calc-uc-in" label="Inches" value={inches} onChange={setInches} unit="in" />
-            <p className="text-xs text-[#64748B] mt-1.5">= <span className="font-bold text-[#0F172A]">{inToMm}</span> mm</p>
+            <p className="text-xs text-[#A3AAB5] mt-1.5">= <span className="font-bold text-[#E6EAF0]">{inToMm}</span> mm</p>
           </div>
         </div>
       </div>
 
       {/* Temperature */}
       <div>
-        <p className="text-xs font-bold text-[#059669] uppercase tracking-wider mb-3">Temperature</p>
+        <p className="text-xs font-bold text-[#39D353] uppercase tracking-wider mb-3 font-mono">Temperature</p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
           <div>
-            <label className="block text-xs font-bold text-[#0F172A] mb-1.5">From</label>
+            <label className="block text-xs font-bold text-[#E6EAF0] mb-1.5">From</label>
             <div className="flex gap-2">
               <input
                 id="calc-uc-temp"
                 type="number"
                 value={tempIn}
                 onChange={(e) => setTempIn(e.target.value)}
-                className="flex-1 px-3.5 py-2.5 rounded-lg border border-[#CBD5E1] text-sm bg-white focus:outline-none focus:border-[#059669]"
+                className="flex-1 px-3.5 py-2.5 rounded-lg border border-[#1E2633] text-sm text-[#E6EAF0] bg-[#161C24] focus:outline-none focus:border-[#39D353]"
               />
               <select
                 value={tempFromUnit}
                 onChange={(e) => setTempFromUnit(e.target.value)}
-                className="px-2.5 py-2.5 rounded-lg border border-[#CBD5E1] text-xs bg-white focus:outline-none focus:border-[#059669]"
+                className="px-2.5 py-2.5 rounded-lg border border-[#1E2633] text-xs text-[#E6EAF0] bg-[#161C24] focus:outline-none focus:border-[#39D353]"
               >
-                {['°C', '°F', 'K'].map((u) => <option key={u}>{u}</option>)}
+                {['°C', '°F', 'K'].map((u) => <option key={u} className="bg-[#161C24] text-[#E6EAF0]">{u}</option>)}
               </select>
             </div>
           </div>
           <div className="flex justify-center">
-            <ArrowLeftRight className="w-5 h-5 text-[#059669]" />
+            <ArrowLeftRight className="w-5 h-5 text-[#39D353]" />
           </div>
           <div>
-            <label className="block text-xs font-bold text-[#0F172A] mb-1.5">To</label>
+            <label className="block text-xs font-bold text-[#E6EAF0] mb-1.5">To</label>
             <div className="flex gap-2">
-              <div className="flex-1 px-3.5 py-2.5 rounded-lg border border-[#CBD5E1] bg-[#F8FAFC] text-sm font-bold text-[#0F172A]">
+              <div className="flex-1 px-3.5 py-2.5 rounded-lg border border-[#1E2633] bg-[#161C24] text-sm font-bold text-[#39D353]">
                 {convertTemp()}
               </div>
               <select
                 value={tempToUnit}
                 onChange={(e) => setTempToUnit(e.target.value)}
-                className="px-2.5 py-2.5 rounded-lg border border-[#CBD5E1] text-xs bg-white focus:outline-none focus:border-[#059669]"
+                className="px-2.5 py-2.5 rounded-lg border border-[#1E2633] text-xs text-[#E6EAF0] bg-[#161C24] focus:outline-none focus:border-[#39D353]"
               >
-                {['°F', '°C', 'K'].filter((u) => u !== tempFromUnit).map((u) => <option key={u}>{u}</option>)}
+                {['°F', '°C', 'K'].filter((u) => u !== tempFromUnit).map((u) => <option key={u} className="bg-[#161C24] text-[#E6EAF0]">{u}</option>)}
               </select>
             </div>
           </div>
@@ -464,19 +463,19 @@ function UnitConverter() {
 
       {/* Ah ↔ Wh */}
       <div>
-        <p className="text-xs font-bold text-[#059669] uppercase tracking-wider mb-3">Capacity ↔ Energy</p>
+        <p className="text-xs font-bold text-[#39D353] uppercase tracking-wider mb-3 font-mono">Capacity ↔ Energy</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="p-4 bg-[#F8FAFC] rounded-xl border border-[#E2E8F0] space-y-3">
-            <p className="text-xs font-semibold text-[#334155]">Ah → Wh</p>
+          <div className="p-4 bg-[#161C24] rounded-xl border border-[#1E2633] space-y-3">
+            <p className="text-xs font-semibold text-[#E6EAF0]">Ah → Wh</p>
             <CalcInput id="calc-uc-ah" label="Capacity (Ah)" value={ahIn} onChange={setAhIn} unit="Ah" />
             <CalcInput id="calc-uc-vah" label="Voltage (V)" value={voltForAh} onChange={setVoltForAh} unit="V" />
-            <p className="text-xs text-[#64748B]">= <span className="font-bold text-[#0F172A]">{calcAhToWh()}</span> Wh</p>
+            <p className="text-xs text-[#A3AAB5]">= <span className="font-bold text-[#39D353]">{calcAhToWh()}</span> Wh</p>
           </div>
-          <div className="p-4 bg-[#F8FAFC] rounded-xl border border-[#E2E8F0] space-y-3">
-            <p className="text-xs font-semibold text-[#334155]">Wh → Ah</p>
+          <div className="p-4 bg-[#161C24] rounded-xl border border-[#1E2633] space-y-3">
+            <p className="text-xs font-semibold text-[#E6EAF0]">Wh → Ah</p>
             <CalcInput id="calc-uc-wh" label="Energy (Wh)" value={ahToWh} onChange={setAhToWh} unit="Wh" />
             <CalcInput id="calc-uc-vwh" label="Voltage (V)" value={voltForWh} onChange={setVoltForWh} unit="V" />
-            <p className="text-xs text-[#64748B]">= <span className="font-bold text-[#0F172A]">{calcWhToAh()}</span> Ah</p>
+            <p className="text-xs text-[#A3AAB5]">= <span className="font-bold text-[#39D353]">{calcWhToAh()}</span> Ah</p>
           </div>
         </div>
       </div>
@@ -491,32 +490,32 @@ function UnitConverter() {
 
 export default function ToolsPage() {
   return (
-    <main className="min-h-screen bg-[#F8FAFC]">
+    <main className="min-h-screen bg-[#0B0F14] text-[#E6EAF0]">
       {/* Page header */}
-      <div className="bg-white border-b border-[#E2E8F0]">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6">
+      <div className="bg-[#11161D] border-b border-[#1E2633]">
+        <div className="max-w-5xl xl:max-w-[1240px] 2xl:max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-8">
           <div className="flex items-center gap-3 mb-1">
-            <Link href="/" className="text-[#64748B] hover:text-[#059669] transition-colors">
+            <Link href="/" className="text-[#A3AAB5] hover:text-[#39D353] transition-colors">
               <ArrowLeft className="w-4 h-4" />
             </Link>
-            <span className="text-[11px] text-[#94A3B8]">/</span>
-            <span className="text-[11px] font-medium text-[#059669]">Engineering Tools</span>
+            <span className="text-[11px] text-[#1E2633]">/</span>
+            <span className="text-[11px] font-medium text-[#39D353]">Engineering Tools</span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold text-[#0F172A]">Battery Engineering Calculators</h1>
-          <p className="text-sm text-[#475569] mt-1">
+          <h1 className="text-2xl sm:text-3xl font-bold text-[#E6EAF0]">Battery Engineering Calculators</h1>
+          <p className="text-sm sm:text-base text-[#A3AAB5] mt-1">
             General-purpose electrical engineering reference tools for battery system sizing and unit conversion.
           </p>
 
-          <div className="mt-3 flex items-start gap-2 p-3 bg-[#FFFBEB] border border-[#FDE68A] rounded-xl">
-            <Info className="w-3.5 h-3.5 text-[#D97706] flex-shrink-0 mt-0.5" />
-            <p className="text-[10px] text-[#78350F] leading-relaxed">
+          <div className="mt-4 flex items-start gap-2 p-3.5 bg-amber-500/10 border border-amber-500/30 rounded-xl">
+            <Info className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
+            <p className="text-xs text-amber-200/90 leading-relaxed">
               <strong>General engineering tools only.</strong> These calculators use standard electrical formulas and are provided for reference and preliminary sizing only. Results do not constitute a MEHAR product recommendation, specification, or engineering validation. Consult a qualified engineer for all critical applications.
             </p>
           </div>
         </div>
       </div>
 
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-4">
+      <div className="max-w-5xl xl:max-w-[1240px] 2xl:max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-8 space-y-6">
 
         <CalcCard
           id="energy-calculator"
@@ -556,21 +555,21 @@ export default function ToolsPage() {
         </CalcCard>
 
         {/* CTA */}
-        <div className="mt-6 p-5 bg-white rounded-2xl border border-[#E2E8F0] text-center">
-          <p className="text-sm font-bold text-[#0F172A] mb-1">Have a specific battery requirement?</p>
-          <p className="text-xs text-[#64748B] mb-4">
+        <div className="mt-6 p-6 bg-[#11161D] rounded-2xl border border-[#1E2633] text-center shadow-xl">
+          <p className="text-sm font-bold text-[#E6EAF0] mb-1">Have a specific battery requirement?</p>
+          <p className="text-xs text-[#A3AAB5] mb-4">
             Use the Battery Finder to scope your requirements or submit a formal RFQ.
           </p>
-          <div className="flex flex-col sm:flex-row gap-2 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/finder"
-              className="px-5 py-2.5 rounded-xl border border-[#059669] text-[#059669] text-sm font-bold hover:bg-[#F0FDF4] transition-colors"
+              className="px-5 py-2.5 rounded-xl border border-[#00A3FF] text-[#00A3FF] bg-[#00A3FF]/10 text-sm font-bold hover:bg-[#00A3FF]/20 transition-colors"
             >
               Battery Requirements Finder
             </Link>
             <Link
               href="/oem-custom-solutions"
-              className="px-5 py-2.5 rounded-xl bg-[#059669] text-white text-sm font-bold hover:bg-[#047857] transition-colors"
+              className="px-5 py-2.5 rounded-xl bg-[#39D353] text-[#0B0F14] text-sm font-bold hover:bg-[#2ec547] shadow-[0_0_15px_rgba(57,211,83,0.25)] transition-colors"
             >
               OEM / Custom Battery Enquiry
             </Link>

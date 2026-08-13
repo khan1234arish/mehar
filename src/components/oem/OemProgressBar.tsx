@@ -26,23 +26,23 @@ export default function OemProgressBar({ currentStep }: OemProgressBarProps) {
   const pct = Math.round(((currentStep - 1) / (OEM_STEPS.length - 1)) * 100);
 
   return (
-    <div className="bg-white border-b border-[#E2E8F0] px-4 sm:px-8 py-4">
+    <div className="bg-[#11161D] border-b border-[#1E2633] px-4 sm:px-8 py-4">
       {/* Percentage bar */}
       <div className="flex items-center justify-between mb-3">
-        <span className="text-xs font-bold text-[#059669]">
+        <span className="text-xs font-bold text-[#39D353]">
           Step {currentStep} of {OEM_STEPS.length}
-          <span className="ml-2 text-[#64748B] font-normal">— {OEM_STEPS[currentStep - 1]?.label}</span>
+          <span className="ml-2 text-[#A3AAB5] font-normal">— {OEM_STEPS[currentStep - 1]?.label}</span>
         </span>
-        <span className="text-xs text-[#94A3B8] font-mono">{pct}% complete</span>
+        <span className="text-xs text-[#64748B] font-mono">{pct}% complete</span>
       </div>
-      <div className="w-full h-1.5 rounded-full bg-[#F1F5F9] overflow-hidden mb-4">
+      <div className="w-full h-1.5 rounded-full bg-[#161C24] overflow-hidden mb-4">
         <div
-          className="h-full rounded-full bg-[#059669] transition-all duration-500"
+          className="h-full rounded-full bg-[#39D353] shadow-[0_0_8px_rgba(57,211,83,0.5)] transition-all duration-500"
           style={{ width: `${pct}%` }}
         />
       </div>
 
-      {/* Step dots — hidden on small screens, shown on md+ */}
+      {/* Step dots */}
       <div className="hidden md:flex items-start justify-between gap-1">
         {OEM_STEPS.map((step) => {
           const done = step.number < currentStep;
@@ -52,17 +52,17 @@ export default function OemProgressBar({ currentStep }: OemProgressBarProps) {
               <div
                 className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-[10px] font-bold border transition-colors ${
                   done
-                    ? 'bg-[#059669] border-[#059669] text-white'
+                    ? 'bg-[#39D353] border-[#39D353] text-[#0B0F14]'
                     : active
-                    ? 'bg-white border-[#059669] text-[#059669]'
-                    : 'bg-white border-[#CBD5E1] text-[#94A3B8]'
+                    ? 'bg-[#161C24] border-[#39D353] text-[#39D353] shadow-[0_0_8px_rgba(57,211,83,0.3)]'
+                    : 'bg-[#161C24] border-[#1E2633] text-[#64748B]'
                 }`}
               >
-                {done ? <Check className="w-3 h-3" /> : step.number}
+                {done ? <Check className="w-3 h-3 stroke-[3]" /> : step.number}
               </div>
               <span
                 className={`text-[9px] text-center leading-tight font-semibold truncate w-full text-center ${
-                  active ? 'text-[#059669]' : done ? 'text-[#64748B]' : 'text-[#94A3B8]'
+                  active ? 'text-[#39D353]' : done ? 'text-[#A3AAB5]' : 'text-[#64748B]'
                 }`}
               >
                 {step.shortLabel}

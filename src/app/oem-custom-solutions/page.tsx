@@ -157,16 +157,16 @@ function FieldLabel({
 }) {
   return (
     <div className="flex items-center flex-wrap gap-x-2 gap-y-0.5 mb-1.5">
-      <label className="text-xs font-bold text-[#0F172A]">
+      <label className="text-xs font-bold text-[#E6EAF0]">
         {children}
-        {required && <span className="text-[#DC2626] ml-0.5">*</span>}
+        {required && <span className="text-[#EF4444] ml-0.5">*</span>}
       </label>
       {isCustomerReq && (
-        <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-[#FFFBEB] border border-[#FDE68A] text-[#92400E]">
+        <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/30 text-amber-300">
           Customer Requirement
         </span>
       )}
-      {hint && <p className="w-full text-[10px] text-[#64748B] leading-tight">{hint}</p>}
+      {hint && <p className="w-full text-[10px] text-[#A3AAB5] leading-tight">{hint}</p>}
     </div>
   );
 }
@@ -197,13 +197,13 @@ function FormInput({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         disabled={disabled}
-        className={`w-full px-3.5 py-2.5 rounded-lg border text-sm text-[#0F172A] placeholder-[#94A3B8] bg-white focus:outline-none focus:ring-2 focus:ring-[#059669]/20 transition-colors ${
+        className={`w-full px-3.5 py-2.5 rounded-lg border text-sm text-[#E6EAF0] placeholder-[#64748B] bg-[#161C24] focus:outline-none focus:ring-2 focus:ring-[#39D353]/20 transition-colors ${
           error
-            ? 'border-[#DC2626] focus:border-[#DC2626]'
-            : 'border-[#CBD5E1] focus:border-[#059669]'
+            ? 'border-[#EF4444] focus:border-[#EF4444]'
+            : 'border-[#1E2633] focus:border-[#39D353]'
         } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
       />
-      {error && <p className="mt-1 text-[10px] text-[#DC2626] font-medium">{error}</p>}
+      {error && <p className="mt-1 text-[10px] text-[#EF4444] font-medium">{error}</p>}
     </div>
   );
 }
@@ -227,18 +227,18 @@ function FormSelect({
         id={id}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={`w-full px-3.5 py-2.5 rounded-lg border text-sm text-[#0F172A] bg-white focus:outline-none focus:ring-2 focus:ring-[#059669]/20 transition-colors ${
+        className={`w-full px-3.5 py-2.5 rounded-lg border text-sm text-[#E6EAF0] bg-[#161C24] focus:outline-none focus:ring-2 focus:ring-[#39D353]/20 transition-colors ${
           error
-            ? 'border-[#DC2626] focus:border-[#DC2626]'
-            : 'border-[#CBD5E1] focus:border-[#059669]'
+            ? 'border-[#EF4444] focus:border-[#EF4444]'
+            : 'border-[#1E2633] focus:border-[#39D353]'
         }`}
       >
-        <option value="">— Select —</option>
+        <option value="" className="bg-[#161C24] text-[#A3AAB5]">— Select —</option>
         {options.map((o) => (
-          <option key={o} value={o}>{o}</option>
+          <option key={o} value={o} className="bg-[#161C24] text-[#E6EAF0]">{o}</option>
         ))}
       </select>
-      {error && <p className="mt-1 text-[10px] text-[#DC2626] font-medium">{error}</p>}
+      {error && <p className="mt-1 text-[10px] text-[#EF4444] font-medium">{error}</p>}
     </div>
   );
 }
@@ -274,19 +274,19 @@ function UnitInput({
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
           min={0}
-          className={`flex-1 px-3.5 py-2.5 rounded-lg border text-sm text-[#0F172A] placeholder-[#94A3B8] bg-white focus:outline-none focus:ring-2 focus:ring-[#059669]/20 transition-colors ${
-            error ? 'border-[#DC2626]' : 'border-[#CBD5E1] focus:border-[#059669]'
+          className={`flex-1 px-3.5 py-2.5 rounded-lg border text-sm text-[#E6EAF0] placeholder-[#64748B] bg-[#161C24] focus:outline-none focus:ring-2 focus:ring-[#39D353]/20 transition-colors ${
+            error ? 'border-[#EF4444]' : 'border-[#1E2633] focus:border-[#39D353]'
           }`}
         />
         <select
           value={unitValue}
           onChange={(e) => onUnitChange(e.target.value)}
-          className="px-2.5 py-2.5 rounded-lg border border-[#CBD5E1] text-xs text-[#0F172A] bg-white focus:outline-none focus:border-[#059669]"
+          className="px-2.5 py-2.5 rounded-lg border border-[#1E2633] text-xs text-[#E6EAF0] bg-[#161C24] focus:outline-none focus:border-[#39D353]"
         >
-          {unitOptions.map((u) => <option key={u} value={u}>{u}</option>)}
+          {unitOptions.map((u) => <option key={u} value={u} className="bg-[#161C24] text-[#E6EAF0]">{u}</option>)}
         </select>
       </div>
-      {error && <p className="mt-1 text-[10px] text-[#DC2626] font-medium">{error}</p>}
+      {error && <p className="mt-1 text-[10px] text-[#EF4444] font-medium">{error}</p>}
     </div>
   );
 }
@@ -315,8 +315,8 @@ function CheckboxGroup({
             onClick={() => toggle(opt)}
             className={`px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all ${
               active
-                ? 'bg-[#ECFDF5] border-[#059669] text-[#065F46]'
-                : 'bg-white border-[#CBD5E1] text-[#334155] hover:border-[#059669] hover:bg-[#F0FDF4]'
+                ? 'bg-[#39D353]/10 border-[#39D353] text-[#39D353]'
+                : 'bg-[#161C24] border-[#1E2633] text-[#A3AAB5] hover:border-[#39D353]/50'
             }`}
           >
             {active ? '✓ ' : ''}{opt}
@@ -329,9 +329,9 @@ function CheckboxGroup({
 
 function SectionCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="bg-white rounded-xl border border-[#E2E8F0] overflow-hidden">
-      <div className="px-5 py-3 bg-[#F8FAFC] border-b border-[#E2E8F0]">
-        <h3 className="text-sm font-bold text-[#0F172A]">{title}</h3>
+    <div className="bg-[#11161D] rounded-xl border border-[#1E2633] overflow-hidden shadow-lg">
+      <div className="px-5 py-3 bg-[#0D1117] border-b border-[#1E2633]">
+        <h3 className="text-sm font-bold text-[#E6EAF0]">{title}</h3>
       </div>
       <div className="p-5 space-y-4">{children}</div>
     </div>
@@ -347,11 +347,11 @@ function ReviewRow({
 }) {
   const display = value && value.trim() ? value : '—';
   return (
-    <div className="flex justify-between items-start gap-4 py-1.5 border-b border-[#F1F5F9] last:border-0">
-      <span className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider whitespace-nowrap flex-shrink-0">
+    <div className="flex justify-between items-start gap-4 py-1.5 border-b border-[#1E2633] last:border-0">
+      <span className="text-[10px] font-bold text-[#A3AAB5] uppercase tracking-wider whitespace-nowrap flex-shrink-0">
         {label}
       </span>
-      <span className="text-xs text-[#0F172A] text-right font-medium">{display}</span>
+      <span className="text-xs text-[#E6EAF0] text-right font-medium">{display}</span>
     </div>
   );
 }
@@ -595,50 +595,50 @@ export default function OemCustomSolutionsPage() {
 
   if (submissionResult) {
     return (
-      <main className="min-h-screen bg-[#F8FAFC] py-12 px-4">
+      <main className="min-h-screen bg-[#0B0F14] text-[#E6EAF0] py-12 px-4">
         <div className="max-w-lg mx-auto">
-          <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm overflow-hidden">
-            <div className="p-6 bg-[#F0FDF4] border-b border-[#A7F3D0] flex items-start gap-4">
-              <div className="w-10 h-10 rounded-full bg-[#059669] flex items-center justify-center flex-shrink-0">
-                <CheckCircle2 className="w-5 h-5 text-white" />
+          <div className="bg-[#11161D] rounded-2xl border border-[#1E2633] shadow-xl overflow-hidden">
+            <div className="p-6 bg-[#39D353]/10 border-b border-[#39D353]/25 flex items-start gap-4">
+              <div className="w-10 h-10 rounded-full bg-[#39D353] text-[#0B0F14] flex items-center justify-center flex-shrink-0 font-bold shadow-[0_0_15px_rgba(57,211,83,0.3)]">
+                <CheckCircle2 className="w-5 h-5" />
               </div>
               <div>
-                <h2 className="text-base font-bold text-[#065F46]">OEM Enquiry Registered</h2>
-                <p className="text-xs text-[#047857] mt-0.5">{submissionResult.message}</p>
+                <h2 className="text-base font-bold text-[#39D353]">OEM Enquiry Registered</h2>
+                <p className="text-xs text-[#A3AAB5] mt-0.5">{submissionResult.message}</p>
               </div>
             </div>
 
             <div className="p-6 space-y-5">
               {/* Reference number */}
               <div>
-                <p className="text-xs text-[#64748B] mb-1.5 font-semibold">Your Enquiry Reference</p>
-                <div className="flex items-center gap-2 p-3 bg-[#F8FAFC] rounded-xl border border-[#E2E8F0]">
-                  <code className="flex-1 font-mono text-sm font-bold text-[#059669]">
+                <p className="text-xs text-[#A3AAB5] mb-1.5 font-semibold">Your Enquiry Reference</p>
+                <div className="flex items-center gap-2 p-3 bg-[#161C24] rounded-xl border border-[#1E2633]">
+                  <code className="flex-1 font-mono text-sm font-bold text-[#39D353]">
                     {submissionResult.enquiryNumber}
                   </code>
                   <button
                     onClick={handleCopy}
-                    className="p-1.5 rounded-lg hover:bg-[#E2E8F0] transition-colors"
+                    className="p-1.5 rounded-lg hover:bg-white/[0.06] transition-colors text-[#A3AAB5] hover:text-[#E6EAF0]"
                     title="Copy reference"
                   >
                     {copied ? (
-                      <CheckCircle2 className="w-4 h-4 text-[#059669]" />
+                      <CheckCircle2 className="w-4 h-4 text-[#39D353]" />
                     ) : (
-                      <Copy className="w-4 h-4 text-[#64748B]" />
+                      <Copy className="w-4 h-4" />
                     )}
                   </button>
                 </div>
-                <p className="text-[10px] text-[#94A3B8] mt-1.5">
+                <p className="text-[10px] text-[#64748B] mt-1.5">
                   Please quote this reference in all future correspondence.
                 </p>
               </div>
 
               {/* Engineering note */}
-              <div className="flex items-start gap-2.5 p-3.5 bg-[#FFFBEB] border border-[#FDE68A] rounded-xl">
-                <AlertTriangle className="w-4 h-4 text-[#D97706] flex-shrink-0 mt-0.5" />
+              <div className="flex items-start gap-2.5 p-3.5 bg-amber-500/10 border border-amber-500/30 rounded-xl">
+                <AlertTriangle className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-xs font-bold text-[#92400E]">Engineering Evaluation Required</p>
-                  <p className="text-[10px] text-[#78350F] mt-0.5 leading-relaxed">
+                  <p className="text-xs font-bold text-amber-300">Engineering Evaluation Required</p>
+                  <p className="text-[10px] text-amber-200/90 mt-0.5 leading-relaxed">
                     Final battery configuration, component selection, BMS parameters and mechanical design require engineering validation by Lawad Infrastructure engineers.
                   </p>
                 </div>
@@ -650,28 +650,28 @@ export default function OemCustomSolutionsPage() {
                   href={waUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-[#059669] text-white text-sm font-bold hover:bg-[#047857] transition-colors"
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-[#39D353] text-[#0B0F14] text-sm font-bold hover:bg-[#2ec547] shadow-[0_0_15px_rgba(57,211,83,0.25)] transition-colors"
                 >
                   <MessageSquare className="w-4 h-4" />
                   Talk to Sales on WhatsApp
                 </a>
                 <Link
                   href="/contact?type=engineering"
-                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-[#059669] text-[#059669] text-sm font-bold hover:bg-[#F0FDF4] transition-colors"
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-[#00A3FF] text-[#00A3FF] bg-[#00A3FF]/10 text-sm font-bold hover:bg-[#00A3FF]/20 transition-colors"
                 >
                   <Building2 className="w-4 h-4" />
                   Talk to Engineering
                 </Link>
                 <Link
                   href="/contact"
-                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-[#CBD5E1] text-[#64748B] text-sm font-semibold hover:bg-[#F8FAFC] transition-colors"
+                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-[#1E2633] text-[#A3AAB5] bg-[#161C24] text-sm font-semibold hover:bg-white/[0.06] hover:text-[#E6EAF0] transition-colors"
                 >
                   <Phone className="w-4 h-4" />
                   Business Enquiry
                 </Link>
                 <Link
                   href="/"
-                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-[#CBD5E1] text-[#64748B] text-sm font-semibold hover:bg-[#F8FAFC] transition-colors"
+                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-[#1E2633] text-[#A3AAB5] bg-[#161C24] text-sm font-semibold hover:bg-white/[0.06] hover:text-[#E6EAF0] transition-colors"
                 >
                   <ArrowLeft className="w-4 h-4" />
                   Back to MEHAR Website
@@ -689,43 +689,43 @@ export default function OemCustomSolutionsPage() {
   // ─────────────────────────────────────────────────────────────
 
   return (
-    <main className="min-h-screen bg-[#F8FAFC]">
+    <main className="min-h-screen bg-[#0B0F14] text-[#E6EAF0]">
       {/* Page header */}
-      <div className="bg-white border-b border-[#E2E8F0]">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-5">
+      <div className="bg-[#11161D] border-b border-[#1E2633]">
+        <div className="max-w-5xl xl:max-w-[1200px] 2xl:max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-8">
           <div className="flex items-center gap-3 mb-1">
-            <Link href="/" className="text-[#64748B] hover:text-[#059669] transition-colors">
+            <Link href="/" className="text-[#A3AAB5] hover:text-[#39D353] transition-colors">
               <ArrowLeft className="w-4 h-4" />
             </Link>
-            <span className="text-[11px] text-[#94A3B8]">/</span>
-            <span className="text-[11px] font-medium text-[#059669]">OEM / ODM Custom Battery Solutions</span>
+            <span className="text-[11px] text-[#1E2633]">/</span>
+            <span className="text-[11px] font-medium text-[#39D353]">OEM / ODM Custom Battery Solutions</span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold text-[#0F172A]">
+          <h1 className="text-2xl sm:text-3xl font-bold text-[#E6EAF0]">
             Custom OEM Battery Engineering Enquiry
           </h1>
-          <p className="text-sm text-[#475569] mt-1">
+          <p className="text-sm sm:text-base text-[#A3AAB5] mt-1">
             Capture your engineering requirements. All values are recorded as customer requirements for evaluation by Lawad Infrastructure engineers.
           </p>
         </div>
       </div>
 
       {/* Progress */}
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-5xl xl:max-w-[1200px] 2xl:max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
         <OemProgressBar currentStep={step} />
       </div>
 
       {/* Engineering caveat banner */}
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 mt-4">
-        <div className="flex items-start gap-2 p-3 bg-[#FFFBEB] border border-[#FDE68A] rounded-xl">
-          <Info className="w-3.5 h-3.5 text-[#D97706] flex-shrink-0 mt-0.5" />
-          <p className="text-[10px] text-[#78350F] leading-relaxed">
+      <div className="max-w-5xl xl:max-w-[1200px] 2xl:max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 mt-6">
+        <div className="flex items-start gap-2 p-3.5 bg-amber-500/10 border border-amber-500/30 rounded-xl">
+          <Info className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
+          <p className="text-xs text-amber-200/90 leading-relaxed">
             <strong>Engineering Assessment Required.</strong> All values entered below are <strong>customer-stated requirements</strong>. Suitability, feasibility, and final configuration require engineering validation by Lawad Infrastructure Pvt. Ltd. No product recommendation or capability claim is implied.
           </p>
         </div>
       </div>
 
       {/* Step content */}
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 space-y-5">
+      <div className="max-w-5xl xl:max-w-[1200px] 2xl:max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-8 space-y-6">
 
         {/* ═══ STEP 1 — APPLICATION ════════════════════════════════ */}
         {step === 1 && (
@@ -740,11 +740,11 @@ export default function OemCustomSolutionsPage() {
                     onClick={() => { setApplicationId(d.id); setErrors({}); }}
                     className={`text-left px-4 py-3 rounded-xl border text-xs font-semibold transition-all ${
                       applicationId === d.id
-                        ? 'border-[#059669] bg-[#F0FDF4] text-[#065F46]'
-                        : 'border-[#E2E8F0] bg-white text-[#334155] hover:border-[#059669] hover:bg-[#F0FDF4]'
+                        ? 'border-[#39D353] bg-[#39D353]/10 text-[#39D353]'
+                        : 'border-[#1E2633] bg-[#161C24] text-[#E6EAF0] hover:border-[#39D353]/50'
                     }`}
                   >
-                    <span className={applicationId === d.id ? 'text-[#059669] mr-1' : 'mr-1 opacity-0'}>✓</span>
+                    <span className={applicationId === d.id ? 'text-[#39D353] mr-1' : 'mr-1 opacity-0'}>✓</span>
                     {d.name}
                   </button>
                 ))}
@@ -1546,7 +1546,7 @@ export default function OemCustomSolutionsPage() {
           <button
             type="button"
             onClick={step === 1 ? () => router.back() : handleBack}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-[#CBD5E1] text-sm font-semibold text-[#334155] hover:bg-[#F8FAFC] transition-colors"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-[#1E2633] text-sm font-semibold text-[#A3AAB5] bg-[#161C24] hover:bg-white/[0.06] hover:text-[#E6EAF0] transition-colors"
           >
             <ChevronLeft className="w-4 h-4" />
             {step === 1 ? 'Back to site' : 'Back'}
@@ -1556,7 +1556,7 @@ export default function OemCustomSolutionsPage() {
             <button
               type="button"
               onClick={handleNext}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#059669] text-white text-sm font-bold hover:bg-[#047857] transition-colors"
+              className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#39D353] text-[#0B0F14] text-sm font-bold hover:bg-[#2ec547] shadow-[0_0_15px_rgba(57,211,83,0.25)] transition-colors"
             >
               Continue
               <ChevronRight className="w-4 h-4" />
@@ -1566,7 +1566,7 @@ export default function OemCustomSolutionsPage() {
               type="button"
               onClick={handleSubmit}
               disabled={submitting}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#059669] text-white text-sm font-bold hover:bg-[#047857] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#39D353] text-[#0B0F14] text-sm font-bold hover:bg-[#2ec547] shadow-[0_0_15px_rgba(57,211,83,0.25)] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {submitting ? 'Submitting…' : 'Submit OEM Enquiry'}
               {!submitting && <ChevronRight className="w-4 h-4" />}
@@ -1580,7 +1580,7 @@ export default function OemCustomSolutionsPage() {
             <button
               type="button"
               onClick={() => setStep(1)}
-              className="text-xs text-[#64748B] hover:text-[#059669] underline underline-offset-2"
+              className="text-xs text-[#A3AAB5] hover:text-[#39D353] underline underline-offset-2"
             >
               Edit Requirements from Step 1
             </button>

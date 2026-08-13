@@ -18,7 +18,6 @@ import {
   Cpu,
   CheckCircle2,
   ExternalLink,
-  Filter,
 } from 'lucide-react';
 
 interface AnalyticsData {
@@ -116,33 +115,33 @@ export default function AnalyticsDashboardClient() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 text-[#E6EAF0]">
       {/* Header Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <Badge variant="green">Private Admin Telemetry</Badge>
-            <span className="text-xs font-mono text-[#64748B]">Vercel Web Analytics &amp; B2B Funnel</span>
+            <span className="text-xs font-mono text-[#A3AAB5]">Vercel Web Analytics &amp; B2B Funnel</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#E6EAF0] tracking-tight">
             Website Analytics &amp; Lead Intelligence
           </h1>
-          <p className="text-xs text-[#64748B] mt-1">
+          <p className="text-xs text-[#A3AAB5] mt-1">
             Private telemetry visible exclusively to authorized MEHAR administrators.
           </p>
         </div>
 
         {/* Date Range Selector & Refresh */}
         <div className="flex flex-wrap items-center gap-2">
-          <div className="inline-flex items-center p-1 rounded-xl bg-white border border-[#CBD5E1] shadow-xs text-xs font-medium font-mono">
+          <div className="inline-flex items-center p-1 rounded-xl bg-[#161C24] border border-[#1E2633] shadow-sm text-xs font-medium font-mono">
             {(['today', '7d', '30d', 'all'] as const).map((r) => (
               <button
                 key={r}
                 onClick={() => handleRangeChange(r)}
                 className={`px-3 py-1.5 rounded-lg transition-colors ${
                   range === r
-                    ? 'bg-[#059669] text-white font-bold shadow-xs'
-                    : 'text-[#64748B] hover:text-[#0F172A]'
+                    ? 'bg-[#39D353] text-[#0B0F14] font-bold shadow-sm'
+                    : 'text-[#A3AAB5] hover:text-[#E6EAF0]'
                 }`}
               >
                 {r === 'today' ? 'Today' : r === '7d' ? '7 Days' : r === '30d' ? '30 Days' : 'All'}
@@ -163,26 +162,26 @@ export default function AnalyticsDashboardClient() {
       </div>
 
       {error && (
-        <div className="p-4 rounded-2xl bg-[#FEF2F2] border border-[#FECACA] text-xs text-[#991B1B]">
+        <div className="p-4 rounded-2xl bg-red-500/10 border border-red-500/30 text-xs text-red-300">
           {error}
         </div>
       )}
 
       {/* Vercel Web Analytics Integration Status Card */}
-      <div className="p-5 rounded-2xl bg-[#F8FAFC] border border-[#E2E8F0] flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xs">
+      <div className="p-5 rounded-2xl bg-[#11161D] border border-[#1E2633] flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
         <div className="flex items-start sm:items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#ECFDF5] border border-[#A7F3D0] flex items-center justify-center text-[#059669] shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-[#161C24] border border-[#39D353]/30 flex items-center justify-center text-[#39D353] shrink-0">
             <Globe className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-[#0F172A]">Vercel Web Analytics Provider</span>
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#ECFDF5] text-[#059669] border border-[#A7F3D0]">
+              <span className="text-xs font-bold text-[#E6EAF0]">Vercel Web Analytics Provider</span>
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#39D353]/10 text-[#39D353] border border-[#39D353]/30">
                 <CheckCircle2 className="w-3 h-3" /> Active &amp; Instrumenting
               </span>
             </div>
-            <p className="text-[11px] text-[#64748B] mt-0.5">
-              Privacy-first telemetry enabled in <code className="text-[#059669] font-mono">RootLayout</code>. Zero cookies, zero PII, and full GDPR compliance.
+            <p className="text-[11px] text-[#A3AAB5] mt-0.5">
+              Privacy-first telemetry enabled in <code className="text-[#39D353] font-mono">RootLayout</code>. Zero cookies, zero PII, and full GDPR compliance.
             </p>
           </div>
         </div>
@@ -192,7 +191,7 @@ export default function AnalyticsDashboardClient() {
             href="https://vercel.com/dashboard"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-[#CBD5E1] hover:border-[#059669] hover:text-[#059669] text-xs font-medium text-[#334155] transition-colors shadow-xs"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#161C24] border border-[#1E2633] hover:border-[#39D353]/50 hover:text-[#39D353] text-xs font-medium text-[#E6EAF0] transition-colors shadow-sm"
           >
             <span>Vercel Analytics Cloud</span>
             <ExternalLink className="w-3.5 h-3.5" />
@@ -202,54 +201,54 @@ export default function AnalyticsDashboardClient() {
 
       {/* Overview Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-5 rounded-2xl bg-white border border-[#E2E8F0] shadow-xs space-y-2">
-          <div className="flex items-center justify-between text-[#64748B]">
+        <div className="p-5 rounded-2xl bg-[#11161D] border border-[#1E2633] shadow-xl space-y-2">
+          <div className="flex items-center justify-between text-[#A3AAB5]">
             <span className="text-xs font-mono font-bold uppercase tracking-wider">Total B2B Leads</span>
-            <Users className="w-4 h-4 text-[#059669]" />
+            <Users className="w-4 h-4 text-[#39D353]" />
           </div>
-          <div className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] font-mono">
+          <div className="text-2xl sm:text-3xl font-extrabold text-[#E6EAF0] font-mono">
             {loading ? '...' : data?.metrics.totalLeads ?? 0}
           </div>
-          <p className="text-[11px] text-[#64748B]">
-            Combined inquiries in <span className="font-semibold text-[#059669]">{getRangeLabel()}</span>
+          <p className="text-[11px] text-[#A3AAB5]">
+            Combined inquiries in <span className="font-semibold text-[#39D353]">{getRangeLabel()}</span>
           </p>
         </div>
 
-        <div className="p-5 rounded-2xl bg-white border border-[#E2E8F0] shadow-xs space-y-2">
-          <div className="flex items-center justify-between text-[#64748B]">
+        <div className="p-5 rounded-2xl bg-[#11161D] border border-[#1E2633] shadow-xl space-y-2">
+          <div className="flex items-center justify-between text-[#A3AAB5]">
             <span className="text-xs font-mono font-bold uppercase tracking-wider">Official RFQ Inquiries</span>
-            <FileSpreadsheet className="w-4 h-4 text-[#059669]" />
+            <FileSpreadsheet className="w-4 h-4 text-[#39D353]" />
           </div>
-          <div className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] font-mono">
+          <div className="text-2xl sm:text-3xl font-extrabold text-[#E6EAF0] font-mono">
             {loading ? '...' : data?.metrics.totalRfqs ?? 0}
           </div>
-          <p className="text-[11px] text-[#64748B]">
+          <p className="text-[11px] text-[#A3AAB5]">
             Formal B2B quotation requests
           </p>
         </div>
 
-        <div className="p-5 rounded-2xl bg-white border border-[#E2E8F0] shadow-xs space-y-2">
-          <div className="flex items-center justify-between text-[#64748B]">
+        <div className="p-5 rounded-2xl bg-[#11161D] border border-[#1E2633] shadow-xl space-y-2">
+          <div className="flex items-center justify-between text-[#A3AAB5]">
             <span className="text-xs font-mono font-bold uppercase tracking-wider">OEM Custom Projects</span>
-            <Cpu className="w-4 h-4 text-[#059669]" />
+            <Cpu className="w-4 h-4 text-[#00A3FF]" />
           </div>
-          <div className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] font-mono">
+          <div className="text-2xl sm:text-3xl font-extrabold text-[#E6EAF0] font-mono">
             {loading ? '...' : data?.metrics.totalOem ?? 0}
           </div>
-          <p className="text-[11px] text-[#64748B]">
+          <p className="text-[11px] text-[#A3AAB5]">
             Custom pack engineering requests
           </p>
         </div>
 
-        <div className="p-5 rounded-2xl bg-white border border-[#E2E8F0] shadow-xs space-y-2">
-          <div className="flex items-center justify-between text-[#64748B]">
+        <div className="p-5 rounded-2xl bg-[#11161D] border border-[#1E2633] shadow-xl space-y-2">
+          <div className="flex items-center justify-between text-[#A3AAB5]">
             <span className="text-xs font-mono font-bold uppercase tracking-wider">Datasheet Downloads</span>
-            <Download className="w-4 h-4 text-[#059669]" />
+            <Download className="w-4 h-4 text-amber-400" />
           </div>
-          <div className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] font-mono">
+          <div className="text-2xl sm:text-3xl font-extrabold text-[#E6EAF0] font-mono">
             {loading ? '...' : data?.metrics.totalDownloads ?? 0}
           </div>
-          <p className="text-[11px] text-[#64748B]">
+          <p className="text-[11px] text-[#A3AAB5]">
             Technical specification files downloaded
           </p>
         </div>
@@ -260,13 +259,13 @@ export default function AnalyticsDashboardClient() {
         {/* Left Column: Category Demand & Top Products (7 cols) */}
         <div className="lg:col-span-7 space-y-8">
           {/* Top Battery Categories Inquired */}
-          <div className="bg-white rounded-3xl p-6 border border-[#E2E8F0] shadow-xs space-y-5">
-            <div className="flex items-center justify-between pb-3 border-b border-[#E2E8F0]">
+          <div className="bg-[#11161D] rounded-3xl p-6 border border-[#1E2633] shadow-xl space-y-5">
+            <div className="flex items-center justify-between pb-3 border-b border-[#1E2633]">
               <div className="flex items-center gap-2">
-                <Layers className="w-5 h-5 text-[#059669]" />
-                <h2 className="text-base font-bold text-[#0F172A]">Catalogue Category Demand</h2>
+                <Layers className="w-5 h-5 text-[#39D353]" />
+                <h2 className="text-base font-bold text-[#E6EAF0]">Catalogue Category Demand</h2>
               </div>
-              <span className="text-xs font-mono text-[#64748B]">
+              <span className="text-xs font-mono text-[#A3AAB5]">
                 {data?.topCategories.length || 6} Active Categories
               </span>
             </div>
@@ -282,18 +281,18 @@ export default function AnalyticsDashboardClient() {
                       <Link
                         href={`/products/${cat.slug}`}
                         target="_blank"
-                        className="font-bold text-[#0F172A] hover:text-[#059669] flex items-center gap-1 transition-colors"
+                        className="font-bold text-[#E6EAF0] hover:text-[#39D353] flex items-center gap-1 transition-colors"
                       >
                         <span>{cat.name}</span>
-                        <ArrowUpRight className="w-3 h-3 text-[#94A3B8]" />
+                        <ArrowUpRight className="w-3 h-3 text-[#64748B]" />
                       </Link>
-                      <span className="font-mono text-[#64748B]">
-                        <strong className="text-[#0F172A]">{cat.productCount}</strong> models
+                      <span className="font-mono text-[#A3AAB5]">
+                        <strong className="text-[#E6EAF0]">{cat.productCount}</strong> models
                       </span>
                     </div>
-                    <div className="w-full h-2 rounded-full bg-[#F1F5F9] overflow-hidden">
+                    <div className="w-full h-2 rounded-full bg-[#161C24] overflow-hidden">
                       <div
-                        className="h-full bg-[#059669] rounded-full transition-all duration-500"
+                        className="h-full bg-[#39D353] rounded-full transition-all duration-500 shadow-[0_0_8px_rgba(57,211,83,0.4)]"
                         style={{ width: `${Math.max(8, percent)}%` }}
                       />
                     </div>
@@ -304,13 +303,13 @@ export default function AnalyticsDashboardClient() {
           </div>
 
           {/* Top Product Models */}
-          <div className="bg-white rounded-3xl p-6 border border-[#E2E8F0] shadow-xs space-y-5">
-            <div className="flex items-center justify-between pb-3 border-b border-[#E2E8F0]">
+          <div className="bg-[#11161D] rounded-3xl p-6 border border-[#1E2633] shadow-xl space-y-5">
+            <div className="flex items-center justify-between pb-3 border-b border-[#1E2633]">
               <div className="flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-[#059669]" />
-                <h2 className="text-base font-bold text-[#0F172A]">Top Product Models &amp; Specifications</h2>
+                <TrendingUp className="w-5 h-5 text-[#39D353]" />
+                <h2 className="text-base font-bold text-[#E6EAF0]">Top Product Models &amp; Specifications</h2>
               </div>
-              <Link href="/admin/products" className="text-xs font-mono text-[#059669] hover:underline font-bold">
+              <Link href="/admin/products" className="text-xs font-mono text-[#39D353] hover:underline font-bold">
                 Manage Products →
               </Link>
             </div>
@@ -318,28 +317,28 @@ export default function AnalyticsDashboardClient() {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="bg-[#F8FAFC] border-b border-[#E2E8F0] text-[#64748B] font-mono uppercase text-[10px]">
+                  <tr className="bg-[#0D1117] border-b border-[#1E2633] text-[#A3AAB5] font-mono uppercase text-[10px]">
                     <th className="py-2.5 px-3 font-bold">Model / Product</th>
                     <th className="py-2.5 px-3 font-bold">Category</th>
                     <th className="py-2.5 px-3 font-bold text-right">Inquiries</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#E2E8F0] text-[#334155]">
+                <tbody className="divide-y divide-[#1E2633] text-[#E6EAF0]">
                   {data?.topProducts && data.topProducts.length > 0 ? (
                     data.topProducts.map((p, idx) => (
-                      <tr key={idx} className="hover:bg-[#F8FAFC] transition-colors">
+                      <tr key={idx} className="hover:bg-white/[0.02] transition-colors">
                         <td className="py-3 px-3">
-                          <p className="font-bold text-[#0F172A] truncate max-w-xs">{p.name}</p>
+                          <p className="font-bold text-[#E6EAF0] truncate max-w-xs">{p.name}</p>
                           {p.modelNumber && (
                             <span className="text-[10px] font-mono text-[#64748B] block">
                               Model: {p.modelNumber}
                             </span>
                           )}
                         </td>
-                        <td className="py-3 px-3 text-[#64748B] font-mono">
+                        <td className="py-3 px-3 text-[#A3AAB5] font-mono">
                           {p.categoryName}
                         </td>
-                        <td className="py-3 px-3 text-right font-mono font-bold text-[#059669]">
+                        <td className="py-3 px-3 text-right font-mono font-bold text-[#39D353]">
                           {p.inquiries}
                         </td>
                       </tr>
@@ -360,39 +359,39 @@ export default function AnalyticsDashboardClient() {
         {/* Right Column: Public Routes, B2B Funnel & Lead Signals (5 cols) */}
         <div className="lg:col-span-5 space-y-8">
           {/* B2B Conversion Funnel Overview */}
-          <div className="bg-white rounded-3xl p-6 border border-[#E2E8F0] shadow-xs space-y-4">
-            <div className="flex items-center gap-2 pb-3 border-b border-[#E2E8F0]">
-              <BarChart3 className="w-5 h-5 text-[#059669]" />
-              <h2 className="text-base font-bold text-[#0F172A]">B2B Conversion Milestone Funnel</h2>
+          <div className="bg-[#11161D] rounded-3xl p-6 border border-[#1E2633] shadow-xl space-y-4">
+            <div className="flex items-center gap-2 pb-3 border-b border-[#1E2633]">
+              <BarChart3 className="w-5 h-5 text-[#39D353]" />
+              <h2 className="text-base font-bold text-[#E6EAF0]">B2B Conversion Milestone Funnel</h2>
             </div>
 
             <div className="space-y-3 font-mono text-xs">
-              <div className="p-3.5 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] space-y-1">
-                <div className="flex items-center justify-between text-[#0F172A] font-bold">
+              <div className="p-3.5 rounded-xl bg-[#161C24] border border-[#1E2633] space-y-1">
+                <div className="flex items-center justify-between text-[#E6EAF0] font-bold">
                   <span>1. Public Traffic Discovery</span>
-                  <span className="text-[#059669]">Step 1</span>
+                  <span className="text-[#39D353]">Step 1</span>
                 </div>
-                <p className="text-[11px] text-[#64748B] font-sans">
+                <p className="text-[11px] text-[#A3AAB5] font-sans">
                   Homepage, Applications, &amp; Cell Technology engineering pages.
                 </p>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] space-y-1">
-                <div className="flex items-center justify-between text-[#0F172A] font-bold">
+              <div className="p-3.5 rounded-xl bg-[#161C24] border border-[#1E2633] space-y-1">
+                <div className="flex items-center justify-between text-[#E6EAF0] font-bold">
                   <span>2. Product Catalogue Exploration</span>
-                  <span className="text-[#059669]">Step 2</span>
+                  <span className="text-[#39D353]">Step 2</span>
                 </div>
-                <p className="text-[11px] text-[#64748B] font-sans">
+                <p className="text-[11px] text-[#A3AAB5] font-sans">
                   Interactive category listings, technical specification sheets, and Battery Finder tool.
                 </p>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] space-y-1">
-                <div className="flex items-center justify-between text-[#0F172A] font-bold">
+              <div className="p-3.5 rounded-xl bg-[#161C24] border border-[#1E2633] space-y-1">
+                <div className="flex items-center justify-between text-[#E6EAF0] font-bold">
                   <span>3. High-Intent Procurement Action</span>
-                  <span className="text-[#059669]">Step 3</span>
+                  <span className="text-[#39D353]">Step 3</span>
                 </div>
-                <p className="text-[11px] text-[#64748B] font-sans">
+                <p className="text-[11px] text-[#A3AAB5] font-sans">
                   B2B RFQ submissions, OEM custom pack configurator completions, and WhatsApp desk inquiries.
                 </p>
               </div>
@@ -400,36 +399,35 @@ export default function AnalyticsDashboardClient() {
           </div>
 
           {/* Key Public Routes Table */}
-          <div className="bg-white rounded-3xl p-6 border border-[#E2E8F0] shadow-xs space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-[#E2E8F0]">
+          <div className="bg-[#11161D] rounded-3xl p-6 border border-[#1E2633] shadow-xl space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-[#1E2633]">
               <div className="flex items-center gap-2">
-                <Globe className="w-5 h-5 text-[#059669]" />
-                <h2 className="text-base font-bold text-[#0F172A]">Monitored Public Routes</h2>
+                <Globe className="w-5 h-5 text-[#39D353]" />
+                <h2 className="text-base font-bold text-[#E6EAF0]">Monitored Public Routes</h2>
               </div>
               <Badge variant="slate">App Router</Badge>
-
             </div>
 
             <div className="space-y-2 max-h-80 overflow-y-auto pr-1">
               {data?.publicRoutes.map((r) => (
                 <div
                   key={r.path}
-                  className="flex items-center justify-between p-2.5 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] text-xs hover:border-[#A7F3D0] transition-colors"
+                  className="flex items-center justify-between p-2.5 rounded-xl bg-[#161C24] border border-[#1E2633] text-xs hover:border-[#39D353]/40 transition-colors"
                 >
                   <div className="overflow-hidden">
                     <Link
                       href={r.path}
                       target="_blank"
-                      className="font-bold text-[#0F172A] hover:text-[#059669] flex items-center gap-1 truncate"
+                      className="font-bold text-[#E6EAF0] hover:text-[#39D353] flex items-center gap-1 truncate"
                     >
                       <span>{r.label}</span>
-                      <ArrowUpRight className="w-3 h-3 text-[#94A3B8] shrink-0" />
+                      <ArrowUpRight className="w-3 h-3 text-[#64748B] shrink-0" />
                     </Link>
                     <span className="text-[10px] font-mono text-[#64748B] truncate block">
                       {r.path}
                     </span>
                   </div>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white text-[#475569] border border-[#CBD5E1] shrink-0">
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#11161D] text-[#A3AAB5] border border-[#1E2633] shrink-0">
                     {r.category}
                   </span>
                 </div>
@@ -438,12 +436,12 @@ export default function AnalyticsDashboardClient() {
           </div>
 
           {/* Privacy & Compliance Assurance Box */}
-          <div className="p-5 rounded-2xl bg-[#ECFDF5] border border-[#A7F3D0] text-[#065F46] space-y-2">
-            <div className="flex items-center gap-2 font-bold text-xs">
-              <ShieldCheck className="w-4 h-4 text-[#059669]" />
+          <div className="p-5 rounded-2xl bg-[#161C24] border border-[#39D353]/30 text-[#E6EAF0] space-y-2">
+            <div className="flex items-center gap-2 font-bold text-xs text-[#39D353]">
+              <ShieldCheck className="w-4 h-4 text-[#39D353]" />
               <span>Data Privacy Governance</span>
             </div>
-            <p className="text-[11px] leading-relaxed text-[#047857]">
+            <p className="text-[11px] leading-relaxed text-[#A3AAB5]">
               In strict accordance with corporate privacy guidelines, no customer personal details, passwords, message bodies, or IP addresses are shared with public analytics vendors.
             </p>
           </div>

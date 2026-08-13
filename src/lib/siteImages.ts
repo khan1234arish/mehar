@@ -200,7 +200,7 @@ export const DEFAULT_SITE_IMAGES: Record<string, DefaultSiteImageMeta> = {
   resource_default: {
     label: 'Resource & Catalogue Placeholder',
     section: 'placeholders',
-    defaultUrl: '/assets/logo/mehar-symbol.svg',
+    defaultUrl: '/assets/logo/mehar-logo.png',
     altText: 'MEHAR Technical Document',
     description: 'Thumbnail for downloadable catalogues and specification sheets.',
   },
@@ -217,7 +217,7 @@ export async function getSitePlaceholderImage(key: string): Promise<{ url: strin
   const defaultMeta = DEFAULT_SITE_IMAGES[key] || {
     label: key,
     section: 'placeholders',
-    defaultUrl: '/assets/logo/mehar-symbol.svg',
+    defaultUrl: '/assets/logo/mehar-logo.png',
     altText: 'MEHAR Battery Systems',
     description: '',
   };

@@ -569,12 +569,12 @@ export default function MeharAssistant() {
         <button
           id="mehar-assistant-trigger"
           onClick={() => setIsOpen(true)}
-          className="flex items-center gap-2.5 px-4 py-3 rounded-full bg-[#059669] text-white shadow-xl hover:bg-[#047857] hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-[#059669]/30"
+          className="flex items-center gap-2.5 px-4 py-3 rounded-full bg-[#39D353] text-[#0B0F14] font-bold shadow-[0_0_20px_rgba(57,211,83,0.35)] hover:bg-[#2ec547] hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-[#39D353]/30"
           aria-label="Open MEHAR Battery Assistant"
         >
           <div className="relative">
             <MessageSquare className="w-5 h-5" />
-            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-white border border-[#059669] animate-pulse" />
+            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-white border border-[#0B0F14] animate-pulse" />
           </div>
           <span className="text-xs font-bold tracking-wide">MEHAR Assistant</span>
         </button>
@@ -587,7 +587,7 @@ export default function MeharAssistant() {
           className={`
             w-[calc(100vw-2rem)] sm:w-[420px]
             ${isMinimized ? 'h-auto' : 'h-[580px] max-h-[85vh]'}
-            bg-white border border-[#CBD5E1] rounded-2xl shadow-2xl flex flex-col overflow-hidden
+            bg-[#11161D] border border-[#1E2633] text-[#E6EAF0] rounded-2xl shadow-2xl flex flex-col overflow-hidden
             transition-all duration-200
           `}
           role="dialog"
@@ -595,15 +595,15 @@ export default function MeharAssistant() {
         >
 
           {/* ── Header ── */}
-          <div className="flex-shrink-0 px-4 py-3 bg-white border-b border-[#E2E8F0]">
+          <div className="flex-shrink-0 px-4 py-3 bg-[#0D1117] border-b border-[#1E2633]">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3 min-w-0">
-                <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-[#ECFDF5] border border-[#A7F3D0] flex items-center justify-center">
-                  <MessageCircle className="w-4 h-4 text-[#059669]" />
+                <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-[#39D353]/10 border border-[#39D353]/25 flex items-center justify-center">
+                  <MessageCircle className="w-4 h-4 text-[#39D353]" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-[12px] font-bold text-[#0F172A] leading-tight">MEHAR Battery Assistant</p>
-                  <p className="text-[10px] text-[#64748B] leading-tight">B2B Solutions &amp; Engineering Enquiry</p>
+                  <p className="text-[12px] font-bold text-[#E6EAF0] leading-tight">MEHAR Battery Assistant</p>
+                  <p className="text-[10px] text-[#A3AAB5] leading-tight">B2B Solutions &amp; Engineering Enquiry</p>
                 </div>
               </div>
               <div className="flex items-center gap-1 flex-shrink-0">
@@ -611,7 +611,7 @@ export default function MeharAssistant() {
                   <button
                     onClick={startOver}
                     title="Start Over"
-                    className="p-1.5 rounded-lg text-[#64748B] hover:text-[#0F172A] hover:bg-[#F1F5F9] transition-colors"
+                    className="p-1.5 rounded-lg text-[#A3AAB5] hover:text-[#E6EAF0] hover:bg-white/[0.06] transition-colors"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
                   </button>
@@ -619,13 +619,13 @@ export default function MeharAssistant() {
                 <button
                   onClick={() => setIsMinimized((v) => !v)}
                   title={isMinimized ? 'Expand' : 'Minimise'}
-                  className="p-1.5 rounded-lg text-[#64748B] hover:text-[#0F172A] hover:bg-[#F1F5F9] transition-colors"
+                  className="p-1.5 rounded-lg text-[#A3AAB5] hover:text-[#E6EAF0] hover:bg-white/[0.06] transition-colors"
                 >
                   <Minus className="w-3.5 h-3.5" />
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="p-1.5 rounded-lg text-[#64748B] hover:text-[#DC2626] hover:bg-[#FEF2F2] transition-colors"
+                  className="p-1.5 rounded-lg text-[#A3AAB5] hover:text-[#EF4444] hover:bg-red-500/10 transition-colors"
                 >
                   <X className="w-4 h-4" />
                 </button>

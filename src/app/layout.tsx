@@ -85,9 +85,9 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap"
           rel="stylesheet"
         />
-        <link rel="icon" href="/assets/logo/mehar-logo-icon.svg" type="image/svg+xml" />
+        <link rel="icon" href="/assets/logo/mehar-logo.png" />
       </head>
-      <body className="min-h-screen bg-white text-[#0F172A] antialiased flex flex-col justify-between selection:bg-[#10B981]/20 selection:text-[#065F46]">
+      <body className="min-h-screen bg-[#0B0F14] text-[#E6EAF0] antialiased flex flex-col justify-between selection:bg-[#39D353]/30 selection:text-[#39D353]">
         <div>
           <TopBar />
           <Header />

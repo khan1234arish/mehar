@@ -1,22 +1,15 @@
 'use client';
 
 import React, { useState, Suspense } from 'react';
-import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { BROAD_CATEGORIES, CategoryData } from '@/data/categories';
-import { COMPANY_INFO } from '@/data/companyInfo';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
 import PlaceholderNotice from '@/components/ui/PlaceholderNotice';
 import {
-  SlidersHorizontal,
   Plus,
   X,
-  ArrowRight,
-  Clock,
   ArrowUpRight,
-  CheckCircle2,
-  FileSpreadsheet,
 } from 'lucide-react';
 
 function CompareContent() {
@@ -52,21 +45,22 @@ function CompareContent() {
   };
 
   return (
-    <div className="py-12 space-y-12 bg-white text-[#0F172A]">
+    <div className="py-12 space-y-12 bg-[#0B0F14] text-[#E6EAF0]">
       {/* Header Banner */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="p-8 sm:p-10 rounded-3xl bg-[#F8FAFC] border border-[#E2E8F0]">
-          <div className="max-w-3xl space-y-4">
+      <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
+        <div className="p-8 sm:p-10 rounded-3xl bg-[#11161D] border border-[#1E2633] shadow-xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-80 h-80 bg-[#39D353]/10 rounded-full blur-[120px] pointer-events-none" />
+          <div className="max-w-3xl space-y-4 relative z-10">
             <Badge variant="green">Technical Evaluation</Badge>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-[#0F172A] tracking-tight">
-              Category & Application Comparison Matrix
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-[#E6EAF0] tracking-tight">
+              Category &amp; Application Comparison Matrix
             </h1>
-            <p className="text-sm text-[#475569] leading-relaxed">
+            <p className="text-sm text-[#A3AAB5] leading-relaxed">
               Compare broad battery categories side-by-side to evaluate application suitability, operating parameters, and custom engineering scope.
             </p>
           </div>
 
-          <div className="mt-6 pt-4 border-t border-[#E2E8F0] flex flex-wrap items-center justify-between gap-4 text-xs">
+          <div className="mt-6 pt-4 border-t border-[#1E2633] flex flex-wrap items-center justify-between gap-4 text-xs relative z-10">
             <PlaceholderNotice
               message="Numerical specification cells are marked 'Not yet verified / Coming soon' until official client catalogue release."
             />
@@ -74,15 +68,15 @@ function CompareContent() {
             {/* Category Selector Buttons */}
             {availableToAdd.length > 0 && selectedSlugs.length < 4 && (
               <div className="flex items-center gap-2">
-                <span className="text-xs font-mono font-bold text-[#64748B]">Add to Compare:</span>
+                <span className="text-xs font-mono font-bold text-[#A3AAB5]">Add to Compare:</span>
                 <div className="flex flex-wrap gap-1.5">
                   {availableToAdd.map((cat) => (
                     <button
                       key={cat.id}
                       onClick={() => addCategory(cat.slug)}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white border border-[#CBD5E1] text-[11px] font-semibold text-[#0F172A] hover:border-[#059669] hover:bg-[#ECFDF5] hover:text-[#065F46] transition-colors"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#161C24] border border-[#1E2633] text-[11px] font-semibold text-[#E6EAF0] hover:border-[#39D353] hover:bg-[#39D353]/10 hover:text-[#39D353] transition-colors"
                     >
-                      <Plus className="w-3 h-3 text-[#059669]" />
+                      <Plus className="w-3 h-3 text-[#39D353]" />
                       <span className="truncate max-w-[140px]">{cat.name}</span>
                     </button>
                   ))}
@@ -94,33 +88,33 @@ function CompareContent() {
       </div>
 
       {/* Comparison Grid Table */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="rounded-3xl bg-white border border-[#E2E8F0] overflow-hidden shadow-sm">
+      <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
+        <div className="rounded-3xl bg-[#11161D] border border-[#1E2633] overflow-hidden shadow-xl">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="bg-[#F8FAFC] border-b border-[#E2E8F0]">
-                  <th className="py-5 px-6 font-mono uppercase text-[11px] font-bold text-[#64748B] w-64 min-w-[200px]">
+                <tr className="bg-[#0D1117] border-b border-[#1E2633]">
+                  <th className="py-5 px-6 font-mono uppercase text-[11px] font-bold text-[#A3AAB5] w-64 min-w-[200px]">
                     Comparison Feature
                   </th>
                   {selectedCategories.map((cat) => (
                     <th
                       key={cat.id}
-                      className="py-5 px-6 min-w-[260px] align-top border-l border-[#E2E8F0]"
+                      className="py-5 px-6 min-w-[260px] align-top border-l border-[#1E2633]"
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div>
-                          <span className="text-[10px] font-mono text-[#059669] font-bold block mb-1 uppercase">
+                          <span className="text-[10px] font-mono text-[#39D353] font-bold block mb-1 uppercase">
                             Broad Category
                           </span>
-                          <h3 className="text-sm font-bold text-[#0F172A] leading-snug">
+                          <h3 className="text-sm font-bold text-[#E6EAF0] leading-snug">
                             {cat.name}
                           </h3>
                         </div>
                         {selectedCategories.length > 1 && (
                           <button
                             onClick={() => removeCategory(cat.slug)}
-                            className="p-1 rounded-md text-[#94A3B8] hover:text-[#0F172A] hover:bg-[#E2E8F0] transition-colors shrink-0"
+                            className="p-1 rounded-md text-[#64748B] hover:text-[#EF4444] hover:bg-red-500/10 transition-colors shrink-0"
                             title="Remove from comparison"
                           >
                             <X className="w-4 h-4" />
@@ -131,19 +125,19 @@ function CompareContent() {
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#E2E8F0] text-[#334155]">
+              <tbody className="divide-y divide-[#1E2633] text-[#E6EAF0]">
                 {/* 1. Target Applications */}
-                <tr className="hover:bg-[#F8FAFC] transition-colors">
-                  <td className="py-4 px-6 font-bold text-[#0F172A] bg-[#F8FAFC]/50">
+                <tr className="hover:bg-white/[0.02] transition-colors">
+                  <td className="py-4 px-6 font-bold text-[#E6EAF0] bg-[#161C24]/50">
                     Primary Target Applications
                   </td>
                   {selectedCategories.map((cat) => (
-                    <td key={cat.id} className="py-4 px-6 border-l border-[#E2E8F0]">
+                    <td key={cat.id} className="py-4 px-6 border-l border-[#1E2633]">
                       <div className="flex flex-wrap gap-1.5">
                         {cat.keyApplications.map((app) => (
                           <span
                             key={app}
-                            className="px-2 py-0.5 rounded bg-[#F8FAFC] border border-[#CBD5E1] text-[11px] font-medium text-[#334155]"
+                            className="px-2 py-0.5 rounded-md bg-[#161C24] border border-[#1E2633] text-[11px] font-mono text-[#A3AAB5]"
                           >
                             {app}
                           </span>
@@ -154,9 +148,9 @@ function CompareContent() {
                 </tr>
 
                 {/* 2. Typical Operating Voltage */}
-                <tr className="hover:bg-[#F8FAFC] transition-colors">
-                  <td className="py-4 px-6 font-bold text-[#0F172A] bg-[#F8FAFC]/50">
-                    Nominal Voltage & Capacity Scope
+                <tr className="hover:bg-white/[0.02] transition-colors">
+                  <td className="py-4 px-6 font-bold text-[#E6EAF0] bg-[#161C24]/50">
+                    Nominal Voltage &amp; Capacity Scope
                   </td>
                   {selectedCategories.map((cat) => {
                     let voltageInfo = 'Application dependent';
@@ -168,16 +162,16 @@ function CompareContent() {
                     else if (cat.slug === 'custom-oem-industrial-batteries') voltageInfo = '24V - 400V+ (Custom Configured)';
 
                     return (
-                      <td key={cat.id} className="py-4 px-6 border-l border-[#E2E8F0]">
-                        <span className="text-xs font-mono font-semibold text-[#0F172A]">{voltageInfo}</span>
+                      <td key={cat.id} className="py-4 px-6 border-l border-[#1E2633]">
+                        <span className="text-xs font-mono font-semibold text-[#39D353]">{voltageInfo}</span>
                       </td>
                     );
                   })}
                 </tr>
 
                 {/* 3. Chemistry Suitability */}
-                <tr className="hover:bg-[#F8FAFC] transition-colors">
-                  <td className="py-4 px-6 font-bold text-[#0F172A] bg-[#F8FAFC]/50">
+                <tr className="hover:bg-white/[0.02] transition-colors">
+                  <td className="py-4 px-6 font-bold text-[#E6EAF0] bg-[#161C24]/50">
                     Electrochemistry Architecture
                   </td>
                   {selectedCategories.map((cat) => {
@@ -190,17 +184,17 @@ function CompareContent() {
                     else if (cat.slug === 'custom-oem-industrial-batteries') chemInfo = 'LiFePO4 / NMC / High-C Polymer';
 
                     return (
-                      <td key={cat.id} className="py-4 px-6 border-l border-[#E2E8F0]">
-                        <p className="text-xs text-[#475569] leading-relaxed font-medium">{chemInfo}</p>
+                      <td key={cat.id} className="py-4 px-6 border-l border-[#1E2633]">
+                        <p className="text-xs text-[#A3AAB5] leading-relaxed font-medium">{chemInfo}</p>
                       </td>
                     );
                   })}
                 </tr>
 
                 {/* 4. BMS & Telemetry Capabilities */}
-                <tr className="hover:bg-[#F8FAFC] transition-colors">
-                  <td className="py-4 px-6 font-bold text-[#0F172A] bg-[#F8FAFC]/50">
-                    BMS & Telemetry Integration
+                <tr className="hover:bg-white/[0.02] transition-colors">
+                  <td className="py-4 px-6 font-bold text-[#E6EAF0] bg-[#161C24]/50">
+                    BMS &amp; Telemetry Integration
                   </td>
                   {selectedCategories.map((cat) => {
                     let bmsInfo = 'Smart BMS Protection';
@@ -212,17 +206,17 @@ function CompareContent() {
                     else if (cat.slug === 'custom-oem-industrial-batteries') bmsInfo = 'Industrial CANbus / Modbus / Custom Harness';
 
                     return (
-                      <td key={cat.id} className="py-4 px-6 border-l border-[#E2E8F0]">
-                        <span className="text-xs text-[#334155]">{bmsInfo}</span>
+                      <td key={cat.id} className="py-4 px-6 border-l border-[#1E2633]">
+                        <span className="text-xs text-[#A3AAB5]">{bmsInfo}</span>
                       </td>
                     );
                   })}
                 </tr>
 
                 {/* 5. Ingress & Mechanical Enclosure */}
-                <tr className="hover:bg-[#F8FAFC] transition-colors">
-                  <td className="py-4 px-6 font-bold text-[#0F172A] bg-[#F8FAFC]/50">
-                    Ingress Protection & Enclosure
+                <tr className="hover:bg-white/[0.02] transition-colors">
+                  <td className="py-4 px-6 font-bold text-[#E6EAF0] bg-[#161C24]/50">
+                    Ingress Protection &amp; Enclosure
                   </td>
                   {selectedCategories.map((cat) => {
                     let ipInfo = 'IP65 Standard';
@@ -234,16 +228,16 @@ function CompareContent() {
                     else if (cat.slug === 'custom-oem-industrial-batteries') ipInfo = 'Custom Heavy Steel / Molded Bay Enclosures';
 
                     return (
-                      <td key={cat.id} className="py-4 px-6 border-l border-[#E2E8F0]">
-                        <span className="text-xs text-[#334155]">{ipInfo}</span>
+                      <td key={cat.id} className="py-4 px-6 border-l border-[#1E2633]">
+                        <span className="text-xs text-[#A3AAB5]">{ipInfo}</span>
                       </td>
                     );
                   })}
                 </tr>
 
                 {/* 6. Cycle Life Rating */}
-                <tr className="hover:bg-[#F8FAFC] transition-colors">
-                  <td className="py-4 px-6 font-bold text-[#0F172A] bg-[#F8FAFC]/50">
+                <tr className="hover:bg-white/[0.02] transition-colors">
+                  <td className="py-4 px-6 font-bold text-[#E6EAF0] bg-[#161C24]/50">
                     Cycle Life Rating (@ 80%–85% DoD)
                   </td>
                   {selectedCategories.map((cat) => {
@@ -255,22 +249,21 @@ function CompareContent() {
                     else if (cat.slug === 'cylindrical-li-ion-cells') cycleInfo = '800 - 2,000+ cycles (Format & Chemistry Dependent)';
                     else if (cat.slug === 'custom-oem-industrial-batteries') cycleInfo = '2,000+ to 3,000+ cycles (Chemistry dependent)';
 
-
                     return (
-                      <td key={cat.id} className="py-4 px-6 border-l border-[#E2E8F0]">
-                        <span className="text-xs font-mono font-bold text-[#059669]">{cycleInfo}</span>
+                      <td key={cat.id} className="py-4 px-6 border-l border-[#1E2633]">
+                        <span className="text-xs font-mono font-bold text-[#39D353]">{cycleInfo}</span>
                       </td>
                     );
                   })}
                 </tr>
 
                 {/* 7. Direct Action CTA */}
-                <tr className="bg-[#F8FAFC]">
-                  <td className="py-4 px-6 font-bold text-[#0F172A]">
+                <tr className="bg-[#0D1117]">
+                  <td className="py-4 px-6 font-bold text-[#E6EAF0]">
                     Procurement Next Step
                   </td>
                   {selectedCategories.map((cat) => (
-                    <td key={cat.id} className="py-4 px-6 border-l border-[#E2E8F0]">
+                    <td key={cat.id} className="py-4 px-6 border-l border-[#1E2633]">
                       <Button
                         href={`/rfq?category=${cat.slug}`}
                         variant="primary"
@@ -295,7 +288,7 @@ function CompareContent() {
 
 export default function ComparePage() {
   return (
-    <Suspense fallback={<div className="p-12 text-center text-xs text-[#64748B]">Loading comparison matrix...</div>}>
+    <Suspense fallback={<div className="p-12 text-center text-xs text-[#A3AAB5]">Loading comparison matrix...</div>}>
       <CompareContent />
     </Suspense>
   );
