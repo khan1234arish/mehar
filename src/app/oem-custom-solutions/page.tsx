@@ -17,8 +17,6 @@ import {
   X,
   Copy,
   MessageSquare,
-  Phone,
-  Building2,
   ArrowLeft,
   Info,
 } from 'lucide-react';
@@ -141,7 +139,7 @@ const MAX_FILE_MB = 10;
 const MAX_FILES = 5;
 
 // ─────────────────────────────────────────────────────────────────
-// FIELD COMPONENTS
+// FIELD COMPONENTS (Semantic Themed)
 // ─────────────────────────────────────────────────────────────────
 
 function FieldLabel({
@@ -157,16 +155,16 @@ function FieldLabel({
 }) {
   return (
     <div className="flex items-center flex-wrap gap-x-2 gap-y-0.5 mb-1.5">
-      <label className="text-xs font-bold text-[#E6EAF0]">
+      <label className="text-xs font-bold text-theme-primary">
         {children}
-        {required && <span className="text-[#EF4444] ml-0.5">*</span>}
+        {required && <span className="text-red-500 ml-0.5">*</span>}
       </label>
       {isCustomerReq && (
-        <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/30 text-amber-300">
+        <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-300">
           Customer Requirement
         </span>
       )}
-      {hint && <p className="w-full text-[10px] text-[#A3AAB5] leading-tight">{hint}</p>}
+      {hint && <p className="w-full text-[10px] text-theme-secondary leading-tight">{hint}</p>}
     </div>
   );
 }
@@ -197,13 +195,13 @@ function FormInput({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         disabled={disabled}
-        className={`w-full px-3.5 py-2.5 rounded-lg border text-sm text-[#E6EAF0] placeholder-[#64748B] bg-[#161C24] focus:outline-none focus:ring-2 focus:ring-[#39D353]/20 transition-colors ${
+        className={`w-full px-3.5 py-2.5 rounded-lg border text-sm text-theme-primary placeholder-theme-muted bg-theme-elevated focus:outline-none focus:ring-2 focus:ring-theme-green/20 transition-colors ${
           error
-            ? 'border-[#EF4444] focus:border-[#EF4444]'
-            : 'border-[#1E2633] focus:border-[#39D353]'
+            ? 'border-red-500 focus:border-red-500'
+            : 'border-theme-border focus:border-theme-green'
         } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
       />
-      {error && <p className="mt-1 text-[10px] text-[#EF4444] font-medium">{error}</p>}
+      {error && <p className="mt-1 text-[10px] text-red-500 font-medium">{error}</p>}
     </div>
   );
 }
@@ -227,18 +225,18 @@ function FormSelect({
         id={id}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={`w-full px-3.5 py-2.5 rounded-lg border text-sm text-[#E6EAF0] bg-[#161C24] focus:outline-none focus:ring-2 focus:ring-[#39D353]/20 transition-colors ${
+        className={`w-full px-3.5 py-2.5 rounded-lg border text-sm text-theme-primary bg-theme-elevated focus:outline-none focus:ring-2 focus:ring-theme-green/20 transition-colors ${
           error
-            ? 'border-[#EF4444] focus:border-[#EF4444]'
-            : 'border-[#1E2633] focus:border-[#39D353]'
+            ? 'border-red-500 focus:border-red-500'
+            : 'border-theme-border focus:border-theme-green'
         }`}
       >
-        <option value="" className="bg-[#161C24] text-[#A3AAB5]">— Select —</option>
+        <option value="" className="bg-theme-card text-theme-muted">— Select —</option>
         {options.map((o) => (
-          <option key={o} value={o} className="bg-[#161C24] text-[#E6EAF0]">{o}</option>
+          <option key={o} value={o} className="bg-theme-card text-theme-primary">{o}</option>
         ))}
       </select>
-      {error && <p className="mt-1 text-[10px] text-[#EF4444] font-medium">{error}</p>}
+      {error && <p className="mt-1 text-[10px] text-red-500 font-medium">{error}</p>}
     </div>
   );
 }
@@ -274,19 +272,19 @@ function UnitInput({
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
           min={0}
-          className={`flex-1 px-3.5 py-2.5 rounded-lg border text-sm text-[#E6EAF0] placeholder-[#64748B] bg-[#161C24] focus:outline-none focus:ring-2 focus:ring-[#39D353]/20 transition-colors ${
-            error ? 'border-[#EF4444]' : 'border-[#1E2633] focus:border-[#39D353]'
+          className={`flex-1 px-3.5 py-2.5 rounded-lg border text-sm text-theme-primary placeholder-theme-muted bg-theme-elevated focus:outline-none focus:ring-2 focus:ring-theme-green/20 transition-colors ${
+            error ? 'border-red-500' : 'border-theme-border focus:border-theme-green'
           }`}
         />
         <select
           value={unitValue}
           onChange={(e) => onUnitChange(e.target.value)}
-          className="px-2.5 py-2.5 rounded-lg border border-[#1E2633] text-xs text-[#E6EAF0] bg-[#161C24] focus:outline-none focus:border-[#39D353]"
+          className="px-2.5 py-2.5 rounded-lg border border-theme-border text-xs text-theme-primary bg-theme-elevated focus:outline-none focus:border-theme-green"
         >
-          {unitOptions.map((u) => <option key={u} value={u} className="bg-[#161C24] text-[#E6EAF0]">{u}</option>)}
+          {unitOptions.map((u) => <option key={u} value={u} className="bg-theme-card text-theme-primary">{u}</option>)}
         </select>
       </div>
-      {error && <p className="mt-1 text-[10px] text-[#EF4444] font-medium">{error}</p>}
+      {error && <p className="mt-1 text-[10px] text-red-500 font-medium">{error}</p>}
     </div>
   );
 }
@@ -315,8 +313,8 @@ function CheckboxGroup({
             onClick={() => toggle(opt)}
             className={`px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all ${
               active
-                ? 'bg-[#39D353]/10 border-[#39D353] text-[#39D353]'
-                : 'bg-[#161C24] border-[#1E2633] text-[#A3AAB5] hover:border-[#39D353]/50'
+                ? 'bg-theme-green/10 border-theme-green text-theme-green shadow-sm'
+                : 'bg-theme-elevated border-theme-border text-theme-secondary hover:border-theme-green/50 hover:text-theme-primary'
             }`}
           >
             {active ? '✓ ' : ''}{opt}
@@ -329,11 +327,11 @@ function CheckboxGroup({
 
 function SectionCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="bg-[#11161D] rounded-xl border border-[#1E2633] overflow-hidden shadow-lg">
-      <div className="px-5 py-3 bg-[#0D1117] border-b border-[#1E2633]">
-        <h3 className="text-sm font-bold text-[#E6EAF0]">{title}</h3>
+    <div className="bg-theme-card rounded-2xl border border-theme-border overflow-hidden shadow-sm">
+      <div className="px-5 py-3.5 bg-theme-surface border-b border-theme-border">
+        <h3 className="text-sm font-bold text-theme-primary">{title}</h3>
       </div>
-      <div className="p-5 space-y-4">{children}</div>
+      <div className="p-5 sm:p-6 space-y-5">{children}</div>
     </div>
   );
 }
@@ -347,11 +345,11 @@ function ReviewRow({
 }) {
   const display = value && value.trim() ? value : '—';
   return (
-    <div className="flex justify-between items-start gap-4 py-1.5 border-b border-[#1E2633] last:border-0">
-      <span className="text-[10px] font-bold text-[#A3AAB5] uppercase tracking-wider whitespace-nowrap flex-shrink-0">
+    <div className="flex justify-between items-start gap-4 py-2 border-b border-theme-border last:border-0">
+      <span className="text-[10px] font-bold text-theme-muted uppercase tracking-wider whitespace-nowrap flex-shrink-0">
         {label}
       </span>
-      <span className="text-xs text-[#E6EAF0] text-right font-medium">{display}</span>
+      <span className="text-xs text-theme-primary text-right font-medium">{display}</span>
     </div>
   );
 }
@@ -564,7 +562,6 @@ export default function OemCustomSolutionsPage() {
       analytics.oemSubmit(applicationLabel, bms.bmsRequired === 'YES');
       setSubmissionResult(data);
     } catch (err) {
-
       setSubmitError(
         err instanceof Error ? err.message : 'An unexpected error occurred.'
       );
@@ -595,50 +592,50 @@ export default function OemCustomSolutionsPage() {
 
   if (submissionResult) {
     return (
-      <main className="min-h-screen bg-[#0B0F14] text-[#E6EAF0] py-12 px-4">
+      <main className="min-h-screen bg-theme-base text-theme-primary py-12 px-4">
         <div className="max-w-lg mx-auto">
-          <div className="bg-[#11161D] rounded-2xl border border-[#1E2633] shadow-xl overflow-hidden">
-            <div className="p-6 bg-[#39D353]/10 border-b border-[#39D353]/25 flex items-start gap-4">
-              <div className="w-10 h-10 rounded-full bg-[#39D353] text-[#0B0F14] flex items-center justify-center flex-shrink-0 font-bold shadow-[0_0_15px_rgba(57,211,83,0.3)]">
+          <div className="bg-theme-card rounded-2xl border border-theme-border shadow-xl overflow-hidden">
+            <div className="p-6 bg-theme-green/10 border-b border-theme-green/25 flex items-start gap-4">
+              <div className="w-10 h-10 rounded-full bg-theme-green text-white dark:text-[#0B0F14] flex items-center justify-center flex-shrink-0 font-bold shadow-sm">
                 <CheckCircle2 className="w-5 h-5" />
               </div>
               <div>
-                <h2 className="text-base font-bold text-[#39D353]">OEM Enquiry Registered</h2>
-                <p className="text-xs text-[#A3AAB5] mt-0.5">{submissionResult.message}</p>
+                <h2 className="text-base font-bold text-theme-green">OEM Enquiry Registered</h2>
+                <p className="text-xs text-theme-secondary mt-0.5">{submissionResult.message}</p>
               </div>
             </div>
 
             <div className="p-6 space-y-5">
               {/* Reference number */}
               <div>
-                <p className="text-xs text-[#A3AAB5] mb-1.5 font-semibold">Your Enquiry Reference</p>
-                <div className="flex items-center gap-2 p-3 bg-[#161C24] rounded-xl border border-[#1E2633]">
-                  <code className="flex-1 font-mono text-sm font-bold text-[#39D353]">
+                <p className="text-xs text-theme-secondary mb-1.5 font-semibold">Your Enquiry Reference</p>
+                <div className="flex items-center gap-2 p-3 bg-theme-elevated rounded-xl border border-theme-border">
+                  <code className="flex-1 font-mono text-sm font-bold text-theme-green">
                     {submissionResult.enquiryNumber}
                   </code>
                   <button
                     onClick={handleCopy}
-                    className="p-1.5 rounded-lg hover:bg-white/[0.06] transition-colors text-[#A3AAB5] hover:text-[#E6EAF0]"
+                    className="p-1.5 rounded-lg hover:bg-theme-card text-theme-secondary hover:text-theme-primary transition-colors"
                     title="Copy reference"
                   >
                     {copied ? (
-                      <CheckCircle2 className="w-4 h-4 text-[#39D353]" />
+                      <CheckCircle2 className="w-4 h-4 text-theme-green" />
                     ) : (
                       <Copy className="w-4 h-4" />
                     )}
                   </button>
                 </div>
-                <p className="text-[10px] text-[#64748B] mt-1.5">
+                <p className="text-[10px] text-theme-muted mt-1.5">
                   Please quote this reference in all future correspondence.
                 </p>
               </div>
 
               {/* Engineering note */}
               <div className="flex items-start gap-2.5 p-3.5 bg-amber-500/10 border border-amber-500/30 rounded-xl">
-                <AlertTriangle className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
+                <AlertTriangle className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-xs font-bold text-amber-300">Engineering Evaluation Required</p>
-                  <p className="text-[10px] text-amber-200/90 mt-0.5 leading-relaxed">
+                  <p className="text-xs font-bold text-amber-600 dark:text-amber-300">Engineering Evaluation Required</p>
+                  <p className="text-[10px] text-theme-secondary mt-0.5 leading-relaxed">
                     Final battery configuration, component selection, BMS parameters and mechanical design require engineering validation by Lawad Infrastructure engineers.
                   </p>
                 </div>
@@ -650,32 +647,26 @@ export default function OemCustomSolutionsPage() {
                   href={waUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-[#39D353] text-[#0B0F14] text-sm font-bold hover:bg-[#2ec547] shadow-[0_0_15px_rgba(57,211,83,0.25)] transition-colors"
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-theme-green text-white dark:text-[#0B0F14] text-sm font-bold hover:bg-theme-green-hover shadow-sm transition-colors"
                 >
                   <MessageSquare className="w-4 h-4" />
                   Talk to Sales on WhatsApp
                 </a>
                 <Link
                   href="/contact?type=engineering"
-                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-[#00A3FF] text-[#00A3FF] bg-[#00A3FF]/10 text-sm font-bold hover:bg-[#00A3FF]/20 transition-colors"
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-theme-blue text-theme-blue bg-theme-blue/10 text-sm font-bold hover:bg-theme-blue/20 transition-colors"
                 >
-                  <Building2 className="w-4 h-4" />
-                  Talk to Engineering
+                  Contact Engineering Team
                 </Link>
-                <Link
-                  href="/contact"
-                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-[#1E2633] text-[#A3AAB5] bg-[#161C24] text-sm font-semibold hover:bg-white/[0.06] hover:text-[#E6EAF0] transition-colors"
+                <button
+                  onClick={() => {
+                    setSubmissionResult(null);
+                    setStep(1);
+                  }}
+                  className="w-full text-center text-xs text-theme-secondary hover:text-theme-primary py-2"
                 >
-                  <Phone className="w-4 h-4" />
-                  Business Enquiry
-                </Link>
-                <Link
-                  href="/"
-                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-[#1E2633] text-[#A3AAB5] bg-[#161C24] text-sm font-semibold hover:bg-white/[0.06] hover:text-[#E6EAF0] transition-colors"
-                >
-                  <ArrowLeft className="w-4 h-4" />
-                  Back to MEHAR Website
-                </Link>
+                  Submit Another OEM Requirement
+                </button>
               </div>
             </div>
           </div>
@@ -685,25 +676,25 @@ export default function OemCustomSolutionsPage() {
   }
 
   // ─────────────────────────────────────────────────────────────
-  // WIZARD
+  // FORM FLOW
   // ─────────────────────────────────────────────────────────────
 
   return (
-    <main className="min-h-screen bg-[#0B0F14] text-[#E6EAF0]">
+    <main className="min-h-screen bg-theme-base text-theme-primary transition-colors duration-200">
       {/* Page header */}
-      <div className="bg-[#11161D] border-b border-[#1E2633]">
+      <div className="bg-theme-card border-b border-theme-border">
         <div className="max-w-5xl xl:max-w-[1200px] 2xl:max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-8">
           <div className="flex items-center gap-3 mb-1">
-            <Link href="/" className="text-[#A3AAB5] hover:text-[#39D353] transition-colors">
+            <Link href="/" className="text-theme-secondary hover:text-theme-green transition-colors">
               <ArrowLeft className="w-4 h-4" />
             </Link>
-            <span className="text-[11px] text-[#1E2633]">/</span>
-            <span className="text-[11px] font-medium text-[#39D353]">OEM / ODM Custom Battery Solutions</span>
+            <span className="text-[11px] text-theme-border-strong">/</span>
+            <span className="text-[11px] font-medium text-theme-green">OEM / ODM Custom Battery Solutions</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#E6EAF0]">
+          <h1 className="text-2xl sm:text-3xl font-bold text-theme-primary">
             Custom OEM Battery Engineering Enquiry
           </h1>
-          <p className="text-sm sm:text-base text-[#A3AAB5] mt-1">
+          <p className="text-sm sm:text-base text-theme-secondary mt-1">
             Capture your engineering requirements. All values are recorded as customer requirements for evaluation by Lawad Infrastructure engineers.
           </p>
         </div>
@@ -717,9 +708,9 @@ export default function OemCustomSolutionsPage() {
       {/* Engineering caveat banner */}
       <div className="max-w-5xl xl:max-w-[1200px] 2xl:max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 mt-6">
         <div className="flex items-start gap-2 p-3.5 bg-amber-500/10 border border-amber-500/30 rounded-xl">
-          <Info className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
-          <p className="text-xs text-amber-200/90 leading-relaxed">
-            <strong>Engineering Assessment Required.</strong> All values entered below are <strong>customer-stated requirements</strong>. Suitability, feasibility, and final configuration require engineering validation by Lawad Infrastructure Pvt. Ltd. No product recommendation or capability claim is implied.
+          <Info className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
+          <p className="text-xs text-theme-secondary leading-relaxed">
+            <strong className="text-theme-primary">Engineering Assessment Required.</strong> All values entered below are <strong>customer-stated requirements</strong>. Suitability, feasibility, and final configuration require engineering validation by Lawad Infrastructure Pvt. Ltd. No product recommendation or capability claim is implied.
           </p>
         </div>
       </div>
@@ -732,7 +723,7 @@ export default function OemCustomSolutionsPage() {
           <SectionCard title="Step 1 — Application Domain">
             <div>
               <FieldLabel required>What will the custom battery be used for?</FieldLabel>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-2">
                 {APPLICATION_DOMAINS.map((d) => (
                   <button
                     key={d.id}
@@ -740,11 +731,11 @@ export default function OemCustomSolutionsPage() {
                     onClick={() => { setApplicationId(d.id); setErrors({}); }}
                     className={`text-left px-4 py-3 rounded-xl border text-xs font-semibold transition-all ${
                       applicationId === d.id
-                        ? 'border-[#39D353] bg-[#39D353]/10 text-[#39D353]'
-                        : 'border-[#1E2633] bg-[#161C24] text-[#E6EAF0] hover:border-[#39D353]/50'
+                        ? 'border-theme-green bg-theme-green/10 text-theme-green shadow-sm'
+                        : 'border-theme-border bg-theme-elevated text-theme-primary hover:border-theme-green/50 hover:bg-theme-card'
                     }`}
                   >
-                    <span className={applicationId === d.id ? 'text-[#39D353] mr-1' : 'mr-1 opacity-0'}>✓</span>
+                    <span className={applicationId === d.id ? 'text-theme-green mr-1.5 font-bold' : 'mr-1.5 opacity-0'}>✓</span>
                     {d.name}
                   </button>
                 ))}
@@ -753,22 +744,22 @@ export default function OemCustomSolutionsPage() {
                   onClick={() => { setApplicationId('other'); setErrors({}); }}
                   className={`text-left px-4 py-3 rounded-xl border text-xs font-semibold transition-all ${
                     applicationId === 'other'
-                      ? 'border-[#059669] bg-[#F0FDF4] text-[#065F46]'
-                      : 'border-[#E2E8F0] bg-white text-[#334155] hover:border-[#059669] hover:bg-[#F0FDF4]'
+                      ? 'border-theme-green bg-theme-green/10 text-theme-green shadow-sm'
+                      : 'border-theme-border bg-theme-elevated text-theme-primary hover:border-theme-green/50 hover:bg-theme-card'
                   }`}
                 >
-                  <span className={applicationId === 'other' ? 'text-[#059669] mr-1' : 'mr-1 opacity-0'}>✓</span>
+                  <span className={applicationId === 'other' ? 'text-theme-green mr-1.5 font-bold' : 'mr-1.5 opacity-0'}>✓</span>
                   Other / Not listed
                 </button>
               </div>
               {errors.applicationId && (
-                <p className="mt-2 text-xs text-[#DC2626]">{errors.applicationId}</p>
+                <p className="mt-2 text-xs text-red-500 font-medium">{errors.applicationId}</p>
               )}
             </div>
 
             <div>
               <FieldLabel hint="Describe the specific equipment, product, or use case.">
-                Application Detail <span className="text-[#94A3B8] font-normal text-[11px]">(optional)</span>
+                Application Detail <span className="text-theme-muted font-normal text-[11px]">(optional)</span>
               </FieldLabel>
               <textarea
                 id="oem-application-detail"
@@ -776,7 +767,7 @@ export default function OemCustomSolutionsPage() {
                 onChange={(e) => setApplicationDetail(e.target.value)}
                 placeholder="e.g. Electric cargo tricycle, 250kg load, 8 hour shift operation"
                 rows={3}
-                className="w-full px-3.5 py-2.5 rounded-lg border border-[#CBD5E1] text-sm text-[#0F172A] placeholder-[#94A3B8] bg-white focus:outline-none focus:border-[#059669] focus:ring-2 focus:ring-[#059669]/20 resize-y"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-theme-border text-sm text-theme-primary placeholder-theme-muted bg-theme-elevated focus:outline-none focus:border-theme-green focus:ring-2 focus:ring-theme-green/20 resize-y"
               />
             </div>
           </SectionCard>
@@ -785,14 +776,14 @@ export default function OemCustomSolutionsPage() {
         {/* ═══ STEP 2 — ELECTRICAL ══════════════════════════════════ */}
         {step === 2 && (
           <SectionCard title="Step 2 — Electrical Requirements (Customer Requirements)">
-            <p className="text-xs text-[#64748B] -mt-1">
+            <p className="text-xs text-theme-secondary -mt-1">
               All values are customer-stated requirements. They are not confirmed as MEHAR capabilities.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <FieldLabel isCustomerReq hint="Nominal system voltage required by your equipment.">
-                  Required Voltage <span className="text-[#94A3B8] font-normal text-[11px]">(optional)</span>
+                  Required Voltage <span className="text-theme-muted font-normal text-[11px]">(optional)</span>
                 </FieldLabel>
                 <UnitInput
                   id="oem-voltage"
@@ -807,7 +798,7 @@ export default function OemCustomSolutionsPage() {
 
               <div>
                 <FieldLabel isCustomerReq hint="Ampere-hours required.">
-                  Capacity <span className="text-[#94A3B8] font-normal text-[11px]">(optional)</span>
+                  Capacity <span className="text-theme-muted font-normal text-[11px]">(optional)</span>
                 </FieldLabel>
                 <UnitInput
                   id="oem-capacity"
@@ -822,7 +813,7 @@ export default function OemCustomSolutionsPage() {
 
               <div>
                 <FieldLabel isCustomerReq hint="Energy in Wh or kWh if known.">
-                  Energy <span className="text-[#94A3B8] font-normal text-[11px]">(optional)</span>
+                  Energy <span className="text-theme-muted font-normal text-[11px]">(optional)</span>
                 </FieldLabel>
                 <UnitInput
                   id="oem-energy"
@@ -837,7 +828,7 @@ export default function OemCustomSolutionsPage() {
 
               <div>
                 <FieldLabel isCustomerReq hint="Continuous discharge current requirement.">
-                  Continuous Current <span className="text-[#94A3B8] font-normal text-[11px]">(optional)</span>
+                  Continuous Current <span className="text-theme-muted font-normal text-[11px]">(optional)</span>
                 </FieldLabel>
                 <UnitInput
                   id="oem-cont-current"
@@ -852,7 +843,7 @@ export default function OemCustomSolutionsPage() {
 
               <div>
                 <FieldLabel isCustomerReq hint="Maximum instantaneous peak current.">
-                  Peak Current <span className="text-[#94A3B8] font-normal text-[11px]">(optional)</span>
+                  Peak Current <span className="text-theme-muted font-normal text-[11px]">(optional)</span>
                 </FieldLabel>
                 <UnitInput
                   id="oem-peak-current"
@@ -867,7 +858,7 @@ export default function OemCustomSolutionsPage() {
 
               <div>
                 <FieldLabel isCustomerReq>
-                  Runtime / Range <span className="text-[#94A3B8] font-normal text-[11px]">(optional)</span>
+                  Runtime / Range <span className="text-theme-muted font-normal text-[11px]">(optional)</span>
                 </FieldLabel>
                 <UnitInput
                   id="oem-runtime"
@@ -883,7 +874,7 @@ export default function OemCustomSolutionsPage() {
 
             <div>
               <FieldLabel isCustomerReq hint="Your preference only — final chemistry is subject to engineering evaluation.">
-                Chemistry Preference <span className="text-[#94A3B8] font-normal text-[11px]">(optional)</span>
+                Chemistry Preference <span className="text-theme-muted font-normal text-[11px]">(optional)</span>
               </FieldLabel>
               <FormSelect
                 id="oem-chemistry"
@@ -898,29 +889,27 @@ export default function OemCustomSolutionsPage() {
         {/* ═══ STEP 3 — MECHANICAL ═════════════════════════════════ */}
         {step === 3 && (
           <SectionCard title="Step 3 — Mechanical Requirements (Customer Requirements)">
-            <p className="text-xs text-[#64748B] -mt-1">
+            <p className="text-xs text-theme-secondary -mt-1">
               All dimensions and constraints are customer-stated. Final form factor requires engineering design.
             </p>
 
             <div>
               <FieldLabel isCustomerReq hint="Maximum external envelope dimensions of the battery pack.">
-                Maximum Dimensions (L × W × H) <span className="text-[#94A3B8] font-normal text-[11px]">(optional)</span>
+                Maximum Dimensions (L × W × H) <span className="text-theme-muted font-normal text-[11px]">(optional)</span>
               </FieldLabel>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-3 gap-2.5">
                 {(['length', 'width', 'height'] as const).map((dim) => (
                   <div key={dim}>
-                    <div className="relative">
-                      <input
-                        id={`oem-${dim}`}
-                        type="number"
-                        min={0}
-                        value={mech[dim]}
-                        onChange={(e) => setMech({ ...mech, [dim]: e.target.value })}
-                        placeholder="mm"
-                        className="w-full px-3 py-2.5 rounded-lg border border-[#CBD5E1] text-sm text-[#0F172A] placeholder-[#94A3B8] bg-white focus:outline-none focus:border-[#059669] focus:ring-2 focus:ring-[#059669]/20"
-                      />
-                    </div>
-                    <p className="text-[9px] text-[#94A3B8] mt-0.5 capitalize text-center">{dim} (mm)</p>
+                    <input
+                      id={`oem-${dim}`}
+                      type="number"
+                      min={0}
+                      value={mech[dim]}
+                      onChange={(e) => setMech({ ...mech, [dim]: e.target.value })}
+                      placeholder="mm"
+                      className="w-full px-3 py-2.5 rounded-lg border border-theme-border text-sm text-theme-primary placeholder-theme-muted bg-theme-elevated focus:outline-none focus:border-theme-green focus:ring-2 focus:ring-theme-green/20"
+                    />
+                    <p className="text-[10px] text-theme-muted mt-1 capitalize text-center">{dim} (mm)</p>
                   </div>
                 ))}
               </div>
@@ -928,7 +917,7 @@ export default function OemCustomSolutionsPage() {
 
             <div>
               <FieldLabel isCustomerReq>
-                Maximum Weight <span className="text-[#94A3B8] font-normal text-[11px]">(optional)</span>
+                Maximum Weight <span className="text-theme-muted font-normal text-[11px]">(optional)</span>
               </FieldLabel>
               <UnitInput
                 id="oem-weight"
@@ -943,7 +932,7 @@ export default function OemCustomSolutionsPage() {
 
             <div>
               <FieldLabel isCustomerReq>
-                Mounting Requirements <span className="text-[#94A3B8] font-normal text-[11px]">(optional)</span>
+                Mounting Requirements <span className="text-theme-muted font-normal text-[11px]">(optional)</span>
               </FieldLabel>
               <FormInput
                 id="oem-mounting"
@@ -955,7 +944,7 @@ export default function OemCustomSolutionsPage() {
 
             <div>
               <FieldLabel isCustomerReq>
-                Connector / Interface <span className="text-[#94A3B8] font-normal text-[11px]">(optional)</span>
+                Connector / Interface <span className="text-theme-muted font-normal text-[11px]">(optional)</span>
               </FieldLabel>
               <FormSelect
                 id="oem-connector"
@@ -967,7 +956,7 @@ export default function OemCustomSolutionsPage() {
 
             <div>
               <FieldLabel isCustomerReq>
-                Cable / Harness Requirements <span className="text-[#94A3B8] font-normal text-[11px]">(optional)</span>
+                Cable / Harness Requirements <span className="text-theme-muted font-normal text-[11px]">(optional)</span>
               </FieldLabel>
               <FormInput
                 id="oem-harness"
@@ -982,7 +971,7 @@ export default function OemCustomSolutionsPage() {
         {/* ═══ STEP 4 — BMS / COMMS ════════════════════════════════ */}
         {step === 4 && (
           <SectionCard title="Step 4 — BMS & Communication Requirements">
-            <div className="bg-[#FFFBEB] border border-[#FDE68A] rounded-lg p-3 text-[10px] text-[#78350F] leading-relaxed">
+            <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3.5 text-xs text-theme-secondary leading-relaxed">
               MEHAR does not confirm specific BMS features or communication protocols without engineering review. The selections below are your stated requirements only.
             </div>
 
@@ -996,10 +985,10 @@ export default function OemCustomSolutionsPage() {
                     key={opt}
                     type="button"
                     onClick={() => setBms({ ...bms, bmsRequired: opt })}
-                    className={`px-4 py-2 rounded-lg border text-xs font-semibold transition-all ${
+                    className={`px-4 py-2 rounded-xl border text-xs font-semibold transition-all ${
                       bms.bmsRequired === opt
-                        ? 'border-[#059669] bg-[#F0FDF4] text-[#065F46]'
-                        : 'border-[#CBD5E1] bg-white text-[#334155] hover:border-[#059669]'
+                        ? 'border-theme-green bg-theme-green/10 text-theme-green shadow-sm'
+                        : 'border-theme-border bg-theme-elevated text-theme-secondary hover:border-theme-green hover:text-theme-primary'
                     }`}
                   >
                     {bms.bmsRequired === opt ? '✓ ' : ''}{opt}
@@ -1012,7 +1001,7 @@ export default function OemCustomSolutionsPage() {
               <>
                 <div>
                   <FieldLabel isCustomerReq hint="Select all communication protocols your system requires. These are customer requirements pending engineering evaluation.">
-                    Communication Protocol(s) <span className="text-[#94A3B8] font-normal text-[11px]">(optional)</span>
+                    Communication Protocol(s) <span className="text-theme-muted font-normal text-[11px]">(optional)</span>
                   </FieldLabel>
                   <CheckboxGroup
                     options={['CAN bus', 'RS485 / Modbus', 'SMBus', 'UART', 'Bluetooth', 'None required', 'Not sure']}
@@ -1023,7 +1012,7 @@ export default function OemCustomSolutionsPage() {
 
                 <div>
                   <FieldLabel isCustomerReq>
-                    Other BMS / Protocol Requirements <span className="text-[#94A3B8] font-normal text-[11px]">(optional)</span>
+                    Other BMS / Protocol Requirements <span className="text-theme-muted font-normal text-[11px]">(optional)</span>
                   </FieldLabel>
                   <FormInput
                     id="oem-bms-other"
@@ -1040,14 +1029,14 @@ export default function OemCustomSolutionsPage() {
         {/* ═══ STEP 5 — ENVIRONMENT ════════════════════════════════ */}
         {step === 5 && (
           <SectionCard title="Step 5 — Environmental Requirements (Customer Requirements)">
-            <div className="bg-[#FFFBEB] border border-[#FDE68A] rounded-lg p-3 text-[10px] text-[#78350F] leading-relaxed">
+            <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3.5 text-xs text-theme-secondary leading-relaxed">
               IP ratings and environmental certifications are not confirmed. All values are customer requirements subject to engineering review.
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <FieldLabel isCustomerReq hint="Minimum and maximum operating temperature.">
-                  Operating Temperature Range <span className="text-[#94A3B8] font-normal text-[11px]">(optional)</span>
+                  Operating Temperature Range <span className="text-theme-muted font-normal text-[11px]">(optional)</span>
                 </FieldLabel>
                 <div className="flex gap-2 items-center">
                   <input
@@ -1056,23 +1045,23 @@ export default function OemCustomSolutionsPage() {
                     value={env.operatingTempMin}
                     onChange={(e) => setEnv({ ...env, operatingTempMin: e.target.value })}
                     placeholder="Min °C"
-                    className="flex-1 px-3 py-2.5 rounded-lg border border-[#CBD5E1] text-sm bg-white focus:outline-none focus:border-[#059669]"
+                    className="flex-1 px-3 py-2.5 rounded-lg border border-theme-border text-sm text-theme-primary placeholder-theme-muted bg-theme-elevated focus:outline-none focus:border-theme-green"
                   />
-                  <span className="text-[#94A3B8] text-xs">to</span>
+                  <span className="text-theme-muted text-xs">to</span>
                   <input
                     id="oem-op-temp-max"
                     type="number"
                     value={env.operatingTempMax}
                     onChange={(e) => setEnv({ ...env, operatingTempMax: e.target.value })}
                     placeholder="Max °C"
-                    className="flex-1 px-3 py-2.5 rounded-lg border border-[#CBD5E1] text-sm bg-white focus:outline-none focus:border-[#059669]"
+                    className="flex-1 px-3 py-2.5 rounded-lg border border-theme-border text-sm text-theme-primary placeholder-theme-muted bg-theme-elevated focus:outline-none focus:border-theme-green"
                   />
                 </div>
               </div>
 
               <div>
                 <FieldLabel isCustomerReq>
-                  Storage Temperature Range <span className="text-[#94A3B8] font-normal text-[11px]">(optional)</span>
+                  Storage Temperature Range <span className="text-theme-muted font-normal text-[11px]">(optional)</span>
                 </FieldLabel>
                 <div className="flex gap-2 items-center">
                   <input
@@ -1081,16 +1070,16 @@ export default function OemCustomSolutionsPage() {
                     value={env.storageTempMin}
                     onChange={(e) => setEnv({ ...env, storageTempMin: e.target.value })}
                     placeholder="Min °C"
-                    className="flex-1 px-3 py-2.5 rounded-lg border border-[#CBD5E1] text-sm bg-white focus:outline-none focus:border-[#059669]"
+                    className="flex-1 px-3 py-2.5 rounded-lg border border-theme-border text-sm text-theme-primary placeholder-theme-muted bg-theme-elevated focus:outline-none focus:border-theme-green"
                   />
-                  <span className="text-[#94A3B8] text-xs">to</span>
+                  <span className="text-theme-muted text-xs">to</span>
                   <input
                     id="oem-store-temp-max"
                     type="number"
                     value={env.storageTempMax}
                     onChange={(e) => setEnv({ ...env, storageTempMax: e.target.value })}
                     placeholder="Max °C"
-                    className="flex-1 px-3 py-2.5 rounded-lg border border-[#CBD5E1] text-sm bg-white focus:outline-none focus:border-[#059669]"
+                    className="flex-1 px-3 py-2.5 rounded-lg border border-theme-border text-sm text-theme-primary placeholder-theme-muted bg-theme-elevated focus:outline-none focus:border-theme-green"
                   />
                 </div>
               </div>
@@ -1098,7 +1087,7 @@ export default function OemCustomSolutionsPage() {
 
             <div>
               <FieldLabel isCustomerReq hint="Customer-stated IP rating requirement — suitability subject to engineering evaluation.">
-                Water / Dust Ingress Protection (IP Rating) <span className="text-[#94A3B8] font-normal text-[11px]">(optional)</span>
+                Water / Dust Ingress Protection (IP Rating) <span className="text-theme-muted font-normal text-[11px]">(optional)</span>
               </FieldLabel>
               <div className="flex flex-wrap gap-2">
                 {['No requirement', 'IP44', 'IP54', 'IP55', 'IP65', 'IP67', 'IP68', 'Not sure'].map((ip) => (
@@ -1106,10 +1095,10 @@ export default function OemCustomSolutionsPage() {
                     key={ip}
                     type="button"
                     onClick={() => setEnv({ ...env, ipRating: ip })}
-                    className={`px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all ${
+                    className={`px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all ${
                       env.ipRating === ip
-                        ? 'border-[#059669] bg-[#F0FDF4] text-[#065F46]'
-                        : 'border-[#CBD5E1] bg-white text-[#334155] hover:border-[#059669]'
+                        ? 'border-theme-green bg-theme-green/10 text-theme-green shadow-sm'
+                        : 'border-theme-border bg-theme-elevated text-theme-secondary hover:border-theme-green hover:text-theme-primary'
                     }`}
                   >
                     {env.ipRating === ip ? '✓ ' : ''}{ip}
@@ -1120,7 +1109,7 @@ export default function OemCustomSolutionsPage() {
 
             <div>
               <FieldLabel isCustomerReq>
-                Vibration / Shock Requirements <span className="text-[#94A3B8] font-normal text-[11px]">(optional)</span>
+                Vibration / Shock Requirements <span className="text-theme-muted font-normal text-[11px]">(optional)</span>
               </FieldLabel>
               <FormInput
                 id="oem-vibration"
@@ -1132,7 +1121,7 @@ export default function OemCustomSolutionsPage() {
 
             <div>
               <FieldLabel isCustomerReq>
-                Other Environmental Requirements <span className="text-[#94A3B8] font-normal text-[11px]">(optional)</span>
+                Other Environmental Requirements <span className="text-theme-muted font-normal text-[11px]">(optional)</span>
               </FieldLabel>
               <textarea
                 id="oem-env-other"
@@ -1140,7 +1129,7 @@ export default function OemCustomSolutionsPage() {
                 onChange={(e) => setEnv({ ...env, otherEnv: e.target.value })}
                 placeholder="e.g. Outdoor roof-mounted, exposed to rain, UV, altitude 2000m"
                 rows={2}
-                className="w-full px-3.5 py-2.5 rounded-lg border border-[#CBD5E1] text-sm text-[#0F172A] placeholder-[#94A3B8] bg-white focus:outline-none focus:border-[#059669] resize-y"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-theme-border text-sm text-theme-primary placeholder-theme-muted bg-theme-elevated focus:outline-none focus:border-theme-green resize-y"
               />
             </div>
           </SectionCard>
@@ -1152,7 +1141,7 @@ export default function OemCustomSolutionsPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <FieldLabel hint="Initial prototype / sample units needed.">
-                  Prototype / Sample Quantity <span className="text-[#94A3B8] font-normal text-[11px]">(optional)</span>
+                  Prototype / Sample Quantity <span className="text-theme-muted font-normal text-[11px]">(optional)</span>
                 </FieldLabel>
                 <div className="flex flex-wrap gap-2">
                   {['1 – 3 units', '4 – 10 units', '10+ units', 'Not yet decided'].map((o) => (
@@ -1160,10 +1149,10 @@ export default function OemCustomSolutionsPage() {
                       key={o}
                       type="button"
                       onClick={() => setComm({ ...comm, protoQty: o })}
-                      className={`px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all ${
+                      className={`px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all ${
                         comm.protoQty === o
-                          ? 'border-[#059669] bg-[#F0FDF4] text-[#065F46]'
-                          : 'border-[#CBD5E1] bg-white text-[#334155] hover:border-[#059669]'
+                          ? 'border-theme-green bg-theme-green/10 text-theme-green shadow-sm'
+                          : 'border-theme-border bg-theme-elevated text-theme-secondary hover:border-theme-green hover:text-theme-primary'
                       }`}
                     >
                       {comm.protoQty === o ? '✓ ' : ''}{o}
@@ -1174,7 +1163,7 @@ export default function OemCustomSolutionsPage() {
 
               <div>
                 <FieldLabel>
-                  First Production Run Quantity <span className="text-[#94A3B8] font-normal text-[11px]">(optional)</span>
+                  First Production Run Quantity <span className="text-theme-muted font-normal text-[11px]">(optional)</span>
                 </FieldLabel>
                 <FormInput
                   id="oem-production-qty"
@@ -1187,7 +1176,7 @@ export default function OemCustomSolutionsPage() {
 
             <div>
               <FieldLabel>
-                Estimated Annual Volume <span className="text-[#94A3B8] font-normal text-[11px]">(optional)</span>
+                Estimated Annual Volume <span className="text-theme-muted font-normal text-[11px]">(optional)</span>
               </FieldLabel>
               <FormSelect
                 id="oem-annual-qty"
@@ -1199,7 +1188,7 @@ export default function OemCustomSolutionsPage() {
 
             <div>
               <FieldLabel hint="Target date for first delivery or production start.">
-                Target Production / Delivery Date <span className="text-[#94A3B8] font-normal text-[11px]">(optional)</span>
+                Target Production / Delivery Date <span className="text-theme-muted font-normal text-[11px]">(optional)</span>
               </FieldLabel>
               <FormInput
                 id="oem-target-date"
@@ -1217,10 +1206,10 @@ export default function OemCustomSolutionsPage() {
                     key={s}
                     type="button"
                     onClick={() => setComm({ ...comm, projectStage: s })}
-                    className={`px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all ${
+                    className={`px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all ${
                       comm.projectStage === s
-                        ? 'border-[#059669] bg-[#F0FDF4] text-[#065F46]'
-                        : 'border-[#CBD5E1] bg-white text-[#334155] hover:border-[#059669]'
+                        ? 'border-theme-green bg-theme-green/10 text-theme-green shadow-sm'
+                        : 'border-theme-border bg-theme-elevated text-theme-secondary hover:border-theme-green hover:text-theme-primary'
                     }`}
                   >
                     {comm.projectStage === s ? '✓ ' : ''}{s}
@@ -1309,7 +1298,7 @@ export default function OemCustomSolutionsPage() {
                 </div>
                 <div>
                   <FieldLabel hint="For Indian businesses.">
-                    GSTIN <span className="text-[#94A3B8] font-normal text-[11px]">(optional)</span>
+                    GSTIN <span className="text-theme-muted font-normal text-[11px]">(optional)</span>
                   </FieldLabel>
                   <FormInput
                     id="oem-gstin"
@@ -1320,7 +1309,7 @@ export default function OemCustomSolutionsPage() {
                 </div>
                 <div className="sm:col-span-2">
                   <FieldLabel>
-                    Website <span className="text-[#94A3B8] font-normal text-[11px]">(optional)</span>
+                    Website <span className="text-theme-muted font-normal text-[11px]">(optional)</span>
                   </FieldLabel>
                   <FormInput
                     id="oem-website"
@@ -1334,16 +1323,16 @@ export default function OemCustomSolutionsPage() {
             </SectionCard>
 
             <SectionCard title="Engineering Documents & Attachments">
-              <p className="text-xs text-[#64748B] -mt-1">
+              <p className="text-xs text-theme-secondary -mt-1">
                 Upload relevant documents such as CAD drawings, existing battery datasheets, product photos, or connector drawings. Maximum {MAX_FILES} files, {MAX_FILE_MB}MB each.
               </p>
-              <p className="text-[10px] text-[#94A3B8]">
+              <p className="text-[10px] text-theme-muted">
                 Accepted: PDF, JPEG, PNG, WEBP, DOCX, XLSX, STEP, IGES, DWG, DXF
               </p>
 
               {/* Drop zone */}
               <div
-                className="border-2 border-dashed border-[#CBD5E1] rounded-xl p-8 text-center hover:border-[#059669] hover:bg-[#F0FDF4] transition-all cursor-pointer"
+                className="border-2 border-dashed border-theme-border rounded-2xl p-8 text-center hover:border-theme-green hover:bg-theme-green/5 transition-all cursor-pointer bg-theme-elevated"
                 onClick={() => fileInputRef.current?.click()}
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={(e) => {
@@ -1351,9 +1340,9 @@ export default function OemCustomSolutionsPage() {
                   handleFiles(e.dataTransfer.files);
                 }}
               >
-                <Upload className="w-8 h-8 text-[#94A3B8] mx-auto mb-2" />
-                <p className="text-sm font-semibold text-[#334155]">Click to upload or drag & drop</p>
-                <p className="text-xs text-[#64748B] mt-0.5">
+                <Upload className="w-8 h-8 text-theme-muted mx-auto mb-2" />
+                <p className="text-sm font-semibold text-theme-primary">Click to upload or drag & drop</p>
+                <p className="text-xs text-theme-secondary mt-0.5">
                   {attachments.length}/{MAX_FILES} files selected
                 </p>
                 <input
@@ -1368,7 +1357,7 @@ export default function OemCustomSolutionsPage() {
               </div>
 
               {fileError && (
-                <p className="text-xs text-[#DC2626] font-medium">{fileError}</p>
+                <p className="text-xs text-red-500 font-medium">{fileError}</p>
               )}
 
               {/* Attachment list */}
@@ -1377,18 +1366,18 @@ export default function OemCustomSolutionsPage() {
                   {attachments.map((a) => (
                     <li
                       key={a.id}
-                      className="flex items-center gap-3 px-3.5 py-2.5 bg-[#F8FAFC] rounded-lg border border-[#E2E8F0]"
+                      className="flex items-center gap-3 px-3.5 py-2.5 bg-theme-elevated rounded-xl border border-theme-border"
                     >
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-semibold text-[#0F172A] truncate">{a.file.name}</p>
-                        <p className="text-[10px] text-[#64748B]">
+                        <p className="text-xs font-semibold text-theme-primary truncate">{a.file.name}</p>
+                        <p className="text-[10px] text-theme-muted">
                           {(a.file.size / 1024 / 1024).toFixed(2)} MB
                         </p>
                       </div>
                       <button
                         type="button"
                         onClick={() => removeAttachment(a.id)}
-                        className="p-1 rounded-lg hover:bg-[#FEE2E2] hover:text-[#DC2626] text-[#94A3B8] transition-colors"
+                        className="p-1 rounded-lg hover:bg-red-500/10 hover:text-red-500 text-theme-muted transition-colors"
                       >
                         <X className="w-4 h-4" />
                       </button>
@@ -1403,25 +1392,25 @@ export default function OemCustomSolutionsPage() {
         {/* ═══ STEP 8 — REVIEW ══════════════════════════════════════ */}
         {step === 8 && (
           <div className="space-y-5">
-            <div className="bg-white rounded-xl border border-[#E2E8F0] overflow-hidden">
-              <div className="px-5 py-3 bg-[#F8FAFC] border-b border-[#E2E8F0] flex items-center justify-between">
-                <h3 className="text-sm font-bold text-[#0F172A]">Customer Requirements Summary</h3>
-                <span className="text-[9px] px-2 py-1 rounded bg-[#FFFBEB] border border-[#FDE68A] text-[#92400E] font-bold uppercase tracking-wider">
+            <div className="bg-theme-card rounded-2xl border border-theme-border overflow-hidden shadow-sm">
+              <div className="px-5 py-3.5 bg-theme-surface border-b border-theme-border flex items-center justify-between">
+                <h3 className="text-sm font-bold text-theme-primary">Customer Requirements Summary</h3>
+                <span className="text-[9px] px-2.5 py-1 rounded bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-300 font-bold uppercase tracking-wider">
                   Customer Requirements Only
                 </span>
               </div>
 
-              <div className="p-5 space-y-5">
+              <div className="p-5 sm:p-6 space-y-6">
                 {/* Application */}
                 <div>
-                  <p className="text-[10px] font-bold text-[#059669] uppercase tracking-wider mb-2">Application</p>
+                  <p className="text-[10px] font-bold text-theme-green uppercase tracking-wider mb-2 font-mono">Application</p>
                   <ReviewRow label="Application" value={applicationLabel || undefined} />
                   <ReviewRow label="Detail" value={applicationDetail || undefined} />
                 </div>
 
                 {/* Electrical */}
                 <div>
-                  <p className="text-[10px] font-bold text-[#059669] uppercase tracking-wider mb-2">Electrical</p>
+                  <p className="text-[10px] font-bold text-theme-green uppercase tracking-wider mb-2 font-mono">Electrical</p>
                   <ReviewRow label="Voltage" value={elec.voltage ? `${elec.voltage} ${elec.voltageUnit}` : undefined} />
                   <ReviewRow label="Capacity" value={elec.capacity ? `${elec.capacity} ${elec.capacityUnit}` : undefined} />
                   <ReviewRow label="Energy" value={elec.energy ? `${elec.energy} ${elec.energyUnit}` : undefined} />
@@ -1433,7 +1422,7 @@ export default function OemCustomSolutionsPage() {
 
                 {/* Mechanical */}
                 <div>
-                  <p className="text-[10px] font-bold text-[#059669] uppercase tracking-wider mb-2">Mechanical</p>
+                  <p className="text-[10px] font-bold text-theme-green uppercase tracking-wider mb-2 font-mono">Mechanical</p>
                   <ReviewRow
                     label="Dimensions (L×W×H)"
                     value={
@@ -1450,7 +1439,7 @@ export default function OemCustomSolutionsPage() {
 
                 {/* BMS */}
                 <div>
-                  <p className="text-[10px] font-bold text-[#059669] uppercase tracking-wider mb-2">BMS / Communication</p>
+                  <p className="text-[10px] font-bold text-theme-green uppercase tracking-wider mb-2 font-mono">BMS / Communication</p>
                   <ReviewRow label="BMS Required" value={bms.bmsRequired || undefined} />
                   <ReviewRow label="Protocols" value={bms.protocols.length > 0 ? bms.protocols.join(', ') : undefined} />
                   <ReviewRow label="Other" value={bms.otherProtocol || undefined} />
@@ -1458,7 +1447,7 @@ export default function OemCustomSolutionsPage() {
 
                 {/* Environment */}
                 <div>
-                  <p className="text-[10px] font-bold text-[#059669] uppercase tracking-wider mb-2">Environment</p>
+                  <p className="text-[10px] font-bold text-theme-green uppercase tracking-wider mb-2 font-mono">Environment</p>
                   <ReviewRow
                     label="Operating Temp"
                     value={
@@ -1482,7 +1471,7 @@ export default function OemCustomSolutionsPage() {
 
                 {/* Commercial */}
                 <div>
-                  <p className="text-[10px] font-bold text-[#059669] uppercase tracking-wider mb-2">Commercial</p>
+                  <p className="text-[10px] font-bold text-theme-green uppercase tracking-wider mb-2 font-mono">Commercial</p>
                   <ReviewRow label="Prototype Qty" value={comm.protoQty || undefined} />
                   <ReviewRow label="Production Qty" value={comm.productionQty || undefined} />
                   <ReviewRow label="Annual Volume" value={comm.annualQty || undefined} />
@@ -1492,7 +1481,7 @@ export default function OemCustomSolutionsPage() {
 
                 {/* Company */}
                 <div>
-                  <p className="text-[10px] font-bold text-[#059669] uppercase tracking-wider mb-2">Company & Contact</p>
+                  <p className="text-[10px] font-bold text-theme-green uppercase tracking-wider mb-2 font-mono">Company & Contact</p>
                   <ReviewRow label="Company" value={company.companyName} />
                   <ReviewRow label="Contact" value={company.contactPerson} />
                   <ReviewRow label="Email" value={company.email} />
@@ -1506,12 +1495,12 @@ export default function OemCustomSolutionsPage() {
                 {/* Attachments */}
                 {attachments.length > 0 && (
                   <div>
-                    <p className="text-[10px] font-bold text-[#059669] uppercase tracking-wider mb-2">Attachments</p>
+                    <p className="text-[10px] font-bold text-theme-green uppercase tracking-wider mb-2 font-mono">Attachments</p>
                     <ul className="space-y-1">
                       {attachments.map((a) => (
-                        <li key={a.id} className="text-xs text-[#334155] flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#059669]" />
-                          {a.file.name} <span className="text-[#94A3B8]">({(a.file.size / 1024).toFixed(0)} KB)</span>
+                        <li key={a.id} className="text-xs text-theme-secondary flex items-center gap-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-theme-green" />
+                          {a.file.name} <span className="text-theme-muted">({(a.file.size / 1024).toFixed(0)} KB)</span>
                         </li>
                       ))}
                     </ul>
@@ -1521,11 +1510,11 @@ export default function OemCustomSolutionsPage() {
             </div>
 
             {/* Engineering caveat */}
-            <div className="flex items-start gap-3 p-4 bg-[#FFFBEB] border border-[#FDE68A] rounded-xl">
-              <AlertTriangle className="w-5 h-5 text-[#D97706] flex-shrink-0 mt-0.5" />
+            <div className="flex items-start gap-3 p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl">
+              <AlertTriangle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-bold text-[#92400E]">Engineering Evaluation Required</p>
-                <p className="text-xs text-[#78350F] mt-1 leading-relaxed">
+                <p className="text-sm font-bold text-amber-600 dark:text-amber-300">Engineering Evaluation Required</p>
+                <p className="text-xs text-theme-secondary mt-1 leading-relaxed">
                   Final battery configuration, component selection, BMS parameters and mechanical design require engineering validation by Lawad Infrastructure Pvt. Ltd. The information above represents customer-stated requirements only.
                 </p>
               </div>
@@ -1533,9 +1522,9 @@ export default function OemCustomSolutionsPage() {
 
             {/* Submit error */}
             {submitError && (
-              <div className="flex items-start gap-2 p-3.5 bg-[#FEF2F2] border border-[#FECACA] rounded-xl">
-                <AlertTriangle className="w-4 h-4 text-[#DC2626] flex-shrink-0 mt-0.5" />
-                <p className="text-xs text-[#991B1B]">{submitError}</p>
+              <div className="flex items-start gap-2 p-3.5 bg-red-500/10 border border-red-500/30 rounded-xl">
+                <AlertTriangle className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />
+                <p className="text-xs text-red-600 dark:text-red-400">{submitError}</p>
               </div>
             )}
           </div>
@@ -1546,7 +1535,7 @@ export default function OemCustomSolutionsPage() {
           <button
             type="button"
             onClick={step === 1 ? () => router.back() : handleBack}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-[#1E2633] text-sm font-semibold text-[#A3AAB5] bg-[#161C24] hover:bg-white/[0.06] hover:text-[#E6EAF0] transition-colors"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-theme-border text-sm font-semibold text-theme-secondary bg-theme-elevated hover:bg-theme-card hover:text-theme-primary transition-colors"
           >
             <ChevronLeft className="w-4 h-4" />
             {step === 1 ? 'Back to site' : 'Back'}
@@ -1556,7 +1545,7 @@ export default function OemCustomSolutionsPage() {
             <button
               type="button"
               onClick={handleNext}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#39D353] text-[#0B0F14] text-sm font-bold hover:bg-[#2ec547] shadow-[0_0_15px_rgba(57,211,83,0.25)] transition-colors"
+              className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-theme-green text-white dark:text-[#0B0F14] text-sm font-bold hover:bg-theme-green-hover shadow-sm transition-colors"
             >
               Continue
               <ChevronRight className="w-4 h-4" />
@@ -1566,7 +1555,7 @@ export default function OemCustomSolutionsPage() {
               type="button"
               onClick={handleSubmit}
               disabled={submitting}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#39D353] text-[#0B0F14] text-sm font-bold hover:bg-[#2ec547] shadow-[0_0_15px_rgba(57,211,83,0.25)] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-theme-green text-white dark:text-[#0B0F14] text-sm font-bold hover:bg-theme-green-hover shadow-sm transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {submitting ? 'Submitting…' : 'Submit OEM Enquiry'}
               {!submitting && <ChevronRight className="w-4 h-4" />}
@@ -1580,7 +1569,7 @@ export default function OemCustomSolutionsPage() {
             <button
               type="button"
               onClick={() => setStep(1)}
-              className="text-xs text-[#A3AAB5] hover:text-[#39D353] underline underline-offset-2"
+              className="text-xs text-theme-secondary hover:text-theme-green underline underline-offset-2"
             >
               Edit Requirements from Step 1
             </button>

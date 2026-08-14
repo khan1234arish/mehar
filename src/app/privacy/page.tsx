@@ -11,34 +11,34 @@ export const metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className="py-12 space-y-12 bg-[#0B0F14] text-[#E6EAF0]">
+    <div className="py-12 space-y-12 bg-theme-base text-theme-primary transition-colors duration-200">
       <div className="max-w-5xl xl:max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
         {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-xs font-mono text-[#A3AAB5] mb-6">
-          <Link href="/" className="hover:text-[#39D353] flex items-center gap-1 font-semibold transition-colors">
+        <div className="flex items-center gap-2 text-xs font-mono text-theme-secondary mb-6">
+          <Link href="/" className="hover:text-theme-green flex items-center gap-1 font-semibold transition-colors">
             <ArrowLeft className="w-3 h-3" /> Back to Home
           </Link>
           <span>/</span>
-          <span className="text-[#E6EAF0] font-bold">Privacy Policy</span>
+          <span className="text-theme-primary font-bold">Privacy Policy</span>
         </div>
 
         {/* Header */}
-        <div className="p-8 sm:p-10 rounded-3xl bg-[#11161D] border border-[#1E2633] space-y-3 mb-10 shadow-xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-80 h-80 bg-[#39D353]/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="p-8 sm:p-10 rounded-3xl bg-theme-card border border-theme-border space-y-3 mb-10 shadow-xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-80 h-80 bg-theme-green/10 rounded-full blur-[120px] pointer-events-none" />
           <Badge variant="green">Corporate Data Governance</Badge>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#E6EAF0] tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-theme-primary tracking-tight">
             Privacy Policy &amp; Commercial Data Governance
           </h1>
-          <p className="text-sm text-[#A3AAB5] leading-relaxed">
-            Effective Date: {new Date().getFullYear()} • Applicable to all commercial enquiries, RFQs, OEM technical intakes, and dealer applications submitted to <strong className="text-[#E6EAF0]">{COMPANY_INFO.parentCompanyName}</strong> for brand <strong className="text-[#E6EAF0]">{COMPANY_INFO.brandName}</strong>.
+          <p className="text-sm text-theme-secondary leading-relaxed">
+            Effective Date: {new Date().getFullYear()} • Applicable to all commercial enquiries, RFQs, OEM technical intakes, and dealer applications submitted to <strong className="text-theme-primary">{COMPANY_INFO.parentCompanyName}</strong> for brand <strong className="text-theme-primary">{COMPANY_INFO.brandName}</strong>.
           </p>
         </div>
 
         {/* Content */}
-        <div className="space-y-8 text-xs sm:text-sm text-[#A3AAB5] leading-relaxed">
-          <section className="p-6 rounded-2xl bg-[#11161D] border border-[#1E2633] space-y-3 shadow-lg">
-            <h2 className="text-base font-bold text-[#E6EAF0] flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-[#39D353]" />
+        <div className="space-y-8 text-xs sm:text-sm text-theme-secondary leading-relaxed">
+          <section className="p-6 rounded-2xl bg-theme-card border border-theme-border space-y-3 shadow-lg">
+            <h2 className="text-base font-bold text-theme-primary flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-theme-green" />
               1. B2B Commercial Scope &amp; Purpose
             </h2>
             <p>
@@ -49,53 +49,55 @@ export default function PrivacyPage() {
             </p>
           </section>
 
-          <section className="p-6 rounded-2xl bg-[#11161D] border border-[#1E2633] space-y-3 shadow-lg">
-            <h2 className="text-base font-bold text-[#E6EAF0] flex items-center gap-2">
-              <Eye className="w-4 h-4 text-[#39D353]" />
+          <section className="p-6 rounded-2xl bg-theme-card border border-theme-border space-y-3 shadow-lg">
+            <h2 className="text-base font-bold text-theme-primary flex items-center gap-2">
+              <Eye className="w-4 h-4 text-theme-green" />
               2. Information We Collect
             </h2>
             <p>When you interact with our B2B tools or submit commercial enquiries, we collect:</p>
-            <ul className="list-disc pl-5 space-y-1.5 text-xs text-[#A3AAB5]">
-              <li><strong className="text-[#E6EAF0]">Business Identification:</strong> Company name, registered business address, city, state, country, GSTIN (optional), and corporate website.</li>
-              <li><strong className="text-[#E6EAF0]">Contact Information:</strong> Full name, official business email, and phone/mobile number.</li>
-              <li><strong className="text-[#E6EAF0]">Technical Requirements:</strong> Target voltage, capacity, continuous/peak current, dimensional envelope, BMS telemetry preferences, chemistry preferences, and operating environment constraints.</li>
-              <li><strong className="text-[#E6EAF0]">Commercial Scope:</strong> Estimated batch size, prototype requirements, annual production volumes, and delivery timelines.</li>
-              <li><strong className="text-[#E6EAF0]">Engineering Document Metadata:</strong> File name, file type, and file size for CAD drawings, datasheets, or technical specification attachments.</li>
+            <ul className="list-disc pl-5 space-y-1.5 text-xs text-theme-secondary">
+              <li><strong className="text-theme-primary">Business Identification:</strong> Company name, registered business address, city, state, country, GSTIN (optional), and corporate website.</li>
+              <li><strong className="text-theme-primary">Contact Information:</strong> Full name, official business email, and phone/mobile number.</li>
+              <li><strong className="text-theme-primary">Engineering Requirements:</strong> Operating voltages, target Ah/kWh capacity, dimensional constraints, peak/continuous discharge currents, cell chemistry preferences, and custom casing specifications.</li>
+              <li><strong className="text-theme-primary">Commercial Scope:</strong> Expected batch volume tier, target delivery timeline, and application sector.</li>
             </ul>
           </section>
 
-          <section className="p-6 rounded-2xl bg-[#11161D] border border-[#1E2633] space-y-3 shadow-lg">
-            <h2 className="text-base font-bold text-[#E6EAF0] flex items-center gap-2">
-              <Lock className="w-4 h-4 text-[#39D353]" />
-              3. Protection of Technical &amp; Engineering Documents
+          <section className="p-6 rounded-2xl bg-theme-card border border-theme-border space-y-3 shadow-lg">
+            <h2 className="text-base font-bold text-theme-primary flex items-center gap-2">
+              <Lock className="w-4 h-4 text-theme-green" />
+              3. Protection of Technical &amp; Proprietary Information
             </h2>
             <p>
-              Engineering files (such as CAD drawings, schematics, and mechanical specifications) shared via the OEM Configurator or RFQ builder are treated as confidential technical submissions. They are accessible only by authorized engineering and commercial personnel for quotation and feasibility evaluation.
+              We treat all customer equipment specifications, mechanical drawings, CAD outlines, and custom battery requirements submitted via our platform as proprietary and strictly confidential.
             </p>
             <p>
-              Uploaded technical documents are never indexed publicly or made available for public download. For projects requiring formal non-disclosure agreements (NDAs), our engineering team executes mutual NDAs prior to detailed design discussions.
+              {COMPANY_INFO.parentCompanyName} routinely enters into bilateral Non-Disclosure Agreements (NDAs) with commercial vehicle OEMs, robotics manufacturers, and ESS integrators prior to final engineering drawing exchange.
             </p>
           </section>
 
-          <section className="p-6 rounded-2xl bg-[#11161D] border border-[#1E2633] space-y-3 shadow-lg">
-            <h2 className="text-base font-bold text-[#E6EAF0] flex items-center gap-2">
-              <FileText className="w-4 h-4 text-[#39D353]" />
-              4. Data Retention &amp; Third-Party Disclosure
+          <section className="p-6 rounded-2xl bg-theme-card border border-theme-border space-y-3 shadow-lg">
+            <h2 className="text-base font-bold text-theme-primary flex items-center gap-2">
+              <FileText className="w-4 h-4 text-theme-green" />
+              4. Data Retention &amp; Third-Party Non-Disclosure
             </h2>
             <p>
-              We do not sell, rent, or lease commercial contact lists or technical project records to third-party marketing companies. Project requirements are retained solely for maintaining quotation history, warranty tracking upon production, and continuing customer engineering support.
+              We do not sell, rent, or trade your corporate information or RFQ specifications to third-party advertisers. Information is retained solely in our secure administrative database for quotation tracking, warranty service records, and commercial relationship management.
             </p>
           </section>
 
-          <section className="p-6 rounded-2xl bg-[#11161D] border border-[#1E2633] space-y-3 shadow-lg">
-            <h2 className="text-base font-bold text-[#E6EAF0]">5. Contact for Privacy Enquiries</h2>
+          <section className="p-6 rounded-2xl bg-theme-card border border-theme-border space-y-3 shadow-lg">
+            <h2 className="text-base font-bold text-theme-primary flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-theme-green" />
+              5. Contact Regarding Data Privacy
+            </h2>
             <p>
-              If you have any questions regarding our commercial data handling practices or wish to update your corporate contact records, please contact our compliance desk:
+              For questions regarding our commercial data handling practices or to update your company contact information, please reach out to our corporate desk:
             </p>
-            <div className="pt-2 font-mono text-xs text-[#E6EAF0] space-y-1">
-              <p><strong>{COMPANY_INFO.parentCompanyName}</strong></p>
-              <p>Email: <a href={`mailto:${COMPANY_INFO.supportEmail}`} className="text-[#39D353] hover:underline">{COMPANY_INFO.supportEmail}</a></p>
-              <p>Corporate Desk: <a href={`mailto:${COMPANY_INFO.salesEmail}`} className="text-[#39D353] hover:underline">{COMPANY_INFO.salesEmail}</a></p>
+            <div className="p-4 rounded-xl bg-theme-elevated border border-theme-border font-mono text-xs space-y-1">
+              <p><strong className="text-theme-primary">Corporate Desk:</strong> {COMPANY_INFO.supportEmail}</p>
+              <p><strong className="text-theme-primary">Sales Email:</strong> {COMPANY_INFO.salesEmail}</p>
+              <p><strong className="text-theme-primary">Parent Entity:</strong> {COMPANY_INFO.parentCompanyName}</p>
             </div>
           </section>
         </div>

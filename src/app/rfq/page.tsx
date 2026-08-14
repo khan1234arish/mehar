@@ -101,7 +101,7 @@ function RfqBuilderInner() {
             'Unable to register quotation request at this time. Please try again or contact our sales desk directly.'
         );
       }
-    } catch (err) {
+    } catch {
       setErrorMessage(
         'A network error occurred while submitting your quotation request. Please check your connection or contact our sales desk directly.'
       );
@@ -124,37 +124,37 @@ function RfqBuilderInner() {
     );
 
     return (
-      <div className="p-8 sm:p-12 rounded-3xl bg-[#11161D] border border-[#39D353]/30 text-center space-y-6 max-w-2xl mx-auto shadow-2xl shadow-black/80">
-        <div className="w-16 h-16 rounded-full bg-[#161C24] border border-[#39D353]/30 flex items-center justify-center text-[#39D353] mx-auto shadow-[0_0_20px_rgba(57,211,83,0.2)]">
+      <div className="p-8 sm:p-12 rounded-3xl bg-theme-card border border-theme-green/30 text-center space-y-6 max-w-2xl mx-auto shadow-2xl">
+        <div className="w-16 h-16 rounded-full bg-theme-elevated border border-theme-green/30 flex items-center justify-center text-theme-green mx-auto shadow-sm">
           <CheckCircle2 className="w-10 h-10" />
         </div>
 
         <div className="space-y-2">
-          <span className="text-xs font-mono font-bold text-[#39D353] uppercase tracking-wider">
+          <span className="text-xs font-mono font-bold text-theme-green uppercase tracking-wider">
             Official B2B RFQ Registered
           </span>
-          <h2 className="text-2xl font-extrabold text-[#E6EAF0]">
+          <h2 className="text-2xl font-extrabold text-theme-primary">
             Quotation Request Received
           </h2>
-          <p className="text-xs sm:text-sm text-[#A3AAB5] max-w-lg mx-auto leading-relaxed">
-            Thank you, <strong className="text-[#E6EAF0]">{formData.contactPerson}</strong> from <strong className="text-[#E6EAF0]">{formData.companyName}</strong>. Your technical parameters have been routed to the commercial sales desk at <strong className="text-[#E6EAF0]">{COMPANY_INFO.parentCompanyName}</strong>.
+          <p className="text-xs sm:text-sm text-theme-secondary max-w-lg mx-auto leading-relaxed">
+            Thank you, <strong className="text-theme-primary">{formData.contactPerson}</strong> from <strong className="text-theme-primary">{formData.companyName}</strong>. Your technical parameters have been routed to the commercial sales desk at <strong className="text-theme-primary">{COMPANY_INFO.parentCompanyName}</strong>.
           </p>
         </div>
 
         {/* Traceable Reference Code */}
-        <div className="p-4 rounded-xl bg-[#161C24] border border-[#1E2633] inline-flex items-center gap-3 font-mono text-sm shadow-sm">
-          <span className="text-[#A3AAB5] text-xs">RFQ Reference ID:</span>
-          <span className="font-bold text-[#39D353]">{submissionResult.rfqNumber}</span>
+        <div className="p-4 rounded-xl bg-theme-elevated border border-theme-border inline-flex items-center gap-3 font-mono text-sm shadow-sm">
+          <span className="text-theme-secondary text-xs">RFQ Reference ID:</span>
+          <span className="font-bold text-theme-green">{submissionResult.rfqNumber}</span>
           <button
             onClick={copyRfqNumber}
-            className="p-1 rounded text-[#39D353] hover:bg-[#39D353]/10 transition-colors"
+            className="p-1 rounded text-theme-green hover:bg-theme-green/10 transition-colors"
             title="Copy RFQ ID"
           >
             <Copy className="w-4 h-4" />
           </button>
         </div>
         {copied && (
-          <span className="block text-[11px] font-mono text-[#39D353] font-semibold">
+          <span className="block text-[11px] font-mono text-theme-green font-semibold">
             Copied to clipboard!
           </span>
         )}
@@ -164,7 +164,7 @@ function RfqBuilderInner() {
             href={`https://wa.me/${COMPANY_INFO.whatsappDesk.replace(/[^0-9]/g, '')}?text=${whatsappText}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#39D353] text-[#0B0F14] text-xs font-bold hover:bg-[#2ec547] shadow-[0_0_15px_rgba(57,211,83,0.25)] transition-all w-full sm:w-auto"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-theme-green text-white dark:text-[#0B0F14] text-xs font-bold hover:bg-theme-green-hover shadow-sm transition-all w-full sm:w-auto"
           >
             <MessageSquare className="w-4 h-4" /> Connect with Sales on WhatsApp
           </a>
@@ -187,11 +187,11 @@ function RfqBuilderInner() {
       {/* 1. Category Selection */}
       <div className="space-y-4">
         <div>
-          <h3 className="text-base font-bold text-[#E6EAF0] flex items-center gap-2">
-            <Layers className="w-4 h-4 text-[#39D353]" />
+          <h3 className="text-base font-bold text-theme-primary flex items-center gap-2">
+            <Layers className="w-4 h-4 text-theme-green" />
             1. Select Battery Category(ies) of Interest
           </h3>
-          <p className="text-xs text-[#A3AAB5] mt-0.5">
+          <p className="text-xs text-theme-secondary mt-0.5">
             Select one or more broad classifications for your procurement requirement.
           </p>
         </div>
@@ -206,20 +206,20 @@ function RfqBuilderInner() {
                 onClick={() => toggleCategory(cat.slug)}
                 className={`p-3.5 rounded-xl border text-left transition-all flex items-center justify-between ${
                   isSelected
-                    ? 'bg-[#39D353]/10 border-[#39D353] ring-1 ring-[#39D353]'
-                    : 'bg-[#161C24] border-[#1E2633] hover:border-[#39D353]/50'
+                    ? 'bg-theme-green/10 border-theme-green ring-1 ring-theme-green'
+                    : 'bg-theme-elevated border-theme-border hover:border-theme-green/50'
                 }`}
               >
                 <div>
-                  <span className="text-xs font-bold text-[#E6EAF0] block">
+                  <span className="text-xs font-bold text-theme-primary block">
                     {cat.name}
                   </span>
-                  <span className="text-[10px] font-mono text-[#A3AAB5]">
+                  <span className="text-[10px] font-mono text-theme-secondary">
                     {cat.tagline}
                   </span>
                 </div>
                 {isSelected && (
-                  <CheckCircle2 className="w-4 h-4 text-[#39D353] shrink-0 ml-2" />
+                  <CheckCircle2 className="w-4 h-4 text-theme-green shrink-0 ml-2" />
                 )}
               </button>
             );
@@ -228,20 +228,20 @@ function RfqBuilderInner() {
       </div>
 
       {/* 2. Technical Requirements (Customer Input) */}
-      <div className="space-y-4 pt-6 border-t border-[#1E2633]">
+      <div className="space-y-4 pt-6 border-t border-theme-border">
         <div>
-          <h3 className="text-base font-bold text-[#E6EAF0] flex items-center gap-2">
-            <Cpu className="w-4 h-4 text-[#39D353]" />
+          <h3 className="text-base font-bold text-theme-primary flex items-center gap-2">
+            <Cpu className="w-4 h-4 text-theme-green" />
             2. Customer Target Technical Requirements
           </h3>
-          <p className="text-xs text-[#A3AAB5] mt-0.5">
+          <p className="text-xs text-theme-secondary mt-0.5">
             Provide your target electrical, physical, and protocol preferences for engineering scoping.
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           <div className="space-y-1.5">
-            <label className="text-xs font-mono font-bold text-[#A3AAB5] block">
+            <label className="text-xs font-mono font-bold text-theme-secondary block">
               Target System Voltage
             </label>
             <input
@@ -249,12 +249,12 @@ function RfqBuilderInner() {
               placeholder="e.g. 48V / 60V / 72V / Custom"
               value={formData.targetVoltage}
               onChange={(e) => setFormData({ ...formData, targetVoltage: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-[#161C24] border border-[#1E2633] text-[#E6EAF0] text-xs focus:outline-none focus:border-[#39D353]"
+              className="w-full px-4 py-2.5 rounded-xl bg-theme-elevated border border-theme-border text-theme-primary text-xs focus:outline-none focus:border-theme-green"
             />
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-mono font-bold text-[#A3AAB5] block">
+            <label className="text-xs font-mono font-bold text-theme-secondary block">
               Required Energy / Capacity (Ah / kWh)
             </label>
             <input
@@ -262,12 +262,12 @@ function RfqBuilderInner() {
               placeholder="e.g. 30Ah / 100Ah / 5kWh"
               value={formData.targetCapacity}
               onChange={(e) => setFormData({ ...formData, targetCapacity: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-[#161C24] border border-[#1E2633] text-[#E6EAF0] text-xs focus:outline-none focus:border-[#39D353]"
+              className="w-full px-4 py-2.5 rounded-xl bg-theme-elevated border border-theme-border text-theme-primary text-xs focus:outline-none focus:border-theme-green"
             />
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-mono font-bold text-[#A3AAB5] block">
+            <label className="text-xs font-mono font-bold text-theme-secondary block">
               Discharge Current (Continuous / Peak)
             </label>
             <input
@@ -275,12 +275,12 @@ function RfqBuilderInner() {
               placeholder="e.g. 40A Continuous / 80A Peak"
               value={formData.continuousCurrent}
               onChange={(e) => setFormData({ ...formData, continuousCurrent: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-[#161C24] border border-[#1E2633] text-[#E6EAF0] text-xs focus:outline-none focus:border-[#39D353]"
+              className="w-full px-4 py-2.5 rounded-xl bg-theme-elevated border border-theme-border text-theme-primary text-xs focus:outline-none focus:border-theme-green"
             />
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-mono font-bold text-[#A3AAB5] block">
+            <label className="text-xs font-mono font-bold text-theme-secondary block">
               Max Dimension Envelope (L x W x H mm)
             </label>
             <input
@@ -288,18 +288,18 @@ function RfqBuilderInner() {
               placeholder="e.g. Max 380 x 220 x 190 mm"
               value={formData.dimensionEnvelope}
               onChange={(e) => setFormData({ ...formData, dimensionEnvelope: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-[#161C24] border border-[#1E2633] text-[#E6EAF0] text-xs focus:outline-none focus:border-[#39D353]"
+              className="w-full px-4 py-2.5 rounded-xl bg-theme-elevated border border-theme-border text-theme-primary text-xs focus:outline-none focus:border-theme-green"
             />
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-mono font-bold text-[#A3AAB5] block">
+            <label className="text-xs font-mono font-bold text-theme-secondary block">
               Chemistry Preference (Customer Input)
             </label>
             <select
               value={formData.chemistryPreference}
               onChange={(e) => setFormData({ ...formData, chemistryPreference: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-[#161C24] border border-[#1E2633] text-[#E6EAF0] text-xs font-medium focus:outline-none focus:border-[#39D353]"
+              className="w-full px-4 py-2.5 rounded-xl bg-theme-elevated border border-theme-border text-theme-primary text-xs font-medium focus:outline-none focus:border-theme-green"
             >
               <option value="NOT_SURE">Engineering Team Recommendation / Sizing</option>
               <option value="LIFEPO4">Lithium Iron Phosphate (LiFePO4) Preference</option>
@@ -309,13 +309,13 @@ function RfqBuilderInner() {
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-mono font-bold text-[#A3AAB5] block">
+            <label className="text-xs font-mono font-bold text-theme-secondary block">
               BMS Communication Protocol
             </label>
             <select
               value={formData.bmsProtocol}
               onChange={(e) => setFormData({ ...formData, bmsProtocol: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-[#161C24] border border-[#1E2633] text-[#E6EAF0] text-xs font-medium focus:outline-none focus:border-[#39D353]"
+              className="w-full px-4 py-2.5 rounded-xl bg-theme-elevated border border-theme-border text-theme-primary text-xs font-medium focus:outline-none focus:border-theme-green"
             >
               <option value="STANDARD">Standard Protection Hardware BMS</option>
               <option value="CANBUS">CAN 2.0B Protocol Integration</option>
@@ -327,27 +327,27 @@ function RfqBuilderInner() {
       </div>
 
       {/* 3. Procurement Volume & Timeline */}
-      <div className="space-y-4 pt-6 border-t border-[#1E2633]">
+      <div className="space-y-4 pt-6 border-t border-theme-border">
         <div>
-          <h3 className="text-base font-bold text-[#E6EAF0] flex items-center gap-2">
-            <Building2 className="w-4 h-4 text-[#39D353]" />
+          <h3 className="text-base font-bold text-theme-primary flex items-center gap-2">
+            <Building2 className="w-4 h-4 text-theme-green" />
             3. Procurement Scope &amp; Schedule
           </h3>
         </div>
 
         {initialProduct && (
-          <div className="p-4 rounded-2xl bg-[#161C24] border border-[#1E2633] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="p-4 rounded-2xl bg-theme-elevated border border-theme-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <span className="text-[11px] font-mono font-bold text-[#39D353] uppercase tracking-wider block">
+              <span className="text-[11px] font-mono font-bold text-theme-green uppercase tracking-wider block">
                 Target Product Inquired
               </span>
-              <span className="text-sm font-bold text-[#E6EAF0]">{initialProduct}</span>
+              <span className="text-sm font-bold text-theme-primary">{initialProduct}</span>
             </div>
             <div className="text-left sm:text-right">
-              <span className="text-[11px] font-mono text-[#A3AAB5] block font-bold uppercase">
+              <span className="text-[11px] font-mono text-theme-secondary block font-bold uppercase">
                 Minimum Order Quantity (MOQ)
               </span>
-              <span className="text-xs font-mono font-bold text-[#E6EAF0]">
+              <span className="text-xs font-mono font-bold text-theme-primary">
                 {initialMoq ? `${initialMoq} units` : 'Contact MEHAR'}
               </span>
             </div>
@@ -356,13 +356,13 @@ function RfqBuilderInner() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div className="space-y-1.5">
-            <label className="text-xs font-mono font-bold text-[#A3AAB5] block">
-              Procurement Batch Volume <span className="text-[#39D353]">*</span>
+            <label className="text-xs font-mono font-bold text-theme-secondary block">
+              Procurement Batch Volume <span className="text-theme-green">*</span>
             </label>
             <select
               value={formData.volumeTier}
               onChange={(e) => setFormData({ ...formData, volumeTier: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-[#161C24] border border-[#1E2633] text-[#E6EAF0] text-xs font-medium focus:outline-none focus:border-[#39D353]"
+              className="w-full px-4 py-2.5 rounded-xl bg-theme-elevated border border-theme-border text-theme-primary text-xs font-medium focus:outline-none focus:border-theme-green"
             >
               <option value="PILOT_SAMPLE">Evaluation / Prototype Batch (1 – 10 Units)</option>
               <option value="COMMERCIAL_BATCH">Commercial Production Batch (50 – 200 Units)</option>
@@ -371,7 +371,7 @@ function RfqBuilderInner() {
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-mono font-bold text-[#A3AAB5] block">
+            <label className="text-xs font-mono font-bold text-theme-secondary block">
               Specific Unit Quantity
             </label>
             <input
@@ -380,7 +380,7 @@ function RfqBuilderInner() {
               placeholder={initialMoq ? `e.g. ${initialMoq} units` : 'e.g. 50 units'}
               value={requestedQuantity}
               onChange={(e) => setRequestedQuantity(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl bg-[#161C24] border border-[#1E2633] text-[#E6EAF0] text-xs focus:outline-none focus:border-[#39D353]"
+              className="w-full px-4 py-2.5 rounded-xl bg-theme-elevated border border-theme-border text-theme-primary text-xs focus:outline-none focus:border-theme-green"
             />
           </div>
 
@@ -389,8 +389,8 @@ function RfqBuilderInner() {
             requestedQuantity &&
             parseInt(requestedQuantity, 10) > 0 &&
             parseInt(requestedQuantity, 10) < initialMoq && (
-              <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs flex items-start gap-3 sm:col-span-2 shadow-sm">
-                <div className="w-5 h-5 rounded-full bg-amber-500/20 flex items-center justify-center font-bold flex-shrink-0 text-xs text-amber-300">
+              <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-300 text-xs flex items-start gap-3 sm:col-span-2 shadow-sm">
+                <div className="w-5 h-5 rounded-full bg-amber-500/20 flex items-center justify-center font-bold flex-shrink-0 text-xs text-amber-600 dark:text-amber-300">
                   !
                 </div>
                 <div>
@@ -401,13 +401,13 @@ function RfqBuilderInner() {
             )}
 
           <div className="space-y-1.5">
-            <label className="text-xs font-mono font-bold text-[#A3AAB5] block">
+            <label className="text-xs font-mono font-bold text-theme-secondary block">
               Required Delivery Timeline
             </label>
             <select
               value={formData.timeline}
               onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-[#161C24] border border-[#1E2633] text-[#E6EAF0] text-xs font-medium focus:outline-none focus:border-[#39D353]"
+              className="w-full px-4 py-2.5 rounded-xl bg-theme-elevated border border-theme-border text-theme-primary text-xs font-medium focus:outline-none focus:border-theme-green"
             >
               <option value="IMMEDIATE">Immediate Pilot Requirement (Within 15 Days)</option>
               <option value="WITHIN_30_DAYS">Standard Schedule (Within 30 – 45 Days)</option>
@@ -416,7 +416,7 @@ function RfqBuilderInner() {
           </div>
 
           <div className="space-y-1.5 sm:col-span-2">
-            <label className="text-xs font-mono font-bold text-[#A3AAB5] block">
+            <label className="text-xs font-mono font-bold text-theme-secondary block">
               Project Notes &amp; Custom Requirements
             </label>
             <textarea
@@ -424,28 +424,28 @@ function RfqBuilderInner() {
               placeholder="Provide target vehicle duty cycle, peak elevation gradients, enclosure mounting bracket details..."
               value={formData.notes}
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-[#161C24] border border-[#1E2633] text-[#E6EAF0] text-xs placeholder-[#64748B] focus:outline-none focus:border-[#39D353]"
+              className="w-full px-4 py-2.5 rounded-xl bg-theme-elevated border border-theme-border text-theme-primary text-xs placeholder-theme-muted focus:outline-none focus:border-theme-green"
             />
           </div>
         </div>
       </div>
 
       {/* 4. B2B Company Profile */}
-      <div className="space-y-4 pt-6 border-t border-[#1E2633]">
+      <div className="space-y-4 pt-6 border-t border-theme-border">
         <div>
-          <h3 className="text-base font-bold text-[#E6EAF0] flex items-center gap-2">
-            <Building2 className="w-4 h-4 text-[#39D353]" />
+          <h3 className="text-base font-bold text-theme-primary flex items-center gap-2">
+            <Building2 className="w-4 h-4 text-theme-green" />
             4. B2B Corporate Identity &amp; Delivery Contact
           </h3>
-          <p className="text-xs text-[#A3AAB5] mt-0.5">
+          <p className="text-xs text-theme-secondary mt-0.5">
             Please provide official corporate credentials for quote preparation and dispatch estimation.
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div className="space-y-1.5">
-            <label className="text-xs font-mono font-bold text-[#A3AAB5] block">
-              Company / Entity Name <span className="text-[#39D353]">*</span>
+            <label className="text-xs font-mono font-bold text-theme-secondary block">
+              Company / Entity Name <span className="text-theme-green">*</span>
             </label>
             <input
               type="text"
@@ -453,13 +453,13 @@ function RfqBuilderInner() {
               placeholder="e.g. Apex EV Technologies Pvt. Ltd."
               value={formData.companyName}
               onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-[#161C24] border border-[#1E2633] text-[#E6EAF0] text-xs focus:outline-none focus:border-[#39D353]"
+              className="w-full px-4 py-2.5 rounded-xl bg-theme-elevated border border-theme-border text-theme-primary text-xs focus:outline-none focus:border-theme-green"
             />
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-mono font-bold text-[#A3AAB5] block">
-              Contact Person Name <span className="text-[#39D353]">*</span>
+            <label className="text-xs font-mono font-bold text-theme-secondary block">
+              Contact Person Name <span className="text-theme-green">*</span>
             </label>
             <input
               type="text"
@@ -467,13 +467,13 @@ function RfqBuilderInner() {
               placeholder="e.g. Rajesh Sharma"
               value={formData.contactPerson}
               onChange={(e) => setFormData({ ...formData, contactPerson: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-[#161C24] border border-[#1E2633] text-[#E6EAF0] text-xs focus:outline-none focus:border-[#39D353]"
+              className="w-full px-4 py-2.5 rounded-xl bg-theme-elevated border border-theme-border text-theme-primary text-xs focus:outline-none focus:border-theme-green"
             />
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-mono font-bold text-[#A3AAB5] block">
-              Official Corporate Email <span className="text-[#39D353]">*</span>
+            <label className="text-xs font-mono font-bold text-theme-secondary block">
+              Official Corporate Email <span className="text-theme-green">*</span>
             </label>
             <input
               type="email"
@@ -481,13 +481,13 @@ function RfqBuilderInner() {
               placeholder="e.g. rajesh@apexev.com"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-[#161C24] border border-[#1E2633] text-[#E6EAF0] text-xs focus:outline-none focus:border-[#39D353]"
+              className="w-full px-4 py-2.5 rounded-xl bg-theme-elevated border border-theme-border text-theme-primary text-xs focus:outline-none focus:border-theme-green"
             />
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-mono font-bold text-[#A3AAB5] block">
-              Phone / Mobile Number <span className="text-[#39D353]">*</span>
+            <label className="text-xs font-mono font-bold text-theme-secondary block">
+              Phone / Mobile Number <span className="text-theme-green">*</span>
             </label>
             <input
               type="tel"
@@ -495,12 +495,12 @@ function RfqBuilderInner() {
               placeholder="e.g. +91 98765 43210"
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-[#161C24] border border-[#1E2633] text-[#E6EAF0] text-xs focus:outline-none focus:border-[#39D353]"
+              className="w-full px-4 py-2.5 rounded-xl bg-theme-elevated border border-theme-border text-theme-primary text-xs focus:outline-none focus:border-theme-green"
             />
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-mono font-bold text-[#A3AAB5] block">
+            <label className="text-xs font-mono font-bold text-theme-secondary block">
               Delivery City &amp; State
             </label>
             <input
@@ -508,12 +508,12 @@ function RfqBuilderInner() {
               placeholder="e.g. Pune, Maharashtra"
               value={formData.cityState}
               onChange={(e) => setFormData({ ...formData, cityState: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-[#161C24] border border-[#1E2633] text-[#E6EAF0] text-xs focus:outline-none focus:border-[#39D353]"
+              className="w-full px-4 py-2.5 rounded-xl bg-theme-elevated border border-theme-border text-theme-primary text-xs focus:outline-none focus:border-theme-green"
             />
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-mono font-bold text-[#A3AAB5] block">
+            <label className="text-xs font-mono font-bold text-theme-secondary block">
               Company GSTIN (Optional)
             </label>
             <input
@@ -521,7 +521,7 @@ function RfqBuilderInner() {
               placeholder="e.g. 27AAAAA0000A1Z5"
               value={formData.gstin}
               onChange={(e) => setFormData({ ...formData, gstin: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-[#161C24] border border-[#1E2633] text-[#E6EAF0] text-xs focus:outline-none focus:border-[#39D353]"
+              className="w-full px-4 py-2.5 rounded-xl bg-theme-elevated border border-theme-border text-theme-primary text-xs focus:outline-none focus:border-theme-green"
             />
           </div>
         </div>
@@ -530,23 +530,23 @@ function RfqBuilderInner() {
       {/* Error State Banner */}
       {errorMessage && (
         <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-left space-y-2">
-          <div className="flex items-center gap-2 text-red-400 text-xs font-bold font-mono">
+          <div className="flex items-center gap-2 text-red-600 dark:text-red-400 text-xs font-bold font-mono">
             <span>Submission Error</span>
           </div>
-          <p className="text-xs text-red-300 leading-relaxed">{errorMessage}</p>
+          <p className="text-xs text-red-700 dark:text-red-300 leading-relaxed">{errorMessage}</p>
           <div className="pt-2 flex flex-wrap items-center gap-3 text-xs">
             <a
               href={`mailto:${COMPANY_INFO.salesEmail}?subject=B2B%20RFQ%20Submission%20Enquiry`}
-              className="text-[#39D353] font-bold hover:underline font-mono"
+              className="text-theme-green font-bold hover:underline font-mono"
             >
               Email Sales: {COMPANY_INFO.salesEmail}
             </a>
-            <span className="text-[#1E2633]">•</span>
+            <span className="text-theme-border">•</span>
             <a
               href={`https://wa.me/${COMPANY_INFO.whatsappDesk.replace(/[^0-9]/g, '')}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#39D353] font-bold hover:underline font-mono"
+              className="text-theme-green font-bold hover:underline font-mono"
             >
               WhatsApp Sales Desk
             </a>
@@ -555,7 +555,7 @@ function RfqBuilderInner() {
       )}
 
       {/* Submit Button */}
-      <div className="pt-6 border-t border-[#1E2633] space-y-3">
+      <div className="pt-6 border-t border-theme-border space-y-3">
         <Button
           type="submit"
           variant="primary"
@@ -567,7 +567,7 @@ function RfqBuilderInner() {
           {submitting ? 'Submitting Official B2B RFQ...' : 'Submit Official B2B RFQ'}
         </Button>
 
-        <p className="text-[11px] text-[#A3AAB5] text-center font-mono">
+        <p className="text-[11px] text-theme-secondary text-center font-mono">
           Strictly B2B Wholesale &amp; OEM Supply • Engineering confirmation required for final pack specifications.
         </p>
       </div>
@@ -577,18 +577,18 @@ function RfqBuilderInner() {
 
 export default function RfqPage() {
   return (
-    <div className="py-12 space-y-12 bg-[#0B0F14] text-[#E6EAF0]">
+    <div className="py-12 space-y-12 bg-theme-base text-theme-primary transition-colors duration-200">
       {/* Header */}
       <div className="max-w-6xl xl:max-w-[1360px] 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-        <div className="p-8 sm:p-10 rounded-3xl bg-[#11161D] border border-[#1E2633] shadow-xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-80 h-80 bg-[#39D353]/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="p-8 sm:p-10 rounded-3xl bg-theme-card border border-theme-border shadow-xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-80 h-80 bg-theme-green/10 rounded-full blur-[120px] pointer-events-none" />
           <div className="max-w-3xl space-y-4 relative z-10">
             <Badge variant="green">Official B2B Procurement</Badge>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-[#E6EAF0] tracking-tight">
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-theme-primary tracking-tight">
               Request for Quotation (RFQ) Builder
             </h1>
-            <p className="text-sm text-[#A3AAB5] leading-relaxed">
-              Configure multi-parameter batch quotations for battery packs, custom OEM enclosures, and energy storage systems by <strong className="text-[#E6EAF0]">{COMPANY_INFO.parentCompanyName}</strong>.
+            <p className="text-sm text-theme-secondary leading-relaxed">
+              Configure multi-parameter batch quotations for battery packs, custom OEM enclosures, and energy storage systems by <strong className="text-theme-primary">{COMPANY_INFO.parentCompanyName}</strong>.
             </p>
           </div>
         </div>
@@ -596,8 +596,8 @@ export default function RfqPage() {
 
       {/* Main Form Box */}
       <div className="max-w-6xl xl:max-w-[1360px] 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-        <div className="bg-[#11161D] border border-[#1E2633] rounded-3xl p-8 sm:p-10 shadow-xl">
-          <Suspense fallback={<div className="p-12 text-center text-xs text-[#A3AAB5]">Loading RFQ builder...</div>}>
+        <div className="bg-theme-card border border-theme-border rounded-3xl p-8 sm:p-10 shadow-xl">
+          <Suspense fallback={<div className="p-12 text-center text-xs text-theme-secondary">Loading RFQ builder...</div>}>
             <RfqBuilderInner />
           </Suspense>
         </div>

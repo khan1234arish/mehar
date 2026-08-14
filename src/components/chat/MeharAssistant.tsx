@@ -569,12 +569,12 @@ export default function MeharAssistant() {
         <button
           id="mehar-assistant-trigger"
           onClick={() => setIsOpen(true)}
-          className="flex items-center gap-2.5 px-4 py-3 rounded-full bg-[#39D353] text-[#0B0F14] font-bold shadow-[0_0_20px_rgba(57,211,83,0.35)] hover:bg-[#2ec547] hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-[#39D353]/30"
+          className="flex items-center gap-2.5 px-4 py-3 rounded-full bg-theme-green text-white dark:text-[#0B0F14] font-bold shadow-lg hover:bg-theme-green-hover hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-theme-green/30"
           aria-label="Open MEHAR Battery Assistant"
         >
           <div className="relative">
             <MessageSquare className="w-5 h-5" />
-            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-white border border-[#0B0F14] animate-pulse" />
+            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-white border border-theme-border animate-pulse" />
           </div>
           <span className="text-xs font-bold tracking-wide">MEHAR Assistant</span>
         </button>
@@ -587,7 +587,7 @@ export default function MeharAssistant() {
           className={`
             w-[calc(100vw-2rem)] sm:w-[420px]
             ${isMinimized ? 'h-auto' : 'h-[580px] max-h-[85vh]'}
-            bg-[#11161D] border border-[#1E2633] text-[#E6EAF0] rounded-2xl shadow-2xl flex flex-col overflow-hidden
+            bg-theme-card border border-theme-border text-theme-primary rounded-2xl shadow-2xl flex flex-col overflow-hidden
             transition-all duration-200
           `}
           role="dialog"
@@ -595,15 +595,15 @@ export default function MeharAssistant() {
         >
 
           {/* ── Header ── */}
-          <div className="flex-shrink-0 px-4 py-3 bg-[#0D1117] border-b border-[#1E2633]">
+          <div className="flex-shrink-0 px-4 py-3 bg-theme-surface border-b border-theme-border">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3 min-w-0">
-                <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-[#39D353]/10 border border-[#39D353]/25 flex items-center justify-center">
-                  <MessageCircle className="w-4 h-4 text-[#39D353]" />
+                <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-theme-green/10 border border-theme-green/25 flex items-center justify-center">
+                  <MessageCircle className="w-4 h-4 text-theme-green" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-[12px] font-bold text-[#E6EAF0] leading-tight">MEHAR Battery Assistant</p>
-                  <p className="text-[10px] text-[#A3AAB5] leading-tight">B2B Solutions &amp; Engineering Enquiry</p>
+                  <p className="text-[12px] font-bold text-theme-primary leading-tight">MEHAR Battery Assistant</p>
+                  <p className="text-[10px] text-theme-secondary leading-tight">B2B Solutions &amp; Engineering Enquiry</p>
                 </div>
               </div>
               <div className="flex items-center gap-1 flex-shrink-0">
@@ -611,7 +611,7 @@ export default function MeharAssistant() {
                   <button
                     onClick={startOver}
                     title="Start Over"
-                    className="p-1.5 rounded-lg text-[#A3AAB5] hover:text-[#E6EAF0] hover:bg-white/[0.06] transition-colors"
+                    className="p-1.5 rounded-lg text-theme-secondary hover:text-theme-primary hover:bg-theme-elevated transition-colors"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
                   </button>
@@ -619,13 +619,13 @@ export default function MeharAssistant() {
                 <button
                   onClick={() => setIsMinimized((v) => !v)}
                   title={isMinimized ? 'Expand' : 'Minimise'}
-                  className="p-1.5 rounded-lg text-[#A3AAB5] hover:text-[#E6EAF0] hover:bg-white/[0.06] transition-colors"
+                  className="p-1.5 rounded-lg text-theme-secondary hover:text-theme-primary hover:bg-theme-elevated transition-colors"
                 >
                   <Minus className="w-3.5 h-3.5" />
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="p-1.5 rounded-lg text-[#A3AAB5] hover:text-[#EF4444] hover:bg-red-500/10 transition-colors"
+                  className="p-1.5 rounded-lg text-theme-secondary hover:text-red-500 hover:bg-red-500/10 transition-colors"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -637,30 +637,30 @@ export default function MeharAssistant() {
               <div className="mt-2 flex items-center gap-2">
                 <button
                   onClick={goBack}
-                  className="flex items-center gap-1 text-[10px] text-[#64748B] hover:text-[#059669] transition-colors"
+                  className="flex items-center gap-1 text-[10px] text-theme-muted hover:text-theme-green transition-colors"
                 >
                   <ArrowLeft className="w-3 h-3" /> Back
                 </button>
                 {(flow === 'finder') && (
                   <div className="flex-1 flex items-center gap-2">
-                    <div className="flex-1 h-1 rounded-full bg-[#F1F5F9] overflow-hidden">
+                    <div className="flex-1 h-1 rounded-full bg-theme-card-subtle overflow-hidden">
                       <div
-                        className="h-full rounded-full bg-[#059669] transition-all duration-300"
+                        className="h-full rounded-full bg-theme-green transition-all duration-300"
                         style={{ width: `${finderProgress}%` }}
                       />
                     </div>
-                    <span className="text-[9px] text-[#94A3B8] whitespace-nowrap">{finderProgress}%</span>
+                    <span className="text-[9px] text-theme-muted whitespace-nowrap">{finderProgress}%</span>
                   </div>
                 )}
                 {(flow === 'oem') && (
                   <div className="flex-1 flex items-center gap-2">
-                    <div className="flex-1 h-1 rounded-full bg-[#F1F5F9] overflow-hidden">
+                    <div className="flex-1 h-1 rounded-full bg-theme-card-subtle overflow-hidden">
                       <div
-                        className="h-full rounded-full bg-[#059669] transition-all duration-300"
+                        className="h-full rounded-full bg-theme-green transition-all duration-300"
                         style={{ width: `${oemProgress}%` }}
                       />
                     </div>
-                    <span className="text-[9px] text-[#94A3B8] whitespace-nowrap">{oemProgress}%</span>
+                    <span className="text-[9px] text-theme-muted whitespace-nowrap">{oemProgress}%</span>
                   </div>
                 )}
               </div>
@@ -679,11 +679,11 @@ export default function MeharAssistant() {
 
                   {/* Context-aware banner */}
                   {contextPrompt && (
-                    <div className="bg-[#F0FDF4] border border-[#A7F3D0] rounded-xl p-3">
-                      <p className="text-[11px] text-[#065F46] font-medium mb-1.5">{contextPrompt.text}</p>
+                    <div className="bg-theme-green/10 border border-theme-green/25 rounded-xl p-3">
+                      <p className="text-[11px] text-theme-green font-medium mb-1.5">{contextPrompt.text}</p>
                       <button
                         onClick={contextPrompt.action}
-                        className="flex items-center gap-1 text-[11px] font-bold text-[#059669] hover:text-[#047857]"
+                        className="flex items-center gap-1 text-[11px] font-bold text-theme-green hover:text-theme-green-hover"
                       >
                         {contextPrompt.cta} <ChevronRight className="w-3 h-3" />
                       </button>
@@ -691,9 +691,9 @@ export default function MeharAssistant() {
                   )}
 
                   {/* Welcome message */}
-                  <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3.5">
-                    <p className="text-[11px] font-bold text-[#0F172A] mb-1">Welcome to MEHAR.</p>
-                    <p className="text-[11px] text-[#475569] leading-relaxed">
+                  <div className="bg-theme-elevated border border-theme-border rounded-xl p-3.5">
+                    <p className="text-[11px] font-bold text-theme-primary mb-1">Welcome to MEHAR.</p>
+                    <p className="text-[11px] text-theme-secondary leading-relaxed">
                       I can help you scope a battery requirement, prepare an RFQ, or connect you with the appropriate business or engineering team.
                     </p>
                   </div>
@@ -701,31 +701,31 @@ export default function MeharAssistant() {
                   {/* Main action cards */}
                   <div className="space-y-2">
                     <ActionCard
-                      icon={<Search className="w-4 h-4 text-[#059669]" />}
+                      icon={<Search className="w-4 h-4 text-theme-green" />}
                       title="Find a Battery Solution"
                       subtitle="Tell us about your application and requirements."
                       onClick={() => { setFlow('finder'); setFinderStep('application'); }}
                     />
                     <ActionCard
-                      icon={<Layers className="w-4 h-4 text-[#059669]" />}
+                      icon={<Layers className="w-4 h-4 text-theme-green" />}
                       title="Design a Custom OEM Battery"
                       subtitle="For custom form factor, electrical, BMS and mechanical requirements."
                       onClick={() => { setFlow('oem'); setOemStep('application'); }}
                     />
                     <ActionCard
-                      icon={<FileText className="w-4 h-4 text-[#059669]" />}
+                      icon={<FileText className="w-4 h-4 text-theme-green" />}
                       title="Prepare a Bulk RFQ"
                       subtitle="Submit your requirements and company details."
                       onClick={() => { setFlow('bulk_rfq'); setBulkStep('application'); }}
                     />
                     <ActionCard
-                      icon={<Handshake className="w-4 h-4 text-[#059669]" />}
+                      icon={<Handshake className="w-4 h-4 text-theme-green" />}
                       title="Dealer / Distribution Enquiry"
                       subtitle="For channel and distribution enquiries."
                       onClick={() => { setFlow('dealer'); setDealerStep('company_name'); }}
                     />
                     <ActionCard
-                      icon={<Phone className="w-4 h-4 text-[#059669]" />}
+                      icon={<Phone className="w-4 h-4 text-theme-green" />}
                       title="Talk to Sales"
                       subtitle="Contact the MEHAR business team."
                       onClick={() => setFlow('sales')}
@@ -735,7 +735,7 @@ export default function MeharAssistant() {
                   {/* Secondary option */}
                   <button
                     onClick={() => { setFlow('finder'); setFinderStep('application'); }}
-                    className="w-full flex items-center justify-center gap-1.5 py-2.5 border border-dashed border-[#CBD5E1] rounded-xl text-[11px] font-semibold text-[#059669] hover:border-[#059669] hover:bg-[#F0FDF4] transition-colors"
+                    className="w-full flex items-center justify-center gap-1.5 py-2.5 border border-dashed border-theme-border rounded-xl text-[11px] font-semibold text-theme-green hover:border-theme-green hover:bg-theme-green/10 transition-colors"
                   >
                     Start with my requirements <ChevronRight className="w-3.5 h-3.5" />
                   </button>
@@ -1479,8 +1479,8 @@ export default function MeharAssistant() {
 
 function BotMessage({ text }: { text: string }) {
   return (
-    <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl rounded-tl-sm p-3">
-      <p className="text-[11px] text-[#334155] leading-relaxed">{text}</p>
+    <div className="bg-theme-surface border border-theme-border rounded-xl rounded-tl-sm p-3">
+      <p className="text-[11px] text-theme-secondary leading-relaxed">{text}</p>
     </div>
   );
 }
@@ -1499,16 +1499,16 @@ function ActionCard({
   return (
     <button
       onClick={onClick}
-      className="w-full flex items-start gap-3 p-3 rounded-xl border border-[#E2E8F0] bg-white hover:border-[#059669] hover:bg-[#F0FDF4] transition-all duration-150 text-left group"
+      className="w-full flex items-start gap-3 p-3 rounded-xl border border-theme-border bg-theme-elevated hover:border-theme-green hover:bg-theme-card transition-all duration-150 text-left group"
     >
-      <div className="flex-shrink-0 w-7 h-7 rounded-lg bg-[#F0FDF4] border border-[#D1FAE5] flex items-center justify-center group-hover:bg-[#ECFDF5]">
+      <div className="flex-shrink-0 w-7 h-7 rounded-lg bg-theme-green/10 border border-theme-green/25 flex items-center justify-center group-hover:bg-theme-green/20">
         {icon}
       </div>
       <div className="min-w-0">
-        <p className="text-[11px] font-bold text-[#0F172A] group-hover:text-[#059669] transition-colors">{title}</p>
-        <p className="text-[10px] text-[#64748B] leading-snug mt-0.5">{subtitle}</p>
+        <p className="text-[11px] font-bold text-theme-primary group-hover:text-theme-green transition-colors">{title}</p>
+        <p className="text-[10px] text-theme-secondary leading-snug mt-0.5">{subtitle}</p>
       </div>
-      <ChevronRight className="flex-shrink-0 w-3.5 h-3.5 text-[#CBD5E1] group-hover:text-[#059669] mt-0.5 ml-auto" />
+      <ChevronRight className="flex-shrink-0 w-3.5 h-3.5 text-theme-muted group-hover:text-theme-green mt-0.5 ml-auto" />
     </button>
   );
 }
@@ -1527,14 +1527,14 @@ function SalesCard({
   onClick?: () => void;
 }) {
   const cls =
-    'w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl border border-[#E2E8F0] bg-white hover:border-[#059669] hover:bg-[#F0FDF4] transition-all duration-150 text-left group';
+    'w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl border border-theme-border bg-theme-elevated hover:border-theme-green hover:bg-theme-card transition-all duration-150 text-left group';
   const content = (
     <>
-      <div className="flex-shrink-0 w-7 h-7 rounded-lg bg-[#F0FDF4] border border-[#D1FAE5] flex items-center justify-center">
+      <div className="flex-shrink-0 w-7 h-7 rounded-lg bg-theme-green/10 border border-theme-green/25 flex items-center justify-center">
         {icon}
       </div>
-      <span className="flex-1 text-[11px] font-semibold text-[#0F172A] group-hover:text-[#059669]">{label}</span>
-      <ChevronRight className="w-3.5 h-3.5 text-[#CBD5E1] group-hover:text-[#059669]" />
+      <span className="flex-1 text-[11px] font-semibold text-theme-primary group-hover:text-theme-green">{label}</span>
+      <ChevronRight className="w-3.5 h-3.5 text-theme-muted group-hover:text-theme-green" />
     </>
   );
 
@@ -1567,7 +1567,7 @@ function FinderSummary({
 }) {
   return (
     <div className="space-y-3">
-      <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3.5 space-y-1">
+      <div className="bg-theme-surface border border-theme-border rounded-xl p-3.5 space-y-1">
         <SummaryRow label="Application" value={requirements.applicationLabel || 'Not specified'} />
         <SummaryRow
           label="Voltage"
@@ -1597,11 +1597,11 @@ function FinderSummary({
         <SummaryRow label="Project Stage" value={requirements.projectStage || 'Not specified'} />
       </div>
 
-      <div className="flex items-start gap-2 p-3 bg-[#FFFBEB] border border-[#FDE68A] rounded-xl">
-        <AlertTriangle className="w-3.5 h-3.5 text-[#D97706] flex-shrink-0 mt-0.5" />
+      <div className="flex items-start gap-2 p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl">
+        <AlertTriangle className="w-3.5 h-3.5 text-amber-500 flex-shrink-0 mt-0.5" />
         <div>
-          <p className="text-[10px] font-bold text-[#92400E] uppercase tracking-wider">Engineering Assessment Required</p>
-          <p className="text-[10px] text-[#78350F] mt-0.5 leading-relaxed">
+          <p className="text-[10px] font-bold text-amber-600 dark:text-amber-300 uppercase tracking-wider">Engineering Assessment Required</p>
+          <p className="text-[10px] text-theme-secondary mt-0.5 leading-relaxed">
             Based on the information provided, our engineering team can evaluate a suitable battery solution.
           </p>
         </div>
@@ -1610,19 +1610,19 @@ function FinderSummary({
       <div className="space-y-1.5">
         <button
           onClick={onStartRfq}
-          className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[#059669] text-white text-[11px] font-bold hover:bg-[#047857] transition-colors"
+          className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-theme-green text-white dark:text-[#0B0F14] text-[11px] font-bold hover:bg-theme-green-hover transition-colors shadow-sm"
         >
           <CheckCircle className="w-3.5 h-3.5" /> Start RFQ
         </button>
         <button
           onClick={onTalkEngineering}
-          className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl border border-[#059669] text-[#059669] text-[11px] font-bold hover:bg-[#F0FDF4] transition-colors"
+          className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl border border-theme-green text-theme-green text-[11px] font-bold hover:bg-theme-green/10 transition-colors"
         >
           Talk to Engineering
         </button>
         <button
           onClick={onReview}
-          className="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl border border-[#CBD5E1] text-[#64748B] text-[11px] font-semibold hover:bg-[#F8FAFC] transition-colors"
+          className="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl border border-theme-border text-theme-secondary text-[11px] font-semibold hover:bg-theme-card transition-colors"
         >
           Review Requirements
         </button>
@@ -1642,7 +1642,7 @@ function OemSummary({
 }) {
   return (
     <div className="space-y-3">
-      <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3.5 space-y-1">
+      <div className="bg-theme-surface border border-theme-border rounded-xl p-3.5 space-y-1">
         <SummaryRow label="Application" value={data.applicationLabel || 'Not specified'} />
         <SummaryRow label="Voltage" value={data.voltage || 'Not specified'} />
         <SummaryRow label="Capacity" value={data.capacity || 'Not specified'} />
@@ -1656,16 +1656,16 @@ function OemSummary({
         <SummaryRow label="Annual Volume" value={data.annualQty || 'Not specified'} />
       </div>
 
-      <div className="flex items-start gap-2 p-3 bg-[#FFFBEB] border border-[#FDE68A] rounded-xl">
-        <AlertTriangle className="w-3.5 h-3.5 text-[#D97706] flex-shrink-0 mt-0.5" />
-        <p className="text-[10px] text-[#78350F] leading-relaxed">
+      <div className="flex items-start gap-2 p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl">
+        <AlertTriangle className="w-3.5 h-3.5 text-amber-500 flex-shrink-0 mt-0.5" />
+        <p className="text-[10px] text-theme-secondary leading-relaxed">
           All custom OEM battery configurations require direct engineering validation by Lawad Infrastructure engineers.
         </p>
       </div>
 
       <button
         onClick={onContinue}
-        className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[#059669] text-white text-[11px] font-bold hover:bg-[#047857] transition-colors"
+        className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-theme-green text-white dark:text-[#0B0F14] text-[11px] font-bold hover:bg-theme-green-hover transition-colors shadow-sm"
       >
         Continue to OEM Enquiry
       </button>
@@ -1684,7 +1684,7 @@ function BulkRfqSummary({
 }) {
   return (
     <div className="space-y-3">
-      <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3.5 space-y-1">
+      <div className="bg-theme-surface border border-theme-border rounded-xl p-3.5 space-y-1">
         <SummaryRow label="Application" value={data.applicationLabel || 'Not specified'} />
         <SummaryRow label="Quantity" value={data.quantity || 'Not specified'} />
         <SummaryRow label="Existing Spec" value={data.hasSpec === 'yes' ? 'Available' : 'Needs engineering scope'} />
@@ -1697,7 +1697,7 @@ function BulkRfqSummary({
 
       <button
         onClick={onBuildRfq}
-        className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[#059669] text-white text-[11px] font-bold hover:bg-[#047857] transition-colors"
+        className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-theme-green text-white dark:text-[#0B0F14] text-[11px] font-bold hover:bg-theme-green-hover transition-colors shadow-sm"
       >
         <FileText className="w-3.5 h-3.5" /> Build RFQ
       </button>
@@ -1716,7 +1716,7 @@ function DealerSummary({
 }) {
   return (
     <div className="space-y-3">
-      <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3.5 space-y-1">
+      <div className="bg-theme-surface border border-theme-border rounded-xl p-3.5 space-y-1">
         <SummaryRow label="Company" value={data.companyName || 'Not specified'} />
         <SummaryRow label="Location" value={data.location || 'Not specified'} />
         <SummaryRow label="Business Type" value={data.businessType || 'Not specified'} />
@@ -1726,13 +1726,13 @@ function DealerSummary({
         <SummaryRow label="Contact" value={data.contactInfo || 'Not specified'} />
       </div>
 
-      <p className="text-[10px] text-[#64748B] leading-relaxed">
+      <p className="text-[10px] text-theme-muted leading-relaxed">
         Your dealership enquiry will be forwarded to the MEHAR commercial desk. A team member will be in touch to discuss channel partnership terms.
       </p>
 
       <button
         onClick={onSubmit}
-        className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[#059669] text-white text-[11px] font-bold hover:bg-[#047857] transition-colors"
+        className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-theme-green text-white dark:text-[#0B0F14] text-[11px] font-bold hover:bg-theme-green-hover transition-colors shadow-sm"
       >
         <Handshake className="w-3.5 h-3.5" /> Submit Dealership Enquiry
       </button>

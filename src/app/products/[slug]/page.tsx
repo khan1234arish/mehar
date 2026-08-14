@@ -1,10 +1,8 @@
 import React from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
 import { notFound } from 'next/navigation';
+import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
-import { BROAD_CATEGORIES } from '@/data/categories';
-import { PRODUCTS_CATALOG } from '@/data/products';
+import { BROAD_CATEGORIES, getCategoryBySlug } from '@/data/categories';
 import { COMPANY_INFO } from '@/data/companyInfo';
 import { getSitePlaceholderImage } from '@/lib/siteImages';
 import Button from '@/components/ui/Button';
@@ -12,51 +10,55 @@ import Badge from '@/components/ui/Badge';
 import {
   ArrowLeft,
   ArrowRight,
-  ArrowUpRight,
-  FileSpreadsheet,
+  ShieldCheck,
   Package,
   Layers,
-  ShieldCheck,
+  ArrowUpRight,
+  FileSpreadsheet,
   Cpu,
 } from 'lucide-react';
 
-interface CategoryPageProps {
-  params: {
-    slug: string;
-  };
-  searchParams?: {
-    product?: string;
-  };
-}
-
-export function generateStaticParams() {
-  return BROAD_CATEGORIES.map((cat) => ({
-    slug: cat.slug,
-  }));
-}
-
 export const dynamic = 'force-dynamic';
 
-export default async function CategoryDetailPage({ params, searchParams }: CategoryPageProps) {
-  const category = BROAD_CATEGORIES.find((c) => c.slug === params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const category = getCategoryBySlug(slug);
+  if (!category) return { title: 'Category Not Found' };
 
+  return {
+    title: `${category.name} | MEHAR Battery Portfolio & Models`,
+    description: category.description,
+  };
+}
+
+export default async function ProductCategoryPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ product?: string }>;
+}) {
+  const { slug } = await params;
+  const { product: selectedProductSlug } = await searchParams;
+
+  const category = getCategoryBySlug(slug);
   if (!category) {
     notFound();
   }
 
-  // 1. Fetch live products from DB under this category
+  // 1. Fetch real products from SQLite Database for this category
   let dbProducts: any[] = [];
-
   try {
     if (prisma && process.env.DATABASE_URL) {
       dbProducts = await prisma.product.findMany({
         where: {
-          category: { slug: params.slug },
           publishStatus: 'VERIFIED',
           isPublished: true,
+          category: {
+            slug: slug,
+          },
         },
         include: {
-          specifications: { orderBy: { displayOrder: 'asc' } },
           images: {
             where: {
               isPublished: true,
@@ -64,36 +66,33 @@ export default async function CategoryDetailPage({ params, searchParams }: Categ
             },
             orderBy: [{ isPrimary: 'desc' }, { sortOrder: 'asc' }],
           },
+          specifications: {
+            orderBy: [{ groupName: 'asc' }, { displayOrder: 'asc' }],
+          },
         },
-        orderBy: { createdAt: 'asc' },
+        orderBy: { name: 'asc' },
       });
     }
   } catch {
-    // Fallback to static catalog
+    // Database fallback
   }
 
-  // Fallback to static catalog if no DB products
-  const categoryFallbackProducts = PRODUCTS_CATALOG.filter(
-    (p) => p.categorySlug === params.slug || p.categoryId === category.id
-  );
+  const availableProducts = dbProducts;
 
-  const availableProducts = dbProducts.length > 0 ? dbProducts : (categoryFallbackProducts.length > 0 ? categoryFallbackProducts : [PRODUCTS_CATALOG[0]]);
+  if (availableProducts.length === 0) {
+    notFound();
+  }
 
-  // Select active product by searchParams or first available
-  const requestedProductSlug = searchParams?.product;
-  const activeProduct = (requestedProductSlug && availableProducts.find((p: any) => p.slug === requestedProductSlug)) || availableProducts[0];
+  // Determine active selected product
+  const activeProduct =
+    availableProducts.find((p: any) => p.slug === selectedProductSlug) || availableProducts[0];
 
-  const publishedImages: Array<{ id: string; imageUrl: string; altText: string | null; isPrimary: boolean }> =
-    activeProduct.images && activeProduct.images.length > 0 ? activeProduct.images : [];
-
-  // MOQ Governance (Rule 4: Do NOT invent MOQ values; null shows "Contact MEHAR")
+  const primaryImage = activeProduct.images?.find((img: any) => img.isPrimary) || activeProduct.images?.[0];
   const moqDisplay = activeProduct.minimumOrderQuantity
-    ? `${activeProduct.minimumOrderQuantity} units`
-    : 'Contact MEHAR';
+    ? `${activeProduct.minimumOrderQuantity} units (Batch procurement)`
+    : 'Batch procurement / OEM MOQ upon application';
 
-  // Image Selection Priority: Primary published image -> Custom Admin placeholder -> Category visual -> Default fallback
-  const defaultPlaceholder = await getSitePlaceholderImage('product_default');
-  const primaryImage = publishedImages.find((img) => img.isPrimary) || publishedImages[0];
+  const defaultPlaceholder = await getSitePlaceholderImage('category_default');
   const displayImageUrl =
     primaryImage?.imageUrl ||
     activeProduct.imageUrl ||
@@ -102,52 +101,52 @@ export default async function CategoryDetailPage({ params, searchParams }: Categ
   const displayImageAlt = primaryImage?.altText || activeProduct.name;
 
   return (
-    <div className="py-12 space-y-16 bg-[#0B0F14] text-[#E6EAF0]">
+    <div className="py-12 space-y-16 bg-theme-base text-theme-primary transition-colors duration-200">
       {/* 1. Breadcrumb & Category Header */}
       <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-        <div className="flex items-center gap-2 text-xs font-mono text-[#A3AAB5] mb-6">
-          <Link href="/products" className="hover:text-[#39D353] flex items-center gap-1 font-semibold transition-colors">
+        <div className="flex items-center gap-2 text-xs font-mono text-theme-secondary mb-6">
+          <Link href="/products" className="hover:text-theme-green flex items-center gap-1 font-semibold transition-colors">
             <ArrowLeft className="w-3 h-3" /> Back to All Categories
           </Link>
-          <span className="text-[#1E2633]">/</span>
-          <span className="text-[#E6EAF0] font-bold truncate">{category.name}</span>
+          <span className="text-theme-border-strong">/</span>
+          <span className="text-theme-primary font-bold truncate">{category.name}</span>
         </div>
 
         {/* Category Overview Card */}
-        <div className="p-8 sm:p-12 rounded-3xl bg-[#11161D] border border-[#1E2633] shadow-xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-80 h-80 bg-[#39D353]/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="p-8 sm:p-12 rounded-3xl bg-theme-card border border-theme-border shadow-xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-80 h-80 bg-theme-green/10 rounded-full blur-[120px] pointer-events-none" />
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
             <div className="lg:col-span-8 space-y-4">
               <div className="flex flex-wrap items-center gap-2.5">
                 <Badge variant="green">Product Category</Badge>
-                <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-mono font-bold bg-[#39D353]/10 text-[#39D353] border border-[#39D353]/25">
-                  <Layers className="w-3.5 h-3.5 text-[#39D353]" />
+                <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-mono font-bold bg-theme-green/10 text-theme-green border border-theme-green/25">
+                  <Layers className="w-3.5 h-3.5 text-theme-green" />
                   {availableProducts.length} {availableProducts.length === 1 ? 'Product Model' : 'Product Models'} in Category
                 </span>
               </div>
 
-              <h1 className="text-2xl sm:text-4xl font-extrabold text-[#E6EAF0] tracking-tight">
+              <h1 className="text-2xl sm:text-4xl font-extrabold text-theme-primary tracking-tight">
                 {category.name}
               </h1>
 
-              <p className="text-sm sm:text-base text-[#39D353] font-semibold">
+              <p className="text-sm sm:text-base text-theme-green font-semibold">
                 {category.tagline}
               </p>
 
-              <p className="text-xs sm:text-sm text-[#A3AAB5] leading-relaxed max-w-3xl">
+              <p className="text-xs sm:text-sm text-theme-secondary leading-relaxed max-w-3xl">
                 {category.description}
               </p>
 
               {/* Target Applications Pills */}
               <div className="pt-2">
-                <span className="text-xs font-mono text-[#A3AAB5] block mb-2 font-bold uppercase tracking-wider">
+                <span className="text-xs font-mono text-theme-secondary block mb-2 font-bold uppercase tracking-wider">
                   Recommended Target Applications:
                 </span>
                 <div className="flex flex-wrap gap-2">
                   {category.keyApplications.map((app) => (
                     <span
                       key={app}
-                      className="px-3 py-1 rounded-lg bg-[#161C24] border border-[#1E2633] text-xs text-[#E6EAF0] font-mono font-medium"
+                      className="px-3 py-1 rounded-lg bg-theme-elevated border border-theme-border text-xs text-theme-primary font-mono font-medium"
                     >
                       {app}
                     </span>
@@ -156,11 +155,11 @@ export default async function CategoryDetailPage({ params, searchParams }: Categ
               </div>
             </div>
 
-            <div className="lg:col-span-4 p-6 rounded-2xl bg-[#0D1117] border border-[#1E2633] shadow-lg space-y-3">
-              <span className="text-xs font-mono text-[#39D353] font-bold uppercase tracking-wider block">
+            <div className="lg:col-span-4 p-6 rounded-2xl bg-theme-surface border border-theme-border shadow-lg space-y-3">
+              <span className="text-xs font-mono text-theme-green font-bold uppercase tracking-wider block">
                 Category Procurement Desk
               </span>
-              <p className="text-xs text-[#A3AAB5] leading-relaxed">
+              <p className="text-xs text-theme-secondary leading-relaxed">
                 Explore individual model specifications below, or submit batch procurement parameters directly to our technical desk.
               </p>
 
@@ -181,19 +180,19 @@ export default async function CategoryDetailPage({ params, searchParams }: Categ
       {/* 2. Individual Products Grid (Catalogue View) */}
       <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
         <div className="space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-[#1E2633]">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-theme-border">
             <div>
-              <h2 className="text-xl font-bold text-[#E6EAF0] flex items-center gap-2">
-                <Package className="w-5 h-5 text-[#39D353]" />
+              <h2 className="text-xl font-bold text-theme-primary flex items-center gap-2">
+                <Package className="w-5 h-5 text-theme-green" />
                 Available Models &amp; Configurations ({availableProducts.length})
               </h2>
-              <p className="text-xs text-[#A3AAB5] mt-0.5">
+              <p className="text-xs text-theme-secondary mt-0.5">
                 Click any model to inspect full engineering specifications, cell chemistry, and dimensional data below.
               </p>
             </div>
 
-            <span className="text-xs font-mono text-[#A3AAB5]">
-              Active Selection: <strong className="text-[#39D353] font-bold">{activeProduct.name}</strong>
+            <span className="text-xs font-mono text-theme-secondary">
+              Active Selection: <strong className="text-theme-green font-bold">{activeProduct.name}</strong>
             </span>
           </div>
 
@@ -205,15 +204,15 @@ export default async function CategoryDetailPage({ params, searchParams }: Categ
               return (
                 <div
                   key={prod.slug}
-                  className={`bg-[#11161D] rounded-2xl p-6 border transition-all duration-300 flex flex-col justify-between group ${
+                  className={`bg-theme-card rounded-2xl p-6 border transition-all duration-300 flex flex-col justify-between group ${
                     isSelected
-                      ? 'border-[#39D353] shadow-[0_0_25px_rgba(57,211,83,0.15)] ring-1 ring-[#39D353] bg-[#161C24]'
-                      : 'border-[#1E2633] hover:border-[#39D353]/50 hover:shadow-md'
+                      ? 'border-theme-green shadow-xl ring-1 ring-theme-green bg-theme-elevated'
+                      : 'border-theme-border hover:border-theme-green/50 hover:shadow-md'
                   }`}
                 >
                   <div className="space-y-4">
                     {/* Visual Container */}
-                    <div className="relative h-44 rounded-xl bg-[#0B0F14] border border-[#1E2633] overflow-hidden flex items-center justify-center p-3 group-hover:border-[#39D353]/40 transition-colors">
+                    <div className="relative h-44 rounded-xl bg-theme-base border border-theme-border overflow-hidden flex items-center justify-center p-3 group-hover:border-theme-green/40 transition-colors">
                       {prodImg ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
@@ -222,12 +221,12 @@ export default async function CategoryDetailPage({ params, searchParams }: Categ
                           className="max-h-36 max-w-[85%] object-contain group-hover:scale-105 transition-transform duration-300"
                         />
                       ) : (
-                        <Cpu className="w-10 h-10 text-[#39D353]" />
+                        <Cpu className="w-10 h-10 text-theme-green" />
                       )}
 
                       {/* Model & Chemistry Tag */}
                       {prod.chemistry && (
-                        <span className="absolute top-3 left-3 text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#11161D]/90 backdrop-blur-sm text-[#39D353] border border-[#39D353]/30">
+                        <span className="absolute top-3 left-3 text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-theme-card/90 backdrop-blur-sm text-theme-green border border-theme-green/30">
                           {prod.chemistry.split(' ')[0]}
                         </span>
                       )}
@@ -241,41 +240,41 @@ export default async function CategoryDetailPage({ params, searchParams }: Categ
 
                     {/* Product Name & Short Description */}
                     <div>
-                      <h3 className="text-base font-bold text-[#E6EAF0] group-hover:text-[#39D353] transition-colors leading-snug">
+                      <h3 className="text-base font-bold text-theme-primary group-hover:text-theme-green transition-colors leading-snug">
                         <Link href={`/products/${category.slug}?product=${prod.slug}#specifications`}>
                           {prod.name}
                         </Link>
                       </h3>
-                      <p className="text-xs text-[#A3AAB5] mt-1.5 line-clamp-2 leading-relaxed">
+                      <p className="text-xs text-theme-secondary mt-1.5 line-clamp-2 leading-relaxed">
                         {prod.shortDescription}
                       </p>
                     </div>
 
                     {/* Key Technical Specs Badges */}
-                    <div className="grid grid-cols-3 gap-2 py-2 px-3 rounded-xl bg-[#0D1117] border border-[#1E2633] text-center font-mono text-xs">
+                    <div className="grid grid-cols-3 gap-2 py-2 px-3 rounded-xl bg-theme-surface border border-theme-border text-center font-mono text-xs">
                       <div>
-                        <span className="text-[10px] text-[#A3AAB5] uppercase block">Voltage</span>
-                        <strong className="text-[#E6EAF0] text-xs">{prod.voltageRange?.split(' ')[0] || 'Varies'}</strong>
+                        <span className="text-[10px] text-theme-secondary uppercase block">Voltage</span>
+                        <strong className="text-theme-primary text-xs">{prod.voltageRange?.split(' ')[0] || 'Varies'}</strong>
                       </div>
-                      <div className="border-x border-[#1E2633]">
-                        <span className="text-[10px] text-[#A3AAB5] uppercase block">Capacity</span>
-                        <strong className="text-[#E6EAF0] text-xs">{prod.capacityRange?.split(' ')[0] || 'Custom'}</strong>
+                      <div className="border-x border-theme-border">
+                        <span className="text-[10px] text-theme-secondary uppercase block">Capacity</span>
+                        <strong className="text-theme-primary text-xs">{prod.capacityRange?.split(' ')[0] || 'Custom'}</strong>
                       </div>
                       <div>
-                        <span className="text-[10px] text-[#A3AAB5] uppercase block">Energy</span>
-                        <strong className="text-[#39D353] text-xs">{prod.energyRange?.split(' ')[0] || 'TDS'}</strong>
+                        <span className="text-[10px] text-theme-secondary uppercase block">Energy</span>
+                        <strong className="text-theme-green text-xs">{prod.energyRange?.split(' ')[0] || 'TDS'}</strong>
                       </div>
                     </div>
                   </div>
 
                   {/* Product Card Actions */}
-                  <div className="pt-4 mt-4 border-t border-[#1E2633] flex items-center justify-between gap-2">
+                  <div className="pt-4 mt-4 border-t border-theme-border flex items-center justify-between gap-2">
                     <Link
                       href={`/products/${category.slug}?product=${prod.slug}#specifications`}
                       className={`flex-1 inline-flex items-center justify-center gap-1 py-2 px-3 rounded-xl text-xs font-bold transition-all ${
                         isSelected
-                          ? 'bg-[#39D353] text-[#0B0F14] shadow-[0_0_12px_rgba(57,211,83,0.25)]'
-                          : 'bg-[#161C24] text-[#E6EAF0] border border-[#1E2633] hover:bg-[#39D353] hover:text-[#0B0F14] hover:border-[#39D353]'
+                          ? 'bg-theme-green text-white dark:text-[#0B0F14] shadow-sm'
+                          : 'bg-theme-elevated text-theme-primary border border-theme-border hover:bg-theme-green hover:text-white dark:hover:text-[#0B0F14] hover:border-theme-green'
                       }`}
                     >
                       <span>{isSelected ? 'Viewing Specs' : 'View Specs'}</span>
@@ -284,7 +283,7 @@ export default async function CategoryDetailPage({ params, searchParams }: Categ
 
                     <Link
                       href={`/rfq?category=${category.slug}&product=${encodeURIComponent(prod.name)}&moq=${prod.minimumOrderQuantity || ''}`}
-                      className="inline-flex items-center justify-center p-2 rounded-xl bg-[#39D353]/10 border border-[#39D353]/25 text-[#39D353] hover:bg-[#39D353] hover:text-[#0B0F14] transition-all text-xs font-bold"
+                      className="inline-flex items-center justify-center p-2 rounded-xl bg-theme-green/10 border border-theme-green/25 text-theme-green hover:bg-theme-green hover:text-white dark:hover:text-[#0B0F14] transition-all text-xs font-bold"
                       title="Request quote for this specific model"
                     >
                       <ArrowUpRight className="w-4 h-4" />
@@ -301,44 +300,44 @@ export default async function CategoryDetailPage({ params, searchParams }: Categ
       <div id="specifications" className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 pt-4">
         <div className="space-y-6">
           {/* Active Product Header Banner */}
-          <div className="p-8 rounded-3xl bg-[#11161D] border border-[#1E2633] shadow-xl">
+          <div className="p-8 rounded-3xl bg-theme-card border border-theme-border shadow-xl">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               {/* Left Column: Product Identity & Details */}
               <div className="lg:col-span-7 space-y-4">
                 <div className="flex flex-wrap items-center gap-2.5">
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-[#39D353]/10 text-[#39D353] border border-[#39D353]/25">
-                    <ShieldCheck className="w-3.5 h-3.5 text-[#39D353]" /> Verified Product Datasheet
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-theme-green/10 text-theme-green border border-theme-green/25">
+                    <ShieldCheck className="w-3.5 h-3.5 text-theme-green" /> Verified Product Datasheet
                   </span>
                   {activeProduct.modelNumber && (
-                    <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold bg-[#161C24] text-[#E6EAF0] border border-[#1E2633]">
+                    <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold bg-theme-elevated text-theme-primary border border-theme-border">
                       Model: {activeProduct.modelNumber}
                     </span>
                   )}
                   {activeProduct.chemistry && (
-                    <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-medium bg-[#161C24] text-[#39D353] border border-[#1E2633]">
+                    <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-medium bg-theme-elevated text-theme-green border border-theme-border">
                       Chemistry: {activeProduct.chemistry}
                     </span>
                   )}
                 </div>
 
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-[#E6EAF0] tracking-tight">
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-theme-primary tracking-tight">
                   {activeProduct.name}
                 </h2>
 
-                <p className="text-xs sm:text-sm text-[#A3AAB5] leading-relaxed max-w-2xl">
+                <p className="text-xs sm:text-sm text-theme-secondary leading-relaxed max-w-2xl">
                   {activeProduct.shortDescription}
                 </p>
 
                 {/* MOQ Indicator Box */}
-                <div className="p-4 rounded-xl bg-[#161C24] border border-[#1E2633] inline-flex items-center gap-4 shadow-sm">
-                  <div className="w-10 h-10 rounded-lg bg-[#39D353]/10 text-[#39D353] flex items-center justify-center">
+                <div className="p-4 rounded-xl bg-theme-elevated border border-theme-border inline-flex items-center gap-4 shadow-sm">
+                  <div className="w-10 h-10 rounded-lg bg-theme-green/10 text-theme-green flex items-center justify-center">
                     <Package className="w-5 h-5" />
                   </div>
                   <div>
-                    <span className="text-[10px] font-mono font-bold text-[#A3AAB5] uppercase tracking-wider block">
+                    <span className="text-[10px] font-mono font-bold text-theme-secondary uppercase tracking-wider block">
                       Minimum Order Quantity (MOQ)
                     </span>
-                    <span className="text-sm font-bold text-[#E6EAF0] font-mono">
+                    <span className="text-sm font-bold text-theme-primary font-mono">
                       {moqDisplay}
                     </span>
                   </div>
@@ -347,7 +346,7 @@ export default async function CategoryDetailPage({ params, searchParams }: Categ
 
               {/* Right Column: Visual & Direct Quote Button */}
               <div className="lg:col-span-5 space-y-4">
-                <div className="relative aspect-video sm:aspect-square w-full rounded-2xl bg-[#0B0F14] border border-[#1E2633] flex flex-col items-center justify-center p-4 overflow-hidden shadow-inner">
+                <div className="relative aspect-video sm:aspect-square w-full rounded-2xl bg-theme-base border border-theme-border flex flex-col items-center justify-center p-4 overflow-hidden shadow-inner">
                   {displayImageUrl.endsWith('.svg') ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
@@ -365,7 +364,7 @@ export default async function CategoryDetailPage({ params, searchParams }: Categ
                   )}
                 </div>
 
-                <div className="p-5 rounded-2xl bg-[#161C24] border border-[#1E2633] shadow-md space-y-2.5">
+                <div className="p-5 rounded-2xl bg-theme-elevated border border-theme-border shadow-md space-y-2.5">
                   <Button
                     href={`/rfq?category=${category.slug}&product=${encodeURIComponent(activeProduct.name)}&moq=${activeProduct.minimumOrderQuantity || ''}`}
                     variant="primary"
@@ -380,7 +379,7 @@ export default async function CategoryDetailPage({ params, searchParams }: Categ
                     href={`https://wa.me/${COMPANY_INFO.whatsappDesk.replace(/[^0-9]/g, '')}?text=Hello%2C%20I%20am%20inquiring%20about%20${encodeURIComponent(activeProduct.name)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block text-center text-xs font-mono text-[#39D353] hover:underline font-semibold"
+                    className="block text-center text-xs font-mono text-theme-green hover:underline font-semibold"
                   >
                     Direct WhatsApp Inquiry Desk →
                   </a>
@@ -392,66 +391,66 @@ export default async function CategoryDetailPage({ params, searchParams }: Categ
           {/* Specifications Table */}
           <div className="space-y-4">
             <div>
-              <h3 className="text-lg font-bold text-[#E6EAF0] flex items-center gap-2">
-                <FileSpreadsheet className="w-5 h-5 text-[#39D353]" />
+              <h3 className="text-lg font-bold text-theme-primary flex items-center gap-2">
+                <FileSpreadsheet className="w-5 h-5 text-theme-green" />
                 Technical &amp; Engineering Specifications Matrix
               </h3>
-              <p className="text-xs text-[#A3AAB5] mt-0.5">
+              <p className="text-xs text-theme-secondary mt-0.5">
                 Numerical specifications for {activeProduct.name} verified by MEHAR engineering.
               </p>
             </div>
 
-            <div className="rounded-2xl bg-[#11161D] border border-[#1E2633] overflow-hidden shadow-md">
+            <div className="rounded-2xl bg-theme-card border border-theme-border overflow-hidden shadow-md">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead>
-                    <tr className="bg-[#0D1117] border-b border-[#1E2633] text-[#A3AAB5] font-mono uppercase text-[11px]">
+                    <tr className="bg-theme-surface border-b border-theme-border text-theme-secondary font-mono uppercase text-[11px]">
                       <th className="py-3.5 px-6 font-bold">Specification Parameter</th>
                       <th className="py-3.5 px-6 font-bold">Classification Group</th>
                       <th className="py-3.5 px-6 font-bold">Value / Unit</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#1E2633] text-[#E6EAF0]">
+                  <tbody className="divide-y divide-theme-border text-theme-primary">
                     {activeProduct.specifications && activeProduct.specifications.length > 0 ? (
                       activeProduct.specifications.map((spec: any, idx: number) => (
-                        <tr key={idx} className="hover:bg-white/[0.03] transition-colors">
-                          <td className="py-4 px-6 font-semibold text-[#E6EAF0]">
+                        <tr key={idx} className="hover:bg-theme-elevated transition-colors">
+                          <td className="py-4 px-6 font-semibold text-theme-primary">
                             {spec.specKey}
                           </td>
-                          <td className="py-4 px-6 font-mono text-[#A3AAB5]">
+                          <td className="py-4 px-6 font-mono text-theme-secondary">
                             {spec.groupName}
                           </td>
-                          <td className="py-4 px-6 font-mono font-medium text-[#39D353]">
+                          <td className="py-4 px-6 font-mono font-medium text-theme-green">
                             {spec.specValue} {spec.specUnit || ''}
                           </td>
                         </tr>
                       ))
                     ) : (
                       <>
-                        <tr className="hover:bg-white/[0.03] transition-colors">
-                          <td className="py-4 px-6 font-semibold text-[#E6EAF0]">Nominal Voltage</td>
-                          <td className="py-4 px-6 font-mono text-[#A3AAB5]">Electrical</td>
-                          <td className="py-4 px-6 font-mono font-medium text-[#39D353]">{activeProduct.voltageRange || 'Configuration dependent'}</td>
+                        <tr className="hover:bg-theme-elevated transition-colors">
+                          <td className="py-4 px-6 font-semibold text-theme-primary">Nominal Voltage</td>
+                          <td className="py-4 px-6 font-mono text-theme-secondary">Electrical</td>
+                          <td className="py-4 px-6 font-mono font-medium text-theme-green">{activeProduct.voltageRange || 'Configuration dependent'}</td>
                         </tr>
-                        <tr className="hover:bg-white/[0.03] transition-colors">
-                          <td className="py-4 px-6 font-semibold text-[#E6EAF0]">Rated Capacity</td>
-                          <td className="py-4 px-6 font-mono text-[#A3AAB5]">Electrical</td>
-                          <td className="py-4 px-6 font-mono font-medium text-[#39D353]">{activeProduct.capacityRange || 'Available on request'}</td>
+                        <tr className="hover:bg-theme-elevated transition-colors">
+                          <td className="py-4 px-6 font-semibold text-theme-primary">Rated Capacity</td>
+                          <td className="py-4 px-6 font-mono text-theme-secondary">Electrical</td>
+                          <td className="py-4 px-6 font-mono font-medium text-theme-green">{activeProduct.capacityRange || 'Available on request'}</td>
                         </tr>
-                        <tr className="hover:bg-white/[0.03] transition-colors">
-                          <td className="py-4 px-6 font-semibold text-[#E6EAF0]">Cell Chemistry</td>
-                          <td className="py-4 px-6 font-mono text-[#A3AAB5]">Electrochemistry</td>
-                          <td className="py-4 px-6 font-mono font-medium text-[#39D353]">{activeProduct.chemistry || 'LiFePO4 / NMC'}</td>
+                        <tr className="hover:bg-theme-elevated transition-colors">
+                          <td className="py-4 px-6 font-semibold text-theme-primary">Cell Chemistry</td>
+                          <td className="py-4 px-6 font-mono text-theme-secondary">Electrochemistry</td>
+                          <td className="py-4 px-6 font-mono font-medium text-theme-green">{activeProduct.chemistry || 'LiFePO4 / NMC'}</td>
                         </tr>
-                        <tr className="hover:bg-white/[0.03] transition-colors">
-                          <td className="py-4 px-6 font-semibold text-[#E6EAF0]">Cycle Life (@ 80% DoD)</td>
-                          <td className="py-4 px-6 font-mono text-[#A3AAB5]">Durability</td>
-                          <td className="py-4 px-6 font-mono font-medium text-[#39D353]">{activeProduct.cycleLife || '2,000+ cycles'}</td>
+                        <tr className="hover:bg-theme-elevated transition-colors">
+                          <td className="py-4 px-6 font-semibold text-theme-primary">Cycle Life (@ 80% DoD)</td>
+                          <td className="py-4 px-6 font-mono text-theme-secondary">Durability</td>
+                          <td className="py-4 px-6 font-mono font-medium text-theme-green">{activeProduct.cycleLife || '2,000+ cycles'}</td>
                         </tr>
-                        <tr className="hover:bg-white/[0.03] transition-colors">
-                          <td className="py-4 px-6 font-semibold text-[#E6EAF0]">Ingress Protection</td>
-                          <td className="py-4 px-6 font-mono text-[#A3AAB5]">Mechanical</td>
-                          <td className="py-4 px-6 font-mono font-medium text-[#39D353]">{activeProduct.ipRating || 'IP65'}</td>
+                        <tr className="hover:bg-theme-elevated transition-colors">
+                          <td className="py-4 px-6 font-semibold text-theme-primary">Ingress Protection</td>
+                          <td className="py-4 px-6 font-mono text-theme-secondary">Mechanical</td>
+                          <td className="py-4 px-6 font-mono font-medium text-theme-green">{activeProduct.ipRating || 'IP65'}</td>
                         </tr>
                       </>
                     )}
@@ -465,12 +464,12 @@ export default async function CategoryDetailPage({ params, searchParams }: Categ
 
       {/* 4. OEM Customization CTA */}
       <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-        <div className="p-8 rounded-2xl bg-[#11161D] border border-[#1E2633] flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="p-8 rounded-2xl bg-theme-card border border-theme-border flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="space-y-1 text-center sm:text-left">
-            <h3 className="text-base font-bold text-[#E6EAF0]">
+            <h3 className="text-base font-bold text-theme-primary">
               Need custom engineering or specific C-rate parameters?
             </h3>
-            <p className="text-xs text-[#A3AAB5]">
+            <p className="text-xs text-theme-secondary">
               Our engineering team works directly with EV and energy storage OEMs to develop tailored pack configurations.
             </p>
           </div>

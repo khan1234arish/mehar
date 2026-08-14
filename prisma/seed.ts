@@ -1,17 +1,18 @@
 import { PrismaClient } from '@prisma/client';
 import { BROAD_CATEGORIES } from '../src/data/categories';
 import { PRODUCTS_CATALOG } from '../src/data/products';
-import * as bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('[MEHAR Seed] Seeding initial broad categories and placeholder data...');
+  console.log('[MEHAR Seed] Seeding authentic Indian battery categories & products...');
 
-  // 1. Seed Categories
+  // 1. Seed Categories & build slug -> dbId map
+  const categoryMap = new Map<string, string>();
+
   for (let i = 0; i < BROAD_CATEGORIES.length; i++) {
     const cat = BROAD_CATEGORIES[i];
-    await prisma.category.upsert({
+    const savedCat = await prisma.category.upsert({
       where: { slug: cat.slug },
       update: {
         name: cat.name,
@@ -19,8 +20,8 @@ async function main() {
         description: cat.description,
         iconName: cat.iconName,
         displayOrder: i,
-        isPlaceholder: true,
-        verificationStatus: 'UNVERIFIED_PLACEHOLDER',
+        isPlaceholder: false,
+        verificationStatus: 'CLIENT_VERIFIED',
       },
       create: {
         id: cat.id,
@@ -30,46 +31,77 @@ async function main() {
         description: cat.description,
         iconName: cat.iconName,
         displayOrder: i,
-        isPlaceholder: true,
-        verificationStatus: 'UNVERIFIED_PLACEHOLDER',
+        isPlaceholder: false,
+        verificationStatus: 'CLIENT_VERIFIED',
       },
     });
-    console.log(`✓ Seeded Category: ${cat.name}`);
+    categoryMap.set(cat.slug, savedCat.id);
+    console.log(`✓ Seeded Category: ${cat.name} (DB ID: ${savedCat.id})`);
   }
 
-  // 2. Seed Products
+  // 2. Seed Products using mapped category ID
   for (const prod of PRODUCTS_CATALOG) {
+    const dbCategoryId = categoryMap.get(prod.categorySlug) || prod.categoryId;
+
     const product = await prisma.product.upsert({
       where: { slug: prod.slug },
       update: {
-        categoryId: prod.categoryId,
+        categoryId: dbCategoryId,
         name: prod.name,
+        modelNumber: prod.modelNumber,
         shortDescription: prod.shortDescription,
         applicationTag: prod.applicationTag,
         chemistry: prod.chemistry,
         voltageRange: prod.voltageRange,
         capacityRange: prod.capacityRange,
-        isPlaceholder: true,
-        verificationStatus: 'UNVERIFIED_PLACEHOLDER',
-        placeholderNote: prod.placeholderNote,
+        energyRange: prod.energyRange,
+        cycleLife: prod.cycleLife,
+        maxDischargeRate: prod.maxDischargeRate,
+        operatingTemp: prod.operatingTemp,
+        bmsProtocols: prod.bmsProtocols,
+        ipRating: prod.ipRating,
+        dimensions: prod.dimensions,
+        weight: prod.weight,
+        warrantySummary: prod.warrantySummary,
+        imageUrl: prod.imageUrl,
+        minimumOrderQuantity: prod.minimumOrderQuantity,
+        isPublished: true,
+        publishStatus: 'VERIFIED',
+        isPlaceholder: false,
+        verificationStatus: 'CLIENT_VERIFIED',
+        placeholderNote: '',
       },
       create: {
         id: prod.id,
-        categoryId: prod.categoryId,
+        categoryId: dbCategoryId,
         name: prod.name,
         slug: prod.slug,
+        modelNumber: prod.modelNumber,
         shortDescription: prod.shortDescription,
         applicationTag: prod.applicationTag,
         chemistry: prod.chemistry,
         voltageRange: prod.voltageRange,
         capacityRange: prod.capacityRange,
-        isPlaceholder: true,
-        verificationStatus: 'UNVERIFIED_PLACEHOLDER',
-        placeholderNote: prod.placeholderNote,
+        energyRange: prod.energyRange,
+        cycleLife: prod.cycleLife,
+        maxDischargeRate: prod.maxDischargeRate,
+        operatingTemp: prod.operatingTemp,
+        bmsProtocols: prod.bmsProtocols,
+        ipRating: prod.ipRating,
+        dimensions: prod.dimensions,
+        weight: prod.weight,
+        warrantySummary: prod.warrantySummary,
+        imageUrl: prod.imageUrl,
+        minimumOrderQuantity: prod.minimumOrderQuantity,
+        isPublished: true,
+        publishStatus: 'VERIFIED',
+        isPlaceholder: false,
+        verificationStatus: 'CLIENT_VERIFIED',
+        placeholderNote: '',
       },
     });
 
-    console.log(`✓ Seeded Product Placeholder: ${product.name}`);
+    console.log(`✓ Seeded Product: ${product.name}`);
 
     // Seed Specs
     await prisma.productSpec.deleteMany({ where: { productId: product.id } });

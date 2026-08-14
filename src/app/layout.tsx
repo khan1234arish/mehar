@@ -5,14 +5,18 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import MeharAssistant from '@/components/chat/MeharAssistant';
 import { Analytics } from '@vercel/analytics/react';
-
+import { ThemeProvider } from '@/components/theme/ThemeProvider';
+import { ThemeScript } from '@/components/theme/ThemeScript';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.meharbatteries.com';
 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#FFFFFF',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#FFFFFF' },
+    { media: '(prefers-color-scheme: dark)', color: '#0B0F14' },
+  ],
 };
 
 export const metadata: Metadata = {
@@ -77,8 +81,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <head>
+        <ThemeScript />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
@@ -87,19 +92,20 @@ export default function RootLayout({
         />
         <link rel="icon" href="/assets/logo/mehar-logo.png" />
       </head>
-      <body className="min-h-screen bg-[#0B0F14] text-[#E6EAF0] antialiased flex flex-col justify-between selection:bg-[#39D353]/30 selection:text-[#39D353]">
-        <div>
-          <TopBar />
-          <Header />
-          <main>{children}</main>
-        </div>
-        <Footer />
-        {/* Persistent Floating B2B Assistant */}
-        <MeharAssistant />
-        {/* Official Vercel Web Analytics Provider */}
-        <Analytics />
+      <body className="min-h-screen bg-theme-base text-theme-primary antialiased flex flex-col justify-between selection:bg-theme-green/30 selection:text-theme-green">
+        <ThemeProvider>
+          <div className="flex flex-col flex-1">
+            <TopBar />
+            <Header />
+            <main className="flex-1">{children}</main>
+          </div>
+          <Footer />
+          {/* Persistent Floating B2B Assistant */}
+          <MeharAssistant />
+          {/* Official Vercel Web Analytics Provider */}
+          <Analytics />
+        </ThemeProvider>
       </body>
     </html>
   );
 }
-

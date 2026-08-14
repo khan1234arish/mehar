@@ -26,18 +26,18 @@ export default function OemProgressBar({ currentStep }: OemProgressBarProps) {
   const pct = Math.round(((currentStep - 1) / (OEM_STEPS.length - 1)) * 100);
 
   return (
-    <div className="bg-[#11161D] border-b border-[#1E2633] px-4 sm:px-8 py-4">
+    <div className="bg-theme-card border-b border-theme-border px-4 sm:px-8 py-4 shadow-sm">
       {/* Percentage bar */}
       <div className="flex items-center justify-between mb-3">
-        <span className="text-xs font-bold text-[#39D353]">
+        <span className="text-xs font-bold text-theme-green">
           Step {currentStep} of {OEM_STEPS.length}
-          <span className="ml-2 text-[#A3AAB5] font-normal">— {OEM_STEPS[currentStep - 1]?.label}</span>
+          <span className="ml-2 text-theme-secondary font-normal">— {OEM_STEPS[currentStep - 1]?.label}</span>
         </span>
-        <span className="text-xs text-[#64748B] font-mono">{pct}% complete</span>
+        <span className="text-xs text-theme-muted font-mono">{pct}% complete</span>
       </div>
-      <div className="w-full h-1.5 rounded-full bg-[#161C24] overflow-hidden mb-4">
+      <div className="w-full h-1.5 rounded-full bg-theme-elevated overflow-hidden mb-4">
         <div
-          className="h-full rounded-full bg-[#39D353] shadow-[0_0_8px_rgba(57,211,83,0.5)] transition-all duration-500"
+          className="h-full rounded-full bg-theme-green shadow-sm transition-all duration-500"
           style={{ width: `${pct}%` }}
         />
       </div>
@@ -52,17 +52,21 @@ export default function OemProgressBar({ currentStep }: OemProgressBarProps) {
               <div
                 className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-[10px] font-bold border transition-colors ${
                   done
-                    ? 'bg-[#39D353] border-[#39D353] text-[#0B0F14]'
+                    ? 'bg-theme-green border-theme-green text-white dark:text-[#0B0F14]'
                     : active
-                    ? 'bg-[#161C24] border-[#39D353] text-[#39D353] shadow-[0_0_8px_rgba(57,211,83,0.3)]'
-                    : 'bg-[#161C24] border-[#1E2633] text-[#64748B]'
+                    ? 'bg-theme-elevated border-theme-green text-theme-green shadow-sm'
+                    : 'bg-theme-elevated border-theme-border text-theme-muted'
                 }`}
               >
-                {done ? <Check className="w-3 h-3 stroke-[3]" /> : step.number}
+                {done ? <Check className="w-3 h-3 text-white dark:text-[#0B0F14]" /> : step.number}
               </div>
               <span
-                className={`text-[9px] text-center leading-tight font-semibold truncate w-full text-center ${
-                  active ? 'text-[#39D353]' : done ? 'text-[#A3AAB5]' : 'text-[#64748B]'
+                className={`text-[10px] text-center leading-tight truncate w-full ${
+                  active
+                    ? 'text-theme-green font-bold'
+                    : done
+                    ? 'text-theme-secondary font-medium'
+                    : 'text-theme-muted'
                 }`}
               >
                 {step.shortLabel}

@@ -56,22 +56,22 @@ export default function ResourcesPage() {
   ];
 
   return (
-    <div className="py-12 space-y-16 bg-[#0B0F14] text-[#E6EAF0]">
+    <div className="py-12 space-y-16 bg-theme-base text-theme-primary transition-colors duration-200">
       {/* Header */}
       <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-        <div className="p-8 sm:p-12 rounded-3xl bg-[#11161D] border border-[#1E2633] shadow-xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-80 h-80 bg-[#00A3FF]/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="p-8 sm:p-12 rounded-3xl bg-theme-card border border-theme-border shadow-xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-80 h-80 bg-theme-blue/10 rounded-full blur-[120px] pointer-events-none" />
           <div className="max-w-3xl space-y-4 relative z-10">
             <Badge variant="blue">Documentation &amp; Assets</Badge>
-            <h1 className="text-3xl sm:text-5xl font-extrabold text-[#E6EAF0] tracking-tight">
+            <h1 className="text-3xl sm:text-5xl font-extrabold text-theme-primary tracking-tight">
               Resource &amp; Download Center
             </h1>
-            <p className="text-sm sm:text-base text-[#A3AAB5] leading-relaxed">
-              Access technical documentation, engineering intake questionnaires, and safety guidelines for <strong className="text-[#E6EAF0]">{COMPANY_INFO.brandName}</strong> battery solutions by <strong className="text-[#E6EAF0]">{COMPANY_INFO.parentCompanyName}</strong>.
+            <p className="text-sm sm:text-base text-theme-secondary leading-relaxed">
+              Access technical documentation, engineering intake questionnaires, and safety guidelines for <strong className="text-theme-primary">{COMPANY_INFO.brandName}</strong> battery solutions by <strong className="text-theme-primary">{COMPANY_INFO.parentCompanyName}</strong>.
             </p>
           </div>
 
-          <div className="mt-8 pt-6 border-t border-[#1E2633] relative z-10">
+          <div className="mt-8 pt-6 border-t border-theme-border relative z-10">
             <PlaceholderNotice
               variant="inline"
               message="Final verified master PDF documents will be attached upon client release of the official catalogue."
@@ -86,32 +86,32 @@ export default function ResourcesPage() {
           {resources.map((res) => (
             <div
               key={res.id}
-              className="p-8 rounded-2xl bg-[#11161D] border border-[#1E2633] hover:border-[#39D353]/40 transition-all flex flex-col justify-between space-y-6 shadow-xl"
+              className="p-8 rounded-2xl bg-theme-card border border-theme-border hover:border-theme-green/40 transition-all flex flex-col justify-between space-y-6 shadow-xl"
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono text-[#39D353] font-bold uppercase tracking-wider">
+                  <span className="text-xs font-mono text-theme-green font-bold uppercase tracking-wider">
                     {res.category}
                   </span>
                   {res.isReady ? (
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-[#39D353]/10 text-[#39D353] border border-[#39D353]/30 font-bold">
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-theme-green/10 text-theme-green border border-theme-green/30 font-bold">
                       {res.status}
                     </span>
                   ) : (
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-amber-500/10 text-amber-300 border border-amber-500/30 font-bold flex items-center gap-1">
-                      <Clock className="w-3 h-3 text-amber-400" /> {res.status}
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-amber-500/10 text-amber-600 dark:text-amber-300 border border-amber-500/30 font-bold flex items-center gap-1">
+                      <Clock className="w-3 h-3 text-amber-500" /> {res.status}
                     </span>
                   )}
                 </div>
 
-                <h3 className="text-lg font-bold text-[#E6EAF0]">{res.title}</h3>
-                <p className="text-xs text-[#A3AAB5] leading-relaxed">
+                <h3 className="text-lg font-bold text-theme-primary">{res.title}</h3>
+                <p className="text-xs text-theme-secondary leading-relaxed">
                   {res.description}
                 </p>
               </div>
 
-              <div className="pt-4 border-t border-[#1E2633] flex items-center justify-between">
-                <span className="text-[11px] font-mono text-[#64748B] font-semibold">
+              <div className="pt-4 border-t border-theme-border flex items-center justify-between">
+                <span className="text-[11px] font-mono text-theme-muted font-semibold">
                   Format: {res.format}
                 </span>
 
@@ -137,12 +137,12 @@ export default function ResourcesPage() {
 
       {/* Direct Contact Banner */}
       <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-        <div className="p-8 rounded-2xl bg-[#11161D] border border-[#1E2633] flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left shadow-xl">
+        <div className="p-8 rounded-2xl bg-theme-card border border-theme-border flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left shadow-xl">
           <div className="space-y-1">
-            <h3 className="text-base font-bold text-[#E6EAF0]">
+            <h3 className="text-base font-bold text-theme-primary">
               Need specific CAD models, dimensional outlines, or pinout schematics?
             </h3>
-            <p className="text-xs text-[#A3AAB5]">
+            <p className="text-xs text-theme-secondary">
               Our engineering team can provide customized dimensional envelopes under mutual NDA.
             </p>
           </div>

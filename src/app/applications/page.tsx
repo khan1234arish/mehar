@@ -99,116 +99,116 @@ export default async function ApplicationsPage() {
       ],
     },
     {
-      id: 'inverter-backup',
-      title: 'Residential & Commercial Inverter Systems',
+      id: 'inverters-ups',
+      title: 'Home & Commercial Inverters / UPS',
       categorySlug: 'energy-storage-inverter-batteries',
       icon: Home,
       badge: 'Backup Power',
       image: imgInverter.url,
       altText: imgInverter.altText,
       description:
-        'Continuous power backup solutions for residential home inverters, retail commercial facilities, and sensitive mission-critical equipment.',
+        'Maintenance-free lithium backup batteries engineered to replace heavy lead-acid systems with 3x longer life and fast recharge.',
       points: [
-        'Seamless compatibility with standard sine wave inverter topologies',
-        'Zero-maintenance sealed construction options with intelligent BMS',
-        'Fast recharging capability following grid outages',
+        'Fast recharging capability to handle frequent grid load-shedding cycles',
+        'Zero acid fumes, zero water top-ups, and 70% floor footprint reduction',
+        'Wide compatibility with standard hybrid and pure sine wave inverters',
       ],
     },
     {
-      id: 'industrial-traction',
-      title: 'Material Handling & Specialized Equipment',
+      id: 'material-handling',
+      title: 'Material Handling & Industrial Forklifts',
       categorySlug: 'custom-oem-industrial-batteries',
       icon: Factory,
-      badge: 'Industrial',
+      badge: 'Industrial Logistics',
       image: imgMaterialHandling.url,
       altText: imgMaterialHandling.altText,
       description:
-        'Robust, high-power motive battery solutions for warehouse forklifts, automated guided vehicles (AGVs), and industrial machinery.',
+        'Continuous multi-shift traction power for electric forklifts, pallet trucks, stackers, and automated airport ground support equipment.',
       points: [
-        'High peak pulse current delivery for heavy load lifting',
-        'Opportunity charging capability to enable multi-shift operations',
-        'Custom voltage configurations tailored to machinery drive motors',
+        'Opportunity charging allows rapid top-up during operator tea breaks',
+        'Eliminates dedicated battery swap rooms and acid handling risks',
+        'Integrated BMS communication with equipment motor controllers',
       ],
     },
     {
-      id: 'robotics-agv',
-      title: 'Robotics, AGVs & Autonomous Mobile Units',
+      id: 'telecom',
+      title: 'Telecom Towers & Base Stations',
+      categorySlug: 'custom-oem-industrial-batteries',
+      icon: Radio,
+      badge: 'Telecom Infrastructure',
+      image: imgTelecom.url,
+      altText: imgTelecom.altText,
+      description:
+        'High-reliability standard 48V / 51.2V rack-mounted battery banks designed for remote, off-grid, and edge telecom installations.',
+      points: [
+        'Standard 19-inch rack-mount chassis for standard telecom server cabinets',
+        'Remote monitoring via SNMP and dry contact alarm outputs',
+        'Stable electrochemical performance in extreme ambient heat up to 55°C',
+      ],
+    },
+    {
+      id: 'robotics',
+      title: 'AGVs, AMRs & Factory Robotics',
       categorySlug: 'custom-oem-industrial-batteries',
       icon: Bot,
       badge: 'Automation',
       image: imgRobotics.url,
       altText: imgRobotics.altText,
       description:
-        'Compact, high-drain modular packs engineered for warehouse robots, sorting automation, and industrial automated guided vehicles.',
+        'High-density, rapid-charging battery packs powering autonomous mobile robots, automated guided vehicles, and warehouse sorting systems.',
       points: [
-        'Rapid contact-plate docking charge capability',
-        'Low profile dimensions for slim automated chassis integration',
-        'Isolated communication bus for motor drive protection',
+        'Ultra-compact form factors engineered for low-profile chassis cavities',
+        'Supports high-current automated opportunity charging contact pads',
+        'Precision SoC reporting over CANopen / Modbus for automated docking',
       ],
     },
     {
-      id: 'drones-uav',
-      title: 'Drones & Unmanned Aerial Systems',
+      id: 'drones',
+      title: 'Agricultural & Commercial UAVs / Drones',
       categorySlug: 'custom-oem-industrial-batteries',
       icon: Plane,
       badge: 'Aerospace',
       image: imgDrones.url,
       altText: imgDrones.altText,
       description:
-        'Ultra-lightweight high-discharge lithium packs built for commercial agriculture sprayers, mapping drones, and aerial delivery systems.',
+        'High-discharge-rate lightweight lithium battery packs designed to maximize flight payload capacity and airborne endurance.',
       points: [
-        'Optimized gravimetric energy density to extend flight endurance',
-        'High burst pulse current for takeoff and payload maneuvers',
-        'Integrated cell voltage telemetry and temperature monitoring',
+        'Optimized energy-to-weight ratio for extended flight duration',
+        'High continuous burst C-rates for stable hover in turbulent winds',
+        'Intelligent BMS with cell-level temperature tracking and telemetry',
       ],
     },
     {
-      id: 'telecom',
-      title: 'Telecom & Infrastructure Storage',
-      categorySlug: 'energy-storage-inverter-batteries',
-      icon: Radio,
-      badge: 'Infrastructure',
-      image: imgTelecom.url,
-      altText: imgTelecom.altText,
-      description:
-        'High-reliability standard rack-mounted storage banks designed for remote base transceiver stations (BTS) and utility installations.',
-      points: [
-        'Standard 19-inch server-rack form factor availability',
-        'Remote telemetry reporting for central station monitoring',
-        'Stable performance across wide ambient temperature spans',
-      ],
-    },
-    {
-      id: 'medical-devices',
-      title: 'Medical & Mobile Healthcare Equipment',
+      id: 'medical',
+      title: 'Medical Carts & Portable Healthcare Devices',
       categorySlug: 'custom-oem-industrial-batteries',
       icon: HeartPulse,
-      badge: 'Medical',
+      badge: 'Healthcare',
       image: imgMedical.url,
       altText: imgMedical.altText,
       description:
-        'Mission-critical backup and mobile power packs for hospital equipment, mobile diagnostic carts, and emergency medical tools.',
+        'Safety-certified, dependable backup packs for hospital mobile workstations, mobile diagnostic imaging, and emergency life-support apparatus.',
       points: [
-        'Redundant safety cutoff and fail-safe BMS protection',
-        'Clean DC output with minimal harmonic distortion',
-        'Sealed hygienic casings for clinical sterilization environments',
+        'Strict multi-redundant safety BMS protection circuitry',
+        'Zero electromagnetic interference with sensitive clinical diagnostic gear',
+        'Long standby shelf life with ultra-low self-discharge rates',
       ],
     },
   ];
 
   return (
-    <div className="py-12 space-y-16 bg-[#0B0F14] text-[#E6EAF0]">
+    <div className="py-12 space-y-16 bg-theme-base text-theme-primary transition-colors duration-200">
       {/* Header */}
       <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-        <div className="p-8 sm:p-12 rounded-3xl bg-[#11161D] border border-[#1E2633] shadow-xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-80 h-80 bg-[#00A3FF]/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="p-8 sm:p-12 rounded-3xl bg-theme-card border border-theme-border shadow-xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-80 h-80 bg-theme-blue/10 rounded-full blur-[120px] pointer-events-none" />
           <div className="max-w-3xl space-y-4 relative z-10">
             <Badge variant="blue">Target Sectors</Badge>
-            <h1 className="text-3xl sm:text-5xl font-extrabold text-[#E6EAF0] tracking-tight">
+            <h1 className="text-3xl sm:text-5xl font-extrabold text-theme-primary tracking-tight">
               Applications &amp; Industries
             </h1>
-            <p className="text-sm sm:text-base text-[#A3AAB5] leading-relaxed">
-              Discover how <strong className="text-[#E6EAF0]">{COMPANY_INFO.brandName}</strong> battery solutions, manufactured by <strong className="text-[#E6EAF0]">{COMPANY_INFO.parentCompanyName}</strong>, power key commercial sectors across India. Every sector visual is independently configurable from the Admin CMS.
+            <p className="text-sm sm:text-base text-theme-secondary leading-relaxed">
+              Discover how <strong className="text-theme-primary">{COMPANY_INFO.brandName}</strong> battery solutions, manufactured by <strong className="text-theme-primary">{COMPANY_INFO.parentCompanyName}</strong>, power key commercial sectors across India. Every sector visual is independently configurable from the Admin CMS.
             </p>
           </div>
         </div>
@@ -220,11 +220,11 @@ export default async function ApplicationsPage() {
           {applications.map((app) => (
             <div
               key={app.id}
-              className="bg-[#11161D] border border-[#1E2633] hover:border-[#00A3FF]/50 hover:shadow-[0_0_25px_rgba(0,163,255,0.12)] transition-all duration-300 rounded-2xl p-7 flex flex-col justify-between group"
+              className="bg-theme-card border border-theme-border hover:border-theme-blue/50 shadow-sm hover:shadow-xl transition-all duration-300 rounded-2xl p-7 flex flex-col justify-between group"
             >
               <div className="space-y-4">
                 {/* Visual Header Box */}
-                <div className="relative h-48 rounded-xl bg-[#0B0F14] border border-[#1E2633] overflow-hidden flex items-center justify-center p-3 group-hover:border-[#00A3FF]/40 transition-colors">
+                <div className="relative h-48 rounded-xl bg-theme-base border border-theme-border overflow-hidden flex items-center justify-center p-3 group-hover:border-theme-blue/40 transition-colors">
                   <Image
                     src={app.image}
                     alt={app.altText || app.title}
@@ -237,32 +237,32 @@ export default async function ApplicationsPage() {
                 </div>
 
                 <div className="flex items-center gap-3 pt-2">
-                  <div className="w-10 h-10 rounded-xl bg-[#00A3FF]/10 border border-[#00A3FF]/25 flex items-center justify-center text-[#00A3FF] shrink-0">
+                  <div className="w-10 h-10 rounded-xl bg-theme-blue/10 border border-theme-blue/25 flex items-center justify-center text-theme-blue shrink-0">
                     <app.icon className="w-5 h-5" />
                   </div>
-                  <h3 className="text-lg font-bold text-[#E6EAF0] leading-snug">{app.title}</h3>
+                  <h3 className="text-lg font-bold text-theme-primary leading-snug">{app.title}</h3>
                 </div>
-                <p className="text-xs text-[#A3AAB5] leading-relaxed">
+                <p className="text-xs text-theme-secondary leading-relaxed">
                   {app.description}
                 </p>
 
-                <div className="pt-3 border-t border-[#1E2633] space-y-2">
-                  <span className="text-[11px] font-mono text-[#A3AAB5] block font-bold uppercase tracking-wider">
+                <div className="pt-3 border-t border-theme-border space-y-2">
+                  <span className="text-[11px] font-mono text-theme-secondary block font-bold uppercase tracking-wider">
                     Key Technical Demands:
                   </span>
                   {app.points.map((point, idx) => (
-                    <div key={idx} className="flex items-start gap-2 text-xs text-[#E6EAF0]">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#39D353] mt-1.5 shrink-0"></span>
+                    <div key={idx} className="flex items-start gap-2 text-xs text-theme-primary">
+                      <span className="w-1.5 h-1.5 rounded-full bg-theme-green mt-1.5 shrink-0"></span>
                       <span>{point}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="pt-6 mt-6 border-t border-[#1E2633] flex items-center justify-between">
+              <div className="pt-6 mt-6 border-t border-theme-border flex items-center justify-between">
                 <Link
                   href={`/products/${app.categorySlug}`}
-                  className="text-xs font-bold text-[#00A3FF] hover:underline flex items-center gap-1"
+                  className="text-xs font-bold text-theme-blue hover:underline flex items-center gap-1"
                 >
                   View Category <ArrowRight className="w-3.5 h-3.5" />
                 </Link>

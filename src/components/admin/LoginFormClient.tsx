@@ -52,38 +52,38 @@ export default function LoginFormClient() {
   return (
     <form onSubmit={handleLogin} className="space-y-5">
       {error && (
-        <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 flex items-start gap-2.5 text-xs text-red-300">
-          <AlertTriangle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+        <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 flex items-start gap-2.5 text-xs text-red-600 dark:text-red-300">
+          <AlertTriangle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
           <p className="leading-relaxed">{error}</p>
         </div>
       )}
 
-      <div className="space-y-1.5 text-left">
-        <label className="text-xs font-mono font-bold text-[#A3AAB5] block">
+      <div className="space-y-2">
+        <label className="text-xs font-mono font-bold text-theme-secondary block">
           Admin Email Address
         </label>
         <div className="relative">
-          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#64748B]">
+          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-theme-muted">
             <Mail className="w-4 h-4" />
           </div>
           <input
             type="email"
             required
-            autoComplete="email"
-            placeholder="admin@yourdomain.com"
+            autoComplete="username"
+            placeholder="admin@lawad.in"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#161C24] border border-[#1E2633] text-[#E6EAF0] text-xs focus:outline-none focus:border-[#39D353] focus:ring-1 focus:ring-[#39D353] transition-colors"
+            className="w-full pl-10 pr-4 py-3 rounded-xl bg-theme-elevated border border-theme-border text-theme-primary text-xs placeholder-theme-muted focus:outline-none focus:border-theme-green focus:ring-1 focus:ring-theme-green transition-colors"
           />
         </div>
       </div>
 
-      <div className="space-y-1.5 text-left">
-        <label className="text-xs font-mono font-bold text-[#A3AAB5] block">
+      <div className="space-y-2">
+        <label className="text-xs font-mono font-bold text-theme-secondary block">
           Password
         </label>
         <div className="relative">
-          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#64748B]">
+          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-theme-muted">
             <Lock className="w-4 h-4" />
           </div>
           <input
@@ -93,40 +93,34 @@ export default function LoginFormClient() {
             placeholder="••••••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-[#161C24] border border-[#1E2633] text-[#E6EAF0] text-xs focus:outline-none focus:border-[#39D353] focus:ring-1 focus:ring-[#39D353] transition-colors"
+            className="w-full pl-10 pr-10 py-3 rounded-xl bg-theme-elevated border border-theme-border text-theme-primary text-xs placeholder-theme-muted focus:outline-none focus:border-theme-green focus:ring-1 focus:ring-theme-green transition-colors font-mono"
           />
           <button
             type="button"
-            onClick={() => setShowPassword((prev) => !prev)}
-            className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[#64748B] hover:text-[#E6EAF0] focus:outline-none focus:text-[#39D353] transition-colors"
-            aria-label={showPassword ? 'Hide password' : 'Show password'}
-            title={showPassword ? 'Hide password' : 'Show password'}
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-theme-muted hover:text-theme-primary transition-colors"
           >
-            {showPassword ? (
-              <EyeOff className="w-4 h-4" aria-hidden="true" />
-            ) : (
-              <Eye className="w-4 h-4" aria-hidden="true" />
-            )}
+            {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
           </button>
         </div>
       </div>
 
-      <Button
-        type="submit"
-        variant="primary"
-        size="lg"
-        className="w-full justify-center"
-        disabled={loading}
-        icon={<ArrowRight className="w-4 h-4" />}
-      >
-        {loading ? 'Authenticating...' : 'Sign In to Admin Portal'}
-      </Button>
+      <div className="pt-2">
+        <Button
+          type="submit"
+          variant="primary"
+          size="lg"
+          className="w-full justify-center"
+          disabled={loading}
+          icon={<ArrowRight className="w-4 h-4" />}
+        >
+          {loading ? 'Authenticating...' : 'Sign In to Management Console'}
+        </Button>
+      </div>
 
-      <div className="pt-2 text-center">
-        <span className="text-[11px] text-[#64748B] font-mono flex items-center justify-center gap-1">
-          <ShieldCheck className="w-3.5 h-3.5 text-[#39D353]" />
-          Protected by Brute-Force Rate Limiting &amp; Session Encryption
-        </span>
+      <div className="pt-2 flex items-center justify-center gap-1.5 text-[11px] font-mono text-theme-muted">
+        <ShieldCheck className="w-3.5 h-3.5 text-theme-green" />
+        <span>B2B End-to-End Encrypted Session</span>
       </div>
     </form>
   );

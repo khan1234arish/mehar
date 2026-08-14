@@ -12,16 +12,16 @@ export default async function TopBar() {
   const cleanWhatsapp = sales.whatsappDesk.replace(/[^0-9]/g, '');
 
   return (
-    <div className="bg-[#070A0E] border-b border-[#1E2633] text-[11px] text-[#A3AAB5] py-2 font-medium">
+    <div className="topbar-wrapper bg-[#070A0E] border-b border-[#1E2633] text-[11px] text-[#A3AAB5] py-2 font-medium">
       <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 flex flex-col md:flex-row justify-between items-center gap-2">
         {/* Parent Company & Trust Marker */}
         <div className="flex items-center gap-2.5">
           <span className="flex items-center gap-1.5 text-[#E6EAF0]">
             <ShieldCheck className="w-3.5 h-3.5 text-[#39D353]" />
-            A Unit of <strong className="text-white font-semibold">{company.parentCompanyName}</strong>
+            <span>A Unit of <strong className="font-semibold text-white">{company.parentCompanyName}</strong></span>
           </span>
-          <span className="hidden sm:inline-block text-[#1E2633]">|</span>
-          <span className="hidden sm:inline-block text-[#A3AAB5] font-mono">
+          <span className="hidden sm:inline-block text-[#2A3649]">|</span>
+          <span className="hidden sm:inline-block text-[#64748B] font-mono">
             {content.topBarText || 'B2B Manufacturing & Supply'}
           </span>
         </div>
@@ -33,7 +33,7 @@ export default async function TopBar() {
             className="flex items-center gap-1.5 text-[#A3AAB5] hover:text-[#39D353] transition-colors"
           >
             <Mail className="w-3.5 h-3.5 text-[#39D353]" />
-            <span className="hidden xs:inline">Sales:</span> {sales.salesEmail}
+            <span className="hidden xs:inline text-[#64748B]">Sales:</span> {sales.salesEmail}
           </a>
 
           <a

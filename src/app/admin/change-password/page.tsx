@@ -56,8 +56,8 @@ export default function ChangePasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B0F14] flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 text-[#E6EAF0] relative overflow-hidden">
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-[#39D353]/10 rounded-full blur-[140px] pointer-events-none" />
+    <div className="min-h-screen bg-theme-base flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 text-theme-primary relative overflow-hidden transition-colors duration-200">
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-theme-green/10 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center space-y-4 relative z-10">
         <div className="w-36 sm:w-44 h-24 sm:h-28 relative mx-auto">
@@ -70,46 +70,46 @@ export default function ChangePasswordPage() {
           />
         </div>
 
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/30 text-red-300">
-          <ShieldAlert className="w-3.5 h-3.5 text-red-400" />
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-300">
+          <ShieldAlert className="w-3.5 h-3.5 text-red-500" />
           <span className="text-xs font-mono font-bold">Security Action Required</span>
         </div>
 
-        <h1 className="text-2xl font-extrabold text-[#E6EAF0] tracking-tight">
+        <h1 className="text-2xl font-extrabold text-theme-primary tracking-tight">
           Update Your Password
         </h1>
-        <p className="text-xs text-[#A3AAB5]">
+        <p className="text-xs text-theme-secondary">
           For security compliance, please choose a strong password before continuing to the administration portal.
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md relative z-10">
-        <div className="bg-[#11161D] py-8 px-6 sm:px-10 rounded-3xl border border-[#1E2633] shadow-2xl">
+        <div className="bg-theme-card py-8 px-6 sm:px-10 rounded-3xl border border-theme-border shadow-2xl">
           {success ? (
             <div className="text-center space-y-4 py-4">
-              <div className="w-12 h-12 rounded-full bg-[#161C24] border border-[#39D353]/30 flex items-center justify-center text-[#39D353] mx-auto shadow-[0_0_15px_rgba(57,211,83,0.2)]">
+              <div className="w-12 h-12 rounded-full bg-theme-elevated border border-theme-green/30 flex items-center justify-center text-theme-green mx-auto shadow-sm">
                 <CheckCircle2 className="w-7 h-7" />
               </div>
-              <h2 className="text-base font-bold text-[#39D353]">Password Updated Successfully</h2>
-              <p className="text-xs text-[#A3AAB5]">
+              <h2 className="text-base font-bold text-theme-green">Password Updated Successfully</h2>
+              <p className="text-xs text-theme-secondary">
                 Your new credentials are now active. Redirecting you to the CMS dashboard...
               </p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5">
               {error && (
-                <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 flex items-start gap-2.5 text-xs text-red-300">
-                  <AlertTriangle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+                <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 flex items-start gap-2.5 text-xs text-red-600 dark:text-red-300">
+                  <AlertTriangle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
                   <p className="leading-relaxed">{error}</p>
                 </div>
               )}
 
               <div className="space-y-1.5 text-left">
-                <label className="text-xs font-mono font-bold text-[#A3AAB5] block">
+                <label className="text-xs font-mono font-bold text-theme-secondary block">
                   Current Password
                 </label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#64748B]">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-theme-muted">
                     <Lock className="w-4 h-4" />
                   </div>
                   <input
@@ -118,12 +118,12 @@ export default function ChangePasswordPage() {
                     placeholder="Enter current password"
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
-                    className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-[#161C24] border border-[#1E2633] text-[#E6EAF0] text-xs focus:outline-none focus:border-[#39D353] focus:ring-1 focus:ring-[#39D353] transition-colors"
+                    className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-theme-elevated border border-theme-border text-theme-primary text-xs focus:outline-none focus:border-theme-green focus:ring-1 focus:ring-theme-green transition-colors"
                   />
                   <button
                     type="button"
                     onClick={() => setShowCurrentPassword((prev) => !prev)}
-                    className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[#64748B] hover:text-[#E6EAF0] focus:outline-none focus:text-[#39D353] transition-colors"
+                    className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-theme-muted hover:text-theme-primary focus:outline-none focus:text-theme-green transition-colors"
                     aria-label={showCurrentPassword ? 'Hide current password' : 'Show current password'}
                     title={showCurrentPassword ? 'Hide current password' : 'Show current password'}
                   >
@@ -137,11 +137,11 @@ export default function ChangePasswordPage() {
               </div>
 
               <div className="space-y-1.5 text-left">
-                <label className="text-xs font-mono font-bold text-[#A3AAB5] block">
+                <label className="text-xs font-mono font-bold text-theme-secondary block">
                   New Password
                 </label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#64748B]">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-theme-muted">
                     <Lock className="w-4 h-4" />
                   </div>
                   <input
@@ -150,12 +150,12 @@ export default function ChangePasswordPage() {
                     placeholder="Min 10 chars (A-Z, a-z, 0-9, special)"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-[#161C24] border border-[#1E2633] text-[#E6EAF0] text-xs focus:outline-none focus:border-[#39D353] focus:ring-1 focus:ring-[#39D353] transition-colors"
+                    className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-theme-elevated border border-theme-border text-theme-primary text-xs focus:outline-none focus:border-theme-green focus:ring-1 focus:ring-theme-green transition-colors"
                   />
                   <button
                     type="button"
                     onClick={() => setShowNewPassword((prev) => !prev)}
-                    className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[#64748B] hover:text-[#E6EAF0] focus:outline-none focus:text-[#39D353] transition-colors"
+                    className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-theme-muted hover:text-theme-primary focus:outline-none focus:text-theme-green transition-colors"
                     aria-label={showNewPassword ? 'Hide new password' : 'Show new password'}
                     title={showNewPassword ? 'Hide new password' : 'Show new password'}
                   >
@@ -169,11 +169,11 @@ export default function ChangePasswordPage() {
               </div>
 
               <div className="space-y-1.5 text-left">
-                <label className="text-xs font-mono font-bold text-[#A3AAB5] block">
+                <label className="text-xs font-mono font-bold text-theme-secondary block">
                   Confirm New Password
                 </label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#64748B]">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-theme-muted">
                     <Lock className="w-4 h-4" />
                   </div>
                   <input
@@ -182,12 +182,12 @@ export default function ChangePasswordPage() {
                     placeholder="Re-type new password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-[#161C24] border border-[#1E2633] text-[#E6EAF0] text-xs focus:outline-none focus:border-[#39D353] focus:ring-1 focus:ring-[#39D353] transition-colors"
+                    className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-theme-elevated border border-theme-border text-theme-primary text-xs focus:outline-none focus:border-theme-green focus:ring-1 focus:ring-theme-green transition-colors"
                   />
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword((prev) => !prev)}
-                    className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[#64748B] hover:text-[#E6EAF0] focus:outline-none focus:text-[#39D353] transition-colors"
+                    className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-theme-muted hover:text-theme-primary focus:outline-none focus:text-theme-green transition-colors"
                     aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
                     title={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
                   >
@@ -201,8 +201,8 @@ export default function ChangePasswordPage() {
               </div>
 
               {/* Password Requirements Guide */}
-              <div className="p-3.5 rounded-xl bg-[#161C24] border border-[#1E2633] text-[11px] text-[#A3AAB5] space-y-1 font-mono">
-                <p className="font-bold text-[#E6EAF0]">Password Requirements:</p>
+              <div className="p-3.5 rounded-xl bg-theme-elevated border border-theme-border text-[11px] text-theme-secondary space-y-1 font-mono">
+                <p className="font-bold text-theme-primary">Password Requirements:</p>
                 <p>• At least 10 characters long</p>
                 <p>• Contains uppercase and lowercase letters</p>
                 <p>• Contains at least 1 number and 1 special symbol</p>

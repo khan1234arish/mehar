@@ -44,31 +44,31 @@ function CalcCard({
   const [open, setOpen] = useState(defaultOpen);
 
   return (
-    <section id={id} className="bg-[#11161D] rounded-2xl border border-[#1E2633] overflow-hidden shadow-xl">
+    <section id={id} className="bg-theme-card rounded-2xl border border-theme-border overflow-hidden shadow-xl">
       <button
         type="button"
-        className="w-full flex items-center justify-between px-5 py-4 hover:bg-white/[0.02] transition-colors"
+        className="w-full flex items-center justify-between px-5 py-4 hover:bg-theme-elevated transition-colors"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
       >
         <div className="flex items-center gap-3 text-left">
-          <div className="w-9 h-9 rounded-xl bg-[#161C24] border border-[#39D353]/30 flex items-center justify-center text-[#39D353] flex-shrink-0 shadow-[0_0_10px_rgba(57,211,83,0.15)]">
+          <div className="w-9 h-9 rounded-xl bg-theme-elevated border border-theme-green/30 flex items-center justify-center text-theme-green flex-shrink-0 shadow-sm">
             {icon}
           </div>
           <div>
-            <p className="text-sm font-bold text-[#E6EAF0]">{title}</p>
-            <p className="text-xs text-[#A3AAB5]">{description}</p>
+            <p className="text-sm font-bold text-theme-primary">{title}</p>
+            <p className="text-xs text-theme-secondary">{description}</p>
           </div>
         </div>
         {open ? (
-          <ChevronUp className="w-4 h-4 text-[#A3AAB5] flex-shrink-0" />
+          <ChevronUp className="w-4 h-4 text-theme-secondary flex-shrink-0" />
         ) : (
-          <ChevronDown className="w-4 h-4 text-[#A3AAB5] flex-shrink-0" />
+          <ChevronDown className="w-4 h-4 text-theme-secondary flex-shrink-0" />
         )}
       </button>
 
       {open && (
-        <div className="border-t border-[#1E2633] p-5">
+        <div className="border-t border-theme-border p-5">
           {children}
         </div>
       )}
@@ -99,7 +99,7 @@ function CalcInput({
 }) {
   return (
     <div>
-      <label htmlFor={id} className="block text-xs font-bold text-[#E6EAF0] mb-1.5">
+      <label htmlFor={id} className="block text-xs font-semibold text-theme-secondary mb-1">
         {label}
       </label>
       <div className="flex gap-2">
@@ -110,405 +110,271 @@ function CalcInput({
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
           min={0}
-          className="flex-1 px-3.5 py-2.5 rounded-lg border border-[#1E2633] text-sm text-[#E6EAF0] placeholder-[#64748B] bg-[#161C24] focus:outline-none focus:border-[#39D353] focus:ring-2 focus:ring-[#39D353]/20"
+          className="flex-1 px-3 py-2 rounded-lg border border-theme-border bg-theme-elevated text-theme-primary placeholder-theme-muted text-sm focus:outline-none focus:border-theme-green focus:ring-1 focus:ring-theme-green transition-colors"
         />
-        {unit && !unitOptions && (
-          <span className="px-3.5 py-2.5 rounded-lg border border-[#1E2633] bg-[#161C24] text-xs font-semibold text-[#A3AAB5]">
-            {unit}
-          </span>
-        )}
-        {unitOptions && unit && onUnitChange && (
+        {unitOptions && onUnitChange && (
           <select
             value={unit}
             onChange={(e) => onUnitChange(e.target.value)}
-            className="px-2.5 py-2.5 rounded-lg border border-[#1E2633] text-xs text-[#E6EAF0] bg-[#161C24] focus:outline-none focus:border-[#39D353]"
+            className="px-2.5 py-2 rounded-lg border border-theme-border bg-theme-elevated text-theme-primary text-xs focus:outline-none focus:border-theme-green transition-colors"
           >
-            {unitOptions.map((u) => <option key={u} value={u} className="bg-[#161C24] text-[#E6EAF0]">{u}</option>)}
+            {unitOptions.map((u) => (
+              <option key={u} value={u} className="bg-theme-card text-theme-primary">
+                {u}
+              </option>
+            ))}
           </select>
+        )}
+        {!unitOptions && unit && (
+          <span className="flex items-center px-3 py-2 rounded-lg bg-theme-elevated border border-theme-border text-xs text-theme-secondary font-mono font-medium select-none">
+            {unit}
+          </span>
         )}
       </div>
     </div>
   );
 }
 
-function ResultBox({ label, value, unit, note }: { label: string; value: string; unit?: string; note?: string }) {
+function ResultBox({
+  label,
+  value,
+  unit,
+  subtext,
+}: {
+  label: string;
+  value: string;
+  unit?: string;
+  subtext?: string;
+}) {
   return (
-    <div className="bg-[#161C24] border border-[#39D353]/30 rounded-xl p-4 shadow-[0_0_15px_rgba(57,211,83,0.1)]">
-      <p className="text-[10px] font-bold text-[#A3AAB5] uppercase tracking-wider mb-1">{label}</p>
-      <p className="text-2xl font-bold text-[#39D353]">
-        {value}
-        {unit && <span className="text-base ml-1 font-semibold text-[#39D353]/80">{unit}</span>}
-      </p>
-      {note && <p className="text-[10px] text-[#A3AAB5] mt-1">{note}</p>}
-    </div>
-  );
-}
-
-function EstimateDisclaimer() {
-  return (
-    <div className="flex items-start gap-2 p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl mt-4">
-      <Info className="w-3.5 h-3.5 text-amber-400 flex-shrink-0 mt-0.5" />
-      <p className="text-[10px] text-amber-200/90 leading-relaxed">
-        <strong>General engineering estimate only.</strong> This calculator uses standard electrical formulas and does not account for temperature, battery ageing, load profile variation, or system losses. Results are not a MEHAR product specification or performance guarantee.
-      </p>
+    <div className="p-4 rounded-xl bg-theme-elevated border border-theme-border flex flex-col justify-between">
+      <p className="text-xs font-medium text-theme-secondary">{label}</p>
+      <div className="my-1">
+        <span className="text-xl sm:text-2xl font-black text-theme-green font-mono">{value}</span>
+        {unit && <span className="ml-1.5 text-xs text-theme-secondary font-mono">{unit}</span>}
+      </div>
+      {subtext && <p className="text-[11px] text-theme-muted">{subtext}</p>}
     </div>
   );
 }
 
 // ─────────────────────────────────────────────────────────────────
-// CALCULATOR 1 — ENERGY
+// CALCULATORS
 // ─────────────────────────────────────────────────────────────────
 
 function EnergyCalculator() {
-  const [mode, setMode] = useState<'vh_to_wh' | 'wh_to_ah'>('vh_to_wh');
-  const [v, setV] = useState('');
-  const [ah, setAh] = useState('');
-  const [wh, setWh] = useState('');
+  const [voltage, setVoltage] = useState('48');
+  const [capacity, setCapacity] = useState('100');
 
-  const calcWh = () => {
-    const voltage = parseFloat(v);
-    const amps = parseFloat(ah);
-    if (isNaN(voltage) || isNaN(amps)) return '—';
-    const result = voltage * amps;
-    return result >= 1000 ? `${round(result / 1000)} kWh` : `${round(result)} Wh`;
-  };
+  const v = parseFloat(voltage) || 0;
+  const c = parseFloat(capacity) || 0;
 
-  const calcAh = () => {
-    const voltage = parseFloat(v);
-    const energy = parseFloat(wh);
-    if (isNaN(voltage) || isNaN(energy) || voltage === 0) return '—';
-    return `${round(energy / voltage)} Ah`;
-  };
+  const wh = v * c;
+  const kwh = wh / 1000;
 
   return (
-    <div className="space-y-5">
-      {/* Mode tabs */}
-      <div className="flex gap-1 bg-[#161C24] p-1 rounded-xl w-fit border border-[#1E2633]">
-        <button
-          onClick={() => setMode('vh_to_wh')}
-          className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-            mode === 'vh_to_wh' ? 'bg-[#39D353] text-[#0B0F14] font-bold shadow-sm' : 'text-[#A3AAB5] hover:text-[#E6EAF0]'
-          }`}
-        >
-          V × Ah → Wh
-        </button>
-        <button
-          onClick={() => setMode('wh_to_ah')}
-          className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-            mode === 'wh_to_ah' ? 'bg-[#39D353] text-[#0B0F14] font-bold shadow-sm' : 'text-[#A3AAB5] hover:text-[#E6EAF0]'
-          }`}
-        >
-          Wh ÷ V → Ah
-        </button>
+    <div className="space-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <CalcInput
+          id="energy-voltage"
+          label="Nominal Voltage (V)"
+          value={voltage}
+          onChange={setVoltage}
+          unit="V"
+          placeholder="e.g. 48"
+        />
+        <CalcInput
+          id="energy-capacity"
+          label="Battery Capacity (Ah)"
+          value={capacity}
+          onChange={setCapacity}
+          unit="Ah"
+          placeholder="e.g. 100"
+        />
       </div>
 
-      {mode === 'vh_to_wh' ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <CalcInput id="calc-e-v1" label="Voltage" value={v} onChange={setV} unit="V" />
-          <CalcInput id="calc-e-ah" label="Capacity" value={ah} onChange={setAh} unit="Ah" />
-          <div className="sm:col-span-2">
-            <ResultBox label="Energy" value={calcWh()} note="Watt-hours (Wh) = Voltage × Ah" />
-          </div>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <CalcInput id="calc-e-wh" label="Energy (Wh)" value={wh} onChange={setWh} unit="Wh" />
-          <CalcInput id="calc-e-v2" label="Voltage" value={v} onChange={setV} unit="V" />
-          <div className="sm:col-span-2">
-            <ResultBox label="Capacity" value={calcAh()} note="Ah = Wh ÷ Voltage" />
-          </div>
-        </div>
-      )}
-      <EstimateDisclaimer />
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+        <ResultBox label="Total Energy (Wh)" value={round(wh, 1)} unit="Wh" subtext="Watt-hours" />
+        <ResultBox label="Total Energy (kWh)" value={round(kwh, 3)} unit="kWh" subtext="Kilowatt-hours" />
+      </div>
     </div>
   );
 }
 
-// ─────────────────────────────────────────────────────────────────
-// CALCULATOR 2 — RUNTIME
-// ─────────────────────────────────────────────────────────────────
-
 function RuntimeCalculator() {
-  const [energyVal, setEnergyVal] = useState('');
-  const [energyUnit, setEnergyUnit] = useState('Wh');
-  const [loadVal, setLoadVal] = useState('');
-  const [loadUnit, setLoadUnit] = useState('W');
-  const [efficiency, setEfficiency] = useState('85');
+  const [energy, setEnergy] = useState('4800');
+  const [load, setLoad] = useState('1000');
+  const [efficiency, setEfficiency] = useState('90');
 
-  const calcRuntime = () => {
-    let energy = parseFloat(energyVal);
-    const load = parseFloat(loadVal);
-    const eff = parseFloat(efficiency) / 100;
+  const e = parseFloat(energy) || 0;
+  const l = parseFloat(load) || 0;
+  const eff = (parseFloat(efficiency) || 100) / 100;
 
-    if (isNaN(energy) || isNaN(load) || load === 0 || isNaN(eff) || eff <= 0) return null;
-
-    // Normalise to Wh
-    if (energyUnit === 'kWh') energy *= 1000;
-    // Normalise load to W
-    let loadW = load;
-    if (loadUnit === 'kW') loadW = load * 1000;
-    else if (loadUnit === 'A') {
-      return { hours: null, note: 'To convert Amps to Watts, enter load in W or kW instead.' };
-    }
-
-    const hours = (energy * eff) / loadW;
-    return { hours, note: null };
-  };
-
-  const result = calcRuntime();
-  const displayHours = result?.hours != null
-    ? result.hours >= 1
-      ? `${round(result.hours)} h`
-      : `${round(result.hours * 60, 1)} min`
-    : '—';
+  const usableEnergy = e * eff;
+  const hours = l > 0 ? usableEnergy / l : 0;
+  const minutes = hours * 60;
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <CalcInput
-          id="calc-rt-energy"
-          label="Battery Energy"
-          value={energyVal}
-          onChange={setEnergyVal}
-          unit={energyUnit}
-          unitOptions={['Wh', 'kWh']}
-          onUnitChange={setEnergyUnit}
+          id="runtime-energy"
+          label="Battery Energy (Wh)"
+          value={energy}
+          onChange={setEnergy}
+          unit="Wh"
+          placeholder="e.g. 4800"
         />
         <CalcInput
-          id="calc-rt-load"
-          label="Average Load / Consumption"
-          value={loadVal}
-          onChange={setLoadVal}
-          unit={loadUnit}
-          unitOptions={['W', 'kW']}
-          onUnitChange={setLoadUnit}
+          id="runtime-load"
+          label="Average Power Load (W)"
+          value={load}
+          onChange={setLoad}
+          unit="W"
+          placeholder="e.g. 1000"
         />
         <CalcInput
-          id="calc-rt-eff"
+          id="runtime-eff"
           label="System Efficiency (%)"
           value={efficiency}
           onChange={setEfficiency}
           unit="%"
-          placeholder="85"
+          placeholder="e.g. 90"
         />
       </div>
 
-      {result?.note ? (
-        <div className="p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl text-xs text-amber-300">{result.note}</div>
-      ) : (
-        <ResultBox
-          label="Estimated Runtime"
-          value={displayHours}
-          note="Runtime = (Energy × Efficiency) ÷ Load"
-        />
-      )}
-      <EstimateDisclaimer />
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+        <ResultBox label="Estimated Runtime (Hours)" value={round(hours, 2)} unit="hours" subtext={`${round(minutes, 0)} minutes approx.`} />
+        <ResultBox label="Usable Energy (Accounting for efficiency)" value={round(usableEnergy, 1)} unit="Wh" subtext={`${efficiency}% efficiency factor`} />
+      </div>
     </div>
   );
 }
-
-// ─────────────────────────────────────────────────────────────────
-// CALCULATOR 3 — SERIES / PARALLEL
-// ─────────────────────────────────────────────────────────────────
 
 function SeriesParallelCalculator() {
-  const [cellV, setCellV] = useState('');
-  const [cellAh, setCellAh] = useState('');
-  const [series, setSeries] = useState('');
-  const [parallel, setParallel] = useState('');
+  const [cellV, setCellV] = useState('3.2');
+  const [cellAh, setCellAh] = useState('6');
+  const [sCount, setSCount] = useState('16');
+  const [pCount, setPCount] = useState('4');
 
-  const s = parseInt(series) || 0;
-  const p = parseInt(parallel) || 0;
   const cv = parseFloat(cellV) || 0;
-  const ca = parseFloat(cellAh) || 0;
+  const cah = parseFloat(cellAh) || 0;
+  const s = parseInt(sCount, 10) || 0;
+  const p = parseInt(pCount, 10) || 0;
 
   const packV = cv * s;
-  const packAh = ca * p;
+  const packAh = cah * p;
   const packWh = packV * packAh;
+  const totalCells = s * p;
 
   return (
-    <div className="space-y-5">
-      <p className="text-xs text-[#A3AAB5]">
-        Enter individual cell parameters and the series/parallel configuration to calculate pack-level totals.
-      </p>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <CalcInput id="calc-sp-cv" label="Cell / Module Voltage" value={cellV} onChange={setCellV} unit="V" />
-        <CalcInput id="calc-sp-ca" label="Cell / Module Capacity" value={cellAh} onChange={setCellAh} unit="Ah" />
-        <CalcInput id="calc-sp-s" label="Cells in Series (S)" value={series} onChange={setSeries} placeholder="e.g. 14" />
-        <CalcInput id="calc-sp-p" label="Cells in Parallel (P)" value={parallel} onChange={setParallel} placeholder="e.g. 4" />
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <ResultBox label="Pack Voltage" value={packV > 0 ? round(packV) : '—'} unit="V" note="= Cell V × S" />
-        <ResultBox label="Pack Capacity" value={packAh > 0 ? round(packAh) : '—'} unit="Ah" note="= Cell Ah × P" />
-        <ResultBox
-          label="Pack Energy"
-          value={packWh > 0 ? (packWh >= 1000 ? round(packWh / 1000) : round(packWh)) : '—'}
-          unit={packWh >= 1000 ? 'kWh' : 'Wh'}
-          note="= Pack V × Pack Ah"
+    <div className="space-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <CalcInput
+          id="sp-cell-v"
+          label="Cell Voltage (V)"
+          value={cellV}
+          onChange={setCellV}
+          unit="V"
+          placeholder="e.g. 3.2"
+        />
+        <CalcInput
+          id="sp-cell-ah"
+          label="Cell Capacity (Ah)"
+          value={cellAh}
+          onChange={setCellAh}
+          unit="Ah"
+          placeholder="e.g. 6.0"
+        />
+        <CalcInput
+          id="sp-s-count"
+          label="Series (S)"
+          value={sCount}
+          onChange={setSCount}
+          unit="in series"
+          placeholder="e.g. 16"
+        />
+        <CalcInput
+          id="sp-p-count"
+          label="Parallel (P)"
+          value={pCount}
+          onChange={setPCount}
+          unit="in parallel"
+          placeholder="e.g. 4"
         />
       </div>
-      <EstimateDisclaimer />
+
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
+        <ResultBox label="Nominal Pack Voltage" value={round(packV, 1)} unit="V" subtext={`${s}S string`} />
+        <ResultBox label="Pack Capacity" value={round(packAh, 1)} unit="Ah" subtext={`${p}P string`} />
+        <ResultBox label="Total Energy" value={round(packWh, 1)} unit="Wh" subtext={`${round(packWh / 1000, 2)} kWh`} />
+        <ResultBox label="Total Cell Count" value={totalCells.toString()} unit="cells" subtext={`${s}S × ${p}P`} />
+      </div>
     </div>
   );
 }
 
-// ─────────────────────────────────────────────────────────────────
-// CALCULATOR 4 — UNIT CONVERTER
-// ─────────────────────────────────────────────────────────────────
-
 function UnitConverter() {
-  // Length
-  const [mm, setMm] = useState('');
-  const [inches, setInches] = useState('');
+  const [mm, setMm] = useState('300');
+  const [celsius, setCelsius] = useState('25');
 
-  // Temperature
-  const [tempIn, setTempIn] = useState('');
-  const [tempFromUnit, setTempFromUnit] = useState('°C');
-  const [tempToUnit, setTempToUnit] = useState('°F');
+  const mmVal = parseFloat(mm) || 0;
+  const inchVal = mmVal / 25.4;
 
-  // Energy
-  const [ahIn, setAhIn] = useState('');
-  const [voltForAh, setVoltForAh] = useState('');
-  const [ahToWh, setAhToWh] = useState('');
-  const [voltForWh, setVoltForWh] = useState('');
-
-  // Length conversions
-  const mmToIn = mm ? round(parseFloat(mm) / 25.4) : '—';
-  const inToMm = inches ? round(parseFloat(inches) * 25.4) : '—';
-
-  // Temperature
-  const convertTemp = (): string => {
-    const val = parseFloat(tempIn);
-    if (isNaN(val)) return '—';
-    if (tempFromUnit === '°C' && tempToUnit === '°F') return round((val * 9) / 5 + 32);
-    if (tempFromUnit === '°C' && tempToUnit === 'K') return round(val + 273.15);
-    if (tempFromUnit === '°F' && tempToUnit === '°C') return round(((val - 32) * 5) / 9);
-    if (tempFromUnit === '°F' && tempToUnit === 'K') return round(((val - 32) * 5) / 9 + 273.15);
-    if (tempFromUnit === 'K' && tempToUnit === '°C') return round(val - 273.15);
-    if (tempFromUnit === 'K' && tempToUnit === '°F') return round(((val - 273.15) * 9) / 5 + 32);
-    return round(val);
-  };
-
-  const calcAhToWh = (): string => {
-    const a = parseFloat(ahIn), v = parseFloat(voltForAh);
-    return isNaN(a) || isNaN(v) ? '—' : round(a * v);
-  };
-  const calcWhToAh = (): string => {
-    const w = parseFloat(ahToWh), v = parseFloat(voltForWh);
-    return isNaN(w) || isNaN(v) || v === 0 ? '—' : round(w / v);
-  };
+  const cVal = parseFloat(celsius) || 0;
+  const fVal = (cVal * 9) / 5 + 32;
+  const kVal = cVal + 273.15;
 
   return (
     <div className="space-y-6">
-      {/* Length */}
       <div>
-        <p className="text-xs font-bold text-[#39D353] uppercase tracking-wider mb-3 font-mono">Length</p>
+        <p className="text-xs font-bold text-theme-primary uppercase tracking-wider mb-3">Length: Millimeters ↔ Inches</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <CalcInput id="calc-uc-mm" label="Millimetres" value={mm} onChange={setMm} unit="mm" />
-            <p className="text-xs text-[#A3AAB5] mt-1.5">= <span className="font-bold text-[#E6EAF0]">{mmToIn}</span> inches</p>
-          </div>
-          <div>
-            <CalcInput id="calc-uc-in" label="Inches" value={inches} onChange={setInches} unit="in" />
-            <p className="text-xs text-[#A3AAB5] mt-1.5">= <span className="font-bold text-[#E6EAF0]">{inToMm}</span> mm</p>
-          </div>
+          <CalcInput id="conv-mm" label="Length (mm)" value={mm} onChange={setMm} unit="mm" />
+          <ResultBox label="Inches (in)" value={round(inchVal, 3)} unit="in" subtext={`${round(mmVal, 1)} mm`} />
         </div>
       </div>
 
-      {/* Temperature */}
-      <div>
-        <p className="text-xs font-bold text-[#39D353] uppercase tracking-wider mb-3 font-mono">Temperature</p>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
-          <div>
-            <label className="block text-xs font-bold text-[#E6EAF0] mb-1.5">From</label>
-            <div className="flex gap-2">
-              <input
-                id="calc-uc-temp"
-                type="number"
-                value={tempIn}
-                onChange={(e) => setTempIn(e.target.value)}
-                className="flex-1 px-3.5 py-2.5 rounded-lg border border-[#1E2633] text-sm text-[#E6EAF0] bg-[#161C24] focus:outline-none focus:border-[#39D353]"
-              />
-              <select
-                value={tempFromUnit}
-                onChange={(e) => setTempFromUnit(e.target.value)}
-                className="px-2.5 py-2.5 rounded-lg border border-[#1E2633] text-xs text-[#E6EAF0] bg-[#161C24] focus:outline-none focus:border-[#39D353]"
-              >
-                {['°C', '°F', 'K'].map((u) => <option key={u} className="bg-[#161C24] text-[#E6EAF0]">{u}</option>)}
-              </select>
-            </div>
-          </div>
-          <div className="flex justify-center">
-            <ArrowLeftRight className="w-5 h-5 text-[#39D353]" />
-          </div>
-          <div>
-            <label className="block text-xs font-bold text-[#E6EAF0] mb-1.5">To</label>
-            <div className="flex gap-2">
-              <div className="flex-1 px-3.5 py-2.5 rounded-lg border border-[#1E2633] bg-[#161C24] text-sm font-bold text-[#39D353]">
-                {convertTemp()}
-              </div>
-              <select
-                value={tempToUnit}
-                onChange={(e) => setTempToUnit(e.target.value)}
-                className="px-2.5 py-2.5 rounded-lg border border-[#1E2633] text-xs text-[#E6EAF0] bg-[#161C24] focus:outline-none focus:border-[#39D353]"
-              >
-                {['°F', '°C', 'K'].filter((u) => u !== tempFromUnit).map((u) => <option key={u} className="bg-[#161C24] text-[#E6EAF0]">{u}</option>)}
-              </select>
-            </div>
-          </div>
+      <div className="pt-4 border-t border-theme-border">
+        <p className="text-xs font-bold text-theme-primary uppercase tracking-wider mb-3">Temperature: °C ↔ °F ↔ Kelvin</p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <CalcInput id="conv-c" label="Temperature (°C)" value={celsius} onChange={setCelsius} unit="°C" />
+          <ResultBox label="Fahrenheit (°F)" value={round(fVal, 1)} unit="°F" />
+          <ResultBox label="Kelvin (K)" value={round(kVal, 2)} unit="K" />
         </div>
       </div>
-
-      {/* Ah ↔ Wh */}
-      <div>
-        <p className="text-xs font-bold text-[#39D353] uppercase tracking-wider mb-3 font-mono">Capacity ↔ Energy</p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="p-4 bg-[#161C24] rounded-xl border border-[#1E2633] space-y-3">
-            <p className="text-xs font-semibold text-[#E6EAF0]">Ah → Wh</p>
-            <CalcInput id="calc-uc-ah" label="Capacity (Ah)" value={ahIn} onChange={setAhIn} unit="Ah" />
-            <CalcInput id="calc-uc-vah" label="Voltage (V)" value={voltForAh} onChange={setVoltForAh} unit="V" />
-            <p className="text-xs text-[#A3AAB5]">= <span className="font-bold text-[#39D353]">{calcAhToWh()}</span> Wh</p>
-          </div>
-          <div className="p-4 bg-[#161C24] rounded-xl border border-[#1E2633] space-y-3">
-            <p className="text-xs font-semibold text-[#E6EAF0]">Wh → Ah</p>
-            <CalcInput id="calc-uc-wh" label="Energy (Wh)" value={ahToWh} onChange={setAhToWh} unit="Wh" />
-            <CalcInput id="calc-uc-vwh" label="Voltage (V)" value={voltForWh} onChange={setVoltForWh} unit="V" />
-            <p className="text-xs text-[#A3AAB5]">= <span className="font-bold text-[#39D353]">{calcWhToAh()}</span> Ah</p>
-          </div>
-        </div>
-      </div>
-      <EstimateDisclaimer />
     </div>
   );
 }
 
 // ─────────────────────────────────────────────────────────────────
-// TOOLS PAGE
+// PAGE ROOT
 // ─────────────────────────────────────────────────────────────────
 
 export default function ToolsPage() {
   return (
-    <main className="min-h-screen bg-[#0B0F14] text-[#E6EAF0]">
-      {/* Page header */}
-      <div className="bg-[#11161D] border-b border-[#1E2633]">
+    <main className="min-h-screen bg-theme-base text-theme-primary transition-colors duration-200">
+      {/* Header */}
+      <div className="bg-theme-card border-b border-theme-border">
         <div className="max-w-5xl xl:max-w-[1240px] 2xl:max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-8">
-          <div className="flex items-center gap-3 mb-1">
-            <Link href="/" className="text-[#A3AAB5] hover:text-[#39D353] transition-colors">
-              <ArrowLeft className="w-4 h-4" />
+          <div className="flex items-center gap-2 mb-3">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-1 text-[11px] font-medium text-theme-secondary hover:text-theme-green transition-colors"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" /> Home
             </Link>
-            <span className="text-[11px] text-[#1E2633]">/</span>
-            <span className="text-[11px] font-medium text-[#39D353]">Engineering Tools</span>
+            <span className="text-[11px] text-theme-border-strong">/</span>
+            <span className="text-[11px] font-medium text-theme-green">Engineering Tools</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#E6EAF0]">Battery Engineering Calculators</h1>
-          <p className="text-sm sm:text-base text-[#A3AAB5] mt-1">
+          <h1 className="text-2xl sm:text-3xl font-bold text-theme-primary">Battery Engineering Calculators</h1>
+          <p className="text-sm sm:text-base text-theme-secondary mt-1">
             General-purpose electrical engineering reference tools for battery system sizing and unit conversion.
           </p>
 
           <div className="mt-4 flex items-start gap-2 p-3.5 bg-amber-500/10 border border-amber-500/30 rounded-xl">
-            <Info className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
-            <p className="text-xs text-amber-200/90 leading-relaxed">
+            <Info className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+            <p className="text-xs text-amber-800 dark:text-amber-200/90 leading-relaxed">
               <strong>General engineering tools only.</strong> These calculators use standard electrical formulas and are provided for reference and preliminary sizing only. Results do not constitute a MEHAR product recommendation, specification, or engineering validation. Consult a qualified engineer for all critical applications.
             </p>
           </div>
@@ -555,21 +421,21 @@ export default function ToolsPage() {
         </CalcCard>
 
         {/* CTA */}
-        <div className="mt-6 p-6 bg-[#11161D] rounded-2xl border border-[#1E2633] text-center shadow-xl">
-          <p className="text-sm font-bold text-[#E6EAF0] mb-1">Have a specific battery requirement?</p>
-          <p className="text-xs text-[#A3AAB5] mb-4">
+        <div className="mt-6 p-6 bg-theme-card rounded-2xl border border-theme-border text-center shadow-xl">
+          <p className="text-sm font-bold text-theme-primary mb-1">Have a specific battery requirement?</p>
+          <p className="text-xs text-theme-secondary mb-4">
             Use the Battery Finder to scope your requirements or submit a formal RFQ.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/finder"
-              className="px-5 py-2.5 rounded-xl border border-[#00A3FF] text-[#00A3FF] bg-[#00A3FF]/10 text-sm font-bold hover:bg-[#00A3FF]/20 transition-colors"
+              className="px-5 py-2.5 rounded-xl border border-theme-blue text-theme-blue bg-theme-blue/10 text-sm font-bold hover:bg-theme-blue/20 transition-colors"
             >
               Battery Requirements Finder
             </Link>
             <Link
               href="/oem-custom-solutions"
-              className="px-5 py-2.5 rounded-xl bg-[#39D353] text-[#0B0F14] text-sm font-bold hover:bg-[#2ec547] shadow-[0_0_15px_rgba(57,211,83,0.25)] transition-colors"
+              className="px-5 py-2.5 rounded-xl bg-theme-green text-white dark:text-[#0B0F14] text-sm font-bold hover:bg-theme-green-hover shadow-sm transition-colors"
             >
               OEM / Custom Battery Enquiry
             </Link>

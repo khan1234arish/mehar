@@ -57,9 +57,9 @@ export default function AdminSidebar({ user, onCloseMobile }: SidebarProps) {
     href === '/admin' ? pathname === '/admin' : pathname.startsWith(href);
 
   return (
-    <aside className="w-64 bg-[#070A0E] border-r border-[#1E2633] flex flex-col h-full select-none">
+    <aside className="w-64 bg-theme-surface border-r border-theme-border flex flex-col h-full select-none transition-colors duration-200">
       {/* Header */}
-      <div className="p-5 border-b border-[#1E2633] flex items-center justify-between">
+      <div className="p-5 border-b border-theme-border flex items-center justify-between">
         <Link href="/admin" className="flex items-center gap-2">
           <div className="w-32 sm:w-36 h-13 sm:h-14 relative">
             <Image
@@ -74,7 +74,7 @@ export default function AdminSidebar({ user, onCloseMobile }: SidebarProps) {
         {onCloseMobile && (
           <button
             onClick={onCloseMobile}
-            className="p-1 rounded-lg hover:bg-white/[0.04] text-[#A3AAB5] md:hidden"
+            className="p-1 rounded-lg hover:bg-theme-elevated text-theme-secondary md:hidden"
             aria-label="Close Sidebar"
           >
             <X className="w-5 h-5" />
@@ -84,7 +84,7 @@ export default function AdminSidebar({ user, onCloseMobile }: SidebarProps) {
 
       {/* Navigation Links */}
       <div className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-        <p className="px-3 text-[10px] font-mono font-bold uppercase tracking-wider text-[#64748B] mb-2">
+        <p className="px-3 text-[10px] font-mono font-bold uppercase tracking-wider text-theme-muted mb-2">
           Administrative Modules
         </p>
 
@@ -97,42 +97,36 @@ export default function AdminSidebar({ user, onCloseMobile }: SidebarProps) {
               onClick={onCloseMobile}
               className={`flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-colors ${
                 active
-                  ? 'bg-[#39D353]/10 text-[#39D353] border border-[#39D353]/30 shadow-[0_0_12px_rgba(57,211,83,0.15)]'
-                  : 'text-[#A3AAB5] hover:bg-white/[0.04] hover:text-[#E6EAF0]'
+                  ? 'bg-theme-green/10 text-theme-green border border-theme-green/30 shadow-sm'
+                  : 'text-theme-secondary hover:text-theme-primary hover:bg-theme-elevated border border-transparent'
               }`}
             >
-              <item.icon className={`w-4 h-4 shrink-0 ${active ? 'text-[#39D353]' : 'text-[#64748B]'}`} />
+              <item.icon className="w-4 h-4 shrink-0" />
               <span>{item.label}</span>
             </Link>
           );
         })}
       </div>
 
-      {/* Admin User Info & Logout */}
-      <div className="p-4 border-t border-[#1E2633] space-y-3 bg-[#0B0F14]">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-full bg-[#161C24] border border-[#39D353]/30 flex items-center justify-center font-bold text-xs text-[#39D353] shrink-0">
-            {user?.name ? user.name[0].toUpperCase() : 'A'}
+      {/* User Info & Logout Footer */}
+      <div className="p-4 border-t border-theme-border space-y-3 bg-theme-base/50">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-full bg-theme-green/10 border border-theme-green/30 flex items-center justify-center font-bold text-xs text-theme-green">
+            {user?.name?.charAt(0) || 'A'}
           </div>
-          <div className="overflow-hidden">
-            <p className="text-xs font-bold text-[#E6EAF0] truncate">{user?.name || 'Administrator'}</p>
-            <p className="text-[10px] font-mono text-[#64748B] truncate">{user?.email || 'admin'}</p>
+          <div className="min-w-0 flex-1">
+            <p className="text-xs font-bold text-theme-primary truncate">{user?.name || 'Administrator'}</p>
+            <p className="text-[10px] font-mono text-theme-muted truncate">{user?.email || 'admin@mehar.com'}</p>
           </div>
         </div>
 
-        <div className="pt-2 flex items-center justify-between border-t border-[#1E2633]">
-          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30">
-            {user?.role || 'SUPER_ADMIN'}
-          </span>
-
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-1 text-xs font-semibold text-red-400 hover:text-red-300 transition-colors"
-          >
-            <LogOut className="w-3.5 h-3.5" />
-            <span>Logout</span>
-          </button>
-        </div>
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-theme-elevated border border-theme-border text-xs font-bold text-red-500 dark:text-red-400 hover:bg-red-500/10 hover:border-red-500/30 transition-colors"
+        >
+          <LogOut className="w-3.5 h-3.5" />
+          <span>Sign Out</span>
+        </button>
       </div>
     </aside>
   );

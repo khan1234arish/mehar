@@ -3,14 +3,93 @@
 @tailwind utilities;
 
 :root {
-  --background: #0B0F14;
-  --foreground: #E6EAF0;
-  --card-bg: #11161D;
-  --surface-bg: #161C24;
-  --border-color: #1E2633;
-  --primary-green: #39D353;
-  --electric-blue: #00A3FF;
+  /* ─────────────────────────────────────────────────────────────
+     LIGHT THEME (MEHAR Corporate Green + Clean Slate Baseline)
+     ───────────────────────────────────────────────────────────── */
+  --bg-base: #FFFFFF;
+  --bg-secondary: #F8FAFC;
+  --bg-card: #FFFFFF;
+  --bg-card-subtle: #F1F5F9;
+  --bg-elevated: #F8FAFC;
+  --bg-input: #FFFFFF;
+  --bg-modal: #FFFFFF;
+  
+  --border: #E2E8F0;
+  --border-subtle: #F1F5F9;
+  --border-strong: #CBD5E1;
+  
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #64748B;
+  
+  --brand-green: #059669;
+  --brand-green-hover: #047857;
+  --brand-green-light: #ECFDF5;
+  --brand-green-border: #A7F3D0;
+  --brand-green-contrast: #FFFFFF;
+  
+  --brand-blue: #0284C7;
+  --brand-blue-hover: #0369A1;
+  --brand-blue-light: #F0F9FF;
+  --brand-blue-border: #BAE6FD;
+  --brand-blue-contrast: #FFFFFF;
+  
+  --header-bg: #0B0F14;
+  --header-border: #1E2633;
+  --footer-bg: #0F172A;
+  --footer-text: #94A3B8;
+  --footer-border: #1E293B;
+
+  --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  --shadow-glow-green: 0 0 20px rgba(5, 150, 105, 0.12);
+  --shadow-glow-blue: 0 0 20px rgba(2, 132, 199, 0.12);
+
+  color-scheme: light;
+}
+
+.dark {
+  /* ─────────────────────────────────────────────────────────────
+     DARK THEME (Premium Industrial Battery Engineering)
+     ───────────────────────────────────────────────────────────── */
+  --bg-base: #0B0F14;
+  --bg-secondary: #0D1117;
+  --bg-card: #11161D;
+  --bg-card-subtle: #161C24;
+  --bg-elevated: #161C24;
+  --bg-input: #161C24;
+  --bg-modal: #11161D;
+  
+  --border: #1E2633;
+  --border-subtle: #161C24;
+  --border-strong: #2A3649;
+  
+  --text-primary: #E6EAF0;
   --text-secondary: #A3AAB5;
+  --text-muted: #64748B;
+  
+  --brand-green: #39D353;
+  --brand-green-hover: #2ec547;
+  --brand-green-light: rgba(57, 211, 83, 0.1);
+  --brand-green-border: rgba(57, 211, 83, 0.25);
+  --brand-green-contrast: #0B0F14;
+  
+  --brand-blue: #00A3FF;
+  --brand-blue-hover: #0090e6;
+  --brand-blue-light: rgba(0, 163, 255, 0.1);
+  --brand-blue-border: rgba(0, 163, 255, 0.25);
+  --brand-blue-contrast: #0B0F14;
+  
+  --header-bg: #0B0F14;
+  --header-border: #1E2633;
+  --footer-bg: #070A0E;
+  --footer-text: #A3AAB5;
+  --footer-border: #1E2633;
+
+  --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.8);
+  --shadow-glow-green: 0 0 25px rgba(57, 211, 83, 0.15);
+  --shadow-glow-blue: 0 0 25px rgba(0, 163, 255, 0.15);
+
+  color-scheme: dark;
 }
 
 * {
@@ -19,21 +98,62 @@
 
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden;
-  background-color: #0B0F14;
-  color: #E6EAF0;
-  color-scheme: dark;
+  overflow-x: clip;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
 }
 
 body {
   margin: 0;
-  background-color: #0B0F14;
-  color: #E6EAF0;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  overflow-x: hidden;
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* ─────────────────────────────────────────────────────────────
+   PERSISTENT DARK HEADER & TOPBAR (Always Dark + Guaranteed Sticky)
+   ───────────────────────────────────────────────────────────── */
+.site-header {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 50 !important;
+  background-color: #0B0F14 !important;
+  border-bottom: 1px solid #1E2633 !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+}
+
+.topbar-wrapper {
+  background-color: #070A0E !important;
+  border-bottom: 1px solid #1E2633 !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   EXPLICIT SEMANTIC UTILITIES (Guaranteed Token Resolution)
+   ───────────────────────────────────────────────────────────── */
+.bg-theme-base { background-color: var(--bg-base); }
+.bg-theme-surface { background-color: var(--bg-secondary); }
+.bg-theme-section { background-color: var(--bg-secondary); }
+.bg-theme-card { background-color: var(--bg-card); }
+.bg-theme-card-subtle { background-color: var(--bg-card-subtle); }
+.bg-theme-elevated { background-color: var(--bg-elevated); }
+.bg-theme-input { background-color: var(--bg-input); }
+.bg-theme-modal { background-color: var(--bg-modal); }
+
+.border-theme-border { border-color: var(--border); }
+.border-theme-border-subtle { border-color: var(--border-subtle); }
+.border-theme-border-strong { border-color: var(--border-strong); }
+
+.text-theme-primary { color: var(--text-primary); }
+.text-theme-secondary { color: var(--text-secondary); }
+.text-theme-muted { color: var(--text-muted); }
+.text-theme-green { color: var(--brand-green); }
+.text-theme-blue { color: var(--brand-blue); }
+
+.bg-theme-green { background-color: var(--brand-green); }
+.bg-theme-blue { background-color: var(--brand-blue); }
 
 a {
   text-decoration: none;
@@ -41,50 +161,30 @@ a {
 }
 
 ::selection {
-  background: rgba(57, 211, 83, 0.3);
-  color: #39D353;
+  background: var(--brand-green-light);
+  color: var(--brand-green);
 }
 
-/* Custom subtle dark scrollbar */
+/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0B0F14;
+  background: var(--bg-base);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1E2633;
+  background: var(--border);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #2A3649;
+  background: var(--border-strong);
 }
 
-/* Glassmorphic utilities */
-.glass-panel {
-  background: rgba(17, 22, 29, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.glass-dropdown {
-  background: rgba(13, 17, 23, 0.95);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.glow-green-hover:hover {
-  box-shadow: 0 0 25px rgba(57, 211, 83, 0.2);
-  border-color: rgba(57, 211, 83, 0.4);
-}
-
-.glow-blue-hover:hover {
-  box-shadow: 0 0 25px rgba(0, 163, 255, 0.2);
-  border-color: rgba(0, 163, 255, 0.4);
+/* Theme micro-transitions */
+.theme-transition {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
 }
