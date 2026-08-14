@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getCompanySettings, getSalesSettings } from '@/lib/settings';
+import { getWhatsAppUrl } from '@/lib/whatsapp';
 import { BROAD_CATEGORIES } from '@/data/categories';
 import {
   ShieldCheck,
@@ -238,12 +239,18 @@ export default async function Footer() {
 
               <div>
                 <span className="text-[11px] font-mono text-theme-muted block font-bold">Sales Phone:</span>
-                <a
-                  href={`tel:${sales.salesPhone}`}
-                  className="text-theme-primary hover:text-theme-green transition-colors font-mono font-semibold"
-                >
-                  {sales.salesPhone}
-                </a>
+                {sales.salesPhone && !sales.salesPhone.includes('X') ? (
+                  <a
+                    href={`tel:${sales.salesPhone.replace(/[^0-9+]/g, '')}`}
+                    className="text-theme-primary hover:text-theme-green transition-colors font-mono font-semibold"
+                  >
+                    {sales.salesPhone}
+                  </a>
+                ) : (
+                  <span className="text-theme-primary font-mono font-semibold">
+                    {sales.salesPhone || '+91 XXXXX XXXXX'}
+                  </span>
+                )}
               </div>
 
               <div>
@@ -256,19 +263,20 @@ export default async function Footer() {
                 </a>
               </div>
 
-              {cleanWhatsapp && (
-                <div className="pt-2">
-                  <a
-                    href={`https://wa.me/${cleanWhatsapp}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-theme-green hover:bg-theme-green-hover text-white dark:text-[#0B0F14] font-bold text-xs transition-colors shadow-sm"
-                  >
-                    <MessageSquare className="w-3.5 h-3.5" />
-                    WhatsApp B2B Desk
-                  </a>
-                </div>
-              )}
+              <div className="pt-2">
+                <a
+                  href={getWhatsAppUrl(
+                    'Hello, I am contacting MEHAR regarding B2B battery procurement.',
+                    sales.whatsappDesk
+                  )}
+                  target={cleanWhatsapp ? '_blank' : undefined}
+                  rel={cleanWhatsapp ? 'noopener noreferrer' : undefined}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-theme-green hover:bg-theme-green-hover text-white dark:text-[#0B0F14] font-bold text-xs transition-colors shadow-sm"
+                >
+                  <MessageSquare className="w-3.5 h-3.5" />
+                  WhatsApp B2B Desk
+                </a>
+              </div>
             </div>
           </div>
         </div>

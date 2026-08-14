@@ -4,6 +4,7 @@ import React, { useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { COMPANY_INFO } from '@/data/companyInfo';
+import { getWhatsAppUrl } from '@/lib/whatsapp';
 import { APPLICATION_DOMAINS } from '@/data/applicationDomains';
 import { analytics } from '@/lib/analytics';
 import OemProgressBar, { OEM_STEPS } from '@/components/oem/OemProgressBar';
@@ -583,7 +584,7 @@ export default function OemCustomSolutionsPage() {
     APPLICATION_DOMAINS.find((d) => d.id === applicationId)?.name || applicationId;
 
   const waUrl = submissionResult
-    ? `https://wa.me/${COMPANY_INFO.whatsappDesk.replace(/[^0-9]/g, '')}?text=${submissionResult.waText}`
+    ? getWhatsAppUrl(submissionResult.waText, COMPANY_INFO.whatsappDesk)
     : '#';
 
   // ─────────────────────────────────────────────────────────────

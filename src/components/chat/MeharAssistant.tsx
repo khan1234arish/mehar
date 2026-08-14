@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { COMPANY_INFO } from '@/data/companyInfo';
+import { getWhatsAppUrl } from '@/lib/whatsapp';
 import { APPLICATION_DOMAINS } from '@/data/applicationDomains';
 import {
   MessageSquare,
@@ -550,7 +551,7 @@ export default function MeharAssistant() {
   })();
 
   // ─── WhatsApp URL ─────────────────────────────────────────────
-  const whatsappUrl = `https://wa.me/${COMPANY_INFO.whatsappDesk.replace(/[^0-9]/g, '')}?text=${encodeURIComponent('Hello, I am enquiring about MEHAR battery solutions (Lawad Infrastructure Pvt. Ltd.).')}`;
+  const whatsappUrl = getWhatsAppUrl('Hello, I am enquiring about MEHAR battery solutions (Lawad Infrastructure Pvt. Ltd.).', COMPANY_INFO.whatsappDesk);
 
   // ─────────────────────────────────────────────────────────────
   // RENDER

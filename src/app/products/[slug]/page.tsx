@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { BROAD_CATEGORIES, getCategoryBySlug } from '@/data/categories';
 import { COMPANY_INFO } from '@/data/companyInfo';
+import { getWhatsAppUrl, getCleanWhatsAppDigits } from '@/lib/whatsapp';
 import { getSitePlaceholderImage } from '@/lib/siteImages';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
@@ -284,9 +285,11 @@ export default async function ProductCategoryPage({
                     <Link
                       href={`/rfq?category=${category.slug}&product=${encodeURIComponent(prod.name)}&moq=${prod.minimumOrderQuantity || ''}`}
                       className="inline-flex items-center justify-center p-2 rounded-xl bg-theme-green/10 border border-theme-green/25 text-theme-green hover:bg-theme-green hover:text-white dark:hover:text-[#0B0F14] transition-all text-xs font-bold"
-                      title="Request quote for this specific model"
+                      title={`Request quote for ${prod.name}`}
+                      aria-label={`Request batch quote for ${prod.name}`}
                     >
                       <ArrowUpRight className="w-4 h-4" />
+                      <span className="sr-only">Request batch quote for {prod.name}</span>
                     </Link>
                   </div>
                 </div>
@@ -376,9 +379,9 @@ export default async function ProductCategoryPage({
                   </Button>
 
                   <a
-                    href={`https://wa.me/${COMPANY_INFO.whatsappDesk.replace(/[^0-9]/g, '')}?text=Hello%2C%20I%20am%20inquiring%20about%20${encodeURIComponent(activeProduct.name)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href={getWhatsAppUrl(`Hello, I am inquiring about ${activeProduct.name} from MEHAR product catalogue.`, COMPANY_INFO.whatsappDesk)}
+                    target={getCleanWhatsAppDigits(COMPANY_INFO.whatsappDesk) ? '_blank' : undefined}
+                    rel={getCleanWhatsAppDigits(COMPANY_INFO.whatsappDesk) ? 'noopener noreferrer' : undefined}
                     className="block text-center text-xs font-mono text-theme-green hover:underline font-semibold"
                   >
                     Direct WhatsApp Inquiry Desk →

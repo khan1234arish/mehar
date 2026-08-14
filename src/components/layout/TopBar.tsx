@@ -1,5 +1,6 @@
 import React from 'react';
 import { getCompanySettings, getSalesSettings, getContentSettings } from '@/lib/settings';
+import { getWhatsAppUrl, getCleanWhatsAppDigits } from '@/lib/whatsapp';
 import { ShieldCheck, Mail, MessageSquare } from 'lucide-react';
 
 export default async function TopBar() {
@@ -9,7 +10,11 @@ export default async function TopBar() {
     getContentSettings(),
   ]);
 
-  const cleanWhatsapp = sales.whatsappDesk.replace(/[^0-9]/g, '');
+  const hasValidWhatsApp = !!getCleanWhatsAppDigits(sales.whatsappDesk);
+  const whatsappUrl = getWhatsAppUrl(
+    'Hello, I am contacting MEHAR regarding B2B battery procurement.',
+    sales.whatsappDesk
+  );
 
   return (
     <div className="topbar-wrapper bg-[#070A0E] border-b border-[#1E2633] text-[11px] text-[#A3AAB5] py-2 font-medium">
@@ -37,9 +42,9 @@ export default async function TopBar() {
           </a>
 
           <a
-            href={`https://wa.me/${cleanWhatsapp}`}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={whatsappUrl}
+            target={hasValidWhatsApp ? '_blank' : undefined}
+            rel={hasValidWhatsApp ? 'noopener noreferrer' : undefined}
             className="flex items-center gap-1.5 text-[#39D353] hover:text-[#2ec547] transition-colors font-semibold"
           >
             <MessageSquare className="w-3.5 h-3.5" />
