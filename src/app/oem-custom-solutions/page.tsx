@@ -4,7 +4,6 @@ import React, { useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { COMPANY_INFO } from '@/data/companyInfo';
-import { getWhatsAppUrl } from '@/lib/whatsapp';
 import { APPLICATION_DOMAINS } from '@/data/applicationDomains';
 import { analytics } from '@/lib/analytics';
 import OemProgressBar, { OEM_STEPS } from '@/components/oem/OemProgressBar';
@@ -584,7 +583,7 @@ export default function OemCustomSolutionsPage() {
     APPLICATION_DOMAINS.find((d) => d.id === applicationId)?.name || applicationId;
 
   const waUrl = submissionResult
-    ? getWhatsAppUrl(submissionResult.waText, COMPANY_INFO.whatsappDesk)
+    ? `https://wa.me/${COMPANY_INFO.whatsappDesk.replace(/[^0-9]/g, '')}?text=${submissionResult.waText}`
     : '#';
 
   // ─────────────────────────────────────────────────────────────
@@ -1532,11 +1531,11 @@ export default function OemCustomSolutionsPage() {
         )}
 
         {/* ── Navigation buttons ─────────────────────────────────── */}
-        <div className="flex items-center justify-between pt-2 pb-8">
+        <div className="flex items-center justify-between pt-2 pb-8 gap-3">
           <button
             type="button"
             onClick={step === 1 ? () => router.back() : handleBack}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-theme-border text-sm font-semibold text-theme-secondary bg-theme-elevated hover:bg-theme-card hover:text-theme-primary transition-colors"
+            className="flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl border border-theme-border text-sm font-semibold text-theme-secondary bg-theme-elevated hover:bg-theme-card hover:text-theme-primary transition-colors min-h-[44px] touch-manipulation"
           >
             <ChevronLeft className="w-4 h-4" />
             {step === 1 ? 'Back to site' : 'Back'}
@@ -1546,7 +1545,7 @@ export default function OemCustomSolutionsPage() {
             <button
               type="button"
               onClick={handleNext}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-theme-green text-white dark:text-[#0B0F14] text-sm font-bold hover:bg-theme-green-hover shadow-sm transition-colors"
+              className="flex items-center gap-2 px-5 sm:px-6 py-2.5 rounded-xl bg-theme-green text-white dark:text-[#0B0F14] text-sm font-bold hover:bg-theme-green-hover shadow-sm transition-colors min-h-[44px] touch-manipulation cursor-pointer"
             >
               Continue
               <ChevronRight className="w-4 h-4" />
@@ -1556,7 +1555,7 @@ export default function OemCustomSolutionsPage() {
               type="button"
               onClick={handleSubmit}
               disabled={submitting}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-theme-green text-white dark:text-[#0B0F14] text-sm font-bold hover:bg-theme-green-hover shadow-sm transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 px-5 sm:px-6 py-2.5 rounded-xl bg-theme-green text-white dark:text-[#0B0F14] text-sm font-bold hover:bg-theme-green-hover shadow-sm transition-colors disabled:opacity-60 disabled:cursor-not-allowed min-h-[44px] touch-manipulation"
             >
               {submitting ? 'Submitting…' : 'Submit OEM Enquiry'}
               {!submitting && <ChevronRight className="w-4 h-4" />}

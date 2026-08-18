@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { BROAD_CATEGORIES, getCategoryBySlug } from '@/data/categories';
 import { COMPANY_INFO } from '@/data/companyInfo';
-import { getWhatsAppUrl, getCleanWhatsAppDigits } from '@/lib/whatsapp';
 import { getSitePlaceholderImage } from '@/lib/siteImages';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
@@ -102,10 +101,10 @@ export default async function ProductCategoryPage({
   const displayImageAlt = primaryImage?.altText || activeProduct.name;
 
   return (
-    <div className="py-12 space-y-16 bg-theme-base text-theme-primary transition-colors duration-200">
+    <div className="py-8 sm:py-12 space-y-10 sm:space-y-16 bg-theme-base text-theme-primary transition-colors duration-200">
       {/* 1. Breadcrumb & Category Header */}
       <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-        <div className="flex items-center gap-2 text-xs font-mono text-theme-secondary mb-6">
+        <div className="flex items-center gap-2 text-xs font-mono text-theme-secondary mb-4 sm:mb-6">
           <Link href="/products" className="hover:text-theme-green flex items-center gap-1 font-semibold transition-colors">
             <ArrowLeft className="w-3 h-3" /> Back to All Categories
           </Link>
@@ -114,14 +113,14 @@ export default async function ProductCategoryPage({
         </div>
 
         {/* Category Overview Card */}
-        <div className="p-8 sm:p-12 rounded-3xl bg-theme-card border border-theme-border shadow-xl relative overflow-hidden">
+        <div className="p-5 sm:p-8 lg:p-12 rounded-3xl bg-theme-card border border-theme-border shadow-xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-80 h-80 bg-theme-green/10 rounded-full blur-[120px] pointer-events-none" />
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
-            <div className="lg:col-span-8 space-y-4">
-              <div className="flex flex-wrap items-center gap-2.5">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center relative z-10">
+            <div className="lg:col-span-8 space-y-3 sm:space-y-4">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
                 <Badge variant="green">Product Category</Badge>
-                <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-mono font-bold bg-theme-green/10 text-theme-green border border-theme-green/25">
-                  <Layers className="w-3.5 h-3.5 text-theme-green" />
+                <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-0.5 rounded-full text-[11px] sm:text-xs font-mono font-bold bg-theme-green/10 text-theme-green border border-theme-green/25">
+                  <Layers className="w-3.5 h-3.5 text-theme-green shrink-0" />
                   {availableProducts.length} {availableProducts.length === 1 ? 'Product Model' : 'Product Models'} in Category
                 </span>
               </div>
@@ -143,11 +142,11 @@ export default async function ProductCategoryPage({
                 <span className="text-xs font-mono text-theme-secondary block mb-2 font-bold uppercase tracking-wider">
                   Recommended Target Applications:
                 </span>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1.5 sm:gap-2">
                   {category.keyApplications.map((app) => (
                     <span
                       key={app}
-                      className="px-3 py-1 rounded-lg bg-theme-elevated border border-theme-border text-xs text-theme-primary font-mono font-medium"
+                      className="px-2.5 sm:px-3 py-1 rounded-lg bg-theme-elevated border border-theme-border text-xs text-theme-primary font-mono font-medium"
                     >
                       {app}
                     </span>
@@ -156,7 +155,7 @@ export default async function ProductCategoryPage({
               </div>
             </div>
 
-            <div className="lg:col-span-4 p-6 rounded-2xl bg-theme-surface border border-theme-border shadow-lg space-y-3">
+            <div className="lg:col-span-4 p-5 sm:p-6 rounded-2xl bg-theme-surface border border-theme-border shadow-lg space-y-3">
               <span className="text-xs font-mono text-theme-green font-bold uppercase tracking-wider block">
                 Category Procurement Desk
               </span>
@@ -184,7 +183,7 @@ export default async function ProductCategoryPage({
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-theme-border">
             <div>
               <h2 className="text-xl font-bold text-theme-primary flex items-center gap-2">
-                <Package className="w-5 h-5 text-theme-green" />
+                <Package className="w-5 h-5 text-theme-green shrink-0" />
                 Available Models &amp; Configurations ({availableProducts.length})
               </h2>
               <p className="text-xs text-theme-secondary mt-0.5">
@@ -197,7 +196,7 @@ export default async function ProductCategoryPage({
             </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {availableProducts.map((prod: any) => {
               const isSelected = prod.slug === activeProduct.slug;
               const prodImg = prod.imageUrl || displayImageUrl;
@@ -205,7 +204,7 @@ export default async function ProductCategoryPage({
               return (
                 <div
                   key={prod.slug}
-                  className={`bg-theme-card rounded-2xl p-6 border transition-all duration-300 flex flex-col justify-between group ${
+                  className={`bg-theme-card rounded-2xl p-5 sm:p-6 border transition-all duration-300 flex flex-col justify-between group ${
                     isSelected
                       ? 'border-theme-green shadow-xl ring-1 ring-theme-green bg-theme-elevated'
                       : 'border-theme-border hover:border-theme-green/50 hover:shadow-md'
@@ -259,38 +258,33 @@ export default async function ProductCategoryPage({
                       </div>
                       <div className="border-x border-theme-border">
                         <span className="text-[10px] text-theme-secondary uppercase block">Capacity</span>
-                        <strong className="text-theme-primary text-xs">{prod.capacityRange?.split(' ')[0] || 'Custom'}</strong>
+                        <strong className="text-theme-primary text-xs">{prod.capacityRange?.split(' ')[0] || 'Varies'}</strong>
                       </div>
                       <div>
-                        <span className="text-[10px] text-theme-secondary uppercase block">Energy</span>
-                        <strong className="text-theme-green text-xs">{prod.energyRange?.split(' ')[0] || 'TDS'}</strong>
+                        <span className="text-[10px] text-theme-secondary uppercase block">IP Rating</span>
+                        <strong className="text-theme-primary text-xs">{prod.ipRating?.split(' ')[0] || 'IP65'}</strong>
                       </div>
                     </div>
                   </div>
 
                   {/* Product Card Actions */}
-                  <div className="pt-4 mt-4 border-t border-theme-border flex items-center justify-between gap-2">
+                  <div className="mt-5 pt-4 border-t border-theme-border flex items-center justify-between">
                     <Link
                       href={`/products/${category.slug}?product=${prod.slug}#specifications`}
-                      className={`flex-1 inline-flex items-center justify-center gap-1 py-2 px-3 rounded-xl text-xs font-bold transition-all ${
-                        isSelected
-                          ? 'bg-theme-green text-white dark:text-[#0B0F14] shadow-sm'
-                          : 'bg-theme-elevated text-theme-primary border border-theme-border hover:bg-theme-green hover:text-white dark:hover:text-[#0B0F14] hover:border-theme-green'
-                      }`}
+                      className="text-xs font-mono font-bold text-theme-green hover:underline flex items-center gap-1"
                     >
-                      <span>{isSelected ? 'Viewing Specs' : 'View Specs'}</span>
+                      <span>Inspect Datasheet</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
 
-                    <Link
-                      href={`/rfq?category=${category.slug}&product=${encodeURIComponent(prod.name)}&moq=${prod.minimumOrderQuantity || ''}`}
-                      className="inline-flex items-center justify-center p-2 rounded-xl bg-theme-green/10 border border-theme-green/25 text-theme-green hover:bg-theme-green hover:text-white dark:hover:text-[#0B0F14] transition-all text-xs font-bold"
-                      title={`Request quote for ${prod.name}`}
-                      aria-label={`Request batch quote for ${prod.name}`}
+                    <Button
+                      href={`/rfq?category=${category.slug}&product=${encodeURIComponent(prod.name)}`}
+                      variant="ghost"
+                      size="sm"
+                      icon={<ArrowUpRight className="w-3.5 h-3.5" />}
                     >
-                      <ArrowUpRight className="w-4 h-4" />
-                      <span className="sr-only">Request batch quote for {prod.name}</span>
-                    </Link>
+                      RFQ
+                    </Button>
                   </div>
                 </div>
               );
@@ -303,13 +297,13 @@ export default async function ProductCategoryPage({
       <div id="specifications" className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 pt-4">
         <div className="space-y-6">
           {/* Active Product Header Banner */}
-          <div className="p-8 rounded-3xl bg-theme-card border border-theme-border shadow-xl">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div className="p-5 sm:p-8 rounded-3xl bg-theme-card border border-theme-border shadow-xl">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center">
               {/* Left Column: Product Identity & Details */}
               <div className="lg:col-span-7 space-y-4">
-                <div className="flex flex-wrap items-center gap-2.5">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
                   <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-theme-green/10 text-theme-green border border-theme-green/25">
-                    <ShieldCheck className="w-3.5 h-3.5 text-theme-green" /> Verified Product Datasheet
+                    <ShieldCheck className="w-3.5 h-3.5 text-theme-green shrink-0" /> Verified Product Datasheet
                   </span>
                   {activeProduct.modelNumber && (
                     <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold bg-theme-elevated text-theme-primary border border-theme-border">
@@ -332,15 +326,15 @@ export default async function ProductCategoryPage({
                 </p>
 
                 {/* MOQ Indicator Box */}
-                <div className="p-4 rounded-xl bg-theme-elevated border border-theme-border inline-flex items-center gap-4 shadow-sm">
-                  <div className="w-10 h-10 rounded-lg bg-theme-green/10 text-theme-green flex items-center justify-center">
+                <div className="p-3.5 sm:p-4 rounded-xl bg-theme-elevated border border-theme-border flex flex-col xs:flex-row items-start xs:items-center gap-3 sm:gap-4 shadow-sm">
+                  <div className="w-10 h-10 rounded-lg bg-theme-green/10 text-theme-green flex items-center justify-center shrink-0">
                     <Package className="w-5 h-5" />
                   </div>
                   <div>
                     <span className="text-[10px] font-mono font-bold text-theme-secondary uppercase tracking-wider block">
                       Minimum Order Quantity (MOQ)
                     </span>
-                    <span className="text-sm font-bold text-theme-primary font-mono">
+                    <span className="text-xs sm:text-sm font-bold text-theme-primary font-mono">
                       {moqDisplay}
                     </span>
                   </div>
@@ -367,7 +361,7 @@ export default async function ProductCategoryPage({
                   )}
                 </div>
 
-                <div className="p-5 rounded-2xl bg-theme-elevated border border-theme-border shadow-md space-y-2.5">
+                <div className="p-4 sm:p-5 rounded-2xl bg-theme-elevated border border-theme-border shadow-md space-y-2.5">
                   <Button
                     href={`/rfq?category=${category.slug}&product=${encodeURIComponent(activeProduct.name)}&moq=${activeProduct.minimumOrderQuantity || ''}`}
                     variant="primary"
@@ -379,9 +373,9 @@ export default async function ProductCategoryPage({
                   </Button>
 
                   <a
-                    href={getWhatsAppUrl(`Hello, I am inquiring about ${activeProduct.name} from MEHAR product catalogue.`, COMPANY_INFO.whatsappDesk)}
-                    target={getCleanWhatsAppDigits(COMPANY_INFO.whatsappDesk) ? '_blank' : undefined}
-                    rel={getCleanWhatsAppDigits(COMPANY_INFO.whatsappDesk) ? 'noopener noreferrer' : undefined}
+                    href={`https://wa.me/${COMPANY_INFO.whatsappDesk.replace(/[^0-9]/g, '')}?text=Hello%2C%20I%20am%20inquiring%20about%20${encodeURIComponent(activeProduct.name)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="block text-center text-xs font-mono text-theme-green hover:underline font-semibold"
                   >
                     Direct WhatsApp Inquiry Desk →
@@ -395,7 +389,7 @@ export default async function ProductCategoryPage({
           <div className="space-y-4">
             <div>
               <h3 className="text-lg font-bold text-theme-primary flex items-center gap-2">
-                <FileSpreadsheet className="w-5 h-5 text-theme-green" />
+                <FileSpreadsheet className="w-5 h-5 text-theme-green shrink-0" />
                 Technical &amp; Engineering Specifications Matrix
               </h3>
               <p className="text-xs text-theme-secondary mt-0.5">
@@ -405,25 +399,25 @@ export default async function ProductCategoryPage({
 
             <div className="rounded-2xl bg-theme-card border border-theme-border overflow-hidden shadow-md">
               <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs">
+                <table className="w-full text-left text-xs min-w-[500px]">
                   <thead>
-                    <tr className="bg-theme-surface border-b border-theme-border text-theme-secondary font-mono uppercase text-[11px]">
-                      <th className="py-3.5 px-6 font-bold">Specification Parameter</th>
-                      <th className="py-3.5 px-6 font-bold">Classification Group</th>
-                      <th className="py-3.5 px-6 font-bold">Value / Unit</th>
+                    <tr className="bg-theme-surface border-b border-theme-border text-theme-secondary font-mono uppercase text-[10px] sm:text-[11px]">
+                      <th className="py-3 px-4 sm:py-3.5 sm:px-6 font-bold">Specification Parameter</th>
+                      <th className="py-3 px-4 sm:py-3.5 sm:px-6 font-bold">Classification Group</th>
+                      <th className="py-3 px-4 sm:py-3.5 sm:px-6 font-bold">Value / Unit</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-theme-border text-theme-primary">
                     {activeProduct.specifications && activeProduct.specifications.length > 0 ? (
                       activeProduct.specifications.map((spec: any, idx: number) => (
                         <tr key={idx} className="hover:bg-theme-elevated transition-colors">
-                          <td className="py-4 px-6 font-semibold text-theme-primary">
+                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-semibold text-theme-primary">
                             {spec.specKey}
                           </td>
-                          <td className="py-4 px-6 font-mono text-theme-secondary">
+                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-mono text-theme-secondary">
                             {spec.groupName}
                           </td>
-                          <td className="py-4 px-6 font-mono font-medium text-theme-green">
+                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-mono font-medium text-theme-green">
                             {spec.specValue} {spec.specUnit || ''}
                           </td>
                         </tr>
@@ -431,29 +425,29 @@ export default async function ProductCategoryPage({
                     ) : (
                       <>
                         <tr className="hover:bg-theme-elevated transition-colors">
-                          <td className="py-4 px-6 font-semibold text-theme-primary">Nominal Voltage</td>
-                          <td className="py-4 px-6 font-mono text-theme-secondary">Electrical</td>
-                          <td className="py-4 px-6 font-mono font-medium text-theme-green">{activeProduct.voltageRange || 'Configuration dependent'}</td>
+                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-semibold text-theme-primary">Nominal Voltage</td>
+                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-mono text-theme-secondary">Electrical</td>
+                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-mono font-medium text-theme-green">{activeProduct.voltageRange || 'Configuration dependent'}</td>
                         </tr>
                         <tr className="hover:bg-theme-elevated transition-colors">
-                          <td className="py-4 px-6 font-semibold text-theme-primary">Rated Capacity</td>
-                          <td className="py-4 px-6 font-mono text-theme-secondary">Electrical</td>
-                          <td className="py-4 px-6 font-mono font-medium text-theme-green">{activeProduct.capacityRange || 'Available on request'}</td>
+                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-semibold text-theme-primary">Rated Capacity</td>
+                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-mono text-theme-secondary">Electrical</td>
+                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-mono font-medium text-theme-green">{activeProduct.capacityRange || 'Available on request'}</td>
                         </tr>
                         <tr className="hover:bg-theme-elevated transition-colors">
-                          <td className="py-4 px-6 font-semibold text-theme-primary">Cell Chemistry</td>
-                          <td className="py-4 px-6 font-mono text-theme-secondary">Electrochemistry</td>
-                          <td className="py-4 px-6 font-mono font-medium text-theme-green">{activeProduct.chemistry || 'LiFePO4 / NMC'}</td>
+                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-semibold text-theme-primary">Cell Chemistry</td>
+                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-mono text-theme-secondary">Electrochemistry</td>
+                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-mono font-medium text-theme-green">{activeProduct.chemistry || 'LiFePO4 / NMC'}</td>
                         </tr>
                         <tr className="hover:bg-theme-elevated transition-colors">
-                          <td className="py-4 px-6 font-semibold text-theme-primary">Cycle Life (@ 80% DoD)</td>
-                          <td className="py-4 px-6 font-mono text-theme-secondary">Durability</td>
-                          <td className="py-4 px-6 font-mono font-medium text-theme-green">{activeProduct.cycleLife || '2,000+ cycles'}</td>
+                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-semibold text-theme-primary">Cycle Life (@ 80% DoD)</td>
+                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-mono text-theme-secondary">Durability</td>
+                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-mono font-medium text-theme-green">{activeProduct.cycleLife || '2,000+ cycles'}</td>
                         </tr>
                         <tr className="hover:bg-theme-elevated transition-colors">
-                          <td className="py-4 px-6 font-semibold text-theme-primary">Ingress Protection</td>
-                          <td className="py-4 px-6 font-mono text-theme-secondary">Mechanical</td>
-                          <td className="py-4 px-6 font-mono font-medium text-theme-green">{activeProduct.ipRating || 'IP65'}</td>
+                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-semibold text-theme-primary">Ingress Protection</td>
+                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-mono text-theme-secondary">Mechanical</td>
+                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-mono font-medium text-theme-green">{activeProduct.ipRating || 'IP65'}</td>
                         </tr>
                       </>
                     )}
@@ -467,7 +461,7 @@ export default async function ProductCategoryPage({
 
       {/* 4. OEM Customization CTA */}
       <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-        <div className="p-8 rounded-2xl bg-theme-card border border-theme-border flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="p-6 sm:p-8 rounded-2xl bg-theme-card border border-theme-border flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="space-y-1 text-center sm:text-left">
             <h3 className="text-base font-bold text-theme-primary">
               Need custom engineering or specific C-rate parameters?

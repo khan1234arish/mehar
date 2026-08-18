@@ -175,7 +175,7 @@ export default function HeroProductCarousel({ parentCompany = 'Lawad Infrastruct
         </div>
 
         {/* ── Slideshow Image Stage ───────────────────────────────── */}
-        <div className="relative w-full h-56 sm:h-64 lg:h-72 rounded-2xl bg-theme-base border border-theme-border overflow-hidden">
+        <div className="relative w-full h-52 xs:h-56 sm:h-64 lg:h-72 rounded-2xl bg-theme-base border border-theme-border overflow-hidden">
           
           {/* Stacked Images with Smooth Cross-Fade */}
           {SLIDES.map((slide, idx) => (
@@ -198,11 +198,11 @@ export default function HeroProductCarousel({ parentCompany = 'Lawad Infrastruct
             </div>
           ))}
 
-          {/* Navigation Chevron Buttons (Always accessible on hover) */}
+          {/* Navigation Chevron Buttons (Always accessible on touch/mobile, hover on desktop) */}
           <button
             type="button"
             onClick={handlePrev}
-            className="absolute left-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/70 hover:bg-theme-green hover:text-black border border-white/20 text-white flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 z-20 shadow-lg cursor-pointer"
+            className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-8 sm:h-8 rounded-full bg-black/75 hover:bg-theme-green hover:text-black border border-white/20 text-white flex items-center justify-center transition-all opacity-85 sm:opacity-0 sm:group-hover:opacity-100 focus:opacity-100 z-20 shadow-lg cursor-pointer touch-manipulation"
             aria-label="Previous battery slide"
           >
             <ChevronLeft className="w-4 h-4" />
@@ -211,7 +211,7 @@ export default function HeroProductCarousel({ parentCompany = 'Lawad Infrastruct
           <button
             type="button"
             onClick={handleNext}
-            className="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/70 hover:bg-theme-green hover:text-black border border-white/20 text-white flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 z-20 shadow-lg cursor-pointer"
+            className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-8 sm:h-8 rounded-full bg-black/75 hover:bg-theme-green hover:text-black border border-white/20 text-white flex items-center justify-center transition-all opacity-85 sm:opacity-0 sm:group-hover:opacity-100 focus:opacity-100 z-20 shadow-lg cursor-pointer touch-manipulation"
             aria-label="Next battery slide"
           >
             <ChevronRight className="w-4 h-4" />
@@ -224,19 +224,23 @@ export default function HeroProductCarousel({ parentCompany = 'Lawad Infrastruct
         </div>
 
         {/* ── Slide Indicator Dots ─────────────────────────────────── */}
-        <div className="flex items-center justify-center gap-1.5 pt-0.5">
+        <div className="flex items-center justify-center gap-1 pt-0.5">
           {SLIDES.map((slide, idx) => (
             <button
               key={slide.id}
               type="button"
               onClick={() => setCurrentIndex(idx)}
-              className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
-                idx === currentIndex
-                  ? 'w-6 bg-theme-green'
-                  : 'w-1.5 bg-theme-border-strong hover:bg-theme-secondary'
-              }`}
+              className="p-1 touch-manipulation flex items-center justify-center cursor-pointer"
               aria-label={`Go to slide ${idx + 1}: ${slide.name}`}
-            />
+            >
+              <span
+                className={`h-1.5 rounded-full transition-all duration-300 block ${
+                  idx === currentIndex
+                    ? 'w-6 bg-theme-green'
+                    : 'w-1.5 bg-theme-border-strong hover:bg-theme-secondary'
+                }`}
+              />
+            </button>
           ))}
         </div>
 

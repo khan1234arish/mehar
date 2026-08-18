@@ -78,23 +78,23 @@ export default function BatteryFinderPage() {
   };
 
   return (
-    <div className="py-12 space-y-12 bg-theme-base text-theme-primary transition-colors duration-200">
+    <div className="py-8 sm:py-12 space-y-8 sm:space-y-12 bg-theme-base text-theme-primary transition-colors duration-200">
       {/* Header Banner */}
       <div className="max-w-6xl xl:max-w-[1360px] 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-        <div className="p-8 sm:p-10 rounded-3xl bg-theme-card border border-theme-border shadow-xl relative overflow-hidden">
+        <div className="p-5 sm:p-8 lg:p-10 rounded-3xl bg-theme-card border border-theme-border shadow-xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-80 h-80 bg-theme-green/10 rounded-full blur-[120px] pointer-events-none" />
-          <div className="max-w-3xl space-y-4 relative z-10">
+          <div className="max-w-3xl space-y-3 sm:space-y-4 relative z-10">
             <Badge variant="green">B2B Requirements Capture</Badge>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-theme-primary tracking-tight">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-theme-primary tracking-tight">
               Battery Requirements Finder
             </h1>
-            <p className="text-sm text-theme-secondary leading-relaxed">
+            <p className="text-xs sm:text-sm text-theme-secondary leading-relaxed">
               Capture your vehicle or equipment operating requirements. Our technical sales and engineering team at <strong className="text-theme-primary">{COMPANY_INFO.parentCompanyName}</strong> will evaluate your parameters and scope an engineered battery solution.
             </p>
           </div>
 
           {/* Stepper Indicator */}
-          <div className="mt-8 pt-6 border-t border-theme-border grid grid-cols-4 gap-2 text-xs font-mono relative z-10">
+          <div className="mt-6 sm:mt-8 pt-5 sm:pt-6 border-t border-theme-border grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono relative z-10">
             {[
               { num: 1, title: 'Application' },
               { num: 2, title: 'Electrical' },
@@ -121,13 +121,13 @@ export default function BatteryFinderPage() {
 
       {/* Main Form Container */}
       <div className="max-w-6xl xl:max-w-[1360px] 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-        <div className="bg-theme-card border border-theme-border rounded-3xl p-8 sm:p-10 shadow-xl">
+        <div className="bg-theme-card border border-theme-border rounded-3xl p-5 sm:p-8 lg:p-10 shadow-xl">
           {/* STEP 1: APPLICATION DOMAIN */}
           {step === 1 && (
-            <form onSubmit={handleNext} className="space-y-8">
+            <form onSubmit={handleNext} className="space-y-6 sm:space-y-8">
               <div>
-                <h2 className="text-xl font-bold text-theme-primary flex items-center gap-2">
-                  <span className="w-7 h-7 rounded-full bg-theme-green text-white dark:text-[#0B0F14] font-bold flex items-center justify-center text-xs">
+                <h2 className="text-lg sm:text-xl font-bold text-theme-primary flex items-center gap-2">
+                  <span className="w-7 h-7 rounded-full bg-theme-green text-white dark:text-[#0B0F14] font-bold flex items-center justify-center text-xs shrink-0">
                     1
                   </span>
                   Select Your Application / Equipment Sector
@@ -137,7 +137,7 @@ export default function BatteryFinderPage() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
                 {APPLICATION_DOMAINS.map((domain) => {
                   const isSelected = formData.applicationDomainId === domain.id;
                   return (

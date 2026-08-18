@@ -56,22 +56,22 @@ export default function ResourcesPage() {
   ];
 
   return (
-    <div className="py-12 space-y-16 bg-theme-base text-theme-primary transition-colors duration-200">
+    <div className="py-8 sm:py-12 space-y-10 sm:space-y-16 bg-theme-base text-theme-primary transition-colors duration-200">
       {/* Header */}
       <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-        <div className="p-8 sm:p-12 rounded-3xl bg-theme-card border border-theme-border shadow-xl relative overflow-hidden">
+        <div className="p-5 sm:p-8 lg:p-12 rounded-3xl bg-theme-card border border-theme-border shadow-xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-80 h-80 bg-theme-blue/10 rounded-full blur-[120px] pointer-events-none" />
-          <div className="max-w-3xl space-y-4 relative z-10">
+          <div className="max-w-3xl space-y-3 sm:space-y-4 relative z-10">
             <Badge variant="blue">Documentation &amp; Assets</Badge>
-            <h1 className="text-3xl sm:text-5xl font-extrabold text-theme-primary tracking-tight">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-theme-primary tracking-tight">
               Resource &amp; Download Center
             </h1>
-            <p className="text-sm sm:text-base text-theme-secondary leading-relaxed">
+            <p className="text-xs sm:text-base text-theme-secondary leading-relaxed">
               Access technical documentation, engineering intake questionnaires, and safety guidelines for <strong className="text-theme-primary">{COMPANY_INFO.brandName}</strong> battery solutions by <strong className="text-theme-primary">{COMPANY_INFO.parentCompanyName}</strong>.
             </p>
           </div>
 
-          <div className="mt-8 pt-6 border-t border-theme-border relative z-10">
+          <div className="mt-6 sm:mt-8 pt-5 sm:pt-6 border-t border-theme-border relative z-10">
             <PlaceholderNotice
               variant="inline"
               message="Final verified master PDF documents will be attached upon client release of the official catalogue."
@@ -80,9 +80,9 @@ export default function ResourcesPage() {
         </div>
       </div>
 
-      {/* Resource Cards Grid */}
+      {/* Resources List */}
       <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 xl:gap-8">
           {resources.map((res) => (
             <div
               key={res.id}

@@ -87,6 +87,9 @@ const config: Config = {
         sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
         mono: ['monospace'],
       },
+      screens: {
+        xs: '380px',
+      },
     },
   },
   plugins: [],

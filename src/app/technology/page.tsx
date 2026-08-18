@@ -43,18 +43,18 @@ export default async function TechnologyPage() {
   ]);
 
   return (
-    <div className="py-12 space-y-20 bg-theme-base text-theme-primary transition-colors duration-200">
+    <div className="py-8 sm:py-12 space-y-10 sm:space-y-16 bg-theme-base text-theme-primary transition-colors duration-200">
       
       {/* ── 1. HEADER BANNER ───────────────────────────────────────────────── */}
       <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-        <div className="p-8 sm:p-12 rounded-3xl bg-theme-card border border-theme-border shadow-xl relative overflow-hidden">
+        <div className="p-5 sm:p-8 lg:p-12 rounded-3xl bg-theme-card border border-theme-border shadow-xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-80 h-80 bg-theme-green/10 rounded-full blur-[120px] pointer-events-none" />
-          <div className="max-w-3xl space-y-4 relative z-10">
+          <div className="max-w-3xl space-y-3 sm:space-y-4 relative z-10">
             <Badge variant="green">Engineering &amp; Manufacturing Rigor</Badge>
-            <h1 className="text-3xl sm:text-5xl font-extrabold text-theme-primary tracking-tight">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-theme-primary tracking-tight">
               Battery Cell Technology &amp; Smart BMS Architecture
             </h1>
-            <p className="text-sm sm:text-base text-theme-secondary leading-relaxed">
+            <p className="text-xs sm:text-base text-theme-secondary leading-relaxed">
               Under brand <strong className="text-theme-primary">{COMPANY_INFO.brandName}</strong>, <strong className="text-theme-primary">{COMPANY_INFO.parentCompanyName}</strong> engineers heavy-duty battery systems specifically for extreme Indian operating environments (-10°C to 55°C). We combine A+ Grade Laser-Welded Prismatic LiFePO4 cells, inter-cell thermal propagation barriers, and microprocessor-governed Smart BMS telemetry to deliver uncompromised safety and cycle life.
             </p>
           </div>

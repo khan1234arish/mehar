@@ -45,17 +45,17 @@ function CompareContent() {
   };
 
   return (
-    <div className="py-12 space-y-12 bg-theme-base text-theme-primary transition-colors duration-200">
+    <div className="py-8 sm:py-12 space-y-8 sm:space-y-12 bg-theme-base text-theme-primary transition-colors duration-200">
       {/* Header Banner */}
       <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-        <div className="p-8 sm:p-10 rounded-3xl bg-theme-card border border-theme-border shadow-xl relative overflow-hidden">
+        <div className="p-5 sm:p-8 lg:p-10 rounded-3xl bg-theme-card border border-theme-border shadow-xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-80 h-80 bg-theme-green/10 rounded-full blur-[120px] pointer-events-none" />
-          <div className="max-w-3xl space-y-4 relative z-10">
+          <div className="max-w-3xl space-y-3 sm:space-y-4 relative z-10">
             <Badge variant="green">Technical Evaluation</Badge>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-theme-primary tracking-tight">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-theme-primary tracking-tight">
               Category &amp; Application Comparison Matrix
             </h1>
-            <p className="text-sm text-theme-secondary leading-relaxed">
+            <p className="text-xs sm:text-sm text-theme-secondary leading-relaxed">
               Compare broad battery categories side-by-side to evaluate application suitability, operating parameters, and custom engineering scope.
             </p>
           </div>
@@ -67,16 +67,16 @@ function CompareContent() {
 
             {/* Category Selector Buttons */}
             {availableToAdd.length > 0 && selectedSlugs.length < 4 && (
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <span className="text-xs font-mono font-bold text-theme-secondary">Add to Compare:</span>
                 <div className="flex flex-wrap gap-1.5">
                   {availableToAdd.map((cat) => (
                     <button
                       key={cat.id}
                       onClick={() => addCategory(cat.slug)}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-theme-elevated border border-theme-border text-[11px] font-semibold text-theme-primary hover:border-theme-green hover:bg-theme-green/10 hover:text-theme-green transition-colors"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-theme-elevated border border-theme-border text-[11px] font-semibold text-theme-primary hover:border-theme-green hover:bg-theme-green/10 hover:text-theme-green transition-colors min-h-[32px] touch-manipulation"
                     >
-                      <Plus className="w-3 h-3 text-theme-green" />
+                      <Plus className="w-3 h-3 text-theme-green shrink-0" />
                       <span className="truncate max-w-[140px]">{cat.name}</span>
                     </button>
                   ))}
@@ -90,17 +90,22 @@ function CompareContent() {
       {/* Comparison Grid Table */}
       <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
         <div className="rounded-3xl bg-theme-card border border-theme-border overflow-hidden shadow-xl">
+          {/* Mobile Swipe Cue */}
+          <div className="block sm:hidden px-4 py-2 bg-theme-surface border-b border-theme-border text-[11px] font-mono text-theme-secondary text-center">
+            ← Swipe horizontally to view all columns →
+          </div>
+
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs border-collapse">
+            <table className="w-full text-left text-xs border-collapse min-w-[540px]">
               <thead>
                 <tr className="bg-theme-surface border-b border-theme-border">
-                  <th className="py-5 px-6 font-mono uppercase text-[11px] font-bold text-theme-secondary w-64 min-w-[200px]">
+                  <th className="py-4 px-4 sm:py-5 sm:px-6 font-mono uppercase text-[10px] sm:text-[11px] font-bold text-theme-secondary w-56 min-w-[160px] sm:min-w-[200px]">
                     Comparison Feature
                   </th>
                   {selectedCategories.map((cat) => (
                     <th
                       key={cat.id}
-                      className="py-5 px-6 font-bold text-theme-primary text-sm min-w-[240px] border-l border-theme-border relative"
+                      className="py-4 px-4 sm:py-5 sm:px-6 font-bold text-theme-primary text-xs sm:text-sm min-w-[180px] sm:min-w-[240px] border-l border-theme-border relative"
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div>
@@ -112,8 +117,9 @@ function CompareContent() {
                         {selectedCategories.length > 1 && (
                           <button
                             onClick={() => removeCategory(cat.slug)}
-                            className="p-1 rounded-lg bg-theme-elevated border border-theme-border text-theme-secondary hover:text-red-400 hover:border-red-400/40 transition-colors flex-shrink-0"
+                            className="p-1 rounded-lg bg-theme-elevated border border-theme-border text-theme-secondary hover:text-red-400 hover:border-red-400/40 transition-colors flex-shrink-0 touch-manipulation"
                             title="Remove from comparison"
+                            aria-label={`Remove ${cat.name} from comparison`}
                           >
                             <X className="w-3.5 h-3.5" />
                           </button>

@@ -55,30 +55,30 @@ export default async function ProductsCataloguePage() {
   const totalProducts = Object.values(categoryCounts).reduce((acc, count) => acc + count, 0);
 
   return (
-    <div className="py-12 space-y-16 bg-theme-base text-theme-primary transition-colors duration-200">
+    <div className="py-8 sm:py-12 space-y-10 sm:space-y-16 bg-theme-base text-theme-primary transition-colors duration-200">
       {/* Header Banner */}
       <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-        <div className="p-8 sm:p-12 lg:p-14 rounded-3xl bg-theme-card border border-theme-border shadow-xl relative overflow-hidden">
+        <div className="p-5 sm:p-10 lg:p-14 rounded-3xl bg-theme-card border border-theme-border shadow-xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-96 h-96 bg-theme-green/10 rounded-full blur-[140px] pointer-events-none" />
-          <div className="max-w-3xl space-y-4 relative z-10">
-            <div className="flex flex-wrap items-center gap-2.5">
+          <div className="max-w-3xl space-y-3 sm:space-y-4 relative z-10">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
               <Badge variant="green">B2B Product Portfolio</Badge>
-              <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-mono font-bold bg-theme-green/10 text-theme-green border border-theme-green/25 shadow-sm">
-                <Layers className="w-3.5 h-3.5 text-theme-green" />
+              <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-0.5 rounded-full text-[11px] sm:text-xs font-mono font-bold bg-theme-green/10 text-theme-green border border-theme-green/25 shadow-sm">
+                <Layers className="w-3.5 h-3.5 text-theme-green shrink-0" />
                 {totalProducts} Verified Models Across {BROAD_CATEGORIES.length} Categories
               </span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-theme-primary tracking-tight">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-theme-primary tracking-tight">
               Product Categories &amp; Catalogue
             </h1>
 
-            <p className="text-sm sm:text-base lg:text-lg text-theme-secondary leading-relaxed">
+            <p className="text-xs sm:text-base lg:text-lg text-theme-secondary leading-relaxed">
               Select a category below to explore specific battery models, technical datasheets, and engineering specifications manufactured by <strong className="text-theme-primary">{COMPANY_INFO.parentCompanyName}</strong> under brand <strong className="text-theme-primary">{COMPANY_INFO.brandName}</strong>.
             </p>
           </div>
 
-          <div className="mt-8 pt-6 border-t border-theme-border flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs sm:text-sm relative z-10">
+          <div className="mt-6 sm:mt-8 pt-5 sm:pt-6 border-t border-theme-border flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs sm:text-sm relative z-10">
             <span className="text-xs sm:text-sm text-theme-secondary font-mono">
               Click any category card below to view all individual products and datasheets inside it.
             </span>
@@ -97,14 +97,14 @@ export default async function ProductsCataloguePage() {
 
       {/* Categories Grid */}
       <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 xl:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 xl:gap-8">
           {BROAD_CATEGORIES.map((cat) => {
             const count = categoryCounts[cat.slug] || 0;
 
             return (
               <div
                 key={cat.id}
-                className="bg-theme-card border border-theme-border hover:border-theme-green/50 shadow-sm hover:shadow-xl transition-all duration-300 rounded-3xl p-6 sm:p-8 flex flex-col justify-between group relative"
+                className="bg-theme-card border border-theme-border hover:border-theme-green/50 shadow-sm hover:shadow-xl transition-all duration-300 rounded-3xl p-5 sm:p-7 flex flex-col justify-between group relative"
               >
                 <div>
                   {/* Category Visual Box */}

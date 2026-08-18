@@ -157,37 +157,37 @@ export default async function HomePage() {
     <div className="flex flex-col bg-theme-base text-theme-primary">
 
       {/* ── 1. HERO SECTION ────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-theme-base border-b border-theme-border pt-10 pb-16 sm:pt-16 sm:pb-20 lg:pt-20 lg:pb-28 xl:pt-24 xl:pb-32">
+      <section className="relative overflow-hidden bg-theme-base border-b border-theme-border pt-8 pb-12 sm:pt-14 sm:pb-16 lg:pt-18 lg:pb-24 xl:pt-22 xl:pb-28">
         {/* Subtle Ambient Glows */}
         <div className="absolute top-0 left-1/4 -translate-x-1/2 w-[500px] h-[500px] bg-theme-green/10 rounded-full blur-[160px] pointer-events-none" />
         <div className="absolute bottom-0 right-10 w-[500px] h-[500px] bg-theme-blue/10 rounded-full blur-[160px] pointer-events-none" />
 
         <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 xl:gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 xl:gap-16 items-center">
 
             {/* Left – headline + CTAs */}
-            <div className="lg:col-span-7 xl:col-span-7 space-y-6 lg:space-y-8">
+            <div className="lg:col-span-7 xl:col-span-7 space-y-5 sm:space-y-6 lg:space-y-8">
 
               {/* Eyebrow */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-theme-green/10 border border-theme-green/25 shadow-sm">
-                <span className="w-2 h-2 rounded-full bg-theme-green animate-pulse" />
-                <span className="text-xs font-mono font-bold uppercase tracking-wider text-theme-green">
+              <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-theme-green/10 border border-theme-green/25 shadow-sm">
+                <span className="w-2 h-2 rounded-full bg-theme-green animate-pulse shrink-0" />
+                <span className="text-[11px] sm:text-xs font-mono font-bold uppercase tracking-wider text-theme-green">
                   AIS-156 Phase 2 Certified · Prismatic LiFePO4 &amp; NMC
                 </span>
               </div>
 
               {/* Main headline */}
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.25rem] xl:text-[3.75rem] 2xl:text-[4.25rem] font-black leading-[1.1] tracking-tight text-theme-primary">
+              <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-[3.25rem] xl:text-[3.75rem] 2xl:text-[4.25rem] font-black leading-[1.15] sm:leading-[1.1] tracking-tight text-theme-primary">
                 High-Performance Lithium Battery Systems for Indian Commercial Mobility &amp; ESS
               </h1>
 
               {/* Sub-text */}
-              <p className="text-base sm:text-lg lg:text-xl leading-relaxed text-theme-secondary max-w-2xl">
+              <p className="text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed text-theme-secondary max-w-2xl">
                 Engineered for harsh ambient temperatures (-10°C to 55°C) and heavy multi-shift duty cycles. Direct B2B supply of A+ Grade Prismatic LiFePO4 packs, microprocessor Smart BMS with Bluetooth BLE/CAN telemetry, and custom OEM pack manufacturing.
               </p>
 
               {/* CTAs */}
-              <div className="flex flex-wrap gap-3 sm:gap-4 pt-2">
+              <div className="flex flex-col sm:flex-row flex-wrap gap-2.5 sm:gap-4 pt-1 sm:pt-2">
                 <Button href="/products" variant="primary" size="lg" icon={<ArrowRight className="w-4 h-4" />}>
                   Explore Products
                 </Button>
@@ -200,10 +200,10 @@ export default async function HomePage() {
               </div>
 
               {/* Trust pillars */}
-              <div className="flex flex-wrap gap-x-8 gap-y-3 pt-6 border-t border-theme-border text-xs sm:text-sm text-theme-secondary font-mono">
-                <span className="flex items-center gap-2"><ShieldCheck className="w-4 h-4 text-theme-green" /> <strong className="text-theme-primary">AIS-156 Phase 2</strong> Compliant</span>
-                <span className="flex items-center gap-2"><Factory className="w-4 h-4 text-theme-blue" /> <strong className="text-theme-primary">Laser-Welded</strong> Prismatic Cells</span>
-                <span className="flex items-center gap-2"><Cpu className="w-4 h-4 text-theme-green" /> <strong className="text-theme-primary">Smart BMS</strong> CAN / 4G IoT</span>
+              <div className="flex flex-wrap gap-x-4 sm:gap-x-8 gap-y-2.5 sm:gap-y-3 pt-5 sm:pt-6 border-t border-theme-border text-xs sm:text-sm text-theme-secondary font-mono">
+                <span className="flex items-center gap-1.5 sm:gap-2"><ShieldCheck className="w-4 h-4 text-theme-green shrink-0" /> <strong className="text-theme-primary">AIS-156 Phase 2</strong> Compliant</span>
+                <span className="flex items-center gap-1.5 sm:gap-2"><Factory className="w-4 h-4 text-theme-blue shrink-0" /> <strong className="text-theme-primary">Laser-Welded</strong> Prismatic Cells</span>
+                <span className="flex items-center gap-1.5 sm:gap-2"><Cpu className="w-4 h-4 text-theme-green shrink-0" /> <strong className="text-theme-primary">Smart BMS</strong> CAN / 4G IoT</span>
               </div>
             </div>
 
@@ -217,17 +217,17 @@ export default async function HomePage() {
       </section>
 
       {/* ── 2. PRODUCT CATEGORIES ─────────────────────────────────────────────── */}
-      <section className="bg-theme-section border-b border-theme-border py-16 sm:py-20 lg:py-28">
+      <section className="bg-theme-section border-b border-theme-border py-12 sm:py-16 lg:py-24">
         <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
 
           {/* Section header */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 lg:mb-16">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 mb-8 sm:mb-12 lg:mb-16">
             <div className="max-w-3xl">
-              <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-theme-green mb-3 font-mono">Product Portfolio</p>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-theme-primary">
+              <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-theme-green mb-2 sm:mb-3 font-mono">Product Portfolio</p>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-black tracking-tight text-theme-primary">
                 Commercial Lithium Battery Categories
               </h2>
-              <p className="mt-3 text-base sm:text-lg lg:text-xl leading-relaxed text-theme-secondary">
+              <p className="mt-2.5 sm:mt-3 text-sm sm:text-base lg:text-lg leading-relaxed text-theme-secondary">
                 Designed and manufactured for high-reliability commercial operation. Select a product line to inspect technical specifications or request wholesale volume pricing.
               </p>
             </div>
@@ -240,7 +240,7 @@ export default async function HomePage() {
           </div>
 
           {/* Category grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 xl:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 xl:gap-8">
             {BROAD_CATEGORIES.map((cat) => {
               const verifiedImg = verifiedProductImages[cat.slug] || verifiedProductImages[cat.id];
               const specificManaged = managedCategoryImages[cat.slug];
@@ -295,20 +295,20 @@ export default async function HomePage() {
       </section>
 
       {/* ── 3. ENGINEERING RIGOR & QUALITY PILLARS ─────────────────────────────── */}
-      <section className="bg-theme-base border-b border-theme-border py-16 sm:py-20 lg:py-28">
+      <section className="bg-theme-base border-b border-theme-border py-12 sm:py-16 lg:py-24">
         <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
 
-          <div className="max-w-3xl mb-12 lg:mb-16">
-            <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-theme-green mb-3 font-mono">Engineering Standards</p>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-theme-primary">
+          <div className="max-w-3xl mb-8 sm:mb-12 lg:mb-16">
+            <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-theme-green mb-2 sm:mb-3 font-mono">Engineering Standards</p>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-black tracking-tight text-theme-primary">
               Engineered for High-Ambient Indian Climates.
             </h2>
-            <p className="mt-3 text-base sm:text-lg lg:text-xl leading-relaxed text-theme-secondary">
+            <p className="mt-2.5 sm:mt-3 text-sm sm:text-base lg:text-lg leading-relaxed text-theme-secondary">
               Under brand MEHAR, Lawad Infrastructure Private Limited manufactures battery packs that solve the critical failure points of imported kits: thermal runaway vulnerability, fragile spot welds, and lack of active cell balancing.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 xl:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 xl:gap-8">
             {[
               {
                 icon: Thermometer,
@@ -346,20 +346,20 @@ export default async function HomePage() {
       </section>
 
       {/* ── 4. HOW WE WORK / OEM WORKFLOW ─────────────────────────────────────── */}
-      <section className="bg-theme-section border-b border-theme-border py-16 sm:py-20 lg:py-28">
+      <section className="bg-theme-section border-b border-theme-border py-12 sm:py-16 lg:py-24">
         <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-10 lg:gap-16 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-8 sm:gap-10 lg:gap-16 items-start">
 
             {/* Left */}
             <div>
-              <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-theme-green mb-3 font-mono">OEM Engineering Process</p>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-theme-primary">
+              <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-theme-green mb-2 sm:mb-3 font-mono">OEM Engineering Process</p>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-black tracking-tight text-theme-primary">
                 From Custom CAD Concept to Certified Batch Delivery.
               </h2>
-              <p className="mt-4 text-base sm:text-lg leading-relaxed text-theme-secondary">
+              <p className="mt-3 sm:mt-4 text-sm sm:text-base lg:text-lg leading-relaxed text-theme-secondary">
                 Developing a custom electric vehicle or industrial machine? Submit your dimensional envelope, duty cycle, continuous C-rate, and communication protocol requirements. Our engineering team handles complete 3D packaging, thermal simulation, and prototype fabrication.
               </p>
-              <div className="mt-8">
+              <div className="mt-6 sm:mt-8">
                 <Button href="/oem-custom-solutions" variant="primary" size="lg" icon={<Factory className="w-4 h-4" />}>
                   Configure Custom OEM Solution
                 </Button>
@@ -390,11 +390,11 @@ export default async function HomePage() {
                   desc: 'Support for ARAI / ICAT AIS-156 Phase 2 homologation testing, followed by serial batch manufacturing with strict quality traceability.',
                 },
               ].map((step) => (
-                <div key={step.n} className="grid gap-4 py-6 sm:grid-cols-[70px_1fr]">
+                <div key={step.n} className="grid gap-3 sm:gap-4 py-5 sm:py-6 sm:grid-cols-[70px_1fr]">
                   <span className="text-lg font-black text-theme-green font-mono">{step.n}</span>
                   <div>
                     <h3 className="text-lg sm:text-xl font-bold text-theme-primary">{step.title}</h3>
-                    <p className="mt-1.5 max-w-xl leading-relaxed text-theme-secondary text-sm sm:text-base">{step.desc}</p>
+                    <p className="mt-1 max-w-xl leading-relaxed text-theme-secondary text-sm sm:text-base">{step.desc}</p>
                   </div>
                 </div>
               ))}
@@ -404,16 +404,16 @@ export default async function HomePage() {
       </section>
 
       {/* ── 5. APPLICATION SECTORS ────────────────────────────────────────────── */}
-      <section className="bg-theme-base border-b border-theme-border py-16 sm:py-20 lg:py-28">
+      <section className="bg-theme-base border-b border-theme-border py-12 sm:py-16 lg:py-24">
         <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
 
           {/* Section header */}
-          <div className="max-w-3xl mb-12 lg:mb-16">
-            <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-theme-blue mb-3 font-mono">Industry Domains</p>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-theme-primary">
+          <div className="max-w-3xl mb-8 sm:mb-12 lg:mb-16">
+            <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-theme-blue mb-2 sm:mb-3 font-mono">Industry Domains</p>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-black tracking-tight text-theme-primary">
               Application-Specific Battery Solutions
             </h2>
-            <p className="mt-3 text-base sm:text-lg lg:text-xl leading-relaxed text-theme-secondary">
+            <p className="mt-2.5 sm:mt-3 text-sm sm:text-base lg:text-lg leading-relaxed text-theme-secondary">
               Tailored energy solutions engineered for specific commercial duty cycles, duty ratings, and environmental conditions.
             </p>
           </div>
@@ -469,15 +469,15 @@ export default async function HomePage() {
       </section>
 
       {/* ── 6. B2B PROCUREMENT TOOLS ──────────────────────────────────────────── */}
-      <section className="bg-theme-section border-b border-theme-border py-16 sm:py-20 lg:py-28">
+      <section className="bg-theme-section border-b border-theme-border py-12 sm:py-16 lg:py-24">
         <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
 
-          <div className="max-w-3xl mb-12 lg:mb-16">
-            <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-theme-green mb-3 font-mono">B2B Procurement Suite</p>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-theme-primary">
+          <div className="max-w-3xl mb-8 sm:mb-12 lg:mb-16">
+            <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-theme-green mb-2 sm:mb-3 font-mono">B2B Procurement Suite</p>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-black tracking-tight text-theme-primary">
               Engineering Sizing &amp; RFQ Tools.
             </h2>
-            <p className="mt-3 text-base sm:text-lg lg:text-xl leading-relaxed text-theme-secondary">
+            <p className="mt-2.5 sm:mt-3 text-sm sm:text-base lg:text-lg leading-relaxed text-theme-secondary">
               Calculate capacity requirements, compare cell chemistry performance, and generate formal RFQs for wholesale procurement.
             </p>
           </div>
@@ -493,7 +493,7 @@ export default async function HomePage() {
               <Link
                 key={tool.href}
                 href={tool.href}
-                className="group flex flex-col justify-between p-6 rounded-2xl bg-theme-card border border-theme-border hover:border-theme-green/50 shadow-sm hover:shadow-xl transition-all duration-300 gap-4"
+                className="group flex flex-col justify-between p-5 sm:p-6 rounded-2xl bg-theme-card border border-theme-border hover:border-theme-green/50 shadow-sm hover:shadow-xl transition-all duration-300 gap-4"
               >
                 <div className="space-y-3">
                   <div className="w-12 h-12 rounded-xl bg-theme-green/10 border border-theme-green/25 text-theme-green flex items-center justify-center shadow-sm">
@@ -516,22 +516,22 @@ export default async function HomePage() {
       </section>
 
       {/* ── 7. CTA BANNER ────────────────────────────────────────────────────── */}
-      <section className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-16 sm:py-20 lg:py-28">
-        <div className="rounded-3xl bg-theme-card border border-theme-green/30 px-8 py-12 sm:px-12 sm:py-16 lg:px-16 lg:py-20 shadow-xl relative overflow-hidden">
+      <section className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-12 sm:py-16 lg:py-24">
+        <div className="rounded-3xl bg-theme-card border border-theme-green/30 px-6 py-10 sm:px-12 sm:py-16 lg:px-16 lg:py-20 shadow-xl relative overflow-hidden">
           <div className="absolute -top-24 -right-24 w-96 h-96 bg-theme-green/10 rounded-full blur-[120px] pointer-events-none" />
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 relative z-10">
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 sm:gap-8 relative z-10">
             <div className="max-w-3xl">
-              <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-theme-green mb-3 font-mono">
+              <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-theme-green mb-2 sm:mb-3 font-mono">
                 Direct B2B Manufacturer Supply
               </p>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-theme-primary">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-black tracking-tight text-theme-primary">
                 Have a Commercial Battery Requirement?
               </h2>
-              <p className="mt-3 text-base sm:text-lg lg:text-xl leading-relaxed text-theme-secondary">
+              <p className="mt-2.5 sm:mt-3 text-sm sm:text-base lg:text-lg leading-relaxed text-theme-secondary">
                 Submit your target voltage, Ah capacity, and fleet volume. Our application engineering team will provide a formal technical proposal and batch commercial quotation within 24 hours.
               </p>
             </div>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 shrink-0">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 shrink-0">
               <Button href="/rfq" variant="primary" size="lg" icon={<ArrowUpRight className="w-4 h-4" />}>
                 Start Batch RFQ
               </Button>

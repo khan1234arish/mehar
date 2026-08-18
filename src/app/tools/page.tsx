@@ -47,7 +47,7 @@ function CalcCard({
     <section id={id} className="bg-theme-card rounded-2xl border border-theme-border overflow-hidden shadow-xl">
       <button
         type="button"
-        className="w-full flex items-center justify-between px-5 py-4 hover:bg-theme-elevated transition-colors"
+        className="w-full flex items-center justify-between px-4 sm:px-5 py-4 hover:bg-theme-elevated transition-colors min-h-[48px] touch-manipulation cursor-pointer"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
       >
@@ -61,14 +61,14 @@ function CalcCard({
           </div>
         </div>
         {open ? (
-          <ChevronUp className="w-4 h-4 text-theme-secondary flex-shrink-0" />
+          <ChevronUp className="w-4 h-4 text-theme-secondary flex-shrink-0 ml-2" />
         ) : (
-          <ChevronDown className="w-4 h-4 text-theme-secondary flex-shrink-0" />
+          <ChevronDown className="w-4 h-4 text-theme-secondary flex-shrink-0 ml-2" />
         )}
       </button>
 
       {open && (
-        <div className="border-t border-theme-border p-5">
+        <div className="border-t border-theme-border p-4 sm:p-6">
           {children}
         </div>
       )}

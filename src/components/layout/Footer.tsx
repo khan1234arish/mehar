@@ -2,7 +2,6 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getCompanySettings, getSalesSettings } from '@/lib/settings';
-import { getWhatsAppUrl } from '@/lib/whatsapp';
 import { BROAD_CATEGORIES } from '@/data/categories';
 import {
   ShieldCheck,
@@ -28,15 +27,15 @@ export default async function Footer() {
   const cleanWhatsapp = (sales.whatsappDesk || '').replace(/[^0-9]/g, '');
 
   return (
-    <footer className="bg-theme-surface text-theme-secondary border-t border-theme-border pt-16 pb-12 transition-colors duration-200">
+    <footer className="bg-theme-surface text-theme-secondary border-t border-theme-border pt-12 sm:pt-16 pb-12 transition-colors duration-200">
       <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
         {/* Main Footer Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-10 lg:gap-8 mb-14">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-8 sm:gap-10 lg:gap-8 mb-12 sm:mb-14">
           
           {/* Column 1 & 2: Brand & Corporate Overview */}
-          <div className="lg:col-span-2 space-y-4">
+          <div className="sm:col-span-2 space-y-4">
             <Link href="/" className="inline-block" aria-label="MEHAR – The Name You Trust">
-              <div className="w-40 sm:w-48 h-20 sm:h-24 relative">
+              <div className="w-36 xs:w-40 sm:w-48 h-16 xs:h-20 sm:h-24 relative">
                 <Image
                   src="/assets/logo/mehar-logo.png"
                   alt={`${company.brandName} – The Name You Trust`}
@@ -52,12 +51,12 @@ export default async function Footer() {
             </p>
 
             {/* Corporate Badges */}
-            <div className="pt-1 flex flex-wrap items-center gap-2.5 text-xs">
-              <span className="px-3 py-1 rounded-lg bg-theme-green/10 border border-theme-green/25 font-mono text-[11px] text-theme-green font-bold flex items-center gap-1.5 shadow-sm">
-                <ShieldCheck className="w-3.5 h-3.5 text-theme-green" />
+            <div className="pt-1 flex flex-wrap items-center gap-2 text-xs">
+              <span className="px-2.5 xs:px-3 py-1 rounded-lg bg-theme-green/10 border border-theme-green/25 font-mono text-[10px] xs:text-[11px] text-theme-green font-bold flex items-center gap-1.5 shadow-sm">
+                <ShieldCheck className="w-3.5 h-3.5 text-theme-green shrink-0" />
                 B2B Manufacturing &amp; Supply
               </span>
-              <span className="font-mono text-[11px] text-theme-muted">
+              <span className="font-mono text-[10px] xs:text-[11px] text-theme-muted">
                 Official OEM &amp; Commercial Desk
               </span>
             </div>
@@ -239,18 +238,12 @@ export default async function Footer() {
 
               <div>
                 <span className="text-[11px] font-mono text-theme-muted block font-bold">Sales Phone:</span>
-                {sales.salesPhone && !sales.salesPhone.includes('X') ? (
-                  <a
-                    href={`tel:${sales.salesPhone.replace(/[^0-9+]/g, '')}`}
-                    className="text-theme-primary hover:text-theme-green transition-colors font-mono font-semibold"
-                  >
-                    {sales.salesPhone}
-                  </a>
-                ) : (
-                  <span className="text-theme-primary font-mono font-semibold">
-                    {sales.salesPhone || '+91 XXXXX XXXXX'}
-                  </span>
-                )}
+                <a
+                  href={`tel:${sales.salesPhone}`}
+                  className="text-theme-primary hover:text-theme-green transition-colors font-mono font-semibold"
+                >
+                  {sales.salesPhone}
+                </a>
               </div>
 
               <div>
@@ -263,27 +256,26 @@ export default async function Footer() {
                 </a>
               </div>
 
-              <div className="pt-2">
-                <a
-                  href={getWhatsAppUrl(
-                    'Hello, I am contacting MEHAR regarding B2B battery procurement.',
-                    sales.whatsappDesk
-                  )}
-                  target={cleanWhatsapp ? '_blank' : undefined}
-                  rel={cleanWhatsapp ? 'noopener noreferrer' : undefined}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-theme-green hover:bg-theme-green-hover text-white dark:text-[#0B0F14] font-bold text-xs transition-colors shadow-sm"
-                >
-                  <MessageSquare className="w-3.5 h-3.5" />
-                  WhatsApp B2B Desk
-                </a>
-              </div>
+              {cleanWhatsapp && (
+                <div className="pt-2">
+                  <a
+                    href={`https://wa.me/${cleanWhatsapp}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-theme-green hover:bg-theme-green-hover text-white dark:text-[#0B0F14] font-bold text-xs transition-colors shadow-sm min-h-[40px]"
+                  >
+                    <MessageSquare className="w-3.5 h-3.5" />
+                    WhatsApp B2B Desk
+                  </a>
+                </div>
+              )}
             </div>
           </div>
         </div>
 
         {/* Bottom Legal Bar */}
-        <div className="pt-8 border-t border-theme-border flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-theme-muted">
-          <div className="text-center md:text-left">
+        <div className="pt-8 border-t border-theme-border flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-theme-muted text-center md:text-left">
+          <div>
             <p>
               &copy; {new Date().getFullYear()} <strong className="text-theme-primary">{company.brandName}</strong> (A brand of <strong className="text-theme-primary">{company.parentCompanyName}</strong>). All rights reserved.
             </p>
@@ -292,7 +284,7 @@ export default async function Footer() {
             </p>
           </div>
 
-          <div className="flex items-center gap-4 text-xs font-mono">
+          <div className="flex flex-wrap items-center justify-center md:justify-end gap-3 sm:gap-4 text-xs font-mono">
             <Link href="/terms" className="hover:text-theme-green transition-colors">
               Terms &amp; Conditions
             </Link>

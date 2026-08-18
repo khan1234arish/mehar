@@ -4,7 +4,6 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { COMPANY_INFO } from '@/data/companyInfo';
-import { getWhatsAppUrl } from '@/lib/whatsapp';
 import { APPLICATION_DOMAINS } from '@/data/applicationDomains';
 import {
   MessageSquare,
@@ -551,7 +550,7 @@ export default function MeharAssistant() {
   })();
 
   // ─── WhatsApp URL ─────────────────────────────────────────────
-  const whatsappUrl = getWhatsAppUrl('Hello, I am enquiring about MEHAR battery solutions (Lawad Infrastructure Pvt. Ltd.).', COMPANY_INFO.whatsappDesk);
+  const whatsappUrl = `https://wa.me/${COMPANY_INFO.whatsappDesk.replace(/[^0-9]/g, '')}?text=${encodeURIComponent('Hello, I am enquiring about MEHAR battery solutions (Lawad Infrastructure Pvt. Ltd.).')}`;
 
   // ─────────────────────────────────────────────────────────────
   // RENDER
@@ -587,7 +586,7 @@ export default function MeharAssistant() {
           ref={containerRef}
           className={`
             w-[calc(100vw-2rem)] sm:w-[420px]
-            ${isMinimized ? 'h-auto' : 'h-[580px] max-h-[85vh]'}
+            ${isMinimized ? 'h-auto' : 'h-[580px] max-h-[calc(100dvh-5rem)] sm:max-h-[85vh]'}
             bg-theme-card border border-theme-border text-theme-primary rounded-2xl shadow-2xl flex flex-col overflow-hidden
             transition-all duration-200
           `}

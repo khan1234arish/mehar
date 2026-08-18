@@ -111,8 +111,8 @@ export default function Header() {
         <div className="flex items-center gap-3 lg:gap-4 xl:gap-6 h-[70px] lg:h-[76px]">
 
           {/* ── Logo (Immutable Approved Trademark Asset) ────────────────── */}
-          <Link href="/" className="flex items-center shrink-0 group mr-2 xl:mr-4" aria-label="MEHAR – Home">
-            <div className="w-32 sm:w-36 lg:w-40 xl:w-44 h-13 sm:h-14 lg:h-[58px] xl:h-[62px] relative py-1">
+          <Link href="/" className="flex items-center shrink-0 group mr-1.5 sm:mr-2 xl:mr-4" aria-label="MEHAR – Home">
+            <div className="w-28 xs:w-32 sm:w-36 lg:w-40 xl:w-44 h-11 xs:h-12 sm:h-14 lg:h-[58px] xl:h-[62px] relative py-1">
               <Image
                 src="/assets/logo/mehar-logo.png"
                 alt="MEHAR – The Name You Trust"
@@ -206,7 +206,7 @@ export default function Header() {
           <div className="hidden lg:flex items-center gap-1.5 xl:gap-2 shrink-0">
             <Link
               href="/finder"
-              className="hidden xl:inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-bold text-[#E6EAF0] hover:text-[#39D353] hover:bg-white/[0.08] transition-colors whitespace-nowrap"
+              className="hidden 2xl:inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-bold text-[#E6EAF0] hover:text-[#39D353] hover:bg-white/[0.08] transition-colors whitespace-nowrap"
             >
               <Search className="w-3.5 h-3.5 text-[#39D353]" />
               <span>Finder</span>
@@ -214,7 +214,7 @@ export default function Header() {
 
             <Link
               href="/rfq"
-              className="hidden xl:inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-bold text-[#E6EAF0] hover:text-[#39D353] hover:bg-white/[0.08] transition-colors whitespace-nowrap"
+              className="hidden 2xl:inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-bold text-[#E6EAF0] hover:text-[#39D353] hover:bg-white/[0.08] transition-colors whitespace-nowrap"
             >
               <FileSpreadsheet className="w-3.5 h-3.5 text-[#39D353]" />
               <span>RFQ Builder</span>
@@ -289,20 +289,20 @@ export default function Header() {
           </div>
 
           {/* ── Mobile / Tablet top-bar Trigger ─────────────────────────── */}
-          <div className="flex lg:hidden items-center gap-2 ml-auto" aria-label="Mobile controls">
+          <div className="flex lg:hidden items-center gap-1.5 xs:gap-2 ml-auto" aria-label="Mobile controls">
             <ThemeToggle variant="compact" />
             <Button
               href="/rfq"
               variant="primary"
               size="sm"
-              className="text-xs px-3 py-1.5"
+              className="text-xs px-2.5 xs:px-3 py-1.5 min-h-[36px] flex items-center"
             >
               RFQ
             </Button>
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-xl bg-[#161C24] border border-[#2A3649] text-[#E6EAF0] hover:text-[#39D353] transition-colors"
+              className="p-2 min-h-[40px] min-w-[40px] flex items-center justify-center rounded-xl bg-[#161C24] border border-[#2A3649] text-[#E6EAF0] hover:text-[#39D353] transition-colors touch-manipulation"
               aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
               aria-expanded={mobileMenuOpen}
             >
@@ -315,11 +315,11 @@ export default function Header() {
       {/* ── Mobile / Tablet Drawer ──────────────────────────────────────── */}
       {mobileMenuOpen && (
         <div
-          className="lg:hidden absolute inset-x-0 top-full bg-[#0B0F14]/98 backdrop-blur-2xl border-b border-[#1E2633] shadow-2xl max-h-[calc(100vh-120px)] overflow-y-auto z-40"
+          className="lg:hidden absolute inset-x-0 top-full bg-[#0B0F14]/98 backdrop-blur-2xl border-b border-[#1E2633] shadow-2xl max-h-[calc(100dvh-76px)] overflow-y-auto z-40"
           role="dialog"
           aria-label="Mobile navigation"
         >
-          <div className="p-4 space-y-5">
+          <div className="p-4 space-y-5 pb-8">
 
             {/* Theme Selection in Mobile Menu */}
             <div>
@@ -339,7 +339,7 @@ export default function Header() {
                   <div key={link.href}>
                     <Link
                       href={link.href}
-                      className={`block px-3 py-2.5 rounded-xl text-sm font-semibold ${
+                      className={`flex items-center min-h-[44px] px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
                         isActive(link.href)
                           ? 'text-[#39D353] bg-[#39D353]/15 border border-[#39D353]/30'
                           : 'text-[#E6EAF0] hover:bg-white/[0.08] hover:text-[#39D353]'
@@ -355,7 +355,7 @@ export default function Header() {
                           <Link
                             key={cat.id}
                             href={`/products/${cat.slug}`}
-                            className="block py-1 text-xs text-[#CBD5E1] hover:text-[#39D353] font-medium"
+                            className="flex items-center min-h-[38px] py-1 text-xs text-[#CBD5E1] hover:text-[#39D353] font-medium"
                           >
                             {cat.name}
                           </Link>
@@ -379,7 +379,7 @@ export default function Header() {
                     <Link
                       key={link.href + link.label}
                       href={link.href}
-                      className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold ${
+                      className={`flex items-center gap-2.5 min-h-[44px] px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
                         isActive(link.href)
                           ? 'text-[#39D353] bg-[#39D353]/15 border border-[#39D353]/30'
                           : 'text-[#E6EAF0] hover:bg-white/[0.08] hover:text-[#39D353]'
@@ -394,11 +394,11 @@ export default function Header() {
             </div>
 
             {/* Mobile CTAs */}
-            <div className="pt-3 border-t border-[#2A3649] space-y-2">
-              <Button href="/oem-custom-solutions" variant="secondary" size="md" className="w-full justify-center">
+            <div className="pt-3 border-t border-[#2A3649] space-y-2.5">
+              <Button href="/oem-custom-solutions" variant="secondary" size="md" className="w-full justify-center min-h-[44px]">
                 Configure Custom OEM Solution
               </Button>
-              <Button href="/rfq" variant="primary" size="md" className="w-full justify-center">
+              <Button href="/rfq" variant="primary" size="md" className="w-full justify-center min-h-[44px]">
                 Request a Quote (RFQ)
               </Button>
             </div>

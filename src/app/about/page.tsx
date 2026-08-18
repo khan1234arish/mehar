@@ -23,20 +23,20 @@ export const metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="py-12 space-y-20 bg-theme-base text-theme-primary transition-colors duration-200">
+    <div className="py-8 sm:py-12 space-y-10 sm:space-y-16 bg-theme-base text-theme-primary transition-colors duration-200">
       
-      {/* ── 1. HEADER BANNER ───────────────────────────────────────────────── */}
+      {/* ── 1. HERO BANNER ─────────────────────────────────────────────────── */}
       <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-        <div className="p-8 sm:p-12 rounded-3xl bg-theme-card border border-theme-border shadow-xl relative overflow-hidden">
+        <div className="p-5 sm:p-8 lg:p-12 rounded-3xl bg-theme-card border border-theme-border shadow-xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-80 h-80 bg-theme-green/10 rounded-full blur-[120px] pointer-events-none" />
-          <div className="max-w-3xl space-y-4 relative z-10">
+          <div className="max-w-3xl space-y-3 sm:space-y-4 relative z-10">
             <Badge variant="blue">Corporate Profile</Badge>
 
-            <h1 className="text-3xl sm:text-5xl font-extrabold text-theme-primary tracking-tight">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-theme-primary tracking-tight">
               About MEHAR &amp; Lawad Infrastructure
             </h1>
 
-            <p className="text-sm sm:text-base text-theme-secondary leading-relaxed">
+            <p className="text-xs sm:text-base text-theme-secondary leading-relaxed">
               <strong className="text-theme-primary">{COMPANY_INFO.brandName}</strong> is the specialized industrial battery and clean energy storage brand of <strong className="text-theme-primary">{COMPANY_INFO.parentCompanyName}</strong>. We engineer high-durability Prismatic LiFePO4 and advanced lithium power systems built to withstand the demands of commercial electric mobility, solar microgrids, and industrial material handling across India.
             </p>
           </div>
@@ -45,9 +45,9 @@ export default function AboutPage() {
 
       {/* ── 2. VISION & CORPORATE IDENTITY ─────────────────────────────────── */}
       <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           
-          <div className="lg:col-span-6 space-y-6">
+          <div className="lg:col-span-6 space-y-5 sm:space-y-6">
             <SectionHeading
               badge="Vision & Mission"
               badgeVariant="green"
@@ -75,29 +75,29 @@ export default function AboutPage() {
             </div>
           </div>
 
-          <div className="lg:col-span-6 p-8 rounded-3xl bg-theme-card border border-theme-border space-y-6 shadow-xl">
+          <div className="lg:col-span-6 p-5 sm:p-8 rounded-3xl bg-theme-card border border-theme-border space-y-5 sm:space-y-6 shadow-xl">
             <h3 className="text-base font-bold text-theme-primary flex items-center gap-2">
               <Building2 className="w-5 h-5 text-theme-green" />
               Corporate Information Overview
             </h3>
 
-            <div className="space-y-3.5 font-mono text-xs text-theme-primary">
-              <div className="p-3.5 rounded-xl bg-theme-elevated border border-theme-border">
+            <div className="space-y-3 font-mono text-xs text-theme-primary">
+              <div className="p-3 sm:p-3.5 rounded-xl bg-theme-elevated border border-theme-border">
                 <span className="text-theme-secondary block text-[10px] uppercase font-bold">Parent Legal Entity</span>
                 <span className="text-theme-primary font-bold text-sm">{COMPANY_INFO.parentCompanyName}</span>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-theme-elevated border border-theme-border">
+              <div className="p-3 sm:p-3.5 rounded-xl bg-theme-elevated border border-theme-border">
                 <span className="text-theme-secondary block text-[10px] uppercase font-bold">Brand Identification</span>
                 <span className="text-theme-green font-bold text-sm">{COMPANY_INFO.brandName} (The Name You Trust)</span>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-theme-elevated border border-theme-border">
+              <div className="p-3 sm:p-3.5 rounded-xl bg-theme-elevated border border-theme-border">
                 <span className="text-theme-secondary block text-[10px] uppercase font-bold">Industry Domain</span>
                 <span className="text-theme-primary font-medium">{COMPANY_INFO.industry}</span>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-theme-elevated border border-theme-border">
+              <div className="p-3 sm:p-3.5 rounded-xl bg-theme-elevated border border-theme-border">
                 <span className="text-theme-secondary block text-[10px] uppercase font-bold">Core Capabilities</span>
                 <span className="text-theme-primary font-medium">B2B Lithium Battery Pack Assembly, Laser Welding, Smart BMS Integration &amp; OEM Supply</span>
               </div>
@@ -108,7 +108,7 @@ export default function AboutPage() {
       </div>
 
       {/* ── 3. MANUFACTURING RIGOR & QUALITY PHILOSOPHY ──────────────────────── */}
-      <div className="bg-theme-section border-y border-theme-border py-16">
+      <div className="bg-theme-section border-y border-theme-border py-12 sm:py-16">
         <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
           <SectionHeading
             badge="Quality Assurance"
@@ -117,7 +117,7 @@ export default function AboutPage() {
             subtitle="Our manufacturing pipeline prioritizes cell grading consistency, fiber laser welding, and active multi-point thermal protection."
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             <div className="p-7 rounded-3xl bg-theme-card border border-theme-border space-y-4 shadow-sm hover:border-theme-green/40 transition-colors">
               <div className="w-12 h-12 rounded-xl bg-theme-green/10 border border-theme-green/25 flex items-center justify-center text-theme-green">
                 <Layers className="w-6 h-6" />
