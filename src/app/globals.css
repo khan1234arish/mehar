@@ -114,7 +114,7 @@ body {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   PERSISTENT DARK HEADER & TOPBAR (Always Dark + Guaranteed Sticky)
+   PERSISTENT DARK HEADER, TOPBAR & FOOTER (Always Dark)
    ───────────────────────────────────────────────────────────── */
 .site-header {
   position: sticky !important;
@@ -128,6 +128,12 @@ body {
 .topbar-wrapper {
   background-color: #070A0E !important;
   border-bottom: 1px solid #1E2633 !important;
+}
+
+.site-footer {
+  background-color: #070A0E !important;
+  border-top: 1px solid #1E2633 !important;
+  color: #A3AAB5 !important;
 }
 
 /* ─────────────────────────────────────────────────────────────
