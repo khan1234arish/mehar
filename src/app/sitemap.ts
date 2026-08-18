@@ -2,12 +2,12 @@ import { MetadataRoute } from 'next';
 import { BROAD_CATEGORIES } from '@/data/categories';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.meharbatteries.com';
+  const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.meharbatteries.com').replace(/\/+$/, '');
   const currentDate = new Date();
 
   const staticRoutes: MetadataRoute.Sitemap = [
     {
-      url: `${baseUrl}`,
+      url: `${baseUrl}/`,
       lastModified: currentDate,
       changeFrequency: 'weekly',
       priority: 1.0,
@@ -92,12 +92,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  const categoryRoutes: MetadataRoute.Sitemap = BROAD_CATEGORIES.map((cat) => ({
-    url: `${baseUrl}/products/${cat.slug}`,
-    lastModified: currentDate,
-    changeFrequency: 'weekly',
-    priority: 0.8,
-  }));
+  const categoryRoutes: MetadataRoute.Sitemap = BROAD_CATEGORIES
+    .filter((cat) => cat && typeof cat.slug === 'string' && cat.slug.trim().length > 0)
+    .map((cat) => ({
+      url: `${baseUrl}/products/${cat.slug.trim()}`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    }));
 
-  return [...staticRoutes, ...categoryRoutes];
+  const allRoutes = [...staticRoutes, ...categoryRoutes];
+
+  // Strictly filter to ensure no empty, undefined, or whitespace-only URL entries can ever exist
+  return allRoutes.filter(
+    (entry) => Boolean(entry && typeof entry.url === 'string' && entry.url.trim().length > 0)
+  );
 }
