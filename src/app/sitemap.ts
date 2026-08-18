@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { BROAD_CATEGORIES } from '@/data/categories';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.meharbatteries.com';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://meharbatteries.com';
   const currentDate = new Date();
 
   const staticRoutes: MetadataRoute.Sitemap = [

@@ -9,11 +9,12 @@ import { OemEnquiryStatus } from '@prisma/client';
 export const dynamic = 'force-dynamic';
 
 interface Params {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export async function PUT(request: Request, { params }: Params) {
   try {
+    const { id } = await params;
     const session = await verifyAdminSession(request);
     if (!session.authenticated || !session.user) {
       return NextResponse.json(
@@ -48,7 +49,7 @@ export async function PUT(request: Request, { params }: Params) {
     }
 
     const oem = await prisma.oemEnquiry.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         status: status as OemEnquiryStatus,
         internalNotes: internalNotes ?? undefined,

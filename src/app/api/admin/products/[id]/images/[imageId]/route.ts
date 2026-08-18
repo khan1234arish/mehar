@@ -8,12 +8,13 @@ import { productImageSchema } from '@/lib/validations/admin';
 export const dynamic = 'force-dynamic';
 
 interface Params {
-  params: { id: string; imageId: string };
+  params: Promise<{ id: string; imageId: string }>;
 }
 
 // ── PUT /api/admin/products/[id]/images/[imageId] ─────────────────────────────
 export async function PUT(request: Request, { params }: Params) {
   try {
+    const { id, imageId } = await params;
     const session = await verifyAdminSession(request);
     if (!session.authenticated || !session.user) {
       return NextResponse.json(
@@ -44,13 +45,13 @@ export async function PUT(request: Request, { params }: Params) {
         // If updating to primary, unmark other images
         if (data.isPrimary) {
           await prisma.productImage.updateMany({
-            where: { productId: params.id, id: { not: params.imageId } },
+            where: { productId: id, id: { not: imageId } },
             data: { isPrimary: false },
           });
         }
 
         const image = await prisma.productImage.update({
-          where: { id: params.imageId },
+          where: { id: imageId },
           data: {
             imageUrl: data.imageUrl,
             altText: data.altText || null,
@@ -64,7 +65,7 @@ export async function PUT(request: Request, { params }: Params) {
         // Sync to Product.imageUrl if primary
         if (image.isPrimary && !image.isArchived) {
           await prisma.product.update({
-            where: { id: params.id },
+            where: { id },
             data: { imageUrl: image.imageUrl },
           });
         }
@@ -88,8 +89,8 @@ export async function PUT(request: Request, { params }: Params) {
     return NextResponse.json({
       success: true,
       image: {
-        id: params.imageId,
-        productId: params.id,
+        id: imageId,
+        productId: id,
         ...data,
       },
     });
@@ -105,6 +106,7 @@ export async function PUT(request: Request, { params }: Params) {
 // ── DELETE /api/admin/products/[id]/images/[imageId] ──────────────────────────
 export async function DELETE(request: Request, { params }: Params) {
   try {
+    const { id, imageId } = await params;
     const session = await verifyAdminSession(request);
     if (!session.authenticated || !session.user) {
       return NextResponse.json(
@@ -122,7 +124,7 @@ export async function DELETE(request: Request, { params }: Params) {
       if (prisma && process.env.DATABASE_URL) {
         // Soft delete / archive only
         const image = await prisma.productImage.update({
-          where: { id: params.imageId },
+          where: { id: imageId },
           data: {
             isArchived: true,
             isPublished: false,

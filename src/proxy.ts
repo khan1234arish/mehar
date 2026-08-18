@@ -22,7 +22,7 @@ function parseJwtPayload(token: string): { userId?: string; role?: string; mustC
   }
 }
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // ── 1. Protect Admin Web Routes (/admin/*) ──────────────────────────────────

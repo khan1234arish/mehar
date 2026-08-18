@@ -8,12 +8,13 @@ import { productSchema } from '@/lib/validations/admin';
 export const dynamic = 'force-dynamic';
 
 interface Params {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 // ── GET /api/admin/products/[id] ──────────────────────────────────────────────
 export async function GET(request: Request, { params }: Params) {
   try {
+    const { id } = await params;
     const session = await verifyAdminSession(request);
     if (!session.authenticated || !session.user) {
       return NextResponse.json(
@@ -27,7 +28,7 @@ export async function GET(request: Request, { params }: Params) {
     }
 
     const product = await prisma.product.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         category: true,
         specifications: { orderBy: { displayOrder: 'asc' } },
@@ -55,6 +56,7 @@ export async function GET(request: Request, { params }: Params) {
 // ── PUT /api/admin/products/[id] (Update Product & Specs) ──────────────────────
 export async function PUT(request: Request, { params }: Params) {
   try {
+    const { id } = await params;
     const session = await verifyAdminSession(request);
     if (!session.authenticated || !session.user) {
       return NextResponse.json(
@@ -85,7 +87,7 @@ export async function PUT(request: Request, { params }: Params) {
     }
 
     const existing = await prisma.product.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!existing) {
@@ -97,7 +99,7 @@ export async function PUT(request: Request, { params }: Params) {
       const slugConflict = await prisma.product.findUnique({
         where: { slug: data.slug },
       });
-      if (slugConflict && slugConflict.id !== params.id) {
+      if (slugConflict && slugConflict.id !== id) {
         return NextResponse.json(
           { error: `Slug "${data.slug}" is already in use by another product.` },
           { status: 400 }
@@ -113,7 +115,7 @@ export async function PUT(request: Request, { params }: Params) {
     // Transaction to update product and replace specs
     const updated = await prisma.$transaction(async (tx) => {
       const prod = await tx.product.update({
-        where: { id: params.id },
+        where: { id },
         data: {
           name: data.name,
           slug: data.slug,
@@ -147,11 +149,11 @@ export async function PUT(request: Request, { params }: Params) {
 
       // Update specs if provided
       if (data.specifications) {
-        await tx.productSpec.deleteMany({ where: { productId: params.id } });
+        await tx.productSpec.deleteMany({ where: { productId: id } });
         if (data.specifications.length > 0) {
           await tx.productSpec.createMany({
             data: data.specifications.map((s, idx) => ({
-              productId: params.id,
+              productId: id,
               groupName: s.groupName,
               specKey: s.specKey,
               specValue: s.specValue,
@@ -193,6 +195,7 @@ export async function PUT(request: Request, { params }: Params) {
 // ── DELETE /api/admin/products/[id] (Soft-Delete / Archive Only) ──────────────
 export async function DELETE(request: Request, { params }: Params) {
   try {
+    const { id } = await params;
     const session = await verifyAdminSession(request);
     if (!session.authenticated || !session.user) {
       return NextResponse.json(
@@ -212,7 +215,7 @@ export async function DELETE(request: Request, { params }: Params) {
 
     // Soft-delete: Mark as ARCHIVED, unpublish, and deactivate (no permanent DB deletion)
     const product = await prisma.product.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         publishStatus: 'ARCHIVED',
         isPublished: false,

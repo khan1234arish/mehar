@@ -276,6 +276,7 @@ export default function AnalyticsDashboardClient() {
                     <Link
                       href={`/products/${cat.slug}`}
                       target="_blank"
+                      rel="noopener noreferrer"
                       className="font-bold text-theme-primary hover:text-theme-green flex items-center gap-1 transition-colors"
                     >
                       <span>{cat.name}</span>
@@ -330,6 +331,7 @@ export default function AnalyticsDashboardClient() {
                 <Link
                   href={`/products/${prod.slug}`}
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="px-2.5 py-1 rounded-lg bg-theme-base border border-theme-border text-theme-secondary hover:text-theme-green transition-colors font-mono text-[10px]"
                 >
                   View Datasheet ↗
@@ -414,6 +416,7 @@ export default function AnalyticsDashboardClient() {
               key={route.path}
               href={route.path}
               target="_blank"
+              rel="noopener noreferrer"
               className="p-2.5 rounded-xl bg-theme-elevated border border-theme-border hover:border-theme-green/50 text-xs flex items-center justify-between group transition-colors"
             >
               <div>

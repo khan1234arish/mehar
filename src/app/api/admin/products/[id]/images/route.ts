@@ -8,12 +8,13 @@ import { productImageSchema } from '@/lib/validations/admin';
 export const dynamic = 'force-dynamic';
 
 interface Params {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 // ── GET /api/admin/products/[id]/images ───────────────────────────────────────
 export async function GET(request: Request, { params }: Params) {
   try {
+    const { id } = await params;
     const session = await verifyAdminSession(request);
     if (!session.authenticated || !session.user) {
       return NextResponse.json(
@@ -25,7 +26,7 @@ export async function GET(request: Request, { params }: Params) {
     try {
       if (prisma && process.env.DATABASE_URL) {
         const images = await prisma.productImage.findMany({
-          where: { productId: params.id, isArchived: false },
+          where: { productId: id, isArchived: false },
           orderBy: [{ isPrimary: 'desc' }, { sortOrder: 'asc' }, { createdAt: 'desc' }],
         });
         return NextResponse.json({ images });
@@ -47,6 +48,7 @@ export async function GET(request: Request, { params }: Params) {
 // ── POST /api/admin/products/[id]/images ──────────────────────────────────────
 export async function POST(request: Request, { params }: Params) {
   try {
+    const { id } = await params;
     const session = await verifyAdminSession(request);
     if (!session.authenticated || !session.user) {
       return NextResponse.json(
@@ -77,14 +79,14 @@ export async function POST(request: Request, { params }: Params) {
         // If this image is marked as primary, unmark other images for this product
         if (data.isPrimary) {
           await prisma.productImage.updateMany({
-            where: { productId: params.id },
+            where: { productId: id },
             data: { isPrimary: false },
           });
         }
 
         const image = await prisma.productImage.create({
           data: {
-            productId: params.id,
+            productId: id,
             imageUrl: data.imageUrl,
             altText: data.altText || null,
             sortOrder: data.sortOrder,
@@ -98,7 +100,7 @@ export async function POST(request: Request, { params }: Params) {
         // Also sync primary image URL to parent Product.imageUrl if primary & published
         if (image.isPrimary) {
           await prisma.product.update({
-            where: { id: params.id },
+            where: { id },
             data: { imageUrl: image.imageUrl },
           });
         }
@@ -109,7 +111,7 @@ export async function POST(request: Request, { params }: Params) {
           action: 'PRODUCT_IMAGE_ADD',
           entityType: 'ProductImage',
           entityId: image.id,
-          metadata: { productId: params.id, isPrimary: image.isPrimary, isPublished: image.isPublished },
+          metadata: { productId: id, isPrimary: image.isPrimary, isPublished: image.isPublished },
           request,
         });
 
@@ -123,7 +125,7 @@ export async function POST(request: Request, { params }: Params) {
       success: true,
       image: {
         id: `img-${Date.now()}`,
-        productId: params.id,
+        productId: id,
         imageUrl: data.imageUrl,
         altText: data.altText || null,
         sortOrder: data.sortOrder,

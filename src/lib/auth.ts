@@ -58,7 +58,7 @@ export function verifyAdminToken(token: string): AdminJwtPayload | null {
 }
 
 // ─── Cookie Utilities ────────────────────────────────────────────────────────
-export function getCookieToken(request?: Request): string | null {
+export async function getCookieToken(request?: Request): Promise<string | null> {
   if (request) {
     const cookieHeader = request.headers.get('cookie') || '';
     const match = cookieHeader.match(new RegExp(`(?:^|;\\s*)${ADMIN_COOKIE_NAME}=([^;]+)`));
@@ -72,7 +72,7 @@ export function getCookieToken(request?: Request): string | null {
   }
 
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const c = cookieStore.get(ADMIN_COOKIE_NAME);
     return c?.value || null;
   } catch {
@@ -85,7 +85,7 @@ export async function verifyAdminSession(
   request?: Request,
   allowedRoles: Role[] = [Role.SUPER_ADMIN, Role.SALES_ADMIN]
 ): Promise<SessionVerificationResult> {
-  const token = getCookieToken(request);
+  const token = await getCookieToken(request);
 
   if (!token) {
     return {

@@ -8,11 +8,12 @@ import { resourceSchema } from '@/lib/validations/admin';
 export const dynamic = 'force-dynamic';
 
 interface Params {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export async function PUT(request: Request, { params }: Params) {
   try {
+    const { id } = await params;
     const session = await verifyAdminSession(request);
     if (!session.authenticated || !session.user) {
       return NextResponse.json(
@@ -43,7 +44,7 @@ export async function PUT(request: Request, { params }: Params) {
     }
 
     const resource = await prisma.resourceDownload.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         title: data.title,
         category: data.category,
@@ -80,6 +81,7 @@ export async function PUT(request: Request, { params }: Params) {
 // Archive-only delete
 export async function DELETE(request: Request, { params }: Params) {
   try {
+    const { id } = await params;
     const session = await verifyAdminSession(request);
     if (!session.authenticated || !session.user) {
       return NextResponse.json(
@@ -98,7 +100,7 @@ export async function DELETE(request: Request, { params }: Params) {
     }
 
     const resource = await prisma.resourceDownload.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         isArchived: true,
         isPublished: false,

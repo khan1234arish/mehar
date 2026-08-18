@@ -68,6 +68,7 @@ export default function AdminLayoutClient({ user, children }: ClientLayoutProps)
             <Link
               href="/"
               target="_blank"
+              rel="noopener noreferrer"
               className="px-2.5 py-1 rounded-lg bg-theme-elevated border border-theme-border text-theme-secondary hover:text-theme-green hover:border-theme-green/50 transition-colors flex items-center gap-1 text-[11px]"
             >
               <span>View Public Site ↗</span>
