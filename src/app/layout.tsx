@@ -1,14 +1,31 @@
 import type { Metadata, Viewport } from 'next';
+import { Inter, Outfit } from 'next/font/google';
+import dynamic from 'next/dynamic';
 import './globals.css';
 import TopBar from '@/components/layout/TopBar';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import MeharAssistant from '@/components/chat/MeharAssistant';
 import { Analytics } from '@vercel/analytics/react';
 import { ThemeProvider } from '@/components/theme/ThemeProvider';
 import { ThemeScript } from '@/components/theme/ThemeScript';
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://meharbatteries.com';
+const MeharAssistant = dynamic(() => import('@/components/chat/MeharAssistant'));
+
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-inter',
+  display: 'swap',
+});
+
+const outfit = Outfit({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800', '900'],
+  variable: '--font-outfit',
+  display: 'swap',
+});
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.meharbatteries.com';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -108,15 +125,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+    <html lang="en" className={`scroll-smooth ${inter.variable} ${outfit.variable}`} suppressHydrationWarning>
       <head>
         <ThemeScript />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap"
-          rel="stylesheet"
-        />
         <link rel="icon" href="/assets/logo/mehar-symbol.png" type="image/png" />
         <link rel="apple-touch-icon" href="/assets/logo/mehar-symbol.png" />
       </head>

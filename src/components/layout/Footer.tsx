@@ -40,6 +40,7 @@ export default async function Footer() {
                   src="/assets/logo/mehar-logo.png"
                   alt={`${company.brandName} – The Name You Trust`}
                   fill
+                  sizes="(max-width: 768px) 160px, 192px"
                   className="object-contain object-left"
                 />
               </div>

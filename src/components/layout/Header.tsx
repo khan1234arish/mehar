@@ -118,6 +118,7 @@ export default function Header() {
                 alt="MEHAR – The Name You Trust"
                 fill
                 priority
+                sizes="(max-width: 768px) 144px, 176px"
                 className="object-contain object-left group-hover:opacity-90 transition-opacity"
               />
             </div>

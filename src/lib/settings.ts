@@ -54,7 +54,7 @@ export async function getCompanySettings(): Promise<CompanySettingsData> {
     plantLocation: COMPANY_INFO.plantLocation,
     cin: COMPANY_INFO.cin,
     gstin: COMPANY_INFO.gstin,
-    website: 'https://meharbatteries.com',
+    website: 'https://www.meharbatteries.com',
     socialLinkedIn: null,
     socialTwitter: null,
   };
