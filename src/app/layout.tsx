@@ -8,7 +8,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { ThemeProvider } from '@/components/theme/ThemeProvider';
 import { ThemeScript } from '@/components/theme/ThemeScript';
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.meharbatteries.com';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://meharbatteries.com';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -54,13 +54,30 @@ export const metadata: Metadata = {
     title: 'MEHAR – The Name You Trust | Official B2B Battery Platform',
     description:
       'Official B2B platform for MEHAR battery systems and clean energy storage solutions by Lawad Infrastructure Private Limited.',
-    siteName: 'MEHAR – The Name You Trust',
+    siteName: 'MEHAR',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1024,
+        height: 559,
+        alt: 'MEHAR – The Name You Trust',
+        type: 'image/png',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'MEHAR – The Name You Trust | Official B2B Battery Platform',
     description:
       'Official B2B platform for MEHAR battery systems and clean energy storage solutions by Lawad Infrastructure Private Limited.',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1024,
+        height: 559,
+        alt: 'MEHAR – The Name You Trust',
+      },
+    ],
   },
   robots: {
     index: true,
