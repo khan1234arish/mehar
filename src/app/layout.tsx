@@ -73,6 +73,16 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  icons: {
+    icon: [
+      { url: '/assets/logo/mehar-symbol.png', type: 'image/png' },
+      { url: '/favicon.ico', sizes: 'any' },
+    ],
+    apple: [
+      { url: '/assets/logo/mehar-symbol.png', sizes: '180x180', type: 'image/png' },
+    ],
+    shortcut: ['/assets/logo/mehar-symbol.png'],
+  },
 };
 
 export default function RootLayout({
@@ -90,7 +100,8 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap"
           rel="stylesheet"
         />
-        <link rel="icon" href="/assets/logo/mehar-logo.png" />
+        <link rel="icon" href="/assets/logo/mehar-symbol.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/assets/logo/mehar-symbol.png" />
       </head>
       <body className="min-h-screen bg-theme-base text-theme-primary antialiased flex flex-col justify-between selection:bg-theme-green/30 selection:text-theme-green">
         <ThemeProvider>
