@@ -43,7 +43,7 @@ export default function ThemeToggle({ variant = 'compact', className = '' }: The
   // Segmented mode (ideal for mobile menu or settings panels)
   if (variant === 'segmented') {
     return (
-      <div className={`p-1 rounded-xl bg-[#161C24] border border-[#2A3649] flex items-center gap-1 ${className}`}>
+      <div className={`p-1 rounded-xl bg-theme-elevated border border-theme-border flex items-center gap-1 ${className}`}>
         {(
           [
             { id: 'light', label: 'Light', icon: Sun },
@@ -60,8 +60,8 @@ export default function ThemeToggle({ variant = 'compact', className = '' }: The
               onClick={() => setTheme(item.id)}
               className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg text-xs font-semibold transition-all ${
                 isActive
-                  ? 'bg-[#39D353]/20 text-[#39D353] font-bold border border-[#39D353]/30 shadow-sm'
-                  : 'text-[#E6EAF0] hover:text-white hover:bg-white/[0.06]'
+                  ? 'bg-theme-green/15 text-theme-green font-bold border border-theme-green/30 shadow-sm'
+                  : 'text-theme-secondary hover:text-theme-primary hover:bg-theme-card-subtle'
               }`}
               aria-label={`Switch to ${item.label} theme`}
               aria-pressed={isActive}
@@ -93,7 +93,7 @@ export default function ThemeToggle({ variant = 'compact', className = '' }: The
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-2 w-36 p-1.5 rounded-2xl bg-[#0D1117] border border-[#2A3649] shadow-2xl z-50 animate-in fade-in slide-in-from-top-1 duration-150">
+        <div className="absolute right-0 top-full mt-2 w-36 p-1.5 rounded-2xl bg-theme-card border border-theme-border shadow-2xl z-50 animate-in fade-in slide-in-from-top-1 duration-150">
           <div className="space-y-1" role="listbox">
             {(
               [
@@ -114,8 +114,8 @@ export default function ThemeToggle({ variant = 'compact', className = '' }: The
                   }}
                   className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
                     isSelected
-                      ? 'bg-[#39D353]/20 text-[#39D353] font-bold border border-[#39D353]/30 shadow-sm'
-                      : 'text-[#E6EAF0] hover:text-[#39D353] hover:bg-white/[0.08]'
+                      ? 'bg-theme-green/15 text-theme-green font-bold border border-theme-green/30 shadow-sm'
+                      : 'text-theme-secondary hover:text-theme-green hover:bg-theme-elevated'
                   }`}
                   role="option"
                   aria-selected={isSelected}
@@ -124,7 +124,7 @@ export default function ThemeToggle({ variant = 'compact', className = '' }: The
                     <Icon className="w-3.5 h-3.5" />
                     <span>{item.label}</span>
                   </span>
-                  {isSelected && <Check className="w-3.5 h-3.5 text-[#39D353]" />}
+                  {isSelected && <Check className="w-3.5 h-3.5 text-theme-green" />}
                 </button>
               );
             })}

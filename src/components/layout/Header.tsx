@@ -150,15 +150,15 @@ export default function Header() {
                     {/* Products mega-dropdown */}
                     {productsDropdownOpen && (
                       <div className="absolute top-full left-0 w-[460px] pt-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
-                        <div className="p-4 rounded-2xl bg-[#0D1117] border border-[#2A3649] shadow-2xl">
-                          <div className="flex items-center justify-between pb-2 mb-3 border-b border-[#2A3649]">
-                            <span className="text-[10px] font-mono font-bold text-[#A3AAB5] uppercase tracking-wider flex items-center gap-1.5">
-                              <Layers className="w-3 h-3 text-[#39D353]" />
+                        <div className="p-4 rounded-2xl bg-theme-card border border-theme-border shadow-2xl">
+                          <div className="flex items-center justify-between pb-2 mb-3 border-b border-theme-border">
+                            <span className="text-[10px] font-mono font-bold text-theme-muted uppercase tracking-wider flex items-center gap-1.5">
+                              <Layers className="w-3 h-3 text-theme-green" />
                               Battery Portfolio Categories
                             </span>
                             <Link
                               href="/products"
-                              className="text-[11px] font-mono font-bold text-[#39D353] hover:underline flex items-center gap-1"
+                              className="text-[11px] font-mono font-bold text-theme-green hover:underline flex items-center gap-1"
                             >
                               View All Categories <ArrowUpRight className="w-3 h-3" />
                             </Link>
@@ -168,17 +168,17 @@ export default function Header() {
                               <Link
                                 key={cat.id}
                                 href={`/products/${cat.slug}`}
-                                className="block p-2.5 rounded-xl hover:bg-white/[0.06] border border-transparent hover:border-[#2A3649] transition-all group"
+                                className="block p-2.5 rounded-xl hover:bg-theme-elevated border border-transparent hover:border-theme-border transition-all group"
                               >
                                 <div className="flex items-center justify-between">
-                                  <span className="text-xs font-bold text-[#E6EAF0] group-hover:text-[#39D353] transition-colors">
+                                  <span className="text-xs font-bold text-theme-primary group-hover:text-theme-green transition-colors">
                                     {cat.name}
                                   </span>
-                                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#39D353]/15 text-[#39D353] border border-[#39D353]/30 font-bold">
+                                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-theme-green/10 text-theme-green border border-theme-green/25 font-bold">
                                     B2B Specs
                                   </span>
                                 </div>
-                                <p className="text-[11px] text-[#CBD5E1] line-clamp-1 mt-0.5">
+                                <p className="text-[11px] text-theme-secondary line-clamp-1 mt-0.5">
                                   {cat.tagline}
                                 </p>
                               </Link>
@@ -245,9 +245,9 @@ export default function Header() {
 
               {toolsDropdownOpen && (
                 <div className="absolute top-full right-0 w-[320px] pt-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
-                  <div className="p-3 rounded-2xl bg-[#0D1117] border border-[#2A3649] shadow-2xl space-y-1">
-                    <div className="px-2 py-1 border-b border-[#2A3649] mb-1">
-                      <span className="text-[10px] font-mono font-bold text-[#A3AAB5] uppercase tracking-wider">
+                  <div className="p-3 rounded-2xl bg-theme-card border border-theme-border shadow-2xl space-y-1">
+                    <div className="px-2 py-1 border-b border-theme-border mb-1">
+                      <span className="text-[10px] font-mono font-bold text-theme-muted uppercase tracking-wider">
                         B2B Engineering &amp; Sizing Tools
                       </span>
                     </div>
@@ -255,14 +255,14 @@ export default function Header() {
                       <Link
                         key={item.href + item.label}
                         href={item.href}
-                        className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-white/[0.06] transition-all group"
+                        className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-theme-elevated transition-all group"
                       >
-                        <item.icon className="w-4 h-4 text-[#39D353] mt-0.5 shrink-0" />
+                        <item.icon className="w-4 h-4 text-theme-green mt-0.5 shrink-0" />
                         <div>
-                          <span className="text-xs font-bold text-[#E6EAF0] group-hover:text-[#39D353] transition-colors block">
+                          <span className="text-xs font-bold text-theme-primary group-hover:text-theme-green transition-colors block">
                             {item.label}
                           </span>
-                          <span className="text-[11px] text-[#CBD5E1] block leading-tight">
+                          <span className="text-[11px] text-theme-secondary block leading-tight">
                             {item.desc}
                           </span>
                         </div>
@@ -315,7 +315,7 @@ export default function Header() {
       {/* ── Mobile / Tablet Drawer ──────────────────────────────────────── */}
       {mobileMenuOpen && (
         <div
-          className="lg:hidden absolute inset-x-0 top-full bg-[#0B0F14]/98 backdrop-blur-2xl border-b border-[#1E2633] shadow-2xl max-h-[calc(100dvh-76px)] overflow-y-auto z-40"
+          className="lg:hidden absolute inset-x-0 top-full bg-theme-card border-b border-theme-border shadow-2xl max-h-[calc(100dvh-76px)] overflow-y-auto z-40"
           role="dialog"
           aria-label="Mobile navigation"
         >
@@ -323,7 +323,7 @@ export default function Header() {
 
             {/* Theme Selection in Mobile Menu */}
             <div>
-              <p className="text-[10px] font-bold font-mono uppercase tracking-wider text-[#A3AAB5] px-2 mb-2">
+              <p className="text-[10px] font-bold font-mono uppercase tracking-wider text-theme-muted px-2 mb-2">
                 Color Theme
               </p>
               <ThemeToggle variant="segmented" className="w-full" />
@@ -331,7 +331,7 @@ export default function Header() {
 
             {/* Main Navigation links */}
             <div>
-              <p className="text-[10px] font-bold font-mono uppercase tracking-wider text-[#A3AAB5] px-2 mb-2">
+              <p className="text-[10px] font-bold font-mono uppercase tracking-wider text-theme-muted px-2 mb-2">
                 Navigation
               </p>
               <div className="space-y-0.5">
@@ -341,8 +341,8 @@ export default function Header() {
                       href={link.href}
                       className={`flex items-center min-h-[44px] px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
                         isActive(link.href)
-                          ? 'text-[#39D353] bg-[#39D353]/15 border border-[#39D353]/30'
-                          : 'text-[#E6EAF0] hover:bg-white/[0.08] hover:text-[#39D353]'
+                          ? 'text-theme-green bg-theme-green/10 border border-theme-green/30'
+                          : 'text-theme-primary hover:bg-theme-elevated hover:text-theme-green'
                       }`}
                     >
                       {link.label}
@@ -350,12 +350,12 @@ export default function Header() {
 
                     {/* Products sub-list in mobile drawer */}
                     {link.hasDropdown && (
-                      <div className="ml-4 mt-1 mb-1 pl-3 border-l-2 border-[#2A3649] space-y-1">
+                      <div className="ml-4 mt-1 mb-1 pl-3 border-l-2 border-theme-border space-y-1">
                         {BROAD_CATEGORIES.map((cat) => (
                           <Link
                             key={cat.id}
                             href={`/products/${cat.slug}`}
-                            className="flex items-center min-h-[38px] py-1 text-xs text-[#CBD5E1] hover:text-[#39D353] font-medium"
+                            className="flex items-center min-h-[38px] py-1 text-xs text-theme-secondary hover:text-theme-green font-medium"
                           >
                             {cat.name}
                           </Link>
@@ -368,8 +368,8 @@ export default function Header() {
             </div>
 
             {/* B2B Procurement & Engineering Tools */}
-            <div className="pt-3 border-t border-[#2A3649]">
-              <p className="text-[10px] font-bold font-mono uppercase tracking-wider text-[#A3AAB5] px-2 mb-2">
+            <div className="pt-3 border-t border-theme-border">
+              <p className="text-[10px] font-bold font-mono uppercase tracking-wider text-theme-muted px-2 mb-2">
                 B2B Procurement &amp; Engineering Tools
               </p>
               <div className="space-y-0.5">
@@ -381,11 +381,11 @@ export default function Header() {
                       href={link.href}
                       className={`flex items-center gap-2.5 min-h-[44px] px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
                         isActive(link.href)
-                          ? 'text-[#39D353] bg-[#39D353]/15 border border-[#39D353]/30'
-                          : 'text-[#E6EAF0] hover:bg-white/[0.08] hover:text-[#39D353]'
+                          ? 'text-theme-green bg-theme-green/10 border border-theme-green/30'
+                          : 'text-theme-primary hover:bg-theme-elevated hover:text-theme-green'
                       }`}
                     >
-                      <Icon className="w-4 h-4 text-[#39D353] flex-shrink-0" />
+                      <Icon className="w-4 h-4 text-theme-green flex-shrink-0" />
                       {link.label}
                     </Link>
                   );
@@ -394,7 +394,7 @@ export default function Header() {
             </div>
 
             {/* Mobile CTAs */}
-            <div className="pt-3 border-t border-[#2A3649] space-y-2.5">
+            <div className="pt-3 border-t border-theme-border space-y-2.5">
               <Button href="/oem-custom-solutions" variant="secondary" size="md" className="w-full justify-center min-h-[44px]">
                 Configure Custom OEM Solution
               </Button>
