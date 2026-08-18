@@ -117,6 +117,9 @@ export const metadata: Metadata = {
     ],
     shortcut: ['/assets/logo/mehar-symbol.png'],
   },
+  verification: {
+    google: 'googledea334a94dae5cce',
+  },
 };
 
 export default function RootLayout({
