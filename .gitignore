@@ -47,3 +47,5 @@ yarn-error.log*
 scratch_*.js
 scratch/
 
+
+.vercel
