@@ -299,7 +299,7 @@ export default async function TechnologyPage() {
                   <div className="w-8 h-8 rounded-lg bg-theme-green/10 flex items-center justify-center text-theme-green">
                     <Radio className="w-4 h-4" />
                   </div>
-                  <h4 className="text-xs font-bold text-theme-primary">CAN 2.0B / Bluetooth &amp; 4G IoT</h4>
+                  <h4 className="text-xs font-bold text-theme-primary">UART / CAN 2.0B / RS485 &amp; 4G IoT</h4>
                   <p className="text-[11px] text-theme-secondary leading-relaxed">
                     Full telemetry integration with vehicle speedometers, motor controllers, and 4G cloud fleet dashboards for GPS tracking, geo-fencing, and remote diagnosis.
                   </p>

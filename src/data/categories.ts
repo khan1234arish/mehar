@@ -17,7 +17,7 @@ export const BROAD_CATEGORIES: CategoryData[] = [
     name: 'Electric 2-Wheeler Batteries',
     slug: 'electric-2-wheeler-batteries',
     tagline: 'AIS-156 Phase 2 certified Prismatic LiFePO4 and High-Density NMC battery packs for electric scooters, delivery fleets, and high-speed motorcycles',
-    description: 'Engineered specifically for extreme Indian ambient temperatures (-10°C to 55°C) and heavy daily commercial duty cycles. Built with A+ Grade Prismatic LiFePO4 cells and high-density NMC modules, featuring laser-welded busbars, inter-cell thermal barrier sheets, microprocessor Smart BMS with Bluetooth BLE/CAN telemetry, and IP67 waterproof aluminum enclosures.',
+    description: 'Engineered specifically for extreme Indian ambient temperatures (-10°C to 55°C) and heavy daily commercial duty cycles. Built with A+ Grade Prismatic LiFePO4 cells and high-density NMC modules, featuring laser-welded busbars, inter-cell thermal barrier sheets, microprocessor Smart BMS with UART / CAN / RS485 telemetry, and IP67 waterproof aluminum enclosures.',
     iconName: 'Bike',
     isPlaceholder: false,
     verificationStatus: 'CLIENT_VERIFIED',

@@ -183,7 +183,7 @@ export default async function HomePage() {
 
               {/* Sub-text */}
               <p className="text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed text-theme-secondary max-w-2xl">
-                Engineered for harsh ambient temperatures (-10°C to 55°C) and heavy multi-shift duty cycles. Direct B2B supply of A+ Grade Prismatic LiFePO4 packs, microprocessor Smart BMS with Bluetooth BLE/CAN telemetry, and custom OEM pack manufacturing.
+                Engineered for harsh ambient temperatures (-10°C to 55°C) and heavy multi-shift duty cycles. Direct B2B supply of A+ Grade Prismatic LiFePO4 packs, microprocessor Smart BMS with UART / CAN / RS485 telemetry, and custom OEM pack manufacturing.
               </p>
 
               {/* CTAs */}
@@ -323,7 +323,7 @@ export default async function HomePage() {
               {
                 icon: Cpu,
                 title: 'Microprocessor Smart BMS',
-                desc: 'Automotive-grade MCU with active cell balancing, 4-point NTC thermistor temperature sensing, dual MOSFET solid-state cutoff, and CAN 2.0B / Bluetooth BLE telemetry.',
+                desc: 'Automotive-grade MCU with active cell balancing, 4-point NTC thermistor temperature sensing, dual MOSFET solid-state cutoff, and UART / CAN 2.0B / RS485 telemetry.',
               },
               {
                 icon: ShieldCheck,

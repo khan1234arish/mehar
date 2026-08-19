@@ -320,7 +320,7 @@ function RfqBuilderInner() {
               <option value="STANDARD">Standard Protection Hardware BMS</option>
               <option value="CANBUS">CAN 2.0B Protocol Integration</option>
               <option value="RS485">RS485 Telemetry Protocol</option>
-              <option value="BLUETOOTH">Bluetooth BLE Monitoring App</option>
+              <option value="UART_CAN_RS485">UART / CAN / RS485 Multi-Protocol BMS</option>
             </select>
           </div>
         </div>
