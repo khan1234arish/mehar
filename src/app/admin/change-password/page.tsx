@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import Button from '@/components/ui/Button';
 import { Lock, ShieldAlert, CheckCircle2, AlertTriangle, ArrowRight, Eye, EyeOff } from 'lucide-react';
 
@@ -60,16 +59,6 @@ export default function ChangePasswordPage() {
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-theme-green/10 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center space-y-4 relative z-10">
-        <div className="w-36 sm:w-44 h-24 sm:h-28 relative mx-auto">
-          <Image
-            src="/assets/logo/mehar-logo.png"
-            alt="MEHAR"
-            fill
-            className="object-contain"
-            priority
-          />
-        </div>
-
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-300">
           <ShieldAlert className="w-3.5 h-3.5 text-red-500" />
           <span className="text-xs font-mono font-bold">Security Action Required</span>

@@ -1,5 +1,4 @@
 import React, { Suspense } from 'react';
-import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { verifyAdminSession } from '@/lib/auth';
 import LoginFormClient from '@/components/admin/LoginFormClient';
@@ -26,16 +25,6 @@ export default async function AdminLoginPage() {
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-theme-green/10 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center space-y-4 relative z-10">
-        <div className="w-36 sm:w-44 h-24 sm:h-28 relative mx-auto">
-          <Image
-            src="/assets/logo/mehar-logo.png"
-            alt="MEHAR"
-            fill
-            className="object-contain"
-            priority
-          />
-        </div>
-
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-theme-elevated border border-theme-border shadow-sm">
           <div className="w-2 h-2 rounded-full bg-theme-green shadow-sm"></div>
           <span className="text-xs font-mono font-bold text-theme-primary">Administrative Access</span>

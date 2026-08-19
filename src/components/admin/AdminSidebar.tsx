@@ -2,7 +2,6 @@
 
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard,
@@ -60,15 +59,13 @@ export default function AdminSidebar({ user, onCloseMobile }: SidebarProps) {
     <aside className="w-64 bg-theme-surface border-r border-theme-border flex flex-col h-full select-none transition-colors duration-200">
       {/* Header */}
       <div className="p-5 border-b border-theme-border flex items-center justify-between">
-        <Link href="/admin" className="flex items-center gap-2">
-          <div className="w-32 sm:w-36 h-13 sm:h-14 relative">
-            <Image
-              src="/assets/logo/mehar-logo.png"
-              alt="MEHAR Admin"
-              fill
-              className="object-contain object-left"
-              priority
-            />
+        <Link href="/admin" className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-xl bg-theme-green/10 border border-theme-green/30 flex items-center justify-center text-theme-green font-black text-sm font-mono">
+            M
+          </div>
+          <div>
+            <div className="text-sm font-black text-theme-primary tracking-tight">Admin Console</div>
+            <div className="text-[10px] text-theme-secondary font-mono">Management Portal</div>
           </div>
         </Link>
         {onCloseMobile && (
