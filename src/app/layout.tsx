@@ -5,6 +5,7 @@ import './globals.css';
 import TopBar from '@/components/layout/TopBar';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import SiteLayout from '@/components/layout/SiteLayout';
 import { Analytics } from '@vercel/analytics/react';
 import { ThemeProvider } from '@/components/theme/ThemeProvider';
 import { ThemeScript } from '@/components/theme/ThemeScript';
@@ -136,14 +137,14 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen bg-theme-base text-theme-primary antialiased flex flex-col justify-between selection:bg-theme-green/30 selection:text-theme-green">
         <ThemeProvider>
-          <div className="flex flex-col flex-1">
-            <TopBar />
-            <Header />
-            <main className="flex-1">{children}</main>
-          </div>
-          <Footer />
-          {/* Persistent Floating B2B Assistant */}
-          <MeharAssistant />
+          <SiteLayout
+            topBar={<TopBar />}
+            header={<Header />}
+            footer={<Footer />}
+            assistant={<MeharAssistant />}
+          >
+            {children}
+          </SiteLayout>
           {/* Official Vercel Web Analytics Provider */}
           <Analytics />
         </ThemeProvider>
