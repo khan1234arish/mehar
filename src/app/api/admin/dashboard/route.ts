@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { verifyAdminSession } from '@/lib/auth';
 import { PRODUCTS_CATALOG } from '@/data/products';
@@ -16,29 +16,50 @@ export async function GET(request: Request) {
       );
     }
 
-    try {
-      if (prisma && process.env.DATABASE_URL) {
+    let productsTotal = PRODUCTS_CATALOG.length;
+    let productsVerified = PRODUCTS_CATALOG.filter((p) => !p.isPlaceholder).length;
+    let rfqTotal = 0;
+    let rfqNew = 0;
+    let oemTotal = 0;
+    let oemNew = 0;
+    let generalTotal = 0;
+    let resourcesTotal = 4;
+    let recentRfqs: any[] = [];
+    let recentOem: any[] = [];
+    let recentAudits: any[] = [];
+
+    if (prisma && process.env.DATABASE_URL) {
+      try {
         const [
-          rfqTotal,
-          rfqNew,
-          oemTotal,
-          oemNew,
-          generalTotal,
-          productsTotal,
-          productsVerified,
-          resourcesTotal,
-          recentRfqs,
-          recentOem,
-          recentAudits,
-        ] = await Promise.all([
+          pTotal,
+          pVer,
+          rTotal,
+          rNew,
+          oTotal,
+          oNew,
+          gTotal,
+          resTotal,
+        ] = await Promise.allSettled([
+          prisma.product.count({ where: { publishStatus: { not: 'ARCHIVED' } } }),
+          prisma.product.count({ where: { publishStatus: 'VERIFIED', isPublished: true } }),
           prisma.rfqRequest.count(),
           prisma.rfqRequest.count({ where: { status: 'NEW' } }),
           prisma.oemEnquiry.count(),
           prisma.oemEnquiry.count({ where: { status: 'NEW' } }),
           prisma.generalEnquiry.count(),
-          prisma.product.count({ where: { publishStatus: { not: 'ARCHIVED' } } }),
-          prisma.product.count({ where: { publishStatus: 'VERIFIED', isPublished: true } }),
           prisma.resourceDownload.count({ where: { isArchived: false } }),
+        ]);
+
+        if (pTotal.status === 'fulfilled') productsTotal = pTotal.value;
+        if (pVer.status === 'fulfilled') productsVerified = pVer.value;
+        if (rTotal.status === 'fulfilled') rfqTotal = rTotal.value;
+        if (rNew.status === 'fulfilled') rfqNew = rNew.value;
+        if (oTotal.status === 'fulfilled') oemTotal = oTotal.value;
+        if (oNew.status === 'fulfilled') oemNew = oNew.value;
+        if (gTotal.status === 'fulfilled') generalTotal = gTotal.value;
+        if (resTotal.status === 'fulfilled') resourcesTotal = resTotal.value;
+
+        const [rfqsRes, oemRes, auditsRes] = await Promise.allSettled([
           prisma.rfqRequest.findMany({
             take: 5,
             orderBy: { createdAt: 'desc' },
@@ -79,35 +100,16 @@ export async function GET(request: Request) {
           }),
         ]);
 
-        return NextResponse.json({
-          counts: {
-            rfqs: { total: rfqTotal, new: rfqNew },
-            oem: { total: oemTotal, new: oemNew },
-            general: { total: generalTotal },
-            products: { total: productsTotal, verified: productsVerified },
-            resources: { total: resourcesTotal },
-          },
-          recentRfqs,
-          recentOem,
-          recentAudits,
-        });
+        if (rfqsRes.status === 'fulfilled') recentRfqs = rfqsRes.value;
+        if (oemRes.status === 'fulfilled') recentOem = oemRes.value;
+        if (auditsRes.status === 'fulfilled') recentAudits = auditsRes.value;
+      } catch (err) {
+        console.error('Error querying dashboard data from DB:', err);
       }
-    } catch {
-      // Database offline — fallback gracefully
     }
 
-    // Fallback data when DB is offline
-    return NextResponse.json({
-      counts: {
-        rfqs: { total: 0, new: 0 },
-        oem: { total: 0, new: 0 },
-        general: { total: 0 },
-        products: { total: PRODUCTS_CATALOG.length, verified: PRODUCTS_CATALOG.filter((p) => !p.isPlaceholder).length },
-        resources: { total: 4 },
-      },
-      recentRfqs: [],
-      recentOem: [],
-      recentAudits: [
+    if (recentAudits.length === 0) {
+      recentAudits = [
         {
           id: 'log-initial',
           adminEmail: session.user.email,
@@ -116,7 +118,20 @@ export async function GET(request: Request) {
           entityId: session.user.id,
           createdAt: new Date().toISOString(),
         },
-      ],
+      ];
+    }
+
+    return NextResponse.json({
+      counts: {
+        rfqs: { total: rfqTotal, new: rfqNew },
+        oem: { total: oemTotal, new: oemNew },
+        general: { total: generalTotal },
+        products: { total: productsTotal, verified: productsVerified },
+        resources: { total: resourcesTotal },
+      },
+      recentRfqs,
+      recentOem,
+      recentAudits,
     });
   } catch (error) {
     console.error('Admin dashboard retrieval error:', error);

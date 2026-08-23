@@ -71,13 +71,13 @@ export async function GET(request: Request) {
 
     // Fallback to static data
     const fallbackProducts = PRODUCTS_CATALOG.map((p) => {
-      const cat = BROAD_CATEGORIES.find((c) => c.id === p.categoryId) || BROAD_CATEGORIES[0];
+      const cat = BROAD_CATEGORIES.find((c) => c.id === p.categoryId || c.slug === p.categorySlug) || BROAD_CATEGORIES[0];
       return {
         id: p.id,
         categoryId: p.categoryId,
         name: p.name,
         slug: p.slug,
-        modelNumber: null,
+        modelNumber: p.modelNumber || null,
         shortDescription: p.shortDescription,
         applicationTag: p.applicationTag,
         chemistry: p.chemistry || null,
@@ -96,6 +96,8 @@ export async function GET(request: Request) {
         isPublished: !p.isPlaceholder,
         isPlaceholder: p.isPlaceholder,
         tdsFileUrl: p.tdsFileUrl || null,
+        imageUrl: p.imageUrl || null,
+        images: p.images || [],
         category: { id: cat.id, name: cat.name, slug: cat.slug },
         specifications: p.specifications || [],
         updatedAt: new Date().toISOString(),
