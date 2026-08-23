@@ -268,7 +268,8 @@ export default async function HomePage() {
                       fill
                       className="object-contain p-3 sm:p-5 group-hover:scale-105 transition-transform duration-300"
                     />
-                    <span className="relative z-10 rounded-full bg-theme-card/90 backdrop-blur-md border border-theme-border px-3.5 py-1 text-xs font-semibold text-theme-primary shadow-sm">
+                    <span className="relative z-10 inline-flex items-center gap-1.5 rounded-full bg-slate-950/90 text-white border border-white/20 px-3.5 py-1 text-xs font-semibold shadow-lg backdrop-blur-md">
+                      <span className="w-1.5 h-1.5 rounded-full bg-theme-green"></span>
                       {cat.keyApplications[0]}
                     </span>
                   </div>

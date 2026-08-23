@@ -129,7 +129,7 @@ export default async function TechnologyPage() {
                   fill
                   className="object-contain p-2 hover:scale-105 transition-transform duration-500"
                 />
-                <span className="absolute top-4 right-4 text-[10px] font-mono font-bold bg-theme-card/90 backdrop-blur-sm px-2.5 py-1 rounded-full border border-theme-green/30 text-theme-green">
+                <span className="absolute top-4 right-4 text-[10px] font-mono font-bold bg-slate-950/90 backdrop-blur-sm px-2.5 py-1 rounded-full border border-theme-green/40 text-theme-green shadow-md">
                   Primary Technology (EV &amp; ESS)
                 </span>
               </div>
@@ -180,8 +180,8 @@ export default async function TechnologyPage() {
                   fill
                   className="object-contain p-2 hover:scale-105 transition-transform duration-500"
                 />
-                <span className="absolute top-4 right-4 text-[10px] font-mono font-bold bg-theme-card/90 backdrop-blur-sm px-2.5 py-1 rounded-full border border-theme-blue/30 text-theme-blue">
-                  Raw Cell Supply (18650 / 21700 / 32700)
+                <span className="absolute top-4 right-4 text-[10px] font-mono font-bold bg-slate-950/90 backdrop-blur-sm px-2.5 py-1 rounded-full border border-theme-green/40 text-theme-green shadow-md">
+                  18650 · 21700 · 32700
                 </span>
               </div>
 

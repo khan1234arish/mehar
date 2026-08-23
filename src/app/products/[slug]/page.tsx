@@ -226,7 +226,7 @@ export default async function ProductCategoryPage({
 
                       {/* Model & Chemistry Tag */}
                       {prod.chemistry && (
-                        <span className="absolute top-3 left-3 text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-theme-card/90 backdrop-blur-sm text-theme-green border border-theme-green/30">
+                        <span className="absolute top-3 left-3 text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-950/90 backdrop-blur-sm text-theme-green border border-theme-green/40 shadow-sm">
                           {prod.chemistry.split(' ')[0]}
                         </span>
                       )}

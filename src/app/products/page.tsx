@@ -124,7 +124,7 @@ export default async function ProductsCataloguePage() {
                       )}
 
                       {/* Top Right: Real Product Count Badge */}
-                      <span className="absolute top-3.5 right-3.5 text-xs font-mono font-bold px-3 py-1 rounded-full bg-theme-card/90 backdrop-blur-md text-theme-green border border-theme-green/30 shadow-sm">
+                      <span className="absolute top-3.5 right-3.5 text-xs font-mono font-bold px-3 py-1 rounded-full bg-slate-950/90 text-theme-green border border-theme-green/40 shadow-lg backdrop-blur-md">
                         {count} {count === 1 ? 'Product' : 'Products'}
                       </span>
                     </div>
