@@ -27,50 +27,101 @@ export async function GET(request: Request) {
         const search = searchParams.get('search')?.trim();
 
         const where: Record<string, unknown> = {};
-        if (categoryId) where.categoryId = categoryId;
-        if (status) {
+        if (categoryId && categoryId !== 'all') {
+          where.OR = [
+            { categoryId: categoryId },
+            { category: { slug: categoryId } },
+          ];
+        }
+
+        if (status && status !== 'ALL' && status !== 'all') {
           where.publishStatus = status;
-        } else {
+        } else if (!status) {
           where.publishStatus = { not: 'ARCHIVED' };
         }
 
         if (search) {
-          where.OR = [
+          const searchFilter = [
             { name: { contains: search, mode: 'insensitive' } },
             { slug: { contains: search, mode: 'insensitive' } },
             { modelNumber: { contains: search, mode: 'insensitive' } },
             { applicationTag: { contains: search, mode: 'insensitive' } },
+            { chemistry: { contains: search, mode: 'insensitive' } },
+            { voltageRange: { contains: search, mode: 'insensitive' } },
+            { capacityRange: { contains: search, mode: 'insensitive' } },
           ];
+
+          if (where.OR) {
+            where.AND = [
+              { OR: where.OR },
+              { OR: searchFilter },
+            ];
+            delete where.OR;
+          } else {
+            where.OR = searchFilter;
+          }
         }
 
-        const products = await prisma.product.findMany({
-          where,
-          include: {
-            category: { select: { id: true, name: true, slug: true } },
-            specifications: { orderBy: { displayOrder: 'asc' } },
-            images: {
-              where: { isArchived: false },
-              orderBy: [{ isPrimary: 'desc' }, { sortOrder: 'asc' }],
+        const [products, categories] = await Promise.all([
+          prisma.product.findMany({
+            where,
+            include: {
+              category: { select: { id: true, name: true, slug: true } },
+              specifications: { orderBy: { displayOrder: 'asc' } },
+              images: {
+                where: { isArchived: false },
+                orderBy: [{ isPrimary: 'desc' }, { sortOrder: 'asc' }],
+              },
             },
-          },
-          orderBy: { updatedAt: 'desc' },
-        });
+            orderBy: { updatedAt: 'desc' },
+          }),
+          prisma.category.findMany({
+            select: { id: true, name: true, slug: true },
+            orderBy: { displayOrder: 'asc' },
+          }),
+        ]);
 
-        const categories = await prisma.category.findMany({
-          select: { id: true, name: true, slug: true },
-          orderBy: { displayOrder: 'asc' },
-        });
-
-        if (products.length > 0) {
-          return NextResponse.json({ products, categories });
-        }
+        return NextResponse.json({ products, categories });
       }
-    } catch {
-      // Fallback to static catalog if DB offline
+    } catch (dbErr) {
+      console.error('Database query error in admin products API:', dbErr);
     }
 
     // Fallback to static data
-    const fallbackProducts = PRODUCTS_CATALOG.map((p) => {
+    const { searchParams } = new URL(request.url);
+    const categoryId = searchParams.get('categoryId');
+    const status = searchParams.get('status');
+    const search = searchParams.get('search')?.trim().toLowerCase();
+
+    let filtered = PRODUCTS_CATALOG;
+
+    if (categoryId && categoryId !== 'all') {
+      filtered = filtered.filter(
+        (p) => p.categoryId === categoryId || p.categorySlug === categoryId
+      );
+    }
+
+    if (status && status !== 'ALL' && status !== 'all') {
+      if (status === 'VERIFIED') filtered = filtered.filter((p) => !p.isPlaceholder);
+      else if (status === 'PENDING_VERIFICATION') filtered = filtered.filter((p) => p.isPlaceholder);
+      else if (status === 'DRAFT') filtered = filtered.filter((p) => p.verificationStatus !== 'CLIENT_VERIFIED');
+      else if (status === 'ARCHIVED') filtered = [];
+    }
+
+    if (search) {
+      filtered = filtered.filter(
+        (p) =>
+          p.name.toLowerCase().includes(search) ||
+          p.slug.toLowerCase().includes(search) ||
+          (p.modelNumber && p.modelNumber.toLowerCase().includes(search)) ||
+          p.applicationTag.toLowerCase().includes(search) ||
+          (p.chemistry && p.chemistry.toLowerCase().includes(search)) ||
+          (p.voltageRange && p.voltageRange.toLowerCase().includes(search)) ||
+          (p.capacityRange && p.capacityRange.toLowerCase().includes(search))
+      );
+    }
+
+    const fallbackProducts = filtered.map((p) => {
       const cat = BROAD_CATEGORIES.find((c) => c.id === p.categoryId || c.slug === p.categorySlug) || BROAD_CATEGORIES[0];
       return {
         id: p.id,

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect, Suspense, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
@@ -23,6 +23,9 @@ import {
   ArrowUp,
   ArrowDown,
   Star,
+  Sparkles,
+  RotateCcw,
+  Filter,
   Trash2,
   Eye,
   EyeOff,
@@ -139,14 +142,18 @@ function ProductsManagementContent() {
     return match ? decodeURIComponent(match[1]) : '';
   };
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (overrideCategory?: string, overrideStatus?: string, overrideSearch?: string) => {
     setLoading(true);
     setError('');
     try {
+      const cat = overrideCategory !== undefined ? overrideCategory : filterCategory;
+      const stat = overrideStatus !== undefined ? overrideStatus : filterStatus;
+      const srch = overrideSearch !== undefined ? overrideSearch : search;
+
       const query = new URLSearchParams();
-      if (filterCategory) query.set('categoryId', filterCategory);
-      if (filterStatus) query.set('status', filterStatus);
-      if (search) query.set('search', search);
+      if (cat && cat !== 'all') query.set('categoryId', cat);
+      if (stat && stat !== 'ALL') query.set('status', stat);
+      if (srch) query.set('search', srch);
 
       const [res, resCarousel] = await Promise.all([
         fetch(`/api/admin/products?${query.toString()}`),
@@ -195,6 +202,56 @@ function ProductsManagementContent() {
   useEffect(() => {
     fetchProducts();
   }, [filterCategory, filterStatus]);
+
+  // Client-side instant live filtering
+  const filteredProducts = useMemo(() => {
+    let result = products;
+
+    if (filterCategory && filterCategory !== 'all') {
+      result = result.filter(
+        (p) =>
+          p.categoryId === filterCategory ||
+          p.category?.id === filterCategory ||
+          p.category?.slug === filterCategory
+      );
+    }
+
+    if (filterStatus && filterStatus !== 'ALL') {
+      if (filterStatus === 'FEATURED_HOME') {
+        result = result.filter((p) => featuredIds.includes(p.id));
+      } else {
+        result = result.filter((p) => p.publishStatus === filterStatus);
+      }
+    }
+
+    if (search.trim()) {
+      const q = search.trim().toLowerCase();
+      result = result.filter(
+        (p) =>
+          p.name.toLowerCase().includes(q) ||
+          p.slug.toLowerCase().includes(q) ||
+          (p.modelNumber && p.modelNumber.toLowerCase().includes(q)) ||
+          p.applicationTag.toLowerCase().includes(q) ||
+          (p.chemistry && p.chemistry.toLowerCase().includes(q)) ||
+          (p.category?.name && p.category.name.toLowerCase().includes(q)) ||
+          (p.voltageRange && p.voltageRange.toLowerCase().includes(q)) ||
+          (p.capacityRange && p.capacityRange.toLowerCase().includes(q))
+      );
+    }
+
+    return result;
+  }, [products, filterCategory, filterStatus, search, featuredIds]);
+
+  const verifiedCount = useMemo(() => products.filter((p) => p.publishStatus === 'VERIFIED' && p.isPublished).length, [products]);
+  const draftCount = useMemo(() => products.filter((p) => p.publishStatus !== 'VERIFIED' || !p.isPublished).length, [products]);
+  const homeFeaturedCount = useMemo(() => products.filter((p) => featuredIds.includes(p.id)).length, [products, featuredIds]);
+
+  const handleClearFilters = () => {
+    setSearch('');
+    setFilterCategory('');
+    setFilterStatus('');
+    fetchProducts('', '', '');
+  };
 
   const openNewModal = () => {
     setEditingProduct(null);
@@ -565,27 +622,89 @@ function ProductsManagementContent() {
         </Button>
       </div>
 
+      {/* Quick Filter Chips */}
+      <div className="flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          onClick={() => { setFilterStatus(''); }}
+          className={`px-3 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all border ${
+            !filterStatus || filterStatus === 'ALL'
+              ? 'bg-theme-green text-white border-theme-green shadow-sm'
+              : 'bg-theme-elevated text-theme-secondary border-theme-border hover:text-theme-primary'
+          }`}
+        >
+          All Batteries ({products.length})
+        </button>
+
+        <button
+          type="button"
+          onClick={() => { setFilterStatus('VERIFIED'); }}
+          className={`px-3 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all border flex items-center gap-1.5 ${
+            filterStatus === 'VERIFIED'
+              ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
+              : 'bg-theme-elevated text-theme-secondary border-theme-border hover:text-theme-primary'
+          }`}
+        >
+          <CheckCircle2 className="w-3.5 h-3.5" />
+          Verified &amp; Published ({verifiedCount})
+        </button>
+
+        <button
+          type="button"
+          onClick={() => { setFilterStatus('DRAFT'); }}
+          className={`px-3 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all border flex items-center gap-1.5 ${
+            filterStatus === 'DRAFT'
+              ? 'bg-amber-600 text-white border-amber-600 shadow-sm'
+              : 'bg-theme-elevated text-theme-secondary border-theme-border hover:text-theme-primary'
+          }`}
+        >
+          <Clock className="w-3.5 h-3.5" />
+          Drafts / Unverified ({draftCount})
+        </button>
+
+        <button
+          type="button"
+          onClick={() => { setFilterStatus('FEATURED_HOME'); }}
+          className={`px-3 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all border flex items-center gap-1.5 ${
+            filterStatus === 'FEATURED_HOME'
+              ? 'bg-amber-500 text-slate-950 font-bold border-amber-500 shadow-sm'
+              : 'bg-theme-elevated text-theme-secondary border-theme-border hover:text-theme-primary'
+          }`}
+        >
+          <Star className="w-3.5 h-3.5 text-amber-500" />
+          Home Carousel ({homeFeaturedCount})
+        </button>
+      </div>
+
       {/* Filter & Search Bar */}
-      <div className="p-4 rounded-2xl bg-white border border-[#E2E8F0] shadow-sm flex flex-col md:flex-row gap-4">
-        <div className="relative flex-1">
-          <Search className="w-4 h-4 text-[#94A3B8] absolute left-3.5 top-1/2 -translate-y-1/2" />
+      <div className="p-4 rounded-2xl bg-theme-card border border-theme-border shadow-sm flex flex-col md:flex-row gap-3 items-center">
+        <div className="relative flex-1 w-full">
+          <Search className="w-4 h-4 text-theme-muted absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
-            placeholder="Search by battery name, model code, application, or chemistry..."
+            placeholder="Live search by model code, battery name, application, or chemistry..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && fetchProducts()}
-            className="w-full pl-10 pr-4 py-2 rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] text-[#0F172A] text-xs focus:outline-none focus:border-[#059669]"
+            className="w-full pl-10 pr-9 py-2.5 rounded-xl bg-theme-base border border-theme-border text-theme-primary text-xs focus:outline-none focus:border-theme-green"
           />
+          {search && (
+            <button
+              type="button"
+              onClick={() => setSearch('')}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-theme-muted hover:text-theme-primary p-0.5"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
         </div>
 
-        <div className="flex flex-wrap gap-2 sm:gap-4">
+        <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
           <select
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value)}
-            className="px-3 py-2 rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] text-[#0F172A] text-xs font-mono focus:outline-none focus:border-[#059669]"
+            className="px-3 py-2.5 rounded-xl bg-theme-base border border-theme-border text-theme-primary text-xs font-mono focus:outline-none focus:border-theme-green"
           >
-            <option value="">All Categories</option>
+            <option value="">All Categories ({categories.length})</option>
             {categories.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.name}
@@ -596,18 +715,57 @@ function ProductsManagementContent() {
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="px-3 py-2 rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] text-[#0F172A] text-xs font-mono focus:outline-none focus:border-[#059669]"
+            className="px-3 py-2.5 rounded-xl bg-theme-base border border-theme-border text-theme-primary text-xs font-mono focus:outline-none focus:border-theme-green"
           >
             <option value="">All Statuses</option>
+            <option value="VERIFIED">Verified &amp; Published</option>
             <option value="DRAFT">Draft</option>
             <option value="PENDING_VERIFICATION">Pending Verification</option>
-            <option value="VERIFIED">Verified &amp; Published</option>
+            <option value="FEATURED_HOME">Home Carousel Featured</option>
           </select>
 
-          <Button onClick={fetchProducts} variant="outline" size="sm">
-            Filter
-          </Button>
+          {(search || filterCategory || filterStatus) && (
+            <Button
+              onClick={handleClearFilters}
+              variant="outline"
+              size="sm"
+              icon={<RotateCcw className="w-3.5 h-3.5" />}
+            >
+              Reset
+            </Button>
+          )}
         </div>
+      </div>
+
+      {/* Filter Status / Summary Bar */}
+      <div className="flex items-center justify-between text-xs font-mono text-theme-secondary px-1">
+        <div>
+          Showing <span className="font-bold text-theme-primary">{filteredProducts.length}</span> of{' '}
+          <span className="font-bold text-theme-primary">{products.length}</span> batteries
+          {filterCategory && (
+            <span>
+              {' '}in{' '}
+              <strong className="text-theme-green">
+                {categories.find((c) => c.id === filterCategory)?.name || filterCategory}
+              </strong>
+            </span>
+          )}
+          {search && (
+            <span>
+              {' '}matching &quot;<strong className="text-theme-primary">{search}</strong>&quot;
+            </span>
+          )}
+        </div>
+
+        {(search || filterCategory || filterStatus) && (
+          <button
+            type="button"
+            onClick={handleClearFilters}
+            className="text-theme-green hover:underline font-bold flex items-center gap-1"
+          >
+            <RotateCcw className="w-3 h-3" /> Clear Filters
+          </button>
+        )}
       </div>
 
       {error && (
@@ -618,24 +776,29 @@ function ProductsManagementContent() {
       )}
 
       {/* Products Table */}
-      <div className="rounded-3xl bg-white border border-[#E2E8F0] overflow-hidden shadow-sm">
+      <div className="rounded-3xl bg-theme-card border border-theme-border overflow-hidden shadow-sm">
         {loading ? (
-          <div className="p-12 text-center text-xs font-mono text-[#64748B]">
+          <div className="p-12 text-center text-xs font-mono text-theme-secondary">
             Loading product repository...
           </div>
-        ) : products.length === 0 ? (
+        ) : filteredProducts.length === 0 ? (
           <div className="p-12 text-center space-y-3">
-            <Layers className="w-8 h-8 text-[#94A3B8] mx-auto" />
-            <h3 className="text-sm font-bold text-[#0F172A]">No products found</h3>
-            <p className="text-xs text-[#64748B]">
+            <Layers className="w-8 h-8 text-theme-muted mx-auto" />
+            <h3 className="text-sm font-bold text-theme-primary">No products found</h3>
+            <p className="text-xs text-theme-secondary">
               No battery systems match the selected filter criteria.
             </p>
+            {(search || filterCategory || filterStatus) && (
+              <Button onClick={handleClearFilters} variant="outline" size="sm">
+                Clear Filters
+              </Button>
+            )}
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="bg-[#F8FAFC] border-b border-[#E2E8F0] text-[#64748B] font-mono uppercase text-[10px]">
+                <tr className="bg-theme-elevated border-b border-theme-border text-theme-secondary font-mono uppercase text-[10px]">
                   <th className="py-3.5 px-6 font-bold">Battery Model / Name</th>
                   <th className="py-3.5 px-6 font-bold">Category &amp; Specs</th>
                   <th className="py-3.5 px-6 font-bold">MOQ</th>
@@ -645,8 +808,8 @@ function ProductsManagementContent() {
                   <th className="py-3.5 px-6 font-bold text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#E2E8F0] text-[#334155]">
-                {products.map((p) => (
+              <tbody className="divide-y divide-theme-border text-theme-primary">
+                {filteredProducts.map((p) => (
                   <tr key={p.id} className="hover:bg-[#F8FAFC] transition-colors">
                     <td className="py-4 px-6">
                       <div className="font-bold text-[#0F172A]">{p.name}</div>

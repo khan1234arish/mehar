@@ -28,12 +28,10 @@ export async function GET(request: Request) {
           orderBy: { displayOrder: 'asc' },
         });
 
-        if (categories.length > 0) {
-          return NextResponse.json({ categories });
-        }
+        return NextResponse.json({ categories });
       }
-    } catch {
-      // Fallback
+    } catch (err) {
+      console.error('Error fetching admin categories from DB:', err);
     }
 
     const fallbackCategories = BROAD_CATEGORIES.map((c, idx) => ({

@@ -23,12 +23,10 @@ export async function GET(request: Request) {
           where: { isArchived: false },
           orderBy: { createdAt: 'desc' },
         });
-        if (resources.length > 0) {
-          return NextResponse.json({ resources });
-        }
+        return NextResponse.json({ resources });
       }
-    } catch {
-      // Fallback
+    } catch (err) {
+      console.error('Error fetching admin resources from DB:', err);
     }
 
     const fallbackResources = [

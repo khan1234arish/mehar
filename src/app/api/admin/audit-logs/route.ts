@@ -35,12 +35,10 @@ export async function GET(request: Request) {
           },
         });
 
-        if (logs.length > 0) {
-          return NextResponse.json({ logs });
-        }
+        return NextResponse.json({ logs });
       }
-    } catch {
-      // Fallback
+    } catch (err) {
+      console.error('Error fetching admin audit logs from DB:', err);
     }
 
     const fallbackLogs = [

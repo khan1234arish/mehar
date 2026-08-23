@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect, Suspense, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
@@ -140,6 +140,53 @@ function EnquiriesContent() {
   useEffect(() => {
     fetchEnquiries();
   }, [activeTab]);
+
+  const filteredRfqs = useMemo(() => {
+    if (!search.trim()) return rfqs;
+    const q = search.trim().toLowerCase();
+    return rfqs.filter(
+      (r) =>
+        r.rfqNumber.toLowerCase().includes(q) ||
+        r.companyName.toLowerCase().includes(q) ||
+        r.contactPerson.toLowerCase().includes(q) ||
+        r.email.toLowerCase().includes(q) ||
+        r.phone.toLowerCase().includes(q) ||
+        r.city.toLowerCase().includes(q) ||
+        r.volumeTier.toLowerCase().includes(q) ||
+        r.status.toLowerCase().includes(q)
+    );
+  }, [rfqs, search]);
+
+  const filteredOem = useMemo(() => {
+    if (!search.trim()) return oemList;
+    const q = search.trim().toLowerCase();
+    return oemList.filter(
+      (o) =>
+        o.enquiryNumber.toLowerCase().includes(q) ||
+        o.companyName.toLowerCase().includes(q) ||
+        o.contactPerson.toLowerCase().includes(q) ||
+        o.email.toLowerCase().includes(q) ||
+        o.phone.toLowerCase().includes(q) ||
+        o.applicationType.toLowerCase().includes(q) ||
+        o.city.toLowerCase().includes(q) ||
+        o.status.toLowerCase().includes(q)
+    );
+  }, [oemList, search]);
+
+  const filteredGeneral = useMemo(() => {
+    if (!search.trim()) return generalList;
+    const q = search.trim().toLowerCase();
+    return generalList.filter(
+      (g) =>
+        g.name.toLowerCase().includes(q) ||
+        (g.companyName && g.companyName.toLowerCase().includes(q)) ||
+        g.email.toLowerCase().includes(q) ||
+        g.phone.toLowerCase().includes(q) ||
+        g.subject.toLowerCase().includes(q) ||
+        g.message.toLowerCase().includes(q) ||
+        g.status.toLowerCase().includes(q)
+    );
+  }, [generalList, search]);
 
   const openRfqInspect = (rfq: RfqItem) => {
     setInspectRfq(rfq);
@@ -315,14 +362,14 @@ function EnquiriesContent() {
                       Loading RFQ submissions...
                     </td>
                   </tr>
-                ) : rfqs.length === 0 ? (
+                ) : filteredRfqs.length === 0 ? (
                   <tr>
                     <td colSpan={6} className="py-8 text-center text-[#64748B]">
                       No RFQ submissions found.
                     </td>
                   </tr>
                 ) : (
-                  rfqs.map((rfq) => (
+                  filteredRfqs.map((rfq) => (
                     <tr key={rfq.id} className="hover:bg-[#F8FAFC] transition-colors">
                       <td className="py-3.5 px-4">
                         <span className="font-mono font-bold text-[#059669] block">
@@ -395,14 +442,14 @@ function EnquiriesContent() {
                       Loading OEM submissions...
                     </td>
                   </tr>
-                ) : oemList.length === 0 ? (
+                ) : filteredOem.length === 0 ? (
                   <tr>
                     <td colSpan={6} className="py-8 text-center text-[#64748B]">
                       No OEM engineering intakes found.
                     </td>
                   </tr>
                 ) : (
-                  oemList.map((oem) => (
+                  filteredOem.map((oem) => (
                     <tr key={oem.id} className="hover:bg-[#F8FAFC] transition-colors">
                       <td className="py-3.5 px-4">
                         <span className="font-mono font-bold text-[#0284C7] block">
@@ -475,14 +522,14 @@ function EnquiriesContent() {
                       Loading general enquiries...
                     </td>
                   </tr>
-                ) : generalList.length === 0 ? (
+                ) : filteredGeneral.length === 0 ? (
                   <tr>
                     <td colSpan={4} className="py-8 text-center text-[#64748B]">
                       No general contacts found.
                     </td>
                   </tr>
                 ) : (
-                  generalList.map((g) => (
+                  filteredGeneral.map((g) => (
                     <tr key={g.id} className="hover:bg-[#F8FAFC] transition-colors">
                       <td className="py-3.5 px-4">
                         <span className="font-bold text-[#0F172A] block">{g.name}</span>
