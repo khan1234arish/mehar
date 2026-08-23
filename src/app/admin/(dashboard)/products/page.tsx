@@ -92,6 +92,11 @@ function ProductsManagementContent() {
   const [filterCategory, setFilterCategory] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
 
+  // Home Carousel Featured State
+  const [featuredIds, setFeaturedIds] = useState<string[]>([]);
+  const [togglingId, setTogglingId] = useState<string | null>(null);
+  const [isFeaturedInForm, setIsFeaturedInForm] = useState(false);
+
   // Modal State
   const [modalOpen, setModalOpen] = useState(initialAction === 'new');
   const [editingProduct, setEditingProduct] = useState<ProductItem | null>(null);
@@ -143,9 +148,18 @@ function ProductsManagementContent() {
       if (filterStatus) query.set('status', filterStatus);
       if (search) query.set('search', search);
 
-      const res = await fetch(`/api/admin/products?${query.toString()}`);
+      const [res, resCarousel] = await Promise.all([
+        fetch(`/api/admin/products?${query.toString()}`),
+        fetch('/api/admin/hero-carousel'),
+      ]);
+
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to load products.');
+
+      if (resCarousel.ok) {
+        const carouselData = await resCarousel.json();
+        setFeaturedIds(carouselData.featuredProductIds || []);
+      }
 
       setProducts(data.products || []);
       setCategories(data.categories || []);
@@ -153,6 +167,28 @@ function ProductsManagementContent() {
       setError(err instanceof Error ? err.message : 'Error fetching products.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleToggleHomeFeatured = async (productId: string, productName: string) => {
+    setTogglingId(productId);
+    try {
+      const res = await fetch('/api/admin/hero-carousel/toggle', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-csrf-token': getCsrfToken(),
+        },
+        body: JSON.stringify({ productId }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to update home carousel.');
+
+      setFeaturedIds(data.featuredProductIds || []);
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : 'Error toggling home carousel.');
+    } finally {
+      setTogglingId(null);
     }
   };
 
@@ -605,6 +641,7 @@ function ProductsManagementContent() {
                   <th className="py-3.5 px-6 font-bold">MOQ</th>
                   <th className="py-3.5 px-6 font-bold">Gallery</th>
                   <th className="py-3.5 px-6 font-bold">Publish Status</th>
+                  <th className="py-3.5 px-4 font-bold text-center">Home Carousel</th>
                   <th className="py-3.5 px-6 font-bold text-right">Actions</th>
                 </tr>
               </thead>
@@ -658,6 +695,23 @@ function ProductsManagementContent() {
                           Draft (Hidden)
                         </span>
                       )}
+                    </td>
+
+                    <td className="py-4 px-4 text-center">
+                      <button
+                        type="button"
+                        onClick={() => handleToggleHomeFeatured(p.id, p.name)}
+                        disabled={togglingId === p.id}
+                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-bold transition-all shadow-xs cursor-pointer ${
+                          featuredIds.includes(p.id)
+                            ? 'bg-[#ECFDF5] text-[#065F46] border border-[#A7F3D0] hover:bg-[#D1FAE5]'
+                            : 'bg-[#F8FAFC] text-[#94A3B8] border border-[#E2E8F0] hover:text-[#0F172A] hover:border-[#CBD5E1]'
+                        }`}
+                        title={featuredIds.includes(p.id) ? 'Active on Home Screen Carousel (Click to remove)' : 'Click to feature on Home Screen Carousel'}
+                      >
+                        <Star className={`w-3.5 h-3.5 ${featuredIds.includes(p.id) ? 'fill-[#059669] text-[#059669]' : 'text-[#94A3B8]'}`} />
+                        <span>{featuredIds.includes(p.id) ? 'Featured' : 'Add to Home'}</span>
+                      </button>
                     </td>
 
                     <td className="py-4 px-6 text-right">
@@ -1186,6 +1240,31 @@ function ProductsManagementContent() {
                       Publish to Live Customer Catalog
                     </label>
                   </div>
+                </div>
+
+                {/* Home Screen Hero Carousel Toggle */}
+                <div className="flex items-center justify-between p-3.5 rounded-xl bg-white border border-[#E2E8F0] mt-3">
+                  <div>
+                    <label htmlFor="heroCarouselCheck" className="font-bold text-[#0F172A] block text-xs cursor-pointer">
+                      ⭐ Feature in Home Screen Hero Carousel
+                    </label>
+                    <p className="text-[11px] text-[#64748B]">
+                      Includes this product in the rotating showcase on the website homepage.
+                    </p>
+                  </div>
+                  <input
+                    type="checkbox"
+                    id="heroCarouselCheck"
+                    checked={editingProduct ? featuredIds.includes(editingProduct.id) : isFeaturedInForm}
+                    onChange={(e) => {
+                      if (editingProduct) {
+                        handleToggleHomeFeatured(editingProduct.id, formData.name);
+                      } else {
+                        setIsFeaturedInForm(e.target.checked);
+                      }
+                    }}
+                    className="w-4 h-4 rounded text-[#059669] focus:ring-[#059669] cursor-pointer"
+                  />
                 </div>
               </div>
 

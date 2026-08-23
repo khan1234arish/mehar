@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import Button from '@/components/ui/Button';
@@ -15,6 +15,12 @@ import {
   Eye,
   ToggleLeft,
   ToggleRight,
+  Layers,
+  ArrowUp,
+  ArrowDown,
+  Star,
+  Sparkles,
+  Check,
 } from 'lucide-react';
 import { ContentSettingsData } from '@/lib/settings';
 
@@ -29,8 +35,23 @@ interface SiteImageItem {
   isActive: boolean;
 }
 
+interface CarouselProductItem {
+  id: string;
+  name: string;
+  slug: string;
+  modelNumber?: string | null;
+  category: string;
+  categorySlug?: string;
+  specs: string;
+  imageUrl: string;
+  isPublished: boolean;
+  publishStatus: string;
+  isFeatured: boolean;
+  featuredOrder: number;
+}
+
 export default function AdminContentSettingsPage() {
-  const [activeTab, setActiveTab] = useState<'content' | 'images'>('content');
+  const [activeTab, setActiveTab] = useState<'content' | 'carousel' | 'images'>('content');
   const [imageSectionFilter, setImageSectionFilter] = useState<'all' | 'homepage' | 'technology' | 'applications' | 'placeholders'>('all');
 
   // Copy & Text Content
@@ -44,6 +65,12 @@ export default function AdminContentSettingsPage() {
   // Site-wide Placeholder Images
   const [siteImages, setSiteImages] = useState<SiteImageItem[]>([]);
   const [uploadingKey, setUploadingKey] = useState<string | null>(null);
+
+  // Hero Carousel Products
+  const [carouselProducts, setCarouselProducts] = useState<CarouselProductItem[]>([]);
+  const [featuredProductIds, setFeaturedProductIds] = useState<string[]>([]);
+  const [carouselSaving, setCarouselSaving] = useState(false);
+  const [carouselSuccess, setCarouselSuccess] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -60,9 +87,10 @@ export default function AdminContentSettingsPage() {
     setLoading(true);
     setError('');
     try {
-      const [resContent, resImages] = await Promise.all([
+      const [resContent, resImages, resCarousel] = await Promise.all([
         fetch('/api/admin/settings'),
         fetch('/api/admin/settings/site-images'),
+        fetch('/api/admin/hero-carousel'),
       ]);
 
       const dataContent = await resContent.json();
@@ -73,6 +101,12 @@ export default function AdminContentSettingsPage() {
       const dataImages = await resImages.json();
       if (resImages.ok && dataImages.images) {
         setSiteImages(dataImages.images);
+      }
+
+      if (resCarousel.ok) {
+        const dataCarousel = await resCarousel.json();
+        setCarouselProducts(dataCarousel.products || []);
+        setFeaturedProductIds(dataCarousel.featuredProductIds || []);
       }
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Error fetching content settings.');
@@ -113,6 +147,70 @@ export default function AdminContentSettingsPage() {
     }
   };
 
+  const handleToggleCarouselProduct = async (productId: string) => {
+    const isCurrentlyFeatured = featuredProductIds.includes(productId);
+    const newFeaturedIds = isCurrentlyFeatured
+      ? featuredProductIds.filter((id) => id !== productId)
+      : [...featuredProductIds, productId];
+
+    setFeaturedProductIds(newFeaturedIds);
+    setCarouselProducts((prev) =>
+      prev.map((p) => (p.id === productId ? { ...p, isFeatured: !isCurrentlyFeatured } : p))
+    );
+
+    try {
+      const res = await fetch('/api/admin/hero-carousel', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-csrf-token': getCsrfToken(),
+        },
+        body: JSON.stringify({ productIds: newFeaturedIds }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to update hero carousel.');
+      setCarouselSuccess(true);
+      setTimeout(() => setCarouselSuccess(false), 3000);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Error updating carousel selection.');
+    }
+  };
+
+  const handleMoveSlide = async (productId: string, direction: 'up' | 'down') => {
+    const idx = featuredProductIds.indexOf(productId);
+    if (idx === -1) return;
+
+    const newIds = [...featuredProductIds];
+    if (direction === 'up' && idx > 0) {
+      const temp = newIds[idx - 1];
+      newIds[idx - 1] = newIds[idx];
+      newIds[idx] = temp;
+    } else if (direction === 'down' && idx < newIds.length - 1) {
+      const temp = newIds[idx + 1];
+      newIds[idx + 1] = newIds[idx];
+      newIds[idx] = temp;
+    } else {
+      return;
+    }
+
+    setFeaturedProductIds(newIds);
+
+    try {
+      const res = await fetch('/api/admin/hero-carousel', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-csrf-token': getCsrfToken(),
+        },
+        body: JSON.stringify({ productIds: newIds }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to save slide order.');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Error saving slide order.');
+    }
+  };
+
   const handleImageFileUpload = async (key: string, file: File) => {
     setUploadingKey(key);
     setError('');
@@ -134,21 +232,19 @@ export default function AdminContentSettingsPage() {
 
       if (!data.url) throw new Error('Upload succeeded but no URL was returned.');
 
-      // Update image url in state with the confirmed upload URL
       setSiteImages((prev) =>
         prev.map((img) => (img.key === key ? { ...img, currentUrl: data.url } : img))
       );
 
-      // Warn if using non-persistent local dev storage
-      if (!data.isPersistentProductionStorage) {
-        setStorageNotice(
-          `Upload saved to local dev storage. Click "Save Image Settings" to persist the URL to the database. Configure S3/R2 for persistent production storage.`
-        );
-      } else {
-        setStorageNotice('');
+      const targetImg = siteImages.find((i) => i.key === key);
+      if (targetImg) {
+        await handleSaveSiteImage({
+          ...targetImg,
+          currentUrl: data.url,
+        });
       }
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Image upload failed.');
+      setError(err instanceof Error ? err.message : 'Error uploading placeholder image.');
     } finally {
       setUploadingKey(null);
     }
@@ -157,6 +253,8 @@ export default function AdminContentSettingsPage() {
   const handleSaveSiteImage = async (img: SiteImageItem) => {
     setSaving(true);
     setError('');
+    setSuccess(false);
+
     try {
       const res = await fetch('/api/admin/settings/site-images', {
         method: 'PUT',
@@ -168,45 +266,61 @@ export default function AdminContentSettingsPage() {
           key: img.key,
           imageUrl: img.currentUrl,
           altText: img.altText,
-          description: img.description,
           isActive: img.isActive,
         }),
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to update placeholder image.');
-
-      // Re-fetch from DB to confirm the write actually persisted
-      await fetchSettings();
-      setStorageNotice('');
+      if (!res.ok) throw new Error(data.error || 'Failed to save site image settings.');
 
       setSuccess(true);
-      setTimeout(() => setSuccess(false), 3000);
+      setTimeout(() => setSuccess(false), 4000);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Error saving image setting.');
+      setError(err instanceof Error ? err.message : 'Error saving site image.');
     } finally {
       setSaving(false);
     }
   };
 
+  if (loading) {
+    return (
+      <div className="p-12 text-center text-xs font-mono text-[#64748B]">
+        Loading website content manager...
+      </div>
+    );
+  }
+
+  const filteredImages = siteImages.filter((img) => {
+    if (imageSectionFilter === 'all') return true;
+    return img.section === imageSectionFilter;
+  });
+
+  const featuredList = featuredProductIds
+    .map((id) => carouselProducts.find((p) => p.id === id))
+    .filter(Boolean) as CarouselProductItem[];
+
+  const unfeaturedList = carouselProducts.filter(
+    (p) => !featuredProductIds.includes(p.id) && p.isPublished
+  );
+
   return (
-    <div className="space-y-6 max-w-4xl">
+    <div className="space-y-6">
       {/* Header */}
       <div>
         <div className="flex items-center gap-2 mb-1">
-          <Badge variant="green">Public Branding &amp; Visuals</Badge>
-          <span className="text-xs font-mono text-[#64748B]">XSS-Safe &amp; Managed Placeholders</span>
+          <Badge variant="green">CMS &amp; Media Control</Badge>
+          <span className="text-xs font-mono text-[#64748B]">Real-Time Production Sync</span>
         </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] tracking-tight">
           Website Content &amp; Media Manager
         </h1>
         <p className="text-xs text-[#64748B] mt-1">
-          Configure public headlines, announcements, and managed fallback placeholder imagery used across the website.
+          Configure public headlines, select home screen hero showcase products, and manage site media.
         </p>
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 border-b border-[#E2E8F0] pb-2 text-xs font-mono">
+      <div className="flex flex-wrap gap-2 border-b border-[#E2E8F0] pb-2 text-xs font-mono">
         <button
           onClick={() => setActiveTab('content')}
           className={`px-4 py-2 rounded-xl font-bold flex items-center gap-2 transition-colors ${
@@ -217,6 +331,18 @@ export default function AdminContentSettingsPage() {
         >
           <Edit3 className="w-4 h-4" /> Copy &amp; Announcements
         </button>
+
+        <button
+          onClick={() => setActiveTab('carousel')}
+          className={`px-4 py-2 rounded-xl font-bold flex items-center gap-2 transition-colors ${
+            activeTab === 'carousel'
+              ? 'bg-[#0F172A] text-white'
+              : 'bg-white border border-[#E2E8F0] text-[#64748B] hover:text-[#0F172A]'
+          }`}
+        >
+          <Layers className="w-4 h-4 text-[#059669]" /> Home Screen Carousel ({featuredProductIds.length} Active)
+        </button>
+
         <button
           onClick={() => setActiveTab('images')}
           className={`px-4 py-2 rounded-xl font-bold flex items-center gap-2 transition-colors ${
@@ -236,10 +362,10 @@ export default function AdminContentSettingsPage() {
         </div>
       )}
 
-      {storageNotice && !error && (
-        <div className="p-4 rounded-2xl bg-[#EFF6FF] border border-[#BFDBFE] flex items-center gap-2 text-xs text-[#1E40AF]">
-          <Eye className="w-4 h-4 text-[#3B82F6] flex-shrink-0" />
-          <span>{storageNotice}</span>
+      {carouselSuccess && (
+        <div className="p-4 rounded-2xl bg-[#ECFDF5] border border-[#A7F3D0] flex items-center gap-2 text-xs text-[#065F46]">
+          <CheckCircle2 className="w-4 h-4 text-[#059669] flex-shrink-0" />
+          <span>Home Screen Hero Carousel selection saved and updated live!</span>
         </div>
       )}
 
@@ -260,29 +386,29 @@ export default function AdminContentSettingsPage() {
               Homepage Hero Section
             </h2>
 
-            <div className="space-y-1.5">
+            <div className="space-y-1">
               <label className="text-xs font-mono font-bold text-[#334155] block">
-                Primary Hero Headline <span className="text-[#059669]">*</span>
+                Hero Main Headline <span className="text-[#059669]">*</span>
               </label>
               <input
                 type="text"
                 value={formData.heroHeadline}
                 onChange={(e) => setFormData({ ...formData, heroHeadline: e.target.value })}
+                className="w-full px-4 py-2.5 rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] text-[#0F172A] text-xs focus:outline-none focus:border-[#059669]"
                 required
-                className="w-full px-4 py-2.5 rounded-xl bg-white border border-[#CBD5E1] text-[#0F172A] text-xs focus:outline-none focus:border-[#059669]"
               />
             </div>
 
-            <div className="space-y-1.5">
+            <div className="space-y-1">
               <label className="text-xs font-mono font-bold text-[#334155] block">
-                Hero Subheadline / Value Proposition <span className="text-[#059669]">*</span>
+                Hero Sub-headline / Value Proposition <span className="text-[#059669]">*</span>
               </label>
               <textarea
                 rows={3}
                 value={formData.heroSubheadline}
                 onChange={(e) => setFormData({ ...formData, heroSubheadline: e.target.value })}
+                className="w-full px-4 py-2.5 rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] text-[#0F172A] text-xs focus:outline-none focus:border-[#059669]"
                 required
-                className="w-full px-4 py-2.5 rounded-xl bg-white border border-[#CBD5E1] text-[#0F172A] text-xs focus:outline-none focus:border-[#059669]"
               />
             </div>
           </div>
@@ -290,193 +416,305 @@ export default function AdminContentSettingsPage() {
           <div className="p-6 rounded-3xl bg-white border border-[#E2E8F0] shadow-sm space-y-5">
             <h2 className="text-sm font-bold text-[#0F172A] flex items-center gap-2 border-b border-[#E2E8F0] pb-3">
               <ShieldCheck className="w-4 h-4 text-[#059669]" />
-              Global Header Alert &amp; Footer Notices
+              Announcements &amp; Legal Disclaimers
             </h2>
 
-            <div className="space-y-1.5">
+            <div className="space-y-1">
               <label className="text-xs font-mono font-bold text-[#334155] block">
-                Top Announcement Bar Text (Optional)
+                Top Bar Promotional / Notice Banner
               </label>
               <input
                 type="text"
                 value={formData.topBarText || ''}
                 onChange={(e) => setFormData({ ...formData, topBarText: e.target.value })}
-                placeholder="e.g. ISO 9001:2015 Certified Manufacturing Facility"
-                className="w-full px-4 py-2.5 rounded-xl bg-white border border-[#CBD5E1] text-[#0F172A] text-xs focus:outline-none focus:border-[#059669]"
+                className="w-full px-4 py-2.5 rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] text-[#0F172A] text-xs focus:outline-none focus:border-[#059669]"
               />
             </div>
 
-            <div className="space-y-1.5">
+            <div className="space-y-1">
               <label className="text-xs font-mono font-bold text-[#334155] block">
-                Footer Legal &amp; Manufacturing Disclaimer
+                Footer Legal Disclaimer
               </label>
               <textarea
                 rows={2}
                 value={formData.footerDisclaimer || ''}
                 onChange={(e) => setFormData({ ...formData, footerDisclaimer: e.target.value })}
-                className="w-full px-4 py-2.5 rounded-xl bg-white border border-[#CBD5E1] text-[#0F172A] text-xs focus:outline-none focus:border-[#059669]"
+                className="w-full px-4 py-2.5 rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] text-[#0F172A] text-xs focus:outline-none focus:border-[#059669]"
               />
             </div>
           </div>
 
-          <div className="flex justify-end">
+          <div className="flex justify-end gap-3 pt-4 border-t border-[#E2E8F0]">
             <Button
               type="submit"
               variant="primary"
               size="md"
-              disabled={saving || loading}
+              disabled={saving}
               icon={<Save className="w-4 h-4" />}
             >
-              {saving ? 'Publishing Content...' : 'Save Content Settings'}
+              {saving ? 'Saving Content...' : 'Save Public Website Copy'}
             </Button>
           </div>
         </form>
       )}
 
-      {/* TAB 2: MANAGED SITE IMAGES & VISUALS */}
-      {activeTab === 'images' && (
+
+      {/* TAB 2: HOME SCREEN HERO CAROUSEL MANAGER */}
+      {activeTab === 'carousel' && (
         <div className="space-y-6">
-          <div className="p-4 rounded-2xl bg-[#F8FAFC] border border-[#CBD5E1] text-xs text-[#475569] space-y-1">
-            <strong className="text-[#0F172A] block">Independent Image Management Architecture:</strong>
-            <p>
-              Each visual on the MEHAR website is independently configurable across Homepage sections, Battery Cell &amp; Engineering pages, and Industrial Application sectors. Uploading or changing an image for one location does not impact other sections.
-            </p>
-          </div>
+          <div className="p-6 rounded-3xl bg-white border border-[#E2E8F0] shadow-sm">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E2E8F0] pb-4 mb-6">
+              <div>
+                <h2 className="text-base font-extrabold text-[#0F172A] flex items-center gap-2">
+                  <Layers className="w-5 h-5 text-[#059669]" />
+                  Home Screen Hero Carousel Products
+                </h2>
+                <p className="text-xs text-[#64748B] mt-1">
+                  Choose exactly which battery products appear in the rotating showcase on the homepage. Reorder slides using the arrows.
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="px-3 py-1.5 rounded-xl bg-[#ECFDF5] text-[#065F46] border border-[#A7F3D0] text-xs font-mono font-bold">
+                  {featuredProductIds.length} Slides Selected
+                </span>
+              </div>
+            </div>
 
-          {/* Section Filter Pills */}
-          <div className="flex flex-wrap items-center gap-2 pt-1 pb-2">
-            {[
-              { id: 'all', label: `All Visuals (${siteImages.length})` },
-              { id: 'homepage', label: `Homepage (${siteImages.filter((i) => i.section === 'homepage').length})` },
-              { id: 'technology', label: `Technology & Cells (${siteImages.filter((i) => i.section === 'technology').length})` },
-              { id: 'applications', label: `Applications (${siteImages.filter((i) => i.section === 'applications').length})` },
-              { id: 'placeholders', label: `Global Defaults (${siteImages.filter((i) => i.section === 'placeholders').length})` },
-            ].map((f) => (
-              <button
-                key={f.id}
-                type="button"
-                onClick={() => setImageSectionFilter(f.id as any)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all ${
-                  imageSectionFilter === f.id
-                    ? 'bg-[#059669] text-white shadow-sm'
-                    : 'bg-white border border-[#CBD5E1] text-[#64748B] hover:text-[#0F172A] hover:border-[#059669]'
-                }`}
-              >
-                {f.label}
-              </button>
-            ))}
-          </div>
+            {/* Currently Active Slides in Order */}
+            <div className="space-y-3 mb-8">
+              <h3 className="text-xs font-mono uppercase font-bold text-[#059669] tracking-wider">
+                1. Active Slides (Rotating in this order)
+              </h3>
 
-          <div className="grid grid-cols-1 gap-6">
-            {siteImages
-              .filter((img) => imageSectionFilter === 'all' || img.section === imageSectionFilter)
-              .map((img) => (
-                <div
-                  key={img.key}
-                  className="p-6 rounded-3xl bg-white border border-[#E2E8F0] shadow-sm space-y-4"
-                >
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E2E8F0] pb-3">
-                    <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-[10px] font-mono font-bold text-[#059669] uppercase tracking-wider bg-[#ECFDF5] px-2 py-0.5 rounded border border-[#A7F3D0]">
-                          {img.key}
+              {featuredList.length === 0 ? (
+                <div className="p-8 rounded-2xl bg-[#F8FAFC] border border-dashed border-[#CBD5E1] text-center text-xs font-mono text-[#64748B]">
+                  No products currently selected. Add products from the available list below to display them on the homepage.
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {featuredList.map((prod, idx) => (
+                    <div
+                      key={prod.id}
+                      className="p-3.5 rounded-2xl bg-white border border-[#E2E8F0] shadow-xs flex items-center justify-between gap-4 hover:border-[#059669]/50 transition-colors"
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <span className="w-6 h-6 rounded-full bg-[#0F172A] text-white flex items-center justify-center text-xs font-mono font-bold shrink-0">
+                          {idx + 1}
                         </span>
-                        {img.section && (
-                          <span className="text-[10px] font-mono text-[#64748B] uppercase tracking-wider">
-                            · {img.section}
-                          </span>
-                        )}
-                      </div>
-                      <h3 className="text-base font-bold text-[#0F172A]">{img.label}</h3>
-                      {img.description && (
-                        <p className="text-xs text-[#64748B] mt-0.5">{img.description}</p>
-                      )}
-                    </div>
 
-                    <div className="flex items-center gap-2">
+                        <div className="w-12 h-12 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] flex items-center justify-center overflow-hidden shrink-0">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={prod.imageUrl}
+                            alt={prod.name}
+                            className="max-h-10 max-w-full object-contain"
+                          />
+                        </div>
+
+                        <div className="min-w-0">
+                          <h4 className="text-xs font-bold text-[#0F172A] truncate">
+                            {prod.name}
+                          </h4>
+                          <p className="text-[11px] font-mono text-[#64748B] truncate">
+                            {prod.category} · {prod.specs || 'Lithium Battery'}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        <button
+                          type="button"
+                          onClick={() => handleMoveSlide(prod.id, 'up')}
+                          disabled={idx === 0}
+                          className="p-1.5 rounded-lg border border-[#E2E8F0] text-[#334155] hover:bg-[#F1F5F9] disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                          title="Move Slide Up"
+                        >
+                          <ArrowUp className="w-3.5 h-3.5" />
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => handleMoveSlide(prod.id, 'down')}
+                          disabled={idx === featuredList.length - 1}
+                          className="p-1.5 rounded-lg border border-[#E2E8F0] text-[#334155] hover:bg-[#F1F5F9] disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                          title="Move Slide Down"
+                        >
+                          <ArrowDown className="w-3.5 h-3.5" />
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => handleToggleCarouselProduct(prod.id)}
+                          className="px-2.5 py-1 rounded-xl bg-[#FEF2F2] text-[#991B1B] border border-[#FECACA] text-xs font-mono font-bold hover:bg-[#FEE2E2] transition-colors cursor-pointer"
+                        >
+                          Remove from Home
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Available Products to Add */}
+            <div className="space-y-3 pt-6 border-t border-[#E2E8F0]">
+              <h3 className="text-xs font-mono uppercase font-bold text-[#334155] tracking-wider">
+                2. Available Products ({unfeaturedList.length} Not on Home Screen)
+              </h3>
+
+              {unfeaturedList.length === 0 ? (
+                <div className="p-6 text-center text-xs font-mono text-[#64748B]">
+                  All active published products are currently featured in the hero carousel.
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {unfeaturedList.map((prod) => (
+                    <div
+                      key={prod.id}
+                      className="p-3 rounded-2xl bg-[#F8FAFC] border border-[#E2E8F0] flex items-center justify-between gap-3 hover:bg-white hover:border-[#CBD5E1] transition-all"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-10 h-10 rounded-lg bg-white border border-[#E2E8F0] flex items-center justify-center overflow-hidden shrink-0">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={prod.imageUrl}
+                            alt={prod.name}
+                            className="max-h-8 max-w-full object-contain"
+                          />
+                        </div>
+                        <div className="min-w-0">
+                          <h4 className="text-xs font-bold text-[#0F172A] truncate">
+                            {prod.name}
+                          </h4>
+                          <p className="text-[10px] font-mono text-[#64748B] truncate">
+                            {prod.category}
+                          </p>
+                        </div>
+                      </div>
+
                       <button
                         type="button"
-                        onClick={async () => {
-                          const updated = { ...img, isActive: !img.isActive };
-                          setSiteImages((prev) =>
-                            prev.map((i) => (i.key === img.key ? updated : i))
-                          );
-                          await handleSaveSiteImage(updated);
-                        }}
-                        disabled={saving}
-                        className={`px-3 py-1 rounded-lg text-xs font-mono font-semibold flex items-center gap-1.5 disabled:opacity-50 ${
-                          img.isActive
-                            ? 'bg-[#ECFDF5] text-[#065F46] border border-[#A7F3D0]'
-                            : 'bg-[#F1F5F9] text-[#64748B] border border-[#CBD5E1]'
-                        }`}
+                        onClick={() => handleToggleCarouselProduct(prod.id)}
+                        className="px-2.5 py-1 rounded-xl bg-white text-[#059669] border border-[#A7F3D0] hover:bg-[#ECFDF5] text-xs font-mono font-bold shrink-0 transition-colors cursor-pointer"
                       >
-                        {img.isActive ? <ToggleRight className="w-4 h-4 text-[#059669]" /> : <ToggleLeft className="w-4 h-4" />}
-                        {img.isActive ? 'Active' : 'Inactive'}
+                        + Add to Home
                       </button>
                     </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+
+      {/* TAB 3: MANAGED SITE PLACEHOLDERS */}
+      {activeTab === 'images' && (
+        <div className="space-y-6">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap gap-2 text-xs font-mono">
+              {(['all', 'homepage', 'technology', 'applications', 'placeholders'] as const).map(
+                (sec) => (
+                  <button
+                    key={sec}
+                    onClick={() => setImageSectionFilter(sec)}
+                    className={`px-3 py-1.5 rounded-xl capitalize transition-colors ${
+                      imageSectionFilter === sec
+                        ? 'bg-[#0F172A] text-white font-bold'
+                        : 'bg-white border border-[#E2E8F0] text-[#64748B] hover:text-[#0F172A]'
+                    }`}
+                  >
+                    {sec === 'all' ? 'All Sections' : sec}
+                  </button>
+                )
+              )}
+            </div>
+
+            <span className="text-xs font-mono text-[#64748B]">
+              Showing {filteredImages.length} of {siteImages.length} configured slots
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {filteredImages.map((img) => (
+              <div
+                key={img.key}
+                className="p-5 rounded-3xl bg-white border border-[#E2E8F0] shadow-sm flex flex-col justify-between space-y-4"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="px-2.5 py-0.5 rounded-md text-[10px] font-mono font-bold uppercase bg-[#F1F5F9] text-[#475569] border border-[#CBD5E1]">
+                      {img.section || 'General'}
+                    </span>
+                    <span className="text-[11px] font-mono text-[#64748B]">
+                      Key: <strong>{img.key}</strong>
+                    </span>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
-                    {/* Image Preview */}
-                    <div className="md:col-span-4 aspect-video rounded-2xl bg-[#F8FAFC] border border-[#CBD5E1] flex items-center justify-center p-3 overflow-hidden">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={img.currentUrl}
-                        alt={img.altText || img.label}
-                        className="max-h-28 max-w-full object-contain"
+                  <h3 className="text-sm font-bold text-[#0F172A]">{img.label}</h3>
+                  <p className="text-xs text-[#64748B] mt-0.5">{img.description}</p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                  <div className="md:col-span-4 aspect-video rounded-2xl bg-[#F8FAFC] border border-[#CBD5E1] flex items-center justify-center p-3 overflow-hidden">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={img.currentUrl}
+                      alt={img.altText || img.label}
+                      className="max-h-28 max-w-full object-contain"
+                    />
+                  </div>
+
+                  <div className="md:col-span-8 space-y-3">
+                    <div className="space-y-1">
+                      <label className="text-[11px] font-mono font-bold text-[#334155] block">
+                        Alt Text (Accessibility &amp; SEO) <span className="text-[#059669]">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={img.altText}
+                        onChange={(e) =>
+                          setSiteImages((prev) =>
+                            prev.map((i) => (i.key === img.key ? { ...i, altText: e.target.value } : i))
+                          )
+                        }
+                        className="w-full px-3 py-2 rounded-xl bg-white border border-[#CBD5E1] text-[#0F172A] text-xs focus:outline-none focus:border-[#059669]"
                       />
                     </div>
 
-                    {/* Settings & Upload */}
-                    <div className="md:col-span-8 space-y-3">
-                      <div className="space-y-1">
-                        <label className="text-[11px] font-mono font-bold text-[#334155] block">
-                          Alt Text (Accessibility &amp; SEO) <span className="text-[#059669]">*</span>
+                    <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+                      <div>
+                        <label className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] hover:border-[#059669] text-xs font-mono font-semibold text-[#0F172A] transition-colors">
+                          <Upload className="w-3.5 h-3.5 text-[#059669]" />
+                          {uploadingKey === img.key ? 'Uploading...' : 'Replace Image'}
+                          <input
+                            type="file"
+                            accept="image/jpeg,image/png,image/webp,image/svg+xml"
+                            className="hidden"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) handleImageFileUpload(img.key, file);
+                            }}
+                          />
                         </label>
-                        <input
-                          type="text"
-                          value={img.altText}
-                          onChange={(e) =>
-                            setSiteImages((prev) =>
-                              prev.map((i) => (i.key === img.key ? { ...i, altText: e.target.value } : i))
-                            )
-                          }
-                          className="w-full px-3 py-2 rounded-xl bg-white border border-[#CBD5E1] text-[#0F172A] text-xs focus:outline-none focus:border-[#059669]"
-                        />
                       </div>
 
-                      <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
-                        <div>
-                          <label className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] hover:border-[#059669] text-xs font-mono font-semibold text-[#0F172A] transition-colors">
-                            <Upload className="w-3.5 h-3.5 text-[#059669]" />
-                            {uploadingKey === img.key ? 'Uploading...' : 'Replace Image'}
-                            <input
-                              type="file"
-                              accept="image/jpeg,image/png,image/webp,image/svg+xml"
-                              className="hidden"
-                              onChange={(e) => {
-                                const file = e.target.files?.[0];
-                                if (file) handleImageFileUpload(img.key, file);
-                              }}
-                            />
-                          </label>
-                        </div>
-
-                        <Button
-                          type="button"
-                          variant="primary"
-                          size="sm"
-                          onClick={() => handleSaveSiteImage(img)}
-                          disabled={saving}
-                          icon={<Save className="w-3.5 h-3.5" />}
-                        >
-                          Save Image Settings
-                        </Button>
-                      </div>
+                      <Button
+                        type="button"
+                        variant="primary"
+                        size="sm"
+                        onClick={() => handleSaveSiteImage(img)}
+                        disabled={saving}
+                        icon={<Save className="w-3.5 h-3.5" />}
+                      >
+                        Save Image Settings
+                      </Button>
                     </div>
                   </div>
                 </div>
-              ))}
+              </div>
+            ))}
           </div>
         </div>
       )}

@@ -15,7 +15,7 @@ interface SlideItem {
   tag: string;
 }
 
-const SLIDES: SlideItem[] = [
+const DEFAULT_SLIDES: SlideItem[] = [
   {
     id: '2w',
     name: 'MEHAR 48V 30Ah Two-Wheeler / E-Scooter Battery',
@@ -80,15 +80,6 @@ const SLIDES: SlideItem[] = [
     tag: 'Custom OEM',
   },
   {
-    id: 'charger',
-    name: 'MEHAR 60kW / 120kW Dual-Gun DC Fast Charger',
-    category: 'Commercial EV Fast Charging Pedestal',
-    specs: '60kW / 120kW · Dual CCS2 · 7" Touchscreen',
-    imageUrl: '/assets/products/mehar-ev-charger.jpg',
-    href: '/products/custom-oem-industrial-batteries',
-    tag: 'EV Fast Charger',
-  },
-  {
     id: 'cells',
     name: 'MEHAR Grade-A Cells (Prismatic & Cylindrical)',
     category: 'Tier-1 Direct Factory Supply',
@@ -99,36 +90,50 @@ const SLIDES: SlideItem[] = [
   },
 ];
 
-export default function HeroProductCarousel({ parentCompany = 'Lawad Infrastructure Private Limited' }: { parentCompany?: string }) {
+export default function HeroProductCarousel({
+  initialSlides,
+  parentCompany = 'Lawad Infrastructure Private Limited',
+}: {
+  initialSlides?: SlideItem[];
+  parentCompany?: string;
+}) {
+  const slides = (initialSlides && initialSlides.length > 0) ? initialSlides : DEFAULT_SLIDES;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Keep index within bounds if slide count changes dynamically
+  useEffect(() => {
+    if (currentIndex >= slides.length) {
+      setCurrentIndex(0);
+    }
+  }, [slides.length, currentIndex]);
+
   // Auto-advance slideshow every 3.8 seconds when not hovered
   useEffect(() => {
-    if (isPaused) return;
+    if (isPaused || slides.length <= 1) return;
 
     timerRef.current = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % SLIDES.length);
+      setCurrentIndex((prev) => (prev + 1) % slides.length);
     }, 3800);
 
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [isPaused]);
+  }, [isPaused, slides.length]);
 
-  const currentSlide = SLIDES[currentIndex];
+  const currentSlide = slides[currentIndex] || slides[0];
 
   const handlePrev = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setCurrentIndex((prev) => (prev === 0 ? SLIDES.length - 1 : prev - 1));
+    setCurrentIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
   };
 
   const handleNext = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setCurrentIndex((prev) => (prev + 1) % SLIDES.length);
+    setCurrentIndex((prev) => (prev + 1) % slides.length);
   };
 
   return (
@@ -178,7 +183,7 @@ export default function HeroProductCarousel({ parentCompany = 'Lawad Infrastruct
         <div className="relative w-full h-52 xs:h-56 sm:h-64 lg:h-72 rounded-2xl bg-theme-base border border-theme-border overflow-hidden">
           
           {/* Stacked Images with Smooth Cross-Fade */}
-          {SLIDES.map((slide, idx) => (
+          {slides.map((slide, idx) => (
             <div
               key={slide.id}
               className={`absolute inset-0 p-3 transition-all duration-700 ease-in-out ${
@@ -219,13 +224,13 @@ export default function HeroProductCarousel({ parentCompany = 'Lawad Infrastruct
 
           {/* Slide Progress Counter Badge */}
           <div className="absolute top-2.5 right-2.5 px-2.5 py-0.5 rounded-full bg-black/75 backdrop-blur-md border border-white/20 text-[10px] font-mono font-bold text-white z-20 shadow-sm">
-            {currentIndex + 1} / {SLIDES.length}
+            {currentIndex + 1} / {slides.length}
           </div>
         </div>
 
         {/* ── Slide Indicator Dots ─────────────────────────────────── */}
         <div className="flex items-center justify-center gap-1 pt-0.5">
-          {SLIDES.map((slide, idx) => (
+          {slides.map((slide, idx) => (
             <button
               key={slide.id}
               type="button"

@@ -6,6 +6,7 @@ import { BROAD_CATEGORIES } from '@/data/categories';
 import { APPLICATION_DOMAINS } from '@/data/applicationDomains';
 import { getCompanySettings, getSalesSettings, getContentSettings } from '@/lib/settings';
 import { getSitePlaceholderImage } from '@/lib/siteImages';
+import { getHeroCarouselSlides } from '@/lib/heroCarousel';
 import Button from '@/components/ui/Button';
 import HeroProductCarousel from '@/components/home/HeroProductCarousel';
 import {
@@ -62,6 +63,7 @@ export default async function HomePage() {
     appSmartHome,
     appSecurity,
     appTestEquip,
+    heroSlides,
   ] = await Promise.all([
     getCompanySettings(),
     getSalesSettings(),
@@ -96,6 +98,7 @@ export default async function HomePage() {
     getSitePlaceholderImage('app_smart_home_iot'),
     getSitePlaceholderImage('app_security_surveillance'),
     getSitePlaceholderImage('app_test_measurement'),
+    getHeroCarouselSlides(),
   ]);
 
   const managedCategoryImages: Record<string, typeof imgCat2W> = {
@@ -209,7 +212,7 @@ export default async function HomePage() {
 
             {/* Right – automatic sliding product showcase carousel */}
             <div className="lg:col-span-5 xl:col-span-5">
-              <HeroProductCarousel parentCompany={company.parentCompanyName} />
+              <HeroProductCarousel initialSlides={heroSlides} parentCompany={company.parentCompanyName} />
             </div>
 
           </div>
