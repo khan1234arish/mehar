@@ -26,40 +26,40 @@ export const changePasswordSchema = z
 
 // ─── Product Spec Schema ──────────────────────────────────────────────────────
 export const productSpecSchema = z.object({
-  groupName: z.string().trim().min(1, 'Group name is required.'),
-  specKey: z.string().trim().min(1, 'Spec key is required.'),
-  specValue: z.string().trim().min(1, 'Spec value is required.'),
-  specUnit: z.string().trim().optional().nullable(),
+  groupName: z.string().trim().min(1, 'Group name is required.').max(200),
+  specKey: z.string().trim().min(1, 'Spec key is required.').max(300),
+  specValue: z.string().trim().min(1, 'Spec value is required.').max(1000),
+  specUnit: z.string().trim().max(100).optional().nullable(),
   isHighlight: z.boolean().default(false),
   displayOrder: z.number().int().default(0),
 });
 
 // ─── Product Create/Update Schema ─────────────────────────────────────────────
 export const productSchema = z.object({
-  name: z.string().trim().min(2, 'Product name is required (min 2 chars).').max(200),
+  name: z.string().trim().min(2, 'Product name is required (min 2 chars).').max(300),
   slug: z
     .string()
     .trim()
     .min(2)
-    .max(200)
+    .max(300)
     .regex(/^[a-z0-9-]+$/, 'Slug must only contain lowercase alphanumeric characters and hyphens.'),
   categoryId: z.string().trim().min(1, 'Category is required.'),
-  modelNumber: z.string().trim().max(100).optional().nullable(),
-  shortDescription: z.string().trim().min(5, 'Short description is required.').max(1000),
-  applicationTag: z.string().trim().min(2, 'Application tag is required.').max(100),
-  chemistry: z.string().trim().max(100).optional().nullable(),
-  voltageRange: z.string().trim().max(100).optional().nullable(),
-  capacityRange: z.string().trim().max(100).optional().nullable(),
-  energyRange: z.string().trim().max(100).optional().nullable(),
-  cycleLife: z.string().trim().max(100).optional().nullable(),
-  maxDischargeRate: z.string().trim().max(100).optional().nullable(),
-  operatingTemp: z.string().trim().max(100).optional().nullable(),
-  bmsProtocols: z.string().trim().max(200).optional().nullable(),
-  ipRating: z.string().trim().max(50).optional().nullable(),
-  dimensions: z.string().trim().max(100).optional().nullable(),
-  weight: z.string().trim().max(50).optional().nullable(),
-  warrantySummary: z.string().trim().max(200).optional().nullable(),
-  placeholderNote: z.string().trim().max(500).optional().nullable(),
+  modelNumber: z.string().trim().max(200).optional().nullable(),
+  shortDescription: z.string().trim().min(5, 'Short description is required.').max(2000),
+  applicationTag: z.string().trim().min(2, 'Application tag is required.').max(300),
+  chemistry: z.string().trim().max(300).optional().nullable(),
+  voltageRange: z.string().trim().max(300).optional().nullable(),
+  capacityRange: z.string().trim().max(300).optional().nullable(),
+  energyRange: z.string().trim().max(300).optional().nullable(),
+  cycleLife: z.string().trim().max(300).optional().nullable(),
+  maxDischargeRate: z.string().trim().max(300).optional().nullable(),
+  operatingTemp: z.string().trim().max(300).optional().nullable(),
+  bmsProtocols: z.string().trim().max(500).optional().nullable(),
+  ipRating: z.string().trim().max(300).optional().nullable(),
+  dimensions: z.string().trim().max(500).optional().nullable(),
+  weight: z.string().trim().max(300).optional().nullable(),
+  warrantySummary: z.string().trim().max(500).optional().nullable(),
+  placeholderNote: z.string().trim().max(1000).optional().nullable(),
   tdsFileUrl: z.string().trim().max(500).optional().nullable(),
   imageUrl: z.string().trim().max(500).optional().nullable(),
   minimumOrderQuantity: z.number().int('MOQ must be an integer.').positive('MOQ must be greater than 0.').optional().nullable(),

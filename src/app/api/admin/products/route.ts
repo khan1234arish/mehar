@@ -137,8 +137,10 @@ export async function POST(request: Request) {
     const parsed = productSchema.safeParse(body);
 
     if (!parsed.success) {
+      const firstIssue = parsed.error.issues[0];
+      const fieldPath = firstIssue?.path?.length ? ` (${firstIssue.path.join('.')})` : '';
       return NextResponse.json(
-        { error: parsed.error.issues[0]?.message || 'Invalid product data format.' },
+        { error: `${firstIssue?.message || 'Invalid product data format.'}${fieldPath}` },
         { status: 400 }
       );
     }

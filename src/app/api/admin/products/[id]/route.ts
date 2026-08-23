@@ -74,8 +74,10 @@ export async function PUT(request: Request, { params }: Params) {
     const parsed = productSchema.safeParse(body);
 
     if (!parsed.success) {
+      const firstIssue = parsed.error.issues[0];
+      const fieldPath = firstIssue?.path?.length ? ` (${firstIssue.path.join('.')})` : '';
       return NextResponse.json(
-        { error: parsed.error.issues[0]?.message || 'Invalid product parameters.' },
+        { error: `${firstIssue?.message || 'Invalid product parameters.'}${fieldPath}` },
         { status: 400 }
       );
     }
