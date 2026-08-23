@@ -43,9 +43,17 @@ export async function getHeroCarouselProductIds(): Promise<string[]> {
   return [];
 }
 
+let carouselCache: { data: HeroSlideItem[]; timestamp: number } | null = null;
+const CACHE_TTL_MS = 30 * 1000; // 30 seconds
+
+export function clearHeroCarouselCache() {
+  carouselCache = null;
+}
+
 export async function setHeroCarouselProductIds(productIds: string[]): Promise<boolean> {
   try {
     if (!prisma) return false;
+    clearHeroCarouselCache();
     await prisma.systemSetting.upsert({
       where: { key: SETTING_KEY },
       update: {
@@ -65,6 +73,7 @@ export async function setHeroCarouselProductIds(productIds: string[]): Promise<b
 }
 
 export async function toggleHeroCarouselProductId(productId: string): Promise<{ isFeatured: boolean; allIds: string[] }> {
+  clearHeroCarouselCache();
   const currentIds = await getHeroCarouselProductIds();
   const exists = currentIds.includes(productId);
   let newIds: string[];
@@ -78,6 +87,11 @@ export async function toggleHeroCarouselProductId(productId: string): Promise<{ 
 }
 
 export async function getHeroCarouselSlides(): Promise<HeroSlideItem[]> {
+  const now = Date.now();
+  if (carouselCache && now - carouselCache.timestamp < CACHE_TTL_MS) {
+    return carouselCache.data;
+  }
+
   try {
     if (!prisma) return getFallbackSlides();
 
@@ -139,7 +153,7 @@ export async function getHeroCarouselSlides(): Promise<HeroSlideItem[]> {
     }
 
     if (products.length > 0) {
-      return products.map((p) => {
+      const mappedSlides: HeroSlideItem[] = products.map((p) => {
         const primaryImg = p.images?.find((i: any) => i.isPrimary) || p.images?.[0];
         const imgUrl = primaryImg?.imageUrl || p.imageUrl || '/assets/products/mehar-2w-battery.jpg';
 
@@ -163,12 +177,17 @@ export async function getHeroCarouselSlides(): Promise<HeroSlideItem[]> {
           tag: p.applicationTag || p.category?.name || 'EV Traction',
         };
       });
+
+      carouselCache = { data: mappedSlides, timestamp: now };
+      return mappedSlides;
     }
   } catch (err) {
     console.error('Error constructing hero carousel slides:', err);
   }
 
-  return getFallbackSlides();
+  const fallback = getFallbackSlides();
+  carouselCache = { data: fallback, timestamp: now };
+  return fallback;
 }
 
 function getFallbackSlides(): HeroSlideItem[] {

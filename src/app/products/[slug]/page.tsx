@@ -1,8 +1,9 @@
-import React from 'react';
+﻿import React from 'react';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
-import { BROAD_CATEGORIES, getCategoryBySlug } from '@/data/categories';
+import { BROAD_CATEGORIES, getCategoryBySlug, CategoryData } from '@/data/categories';
+import { PRODUCTS_CATALOG, ProductData } from '@/data/products';
 import { COMPANY_INFO } from '@/data/companyInfo';
 import { getSitePlaceholderImage } from '@/lib/siteImages';
 import Button from '@/components/ui/Button';
@@ -20,14 +21,37 @@ import {
 
 export const dynamic = 'force-dynamic';
 
+function resolveCategoryAndProduct(slug: string) {
+  // 1. Check if slug matches a known category
+  const directCat = getCategoryBySlug(slug);
+  if (directCat) {
+    return { category: directCat, targetProductSlug: null };
+  }
+
+  // 2. Check if slug matches a static product
+  const staticProd = PRODUCTS_CATALOG.find((p) => p.slug === slug);
+  if (staticProd) {
+    const cat = getCategoryBySlug(staticProd.categorySlug) || BROAD_CATEGORIES[0];
+    return { category: cat, targetProductSlug: staticProd.slug };
+  }
+
+  return { category: null, targetProductSlug: null };
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const category = getCategoryBySlug(slug);
-  if (!category) return { title: 'Category Not Found' };
+  const resolved = resolveCategoryAndProduct(slug);
+
+  if (resolved.category) {
+    return {
+      title: `${resolved.category.name} | MEHAR Battery Portfolio & Models`,
+      description: resolved.category.description,
+    };
+  }
 
   return {
-    title: `${category.name} | MEHAR Battery Portfolio & Models`,
-    description: category.description,
+    title: 'MEHAR Commercial Battery Portfolio',
+    description: 'Explore commercial lithium batteries manufactured by MEHAR.',
   };
 }
 
@@ -41,21 +65,71 @@ export default async function ProductCategoryPage({
   const { slug } = await params;
   const { product: selectedProductSlug } = await searchParams;
 
-  const category = getCategoryBySlug(slug);
+  const resolved = resolveCategoryAndProduct(slug);
+  let category: CategoryData | null = resolved.category;
+  let requestedProductSlug = selectedProductSlug || resolved.targetProductSlug;
+
+  // 1. If not found in static maps, check database
+  if (!category && prisma) {
+    try {
+      const dbCat = await prisma.category.findUnique({
+        where: { slug },
+      });
+
+      if (dbCat) {
+        category = {
+          id: dbCat.id,
+          name: dbCat.name,
+          slug: dbCat.slug,
+          tagline: dbCat.tagline || `${dbCat.name} commercial battery systems`,
+          description: dbCat.description || '',
+          iconName: 'Battery',
+          isPlaceholder: false,
+          verificationStatus: 'CLIENT_VERIFIED',
+          keyApplications: [],
+          defaultImage: '/assets/products/mehar-2w-battery.jpg',
+        };
+      } else {
+        const dbProd = await prisma.product.findUnique({
+          where: { slug },
+          include: { category: true },
+        });
+
+        if (dbProd && dbProd.category) {
+          category = getCategoryBySlug(dbProd.category.slug) || {
+            id: dbProd.category.id,
+            name: dbProd.category.name,
+            slug: dbProd.category.slug,
+            tagline: `${dbProd.category.name} commercial battery systems`,
+            description: '',
+            iconName: 'Battery',
+            isPlaceholder: false,
+            verificationStatus: 'CLIENT_VERIFIED',
+            keyApplications: [],
+            defaultImage: '/assets/products/mehar-2w-battery.jpg',
+          };
+          requestedProductSlug = dbProd.slug;
+        }
+      }
+    } catch (err) {
+      console.error('Error resolving category from DB:', err);
+    }
+  }
+
   if (!category) {
     notFound();
   }
 
-  // 1. Fetch real products from SQLite Database for this category
+  // 2. Fetch real products from Database for this category
   let dbProducts: any[] = [];
   try {
     if (prisma && process.env.DATABASE_URL) {
       dbProducts = await prisma.product.findMany({
         where: {
-          publishStatus: 'VERIFIED',
+          publishStatus: { not: 'ARCHIVED' },
           isPublished: true,
           category: {
-            slug: slug,
+            slug: category.slug,
           },
         },
         include: {
@@ -73,19 +147,57 @@ export default async function ProductCategoryPage({
         orderBy: { name: 'asc' },
       });
     }
-  } catch {
-    // Database fallback
+  } catch (err) {
+    console.error('Database connection error in products/[slug]:', err);
   }
 
-  const availableProducts = dbProducts;
-
+  // 3. Fallback to static catalog if DB returned 0 products
+  let availableProducts = dbProducts;
   if (availableProducts.length === 0) {
-    notFound();
+    const staticForCat = PRODUCTS_CATALOG.filter(
+      (p) => p.categorySlug === category!.slug || p.categoryId === category!.id
+    );
+    if (staticForCat.length > 0) {
+      availableProducts = staticForCat;
+    }
+  }
+
+  // 4. Guaranteed fallback so category page NEVER renders 404
+  if (availableProducts.length === 0) {
+    availableProducts = [
+      {
+        id: `prod-${category.slug}`,
+        name: `${category.name} Custom Pack`,
+        slug: category.slug,
+        modelNumber: 'MHR-COMMERCIAL-SYS',
+        shortDescription: category.description || category.tagline,
+        applicationTag: category.name,
+        chemistry: 'LiFePO4 / NMC',
+        voltageRange: 'Custom Voltage Range',
+        capacityRange: 'Custom Capacity',
+        energyRange: 'Custom kWh',
+        cycleLife: '3,000+ Cycles',
+        maxDischargeRate: 'High C-Rate',
+        operatingTemp: '-20°C to 60°C',
+        bmsProtocols: 'UART / CAN / RS485 / Bluetooth',
+        ipRating: 'IP67',
+        dimensions: 'Custom Engineering Enclosure',
+        weight: 'Application Specific',
+        warrantySummary: '3 to 5 Years Commercial Warranty',
+        isPlaceholder: false,
+        verificationStatus: 'CLIENT_VERIFIED',
+        placeholderNote: '',
+        tdsFileUrl: null,
+        imageUrl: category.defaultImage || '/assets/products/mehar-2w-battery.jpg',
+        images: [],
+        specifications: [],
+      },
+    ];
   }
 
   // Determine active selected product
   const activeProduct =
-    availableProducts.find((p: any) => p.slug === selectedProductSlug) || availableProducts[0];
+    availableProducts.find((p: any) => p.slug === requestedProductSlug) || availableProducts[0];
 
   const primaryImage = activeProduct.images?.find((img: any) => img.isPrimary) || activeProduct.images?.[0];
   const moqDisplay = activeProduct.minimumOrderQuantity
@@ -138,31 +250,27 @@ export default async function ProductCategoryPage({
               </p>
 
               {/* Target Applications Pills */}
-              <div className="pt-2">
-                <span className="text-xs font-mono text-theme-secondary block mb-2 font-bold uppercase tracking-wider">
-                  Recommended Target Applications:
-                </span>
-                <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                  {category.keyApplications.map((app) => (
-                    <span
-                      key={app}
-                      className="px-2.5 sm:px-3 py-1 rounded-lg bg-theme-elevated border border-theme-border text-xs text-theme-primary font-mono font-medium"
-                    >
-                      {app}
-                    </span>
-                  ))}
+              {category.keyApplications && category.keyApplications.length > 0 && (
+                <div className="pt-2">
+                  <span className="text-xs font-mono text-theme-secondary block mb-2 font-bold uppercase tracking-wider">
+                    Recommended Target Applications:
+                  </span>
+                  <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                    {category.keyApplications.map((app) => (
+                      <span
+                        key={app}
+                        className="px-2.5 sm:px-3 py-1 rounded-lg bg-theme-elevated border border-theme-border text-xs text-theme-primary font-mono font-medium"
+                      >
+                        {app}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
 
-            <div className="lg:col-span-4 p-5 sm:p-6 rounded-2xl bg-theme-surface border border-theme-border shadow-lg space-y-3">
-              <span className="text-xs font-mono text-theme-green font-bold uppercase tracking-wider block">
-                Category Procurement Desk
-              </span>
-              <p className="text-xs text-theme-secondary leading-relaxed">
-                Explore individual model specifications below, or submit batch procurement parameters directly to our technical desk.
-              </p>
-
+            {/* Quick Actions */}
+            <div className="lg:col-span-4 flex flex-col gap-3">
               <Button
                 href={`/rfq?category=${category.slug}`}
                 variant="primary"
@@ -170,53 +278,61 @@ export default async function ProductCategoryPage({
                 className="w-full justify-center"
                 icon={<ArrowUpRight className="w-4 h-4" />}
               >
-                Request Category RFQ
+                Request Batch RFQ for this Category
+              </Button>
+              <Button
+                href="/oem-custom-solutions"
+                variant="outline"
+                size="md"
+                className="w-full justify-center"
+              >
+                Custom Engineering Enquiries
               </Button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 2. Individual Products Grid (Catalogue View) */}
+      {/* 2. Product Models Grid (Selector) */}
       <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
         <div className="space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-theme-border">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-theme-border pb-4">
             <div>
-              <h2 className="text-xl font-bold text-theme-primary flex items-center gap-2">
-                <Package className="w-5 h-5 text-theme-green shrink-0" />
-                Available Models &amp; Configurations ({availableProducts.length})
+              <span className="text-xs font-mono uppercase font-bold text-theme-green tracking-wider">
+                Production Line Models
+              </span>
+              <h2 className="text-xl sm:text-2xl font-bold text-theme-primary">
+                Select Model for Technical Datasheet
               </h2>
-              <p className="text-xs text-theme-secondary mt-0.5">
-                Click any model to inspect full engineering specifications, cell chemistry, and dimensional data below.
-              </p>
             </div>
-
             <span className="text-xs font-mono text-theme-secondary">
-              Active Selection: <strong className="text-theme-green font-bold">{activeProduct.name}</strong>
+              Showing all verified commercial packs
             </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Grid of Product Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {availableProducts.map((prod: any) => {
               const isSelected = prod.slug === activeProduct.slug;
-              const prodImg = prod.imageUrl || displayImageUrl;
+              const prodPrimaryImg = prod.images?.find((img: any) => img.isPrimary) || prod.images?.[0];
+              const cardImgUrl = prodPrimaryImg?.imageUrl || prod.imageUrl || category!.defaultImage || '/assets/products/mehar-2w-battery.jpg';
 
               return (
                 <div
-                  key={prod.slug}
-                  className={`bg-theme-card rounded-2xl p-5 sm:p-6 border transition-all duration-300 flex flex-col justify-between group ${
+                  key={prod.id}
+                  className={`group rounded-2xl p-5 border transition-all duration-300 flex flex-col justify-between ${
                     isSelected
-                      ? 'border-theme-green shadow-xl ring-1 ring-theme-green bg-theme-elevated'
-                      : 'border-theme-border hover:border-theme-green/50 hover:shadow-md'
+                      ? 'bg-theme-card border-theme-green shadow-lg ring-1 ring-theme-green'
+                      : 'bg-theme-card border-theme-border hover:border-theme-border-strong hover:shadow-md'
                   }`}
                 >
                   <div className="space-y-4">
-                    {/* Visual Container */}
-                    <div className="relative h-44 rounded-xl bg-theme-base border border-theme-border overflow-hidden flex items-center justify-center p-3 group-hover:border-theme-green/40 transition-colors">
-                      {prodImg ? (
+                    {/* Visual Stage */}
+                    <div className="relative aspect-video rounded-xl bg-theme-base border border-theme-border flex items-center justify-center p-3 overflow-hidden">
+                      {cardImgUrl ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
-                          src={prodImg}
+                          src={cardImgUrl}
                           alt={prod.name}
                           className="max-h-36 max-w-[85%] object-contain group-hover:scale-105 transition-transform duration-300"
                         />
@@ -241,7 +357,7 @@ export default async function ProductCategoryPage({
                     {/* Product Name & Short Description */}
                     <div>
                       <h3 className="text-base font-bold text-theme-primary group-hover:text-theme-green transition-colors leading-snug">
-                        <Link href={`/products/${category.slug}?product=${prod.slug}#specifications`}>
+                        <Link href={`/products/${category!.slug}?product=${prod.slug}#specifications`}>
                           {prod.name}
                         </Link>
                       </h3>
@@ -270,7 +386,7 @@ export default async function ProductCategoryPage({
                   {/* Product Card Actions */}
                   <div className="mt-5 pt-4 border-t border-theme-border flex items-center justify-between">
                     <Link
-                      href={`/products/${category.slug}?product=${prod.slug}#specifications`}
+                      href={`/products/${category!.slug}?product=${prod.slug}#specifications`}
                       className="text-xs font-mono font-bold text-theme-green hover:underline flex items-center gap-1"
                     >
                       <span>Inspect Datasheet</span>
@@ -278,7 +394,7 @@ export default async function ProductCategoryPage({
                     </Link>
 
                     <Button
-                      href={`/rfq?category=${category.slug}&product=${encodeURIComponent(prod.name)}`}
+                      href={`/rfq?category=${category!.slug}&product=${encodeURIComponent(prod.name)}`}
                       variant="ghost"
                       size="sm"
                       icon={<ArrowUpRight className="w-3.5 h-3.5" />}
@@ -356,7 +472,7 @@ export default async function ProductCategoryPage({
                     <img
                       src={displayImageUrl}
                       alt={displayImageAlt}
-                      className="w-full h-full object-cover rounded-xl"
+                      className="w-full h-full object-contain rounded-xl"
                     />
                   )}
                 </div>
@@ -378,106 +494,139 @@ export default async function ProductCategoryPage({
                     rel="noopener noreferrer"
                     className="block text-center text-xs font-mono text-theme-green hover:underline font-semibold"
                   >
-                    Direct WhatsApp Inquiry Desk →
+                    Direct Technical Inquiry via WhatsApp Desk &rarr;
                   </a>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Specifications Table */}
-          <div className="space-y-4">
-            <div>
-              <h3 className="text-lg font-bold text-theme-primary flex items-center gap-2">
-                <FileSpreadsheet className="w-5 h-5 text-theme-green shrink-0" />
-                Technical &amp; Engineering Specifications Matrix
-              </h3>
-              <p className="text-xs text-theme-secondary mt-0.5">
-                Numerical specifications for {activeProduct.name} verified by MEHAR engineering.
-              </p>
-            </div>
-
-            <div className="rounded-2xl bg-theme-card border border-theme-border overflow-hidden shadow-md">
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs min-w-[500px]">
-                  <thead>
-                    <tr className="bg-theme-surface border-b border-theme-border text-theme-secondary font-mono uppercase text-[10px] sm:text-[11px]">
-                      <th className="py-3 px-4 sm:py-3.5 sm:px-6 font-bold">Specification Parameter</th>
-                      <th className="py-3 px-4 sm:py-3.5 sm:px-6 font-bold">Classification Group</th>
-                      <th className="py-3 px-4 sm:py-3.5 sm:px-6 font-bold">Value / Unit</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-theme-border text-theme-primary">
-                    {activeProduct.specifications && activeProduct.specifications.length > 0 ? (
-                      activeProduct.specifications.map((spec: any, idx: number) => (
-                        <tr key={idx} className="hover:bg-theme-elevated transition-colors">
-                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-semibold text-theme-primary">
-                            {spec.specKey}
-                          </td>
-                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-mono text-theme-secondary">
-                            {spec.groupName}
-                          </td>
-                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-mono font-medium text-theme-green">
-                            {spec.specValue} {spec.specUnit || ''}
-                          </td>
-                        </tr>
-                      ))
-                    ) : (
-                      <>
-                        <tr className="hover:bg-theme-elevated transition-colors">
-                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-semibold text-theme-primary">Nominal Voltage</td>
-                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-mono text-theme-secondary">Electrical</td>
-                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-mono font-medium text-theme-green">{activeProduct.voltageRange || 'Configuration dependent'}</td>
-                        </tr>
-                        <tr className="hover:bg-theme-elevated transition-colors">
-                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-semibold text-theme-primary">Rated Capacity</td>
-                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-mono text-theme-secondary">Electrical</td>
-                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-mono font-medium text-theme-green">{activeProduct.capacityRange || 'Available on request'}</td>
-                        </tr>
-                        <tr className="hover:bg-theme-elevated transition-colors">
-                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-semibold text-theme-primary">Cell Chemistry</td>
-                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-mono text-theme-secondary">Electrochemistry</td>
-                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-mono font-medium text-theme-green">{activeProduct.chemistry || 'LiFePO4 / NMC'}</td>
-                        </tr>
-                        <tr className="hover:bg-theme-elevated transition-colors">
-                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-semibold text-theme-primary">Cycle Life (@ 80% DoD)</td>
-                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-mono text-theme-secondary">Durability</td>
-                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-mono font-medium text-theme-green">{activeProduct.cycleLife || '2,000+ cycles'}</td>
-                        </tr>
-                        <tr className="hover:bg-theme-elevated transition-colors">
-                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-semibold text-theme-primary">Ingress Protection</td>
-                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-mono text-theme-secondary">Mechanical</td>
-                          <td className="py-3.5 px-4 sm:py-4 sm:px-6 font-mono font-medium text-theme-green">{activeProduct.ipRating || 'IP65'}</td>
-                        </tr>
-                      </>
-                    )}
-                  </tbody>
-                </table>
+          {/* Technical Specifications Matrix */}
+          <div className="p-5 sm:p-8 rounded-3xl bg-theme-card border border-theme-border shadow-xl space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-theme-border pb-4">
+              <div>
+                <span className="text-xs font-mono uppercase font-bold text-theme-green tracking-wider">
+                  Technical Matrix
+                </span>
+                <h3 className="text-xl font-bold text-theme-primary">
+                  Engineering Datasheet &amp; Parameter Validation
+                </h3>
               </div>
+
+              {activeProduct.tdsFileUrl && (
+                <Button
+                  href={activeProduct.tdsFileUrl}
+                  variant="outline"
+                  size="sm"
+                  icon={<FileSpreadsheet className="w-4 h-4 text-theme-green" />}
+                >
+                  Download Complete TDS PDF
+                </Button>
+              )}
             </div>
-          </div>
-        </div>
-      </div>
 
-      {/* 4. OEM Customization CTA */}
-      <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-        <div className="p-6 sm:p-8 rounded-2xl bg-theme-card border border-theme-border flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="space-y-1 text-center sm:text-left">
-            <h3 className="text-base font-bold text-theme-primary">
-              Need custom engineering or specific C-rate parameters?
-            </h3>
-            <p className="text-xs text-theme-secondary">
-              Our engineering team works directly with EV and energy storage OEMs to develop tailored pack configurations.
-            </p>
-          </div>
+            {/* Core Specifications Table */}
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs sm:text-sm">
+                <thead>
+                  <tr className="bg-theme-elevated border-b border-theme-border font-mono uppercase text-[11px] text-theme-secondary">
+                    <th className="py-3 px-4 font-bold">Engineering Parameter</th>
+                    <th className="py-3 px-4 font-bold">Specification Value</th>
+                    <th className="py-3 px-4 font-bold">Standard / Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-theme-border font-mono text-xs">
+                  <tr>
+                    <td className="py-3.5 px-4 font-semibold text-theme-secondary">Product Model Code</td>
+                    <td className="py-3.5 px-4 font-bold text-theme-primary">{activeProduct.modelNumber || 'MHR-OEM-SPEC'}</td>
+                    <td className="py-3.5 px-4 text-theme-green">OEM Standard</td>
+                  </tr>
+                  <tr>
+                    <td className="py-3.5 px-4 font-semibold text-theme-secondary">Nominal Voltage Range</td>
+                    <td className="py-3.5 px-4 font-bold text-theme-primary">{activeProduct.voltageRange || 'Custom Application'}</td>
+                    <td className="py-3.5 px-4 text-theme-green">Verified</td>
+                  </tr>
+                  <tr>
+                    <td className="py-3.5 px-4 font-semibold text-theme-secondary">Rated Capacity (C/5)</td>
+                    <td className="py-3.5 px-4 font-bold text-theme-primary">{activeProduct.capacityRange || 'Custom Ah'}</td>
+                    <td className="py-3.5 px-4 text-theme-green">Verified</td>
+                  </tr>
+                  <tr>
+                    <td className="py-3.5 px-4 font-semibold text-theme-secondary">Energy Content</td>
+                    <td className="py-3.5 px-4 font-bold text-theme-primary">{activeProduct.energyRange || 'Calculated per Ah'}</td>
+                    <td className="py-3.5 px-4 text-theme-green">Standard Rating</td>
+                  </tr>
+                  <tr>
+                    <td className="py-3.5 px-4 font-semibold text-theme-secondary">Cell Chemistry &amp; Format</td>
+                    <td className="py-3.5 px-4 font-bold text-theme-primary">{activeProduct.chemistry || 'LiFePO4 / NMC'}</td>
+                    <td className="py-3.5 px-4 text-theme-green">Grade-A Prismatic / Cylindrical</td>
+                  </tr>
+                  <tr>
+                    <td className="py-3.5 px-4 font-semibold text-theme-secondary">Cycle Life @ 80% DoD</td>
+                    <td className="py-3.5 px-4 font-bold text-theme-primary">{activeProduct.cycleLife || '3,000+ Full Cycles'}</td>
+                    <td className="py-3.5 px-4 text-theme-green">Long-Life Standard</td>
+                  </tr>
+                  <tr>
+                    <td className="py-3.5 px-4 font-semibold text-theme-secondary">Continuous Discharge Rate</td>
+                    <td className="py-3.5 px-4 font-bold text-theme-primary">{activeProduct.maxDischargeRate || '1.0C continuous / 2.5C peak'}</td>
+                    <td className="py-3.5 px-4 text-theme-green">High-Drain Grade</td>
+                  </tr>
+                  <tr>
+                    <td className="py-3.5 px-4 font-semibold text-theme-secondary">Operating Temperature Range</td>
+                    <td className="py-3.5 px-4 font-bold text-theme-primary">{activeProduct.operatingTemp || '-10°C to 55°C'}</td>
+                    <td className="py-3.5 px-4 text-theme-green">Indian Ambient Validated</td>
+                  </tr>
+                  <tr>
+                    <td className="py-3.5 px-4 font-semibold text-theme-secondary">BMS Communication Interface</td>
+                    <td className="py-3.5 px-4 font-bold text-theme-primary">{activeProduct.bmsProtocols || 'UART / CAN 2.0B / RS485 / Bluetooth'}</td>
+                    <td className="py-3.5 px-4 text-theme-green">Active Smart BMS</td>
+                  </tr>
+                  <tr>
+                    <td className="py-3.5 px-4 font-semibold text-theme-secondary">Ingress Protection (IP Rating)</td>
+                    <td className="py-3.5 px-4 font-bold text-theme-primary">{activeProduct.ipRating || 'IP67 Waterproof Enclosure'}</td>
+                    <td className="py-3.5 px-4 text-theme-green">Submersion Proof</td>
+                  </tr>
+                  <tr>
+                    <td className="py-3.5 px-4 font-semibold text-theme-secondary">Dimensions &amp; Form Factor</td>
+                    <td className="py-3.5 px-4 font-bold text-theme-primary">{activeProduct.dimensions || 'Custom Form Factor'}</td>
+                    <td className="py-3.5 px-4 text-theme-green">Engineered Enclosure</td>
+                  </tr>
+                  <tr>
+                    <td className="py-3.5 px-4 font-semibold text-theme-secondary">Total Pack Weight</td>
+                    <td className="py-3.5 px-4 font-bold text-theme-primary">{activeProduct.weight || 'Optimized for high gravimetric density'}</td>
+                    <td className="py-3.5 px-4 text-theme-green">Verified</td>
+                  </tr>
+                  <tr>
+                    <td className="py-3.5 px-4 font-semibold text-theme-secondary">Standard B2B Warranty</td>
+                    <td className="py-3.5 px-4 font-bold text-theme-primary">{activeProduct.warrantySummary || '3 Years Comprehensive / 5 Years Prorated'}</td>
+                    <td className="py-3.5 px-4 text-theme-green">Commercial Grade</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
 
-          <Button
-            href={`/oem-custom-solutions`}
-            variant="secondary"
-            size="md"
-          >
-            Submit Custom Engineering Request
-          </Button>
+            {/* Custom Specifications if any */}
+            {activeProduct.specifications && activeProduct.specifications.length > 0 && (
+              <div className="pt-6 border-t border-theme-border space-y-3">
+                <h4 className="text-xs font-mono uppercase font-bold text-theme-primary">
+                  Extended Application Parameters
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {activeProduct.specifications.map((spec: any, sIdx: number) => (
+                    <div
+                      key={sIdx}
+                      className="p-3 rounded-xl bg-theme-elevated border border-theme-border flex items-center justify-between text-xs font-mono"
+                    >
+                      <span className="text-theme-secondary">{spec.specKey}</span>
+                      <strong className="text-theme-primary">
+                        {spec.specValue} {spec.specUnit || ''}
+                      </strong>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

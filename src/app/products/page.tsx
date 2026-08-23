@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { prisma } from '@/lib/prisma';
 import { BROAD_CATEGORIES } from '@/data/categories';
+import { PRODUCTS_CATALOG } from '@/data/products';
 import { COMPANY_INFO } from '@/data/companyInfo';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
@@ -45,12 +46,21 @@ export default async function ProductsCataloguePage() {
 
   // Count products per category slug
   const categoryCounts: Record<string, number> = {};
-  publishedProducts.forEach((p) => {
-    const slug = p.category?.slug;
-    if (slug) {
-      categoryCounts[slug] = (categoryCounts[slug] || 0) + 1;
-    }
-  });
+  if (publishedProducts.length > 0) {
+    publishedProducts.forEach((p) => {
+      const slug = p.category?.slug;
+      if (slug) {
+        categoryCounts[slug] = (categoryCounts[slug] || 0) + 1;
+      }
+    });
+  } else {
+    PRODUCTS_CATALOG.forEach((p) => {
+      const slug = p.categorySlug;
+      if (slug) {
+        categoryCounts[slug] = (categoryCounts[slug] || 0) + 1;
+      }
+    });
+  }
 
   const totalProducts = Object.values(categoryCounts).reduce((acc, count) => acc + count, 0);
 
