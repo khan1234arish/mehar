@@ -108,15 +108,19 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  manifest: '/site.webmanifest',
   icons: {
     icon: [
-      { url: '/assets/logo/mehar-symbol.png', type: 'image/png' },
       { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon-48x48.png', sizes: '48x48', type: 'image/png' },
+      { url: '/favicon-96x96.png', sizes: '96x96', type: 'image/png' },
+      { url: '/icon.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
     ],
     apple: [
-      { url: '/assets/logo/mehar-symbol.png', sizes: '180x180', type: 'image/png' },
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
     ],
-    shortcut: ['/assets/logo/mehar-symbol.png'],
+    shortcut: ['/favicon.ico'],
   },
   verification: {
     google: 'googledeed334a94dae5cce',
@@ -132,8 +136,12 @@ export default function RootLayout({
     <html lang="en" className={`scroll-smooth ${inter.variable} ${outfit.variable}`} suppressHydrationWarning>
       <head>
         <ThemeScript />
-        <link rel="icon" href="/assets/logo/mehar-symbol.png" type="image/png" />
-        <link rel="apple-touch-icon" href="/assets/logo/mehar-symbol.png" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/favicon-48x48.png" type="image/png" sizes="48x48" />
+        <link rel="icon" href="/favicon-96x96.png" type="image/png" sizes="96x96" />
+        <link rel="icon" href="/icon.png" type="image/png" sizes="192x192" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+        <link rel="manifest" href="/site.webmanifest" />
       </head>
       <body className="min-h-screen bg-theme-base text-theme-primary antialiased flex flex-col justify-between selection:bg-theme-green/30 selection:text-theme-green">
         <ThemeProvider>
