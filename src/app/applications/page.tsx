@@ -38,8 +38,8 @@ export default async function ApplicationsPage() {
     imgDrones,
     imgMedical,
   ] = await Promise.all([
-    getSitePlaceholderImage('app_electric_mobility'),
-    getSitePlaceholderImage('homepage_electric_3w'),
+    getSitePlaceholderImage('app_electric_2w'),
+    getSitePlaceholderImage('app_electric_3w'),
     getSitePlaceholderImage('app_solar_ess'),
     getSitePlaceholderImage('app_ups_inverter'),
     getSitePlaceholderImage('app_material_handling'),

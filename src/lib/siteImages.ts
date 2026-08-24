@@ -104,8 +104,22 @@ export const DEFAULT_SITE_IMAGES: Record<string, DefaultSiteImageMeta> = {
   },
 
   // ── 3. APPLICATION & SECTOR VISUALS ────────────────────────────────────────
+  app_electric_2w: {
+    label: 'Application: Electric 2-Wheelers & Delivery Fleets',
+    section: 'applications',
+    defaultUrl: '/assets/applications/app-electric-2w.jpg',
+    altText: 'MEHAR Commercial Electric 2-Wheeler Delivery Battery Solutions',
+    description: 'Sector photograph for electric scooters, motorcycles, and delivery fleets.',
+  },
+  app_electric_3w: {
+    label: 'Application: Electric 3-Wheelers & Passenger E-Rickshaws',
+    section: 'applications',
+    defaultUrl: '/assets/applications/app-electric-3w.jpg',
+    altText: 'MEHAR Commercial 3-Wheeler & Passenger E-Rickshaw Traction Batteries',
+    description: 'Sector photograph for passenger e-rickshaws and cargo 3-wheelers.',
+  },
   app_electric_mobility: {
-    label: 'Application: Electric Mobility (2W / 3W / Light EV)',
+    label: 'Application: Electric Mobility (General Light EV)',
     section: 'applications',
     defaultUrl: '/assets/applications/app-electric-2w.jpg',
     altText: 'MEHAR E-Mobility Battery Pack Solutions',

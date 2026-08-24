@@ -44,7 +44,8 @@ export default async function HomePage() {
     imgCatCells,
     imgCatOEM,
     // App-specific managed images
-    appMobility,
+    app2W,
+    app3W,
     appSolar,
     appUPS,
     appIndustrial,
@@ -79,7 +80,8 @@ export default async function HomePage() {
     getSitePlaceholderImage('homepage_cylindrical_cells'),
     getSitePlaceholderImage('homepage_custom_oem'),
     // App managed images
-    getSitePlaceholderImage('app_electric_mobility'),
+    getSitePlaceholderImage('app_electric_2w'),
+    getSitePlaceholderImage('app_electric_3w'),
     getSitePlaceholderImage('app_solar_ess'),
     getSitePlaceholderImage('app_ups_inverter'),
     getSitePlaceholderImage('app_industrial_equipment'),
@@ -110,9 +112,9 @@ export default async function HomePage() {
     'custom-oem-industrial-batteries': imgCatOEM,
   };
 
-  const managedAppImages: Record<string, typeof appMobility> = {
-    'electric-mobility-2w': appMobility,
-    'electric-mobility-3w': appMobility,
+  const managedAppImages: Record<string, typeof app2W> = {
+    'electric-mobility-2w': app2W,
+    'electric-mobility-3w': app3W,
     'solar-ess': appSolar,
     'ups-inverter': appUPS,
     'industrial-equipment': appIndustrial,
