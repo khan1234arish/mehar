@@ -224,12 +224,13 @@ export default async function ApplicationsPage() {
             >
               <div className="space-y-4">
                 {/* Visual Header Box */}
-                <div className="relative h-48 rounded-xl bg-theme-base border border-theme-border overflow-hidden flex items-center justify-center p-3 group-hover:border-theme-blue/40 transition-colors">
+                <div className="relative aspect-[4/3] rounded-2xl bg-theme-base border border-theme-border overflow-hidden group-hover:border-theme-blue/40 transition-colors">
                   <Image
                     src={app.image}
                     alt={app.altText || app.title}
                     fill
-                    className="object-contain p-3 group-hover:scale-105 transition-transform duration-300"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute top-3 right-3">
                     <Badge variant="blue">{app.badge}</Badge>

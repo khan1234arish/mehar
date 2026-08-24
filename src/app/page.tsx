@@ -413,9 +413,8 @@ export default async function HomePage() {
 
           {/* Section header */}
           <div className="max-w-3xl mb-8 sm:mb-12 lg:mb-16">
-            <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-theme-blue mb-2 sm:mb-3 font-mono">Industry Domains</p>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-black tracking-tight text-theme-primary">
-              Application-Specific Battery Solutions
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-theme-primary">
+              Solutions
             </h2>
             <p className="mt-2.5 sm:mt-3 text-sm sm:text-base lg:text-lg leading-relaxed text-theme-secondary">
               Tailored energy solutions engineered for specific commercial duty cycles, duty ratings, and environmental conditions.
@@ -436,22 +435,20 @@ export default async function HomePage() {
                 <Link
                   key={domain.id}
                   href={`/finder?domain=${domain.id}`}
-                  className="group rounded-3xl border border-theme-border bg-theme-card p-5 sm:p-6 hover:border-theme-blue/50 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between gap-4"
+                  className="group rounded-3xl border border-theme-border bg-theme-card p-4 sm:p-5 hover:border-theme-blue/50 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
                 >
                   <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="w-16 h-16 rounded-2xl bg-theme-base border border-theme-border p-2 relative overflow-hidden flex items-center justify-center group-hover:border-theme-blue/40 transition-colors">
-                        <Image
-                          src={domainImgUrl}
-                          alt={specificManaged?.altText || domain.name}
-                          fill
-                          className="object-contain p-1 group-hover:scale-105 transition-transform"
-                        />
-                      </div>
-                      <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-theme-blue bg-theme-blue/10 px-2.5 py-1 rounded-lg border border-theme-blue/25">
-                        {domain.operatingTemp.split(' ')[0]}
-                      </span>
+                    {/* Top Image Banner */}
+                    <div className="relative aspect-[4/3] w-full rounded-2xl overflow-hidden bg-theme-base border border-theme-border mb-4">
+                      <Image
+                        src={domainImgUrl}
+                        alt={specificManaged?.altText || domain.name}
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
                     </div>
+
                     <h3 className="text-base sm:text-lg font-bold text-theme-primary group-hover:text-theme-blue transition-colors leading-snug">
                       {domain.name}
                     </h3>
@@ -462,9 +459,12 @@ export default async function HomePage() {
                       <span className="block text-theme-primary font-semibold">Duty: {domain.dutyCycle}</span>
                     </div>
                   </div>
-                  <span className="inline-flex items-center gap-1 text-xs sm:text-sm font-bold text-theme-blue">
-                    Find Model <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-                  </span>
+
+                  <div className="mt-4 pt-1 flex items-center justify-between">
+                    <span className="inline-flex items-center gap-1 text-xs sm:text-sm font-bold text-theme-blue">
+                      Find Model <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                    </span>
+                  </div>
                 </Link>
               );
             })}

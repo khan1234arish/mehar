@@ -20,7 +20,7 @@ export const APPLICATION_DOMAINS: ApplicationDomain[] = [
     operatingTemp: '-10°C to 55°C Ambient',
     recommendedChemistry: 'A+ Grade Prismatic LiFePO4 / High-Density NMC',
     sampleEquipment: ['Commercial Delivery E-Scooters', 'High-Speed Electric Motorcycles', 'Fleet Rental 2-Wheelers', 'Last-Mile Delivery B2B Fleets'],
-    defaultImage: '/assets/products/mehar-2w-battery.jpg',
+    defaultImage: '/assets/applications/app-electric-2w.jpg',
   },
   {
     id: 'electric-mobility-3w',
@@ -31,7 +31,7 @@ export const APPLICATION_DOMAINS: ApplicationDomain[] = [
     operatingTemp: '-10°C to 60°C Heavy Ambient',
     recommendedChemistry: 'Grade-A Prismatic LiFePO4 (16S 51.2V 86Ah - 150Ah)',
     sampleEquipment: ['Passenger E-Rickshaws (51.2V 100Ah)', 'L5 Cargo Delivery Loaders (51.2V 130Ah)', 'Electric Auto-Rickshaws', 'Municipal Waste Collection Loaders'],
-    defaultImage: '/assets/products/mehar-3w-battery.jpg',
+    defaultImage: '/assets/applications/app-electric-3w.jpg',
   },
   {
     id: 'ups-inverter',
@@ -42,7 +42,7 @@ export const APPLICATION_DOMAINS: ApplicationDomain[] = [
     operatingTemp: '0°C to 55°C Indoor/Outdoor',
     recommendedChemistry: 'Prismatic LiFePO4 (4S 12.8V / 8S 25.6V / 16S 51.2V)',
     sampleEquipment: ['Home Sine Wave Inverter Backup', 'Commercial Office UPS Systems', '19" 4U Server Rack Backup Modules', 'Hospital Emergency Power Banks'],
-    defaultImage: '/assets/products/mehar-ess-battery.jpg',
+    defaultImage: '/assets/applications/app-ups-inverter.jpg',
   },
   {
     id: 'solar-ess',
@@ -53,7 +53,7 @@ export const APPLICATION_DOMAINS: ApplicationDomain[] = [
     operatingTemp: '-10°C to 55°C High-Solar Envelopes',
     recommendedChemistry: 'Grade-A Prismatic LiFePO4 (10kWh to 160kWh Modular)',
     sampleEquipment: ['Off-Grid Rooftop Solar Banks', 'Commercial Hybrid Solar Storage Cabinets', 'Industrial Solar Microgrids', 'Telecom Solar BTS Arrays'],
-    defaultImage: '/assets/products/mehar-solar-battery.jpg',
+    defaultImage: '/assets/applications/app-solar-ess.jpg',
   },
   {
     id: 'material-handling',
@@ -64,7 +64,7 @@ export const APPLICATION_DOMAINS: ApplicationDomain[] = [
     operatingTemp: '-20°C (Cold Storage) to 60°C (Factory Floor)',
     recommendedChemistry: 'Heavy-Duty Prismatic LiFePO4 (200Ah to 600Ah)',
     sampleEquipment: ['Counterbalance Electric Forklifts', 'Reach Trucks & Order Pickers', 'Battery Operated Pallet Trucks (BOPT)', 'Electric Tow Tractors'],
-    defaultImage: '/assets/products/mehar-forklift-battery.jpg',
+    defaultImage: '/assets/applications/app-material-handling.jpg',
   },
   {
     id: 'robotics-automation',
@@ -75,7 +75,7 @@ export const APPLICATION_DOMAINS: ApplicationDomain[] = [
     operatingTemp: '-10°C to 55°C',
     recommendedChemistry: 'Prismatic LiFePO4 (24V / 48V 40Ah - 100Ah)',
     sampleEquipment: ['Warehouse Logistics AGVs', 'Autonomous Mobile Robots (AMRs)', 'Industrial Robotic Arm Bases', 'Automated Guided Carts (AGCs)'],
-    defaultImage: '/assets/products/mehar-agv-battery.jpg',
+    defaultImage: '/assets/applications/app-robotics-automation.jpg',
   },
   {
     id: 'telecom-infrastructure',
@@ -86,7 +86,7 @@ export const APPLICATION_DOMAINS: ApplicationDomain[] = [
     operatingTemp: '-10°C to 55°C High-Ambient Outdoor Shelters',
     recommendedChemistry: 'Telecom-Grade Prismatic LiFePO4 (15S / 16S 48V 100Ah)',
     sampleEquipment: ['Telecom Tower BTS Backup Cabinets', 'Optical Fiber Node Power Units', 'Edge Datacenter Rack Banks', 'Rural Micro-Repeater Towers'],
-    defaultImage: '/assets/products/mehar-telecom-battery.jpg',
+    defaultImage: '/assets/applications/app-telecom-infrastructure.jpg',
   },
   {
     id: 'drones-uav',
@@ -97,6 +97,6 @@ export const APPLICATION_DOMAINS: ApplicationDomain[] = [
     operatingTemp: '-10°C to 50°C Aerial Operation',
     recommendedChemistry: 'High-Rate LiPo / High-C NMC (6S, 12S, 14S 16000mAh - 30000mAh)',
     sampleEquipment: ['Agricultural Crop-Spraying Drones (10L - 30L Payload)', 'High-Altitude Survey & Mapping UAVs', 'Heavy-Lift Logistics Cargo Drones', 'Industrial Surveillance Hexacopters'],
-    defaultImage: '/assets/products/mehar-drone-battery.jpg',
+    defaultImage: '/assets/applications/app-drones-uav.jpg',
   },
 ];
